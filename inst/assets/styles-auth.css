@@ -1,7 +1,7 @@
 /* CSS style for authentication module */
 
 .panel-auth {
-  position: absolute;
+  position: fixed;
   top:0;
   bottom: 0;
   left: 0;

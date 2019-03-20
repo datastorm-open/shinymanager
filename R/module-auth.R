@@ -113,7 +113,7 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
     )),
     tags$div(
       id = ns("auth-mod"), class = "panel-auth",
-      tags$br(), tags$div(style = "height: 100px;"), tags$br(),
+      tags$br(), tags$div(style = "height: 70px;"), tags$br(),
       fluidRow(
         column(
           width = 4, offset = 4,
