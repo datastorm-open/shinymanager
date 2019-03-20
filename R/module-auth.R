@@ -108,7 +108,8 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
   .globals$labels <- labels
   tagList(
     singleton(tags$head(
-      tags$link(href="shinymanager/styles-auth.css", rel="stylesheet")
+      tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
+      tags$script(src = "shinymanager/bindEnter.js")
     )),
     tags$div(
       id = ns("auth-mod"), class = "panel-auth",
@@ -144,6 +145,9 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
                 class = paste0("btn-", status)
               ),
               tags$br(), tags$br(),
+              tags$script(
+                sprintf("bindEnter('%s');", ns(""))
+              ),
               tags$div(id = ns("result_auth"))
             )
           )
