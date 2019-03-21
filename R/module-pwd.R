@@ -112,9 +112,9 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
   shiny::observeEvent(input$relog, {
     if (isTRUE(use_token)) {
       query <- shiny::getQueryString()
-      token <- shiny::parseQueryString(query)$token
+      token <- query$token
       remove_token(token)
-      shiny::updateQueryString(queryString = "", session = session)
+      shiny::updateQueryString(queryString = "?", session = session)
       session$reload()
     }
   })

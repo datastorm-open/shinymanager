@@ -42,14 +42,23 @@ manage_auth_app <- function(ui, ...) {
 #'
 #' @export
 #'
-#' @importFrom shiny callModule
+#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString
 #'
 #' @rdname manage-auth
 manage_auth_server <- function(session, check_credentials) {
+
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
     use_token = TRUE
   )
+
+  observeEvent(session$input$.shinymanager_logout, {
+    query <- getQueryString(session = session)
+    token <- query$token
+    remove_token(token)
+    updateQueryString(queryString = "?", session = session, mode = "replace")
+    session$reload()
+  })
 }
