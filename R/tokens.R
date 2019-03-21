@@ -9,3 +9,11 @@ validate_token <- function(token) {
 generate_token <- function(user = "user") {
   sha256(paste0(user, Sys.time()), key = rand_bytes(32))
 }
+
+remove_token <- function(token) {
+  .globals$tokens <- setdiff(.globals$tokens, token)
+}
+
+add_token <- function(token) {
+  .globals$tokens <- append(.globals$tokens, token)
+}

@@ -199,7 +199,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       token <- generate_token(input$user_id)
 
       if (isTRUE(use_token)) {
-        .globals$tokens <- c(.globals$tokens, token)
+        add_token(token)
         updateQueryString(queryString = paste0("?token=", token), session = session)
         session$reload()
       }
