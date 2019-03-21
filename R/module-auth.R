@@ -205,13 +205,23 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       }
 
     } else {
-      insertUI(
-        selector = jns("result_auth"),
-        ui = tags$div(
-          id = ns("msg_auth"), class = "alert alert-danger",
-          icon("exclamation-triangle"), .globals$labels_auth$invalid_usr_pwd
+      if (isTRUE(res_auth$expired)) {
+        insertUI(
+          selector = jns("result_auth"),
+          ui = tags$div(
+            id = ns("msg_auth"), class = "alert alert-danger",
+            icon("exclamation-triangle"), .globals$labels_auth$user_expired
+          )
         )
-      )
+      } else {
+        insertUI(
+          selector = jns("result_auth"),
+          ui = tags$div(
+            id = ns("msg_auth"), class = "alert alert-danger",
+            icon("exclamation-triangle"), .globals$labels_auth$invalid_usr_pwd
+          )
+        )
+      }
     }
   })
 
@@ -226,6 +236,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
 #' @param password Label for password input field.
 #' @param login Text displayed on the button.
 #' @param invalid_usr_pwd Error message displayed if authentication is unsuccesful.
+#' @param user_expired Error message displayed if user's account has expired.
 #'
 #' @export
 #'
@@ -233,13 +244,15 @@ auth_labels <- function(please_authenticate = "Please authenticate",
                         username = "Username:",
                         password = "Password:",
                         login = "Login",
-                        invalid_usr_pwd = "Username or password are incorrect") {
+                        invalid_usr_pwd = "Username or password are incorrect",
+                        user_expired = "Your account has expired") {
   list(
     please_authenticate = please_authenticate,
     username = username,
     password = password,
     login = login,
-    invalid_usr_pwd = invalid_usr_pwd
+    invalid_usr_pwd = invalid_usr_pwd,
+    user_expired = user_expired
   )
 }
 

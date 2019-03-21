@@ -6,7 +6,8 @@
 \usage{
 auth_labels(please_authenticate = "Please authenticate",
   username = "Username:", password = "Password:", login = "Login",
-  invalid_usr_pwd = "Username or password are incorrect")
+  invalid_usr_pwd = "Username or password are incorrect",
+  user_expired = "Your account has expired")
 }
 \arguments{
 \item{please_authenticate}{Text to be displayed as a header.}
@@ -18,6 +19,8 @@ auth_labels(please_authenticate = "Please authenticate",
 \item{login}{Text displayed on the button.}
 
 \item{invalid_usr_pwd}{Error message displayed if authentication is unsuccesful.}
+
+\item{user_expired}{Error message displayed if user's account has expired.}
 }
 \description{
 Labels for authentication module
