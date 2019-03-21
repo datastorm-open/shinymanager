@@ -105,7 +105,7 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
 
   ns <- NS(id)
 
-  .globals$labels <- labels
+  .globals$labels_auth <- labels
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
@@ -140,7 +140,7 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
               tags$br(),
               actionButton(
                 inputId = ns("go_auth"),
-                label = "Login",
+                label = labels$login,
                 width = "100%",
                 class = paste0("btn-", status)
               ),
@@ -209,7 +209,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
         selector = jns("result_auth"),
         ui = tags$div(
           id = ns("msg_auth"), class = "alert alert-danger",
-          icon("exclamation-triangle"), .globals$labels$invalid_usr_pwd
+          icon("exclamation-triangle"), .globals$labels_auth$invalid_usr_pwd
         )
       )
     }
