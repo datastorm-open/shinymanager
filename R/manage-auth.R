@@ -42,7 +42,7 @@ manage_auth_app <- function(ui, ...) {
 #'
 #' @export
 #'
-#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString
+#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe
 #'
 #' @rdname manage-auth
 manage_auth_server <- function(session, check_credentials) {
@@ -54,6 +54,16 @@ manage_auth_server <- function(session, check_credentials) {
     use_token = TRUE
   )
 
+  user_info <- reactiveValues(user = NULL, user_info = NULL)
+
+  observe({
+    query <- getQueryString(session = session)
+    token <- query$token
+    user <- get_user(token)
+    user_info$user <- user
+    user_info$user_info <- get_user_info(user)
+  })
+
   observeEvent(session$input$.shinymanager_logout, {
     query <- getQueryString(session = session)
     token <- query$token
@@ -61,4 +71,6 @@ manage_auth_server <- function(session, check_credentials) {
     updateQueryString(queryString = "?", session = session, mode = "replace")
     session$reload()
   })
+
+  return(user_info)
 }

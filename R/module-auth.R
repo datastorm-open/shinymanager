@@ -179,6 +179,7 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
 #'
 #' @importFrom htmltools tags
 #' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI icon
+#' @importFrom stats setNames
 auth_server <- function(input, output, session, check_credentials, use_token = FALSE) {
 
   ns <- session$ns
@@ -199,7 +200,8 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       token <- generate_token(input$user_id)
 
       if (isTRUE(use_token)) {
-        add_token(token)
+        add_token(setNames(list(token), input$user_id))
+        store_user_info(setNames(list(res_auth$user_info), input$user_id))
         updateQueryString(queryString = paste0("?token=", token), session = session)
         session$reload()
       }
