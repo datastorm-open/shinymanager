@@ -6,7 +6,8 @@
 #'
 #' @export
 #'
-#' @importFrom shiny parseQueryString fluidPage
+#' @importFrom shiny parseQueryString fluidPage actionButton icon
+#' @importFrom htmltools tagList
 #'
 #' @name manage-auth
 #'
@@ -14,7 +15,17 @@ manage_auth_app <- function(ui, ...) {
   function(req) {
     token <- parseQueryString(req$QUERY_STRING)$token
     if (validate_token(token)) {
-      ui
+      tagList(
+        ui,
+        fab_button(
+          actionButton(
+            inputId = ".shinymanager_logout",
+            label = NULL,
+            tooltip = "Logout",
+            icon = icon("sign-out")
+          )
+        )
+      )
     } else {
       args <- list(...)
       args$id <- "auth"
