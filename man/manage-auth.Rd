@@ -6,7 +6,7 @@
 \alias{manage_auth_server}
 \title{Manage authentication in a Shiny application}
 \usage{
-manage_auth_app(ui, ...)
+manage_auth_app(ui, ..., head_auth = NULL)
 
 manage_auth_server(session, check_credentials)
 }
@@ -14,6 +14,9 @@ manage_auth_server(session, check_credentials)
 \item{ui}{UI of the application.}
 
 \item{...}{Arguments passed to \code{\link{auth_ui}}.}
+
+\item{head_auth}{Tag or list of tags to use in the \code{<head>}
+of the authentication page (for custom CSS for example).}
 
 \item{session}{Shiny session}
 

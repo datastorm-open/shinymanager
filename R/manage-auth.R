@@ -3,6 +3,8 @@
 #'
 #' @param ui UI of the application.
 #' @param ... Arguments passed to \code{\link{auth_ui}}.
+#' @param head_auth Tag or list of tags to use in the \code{<head>}
+#'  of the authentication page (for custom CSS for example).
 #'
 #' @export
 #'
@@ -11,7 +13,7 @@
 #'
 #' @name manage-auth
 #'
-manage_auth_app <- function(ui, ...) {
+manage_auth_app <- function(ui, ..., head_auth = NULL) {
   function(req) {
     query <- parseQueryString(req$QUERY_STRING)
     token <- query$token
@@ -54,6 +56,7 @@ manage_auth_app <- function(ui, ...) {
       args <- list(...)
       args$id <- "auth"
       fluidPage(
+        tags$head(head_auth),
         do.call(auth_ui, args)
       )
     }

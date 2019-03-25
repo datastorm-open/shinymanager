@@ -3,7 +3,7 @@
 - ui : box avec user et pwd
     + [x] options labels
     + [x] logo (image)
-    + [ ] css / couleur / theme
+    + [x] css / couleur / theme
 
 - server: 
     + [x] entrée : colonne user / pwd / admin obligatoire
