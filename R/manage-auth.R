@@ -13,19 +13,43 @@
 #'
 manage_auth_app <- function(ui, ...) {
   function(req) {
-    token <- parseQueryString(req$QUERY_STRING)$token
+    query <- parseQueryString(req$QUERY_STRING)
+    token <- query$token
+    admin <- query$admin
     if (validate_token(token)) {
-      tagList(
-        ui,
-        fab_button(
-          actionButton(
-            inputId = ".shinymanager_logout",
-            label = NULL,
-            tooltip = "Logout",
-            icon = icon("sign-out")
-          )
+      if (is_token_admin(token) & identical(admin, "true")) {
+        fluidPage(
+          tags$h2("Welcome to admin mode!")
         )
-      )
+      } else {
+        if (is_token_admin(token)) {
+          menu <- fab_button(
+            actionButton(
+              inputId = ".shinymanager_logout",
+              label = NULL,
+              tooltip = "Logout",
+              icon = icon("sign-out")
+            ),
+            actionButton(
+              inputId = ".shinymanager_admin",
+              label = NULL,
+              tooltip = "Admin mode",
+              icon = icon("cogs")
+            )
+          )
+        } else {
+          menu <- fab_button(
+            actionButton(
+              inputId = ".shinymanager_logout",
+              label = NULL,
+              tooltip = "Logout",
+              icon = icon("sign-out")
+            )
+          )
+        }
+
+        tagList(ui, menu)
+      }
     } else {
       args <- list(...)
       args$id <- "auth"
@@ -59,9 +83,18 @@ manage_auth_server <- function(session, check_credentials) {
   observe({
     query <- getQueryString(session = session)
     token <- query$token
-    user <- get_user(token)
-    user_info$user <- user
-    user_info$user_info <- get_user_info(user)
+    if (!is.null(token)) {
+      user <- get_user(token)
+      user_info$user <- user
+      user_info$user_info <- get_user_info(user)
+    }
+  })
+
+  observeEvent(session$input$.shinymanager_admin, {
+    query <- getQueryString(session = session)
+    token <- query$token
+    updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
+    session$reload()
   })
 
   observeEvent(session$input$.shinymanager_logout, {

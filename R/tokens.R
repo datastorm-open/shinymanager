@@ -31,7 +31,20 @@ store_user_info <- function(info) {
 }
 
 get_user_info <- function(user) {
+  if (is.null(user)) {
+    return(NULL)
+  }
   .globals$user_infos[[user]]
+}
+
+is_token_admin <- function(token) {
+  user <- get_user(token)
+  user_infos <- get_user_info(user)
+  if (is.null(user_infos)) {
+    return(FALSE)
+  } else {
+    isTRUE(user_infos$admin)
+  }
 }
 
 # add_user <- function(user) {
