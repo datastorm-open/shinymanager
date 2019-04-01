@@ -12,9 +12,9 @@ LazyData: true
 Imports: 
     shiny,
     htmltools,
+    DT,
     DBI,
     RSQLite,
-    openssl
-Suggests: 
-    purrr
+    openssl,
+    R.utils
 RoxygenNote: 6.1.1

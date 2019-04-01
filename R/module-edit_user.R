@@ -1,6 +1,6 @@
 
 #' @importFrom shiny NS dateInput checkboxInput textInput
-#' @importFrom htmltools taglist
+#' @importFrom htmltools tagList
 #' @importFrom R.utils capitalize
 edit_user_UI <- function(id, data, user = NULL) {
   ns <- NS(id)

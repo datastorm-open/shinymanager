@@ -45,7 +45,7 @@ write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NUL
     value_encrypted <- aes_cbc_encrypt(data = value_serialized, key = key)
     value <- data.frame(value = I(list(value_encrypted)), iv = I(list(attr(value_encrypted, "iv"))))
   }
-  dbWriteTable(conn = conn, name = name, value = value)
+  dbWriteTable(conn = conn, name = name, value = value, overwrite = TRUE)
 }
 
 #' @importFrom DBI dbReadTable
