@@ -8,7 +8,8 @@
 \usage{
 manage_auth_app(ui, ..., head_auth = NULL)
 
-manage_auth_server(session, check_credentials)
+manage_auth_server(check_credentials,
+  session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{ui}{UI of the application.}
@@ -18,9 +19,9 @@ manage_auth_server(session, check_credentials)
 \item{head_auth}{Tag or list of tags to use in the \code{<head>}
 of the authentication page (for custom CSS for example).}
 
-\item{session}{Shiny session}
-
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
+
+\item{session}{Shiny session.}
 }
 \description{
 Manage authentication in a Shiny application

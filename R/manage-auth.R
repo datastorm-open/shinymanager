@@ -64,15 +64,15 @@ manage_auth_app <- function(ui, ..., head_auth = NULL) {
 }
 
 
-#' @param session Shiny session
 #' @param check_credentials Function passed to \code{\link{auth_server}}.
+#' @param session Shiny session.
 #'
 #' @export
 #'
-#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe
+#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain
 #'
 #' @rdname manage-auth
-manage_auth_server <- function(session, check_credentials) {
+manage_auth_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
   callModule(
     module = auth_server,

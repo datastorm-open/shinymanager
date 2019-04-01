@@ -55,12 +55,6 @@ if (interactive()) {
     stringsAsFactors = FALSE
   )
 
-  # Function to authenticate user
-  check_credentials_p <- purrr::partial(
-    check_credentials_df,
-    credentials_df = credentials # set default df to use
-  )
-
   # app
   ui <- fluidPage(
 
@@ -95,7 +89,7 @@ if (interactive()) {
     auth <- callModule(
       module = auth_server,
       id = "auth",
-      check_credentials = check_credentials_p
+      check_credentials = check_credentials(credentials)
     )
 
     output$res_auth <- renderPrint({
