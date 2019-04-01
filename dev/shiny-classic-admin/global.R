@@ -15,9 +15,3 @@ credentials <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Function to authenticate user
-check_credentials_p <- purrr::partial(
-  check_credentials_df,
-  credentials_df = credentials # set default df to use
-)
-

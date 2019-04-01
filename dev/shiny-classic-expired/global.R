@@ -14,10 +14,3 @@ credentials <- data.frame(
   expire = as.Date(c("2019-12-31", "2019-01-31", "2019-12-31")),
   stringsAsFactors = FALSE
 )
-
-# Function to authenticate user
-check_credentials_p <- purrr::partial(
-  check_credentials_df,
-  credentials_df = credentials # set default df to use
-)
-
