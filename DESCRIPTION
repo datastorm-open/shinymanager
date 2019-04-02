@@ -7,7 +7,7 @@ Authors@R: c(
     )
 Description: Simple and secure authentification mechanism for single 'Shiny' applications.
     Credentials are stored in an encrypted 'SQLite' database. Source code of main application
-    is protected until authentication isn't successful.
+    is protected until authentication is successful.
 License: GPL-3
 URL: https://github.com/datastorm-open/shinymanager
 Encoding: UTF-8

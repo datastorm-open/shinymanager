@@ -19,5 +19,5 @@ manage_auth_app(fluidPage(
     verbatimTextOutput("res_auth")
   )
 
-))
+), enable_admin = TRUE)
 

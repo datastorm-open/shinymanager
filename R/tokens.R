@@ -51,8 +51,8 @@ is_token_admin <- function(token) {
       sha256(paste0(user, Sys.time()), key = rand_bytes(32))
     },
     add = function(token, ...) {
-      private$queue <- append(
-        x = private$queue,
+      private$tokens <- append(
+        x = private$tokens,
         values = setNames(
           object = list(...),
           nm = token
@@ -61,26 +61,42 @@ is_token_admin <- function(token) {
       invisible(self)
     },
     get_user = function(token) {
-      private$queue[[token]]$user
+      private$tokens[[token]]$user
     },
     is_valid = function(token) {
-      isTRUE(token %in% names(private$queue))
+      isTRUE(token %in% names(private$tokens))
     },
     is_admin = function(token) {
-      isTRUE(private$queue[[token]]$admin)
+      isTRUE(as.logical(private$tokens[[token]]$admin))
     },
     get = function(token) {
-      private$queue[[token]]
+      private$tokens[[token]]
     },
     remove = function(token) {
       if (private$length() == 0) return(NULL)
-      private$queue[[token]] <- NULL
+      private$tokens[[token]] <- NULL
       invisible()
+    },
+    set_sqlite_path = function(path) {
+      private$sqlite_path <- path
+      invisible(private$sqlite_path)
+    },
+    get_sqlite_path = function() {
+      private$sqlite_path
+    },
+    set_passphrase = function(passphrase) {
+      private$passphrase <- passphrase
+      invisible(private$passphrase)
+    },
+    get_passphrase = function() {
+      private$passphrase
     }
   ),
   private = list(
-    queue = list(),
-    length = function() base::length(private$queue)
+    tokens = list(),
+    sqlite_path = NULL,
+    passphrase = NULL,
+    length = function() base::length(private$tokens)
   )
 )
 .tok <- .tokens$new()

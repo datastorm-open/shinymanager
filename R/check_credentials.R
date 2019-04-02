@@ -37,6 +37,8 @@ check_credentials <- function(db, passphrase = NULL) {
       check_credentials_df(user, password, credentials_df = db)
     }
   } else if (is_sqlite(db)) {
+    .tok$set_sqlite_path(db)
+    .tok$set_passphrase(passphrase)
     check_credentials_sqlite(sqlite_path = db, passphrase = passphrase)
   } else {
     stop("'db' must be a data.frame or a path to a SQLite database", call. = FALSE)

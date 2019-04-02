@@ -3,6 +3,8 @@
 #'
 #' @param ui UI of the application.
 #' @param ... Arguments passed to \code{\link{auth_ui}}.
+#' @param enable_admin Enable or not access to admin mode, note that
+#'  admin mode is only available using a SQLite backend for credentials.
 #' @param head_auth Tag or list of tags to use in the \code{<head>}
 #'  of the authentication page (for custom CSS for example).
 #'
@@ -13,18 +15,32 @@
 #'
 #' @name manage-auth
 #'
-manage_auth_app <- function(ui, ..., head_auth = NULL) {
+manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
   function(req) {
     query <- parseQueryString(req$QUERY_STRING)
     token <- query$token
     admin <- query$admin
     if (.tok$is_valid(token)) {
-      if (.tok$is_admin(token) & identical(admin, "true")) {
+      if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
         fluidPage(
-          tags$h2("Welcome to admin mode!")
+          admin_UI("admin"),
+          fab_button(
+            actionButton(
+              inputId = ".shinymanager_logout",
+              label = NULL,
+              tooltip = "Logout",
+              icon = icon("sign-out")
+            ),
+            actionButton(
+              inputId = ".shinymanager_app",
+              label = NULL,
+              tooltip = "Go to application",
+              icon = icon("share")
+            )
+          )
         )
       } else {
-        if (.tok$is_admin(token)) {
+        if (isTRUE(enable_admin) && .tok$is_admin(token)) {
           menu <- fab_button(
             actionButton(
               inputId = ".shinymanager_logout",
@@ -81,6 +97,16 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
     use_token = TRUE
   )
 
+  path_sqlite <- .tok$get_sqlite_path()
+  if (!is.null(path_sqlite)) {
+    callModule(
+      module = admin,
+      id = "admin",
+      sqlite_path = path_sqlite,
+      passphrase = .tok$get_passphrase()
+    )
+  }
+
   user_info_rv <- reactiveValues()
 
   observe({
@@ -98,6 +124,13 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
     query <- getQueryString(session = session)
     token <- query$token
     updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
+    session$reload()
+  })
+
+  observeEvent(session$input$.shinymanager_app, {
+    query <- getQueryString(session = session)
+    token <- query$token
+    updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
     session$reload()
   })
 
