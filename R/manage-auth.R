@@ -81,15 +81,16 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
     use_token = TRUE
   )
 
-  user_info <- reactiveValues(user = NULL, user_info = NULL)
+  user_info_rv <- reactiveValues()
 
   observe({
     query <- getQueryString(session = session)
     token <- query$token
     if (!is.null(token)) {
-      user <- get_user(token)
-      user_info$user <- user
-      user_info$user_info <- get_user_info(user)
+      user_info <- get_user_info(token)
+      for (i in names(user_info)) {
+        user_info_rv[[i]] <- user_info[[i]]
+      }
     }
   })
 
@@ -108,5 +109,5 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
     session$reload()
   })
 
-  return(user_info)
+  return(user_info_rv)
 }
