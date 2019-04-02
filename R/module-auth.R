@@ -2,7 +2,6 @@
 #' Authentication module
 #'
 #' @param id Module's id.
-#' @param labels Labels for text field, see \code{\link{auth_labels}}.
 #' @param tag_img A \code{tags$img} to be displayed on the authentication module.
 #' @param status Bootstrap status to use for the panel and the button.
 #'  Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
@@ -95,11 +94,12 @@
 #'
 #'   shinyApp(ui, server)
 #' }
-auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primary") {
+auth_ui <- function(id, tag_img = NULL, status = "primary") {
 
   ns <- NS(id)
 
-  .globals$labels_auth <- labels
+  lan <- use_language()
+
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
@@ -118,23 +118,23 @@ auth_ui <- function(id, labels = auth_labels(), tag_img = NULL, status = "primar
               tags$div(
                 style = "text-align: center;",
                 if (!is.null(tag_img)) tag_img,
-                tags$h3(labels$please_authenticate)
+                tags$h3(lan$get("Please authenticate"))
               ),
               tags$br(),
               textInput(
                 inputId = ns("user_id"),
-                label = labels$username,
+                label = lan$get("Username:"),
                 width = "100%"
               ),
               passwordInput(
                 inputId = ns("user_pwd"),
-                label = labels$password,
+                label = lan$get("Password:"),
                 width = "100%"
               ),
               tags$br(),
               actionButton(
                 inputId = ns("go_auth"),
-                label = labels$login,
+                label = lan$get("Login"),
                 width = "100%",
                 class = paste0("btn-", status)
               ),
@@ -181,6 +181,8 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
     paste0("#", ns(x))
   }
 
+  lan <- use_language()
+
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
 
   observeEvent(input$go_auth, {
@@ -207,7 +209,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), .globals$labels_auth$user_expired
+            icon("exclamation-triangle"), lan$get("Your account has expired")
           )
         )
       } else {
@@ -215,7 +217,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), .globals$labels_auth$invalid_usr_pwd
+            icon("exclamation-triangle"), lan$get("Username or password are incorrect")
           )
         )
       }
@@ -226,31 +228,5 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
 }
 
 
-#' Labels for authentication module
-#'
-#' @param please_authenticate Text to be displayed as a header.
-#' @param username Label for username input field.
-#' @param password Label for password input field.
-#' @param login Text displayed on the button.
-#' @param invalid_usr_pwd Error message displayed if authentication is unsuccesful.
-#' @param user_expired Error message displayed if user's account has expired.
-#'
-#' @export
-#'
-auth_labels <- function(please_authenticate = "Please authenticate",
-                        username = "Username:",
-                        password = "Password:",
-                        login = "Login",
-                        invalid_usr_pwd = "Username or password are incorrect",
-                        user_expired = "Your account has expired") {
-  list(
-    please_authenticate = please_authenticate,
-    username = username,
-    password = password,
-    login = login,
-    invalid_usr_pwd = invalid_usr_pwd,
-    user_expired = user_expired
-  )
-}
 
 

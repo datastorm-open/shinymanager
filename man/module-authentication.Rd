@@ -6,15 +6,12 @@
 \alias{auth_server}
 \title{Authentication module}
 \usage{
-auth_ui(id, labels = auth_labels(), tag_img = NULL,
-  status = "primary")
+auth_ui(id, tag_img = NULL, status = "primary")
 
 auth_server(input, output, session, check_credentials, use_token = FALSE)
 }
 \arguments{
 \item{id}{Module's id.}
-
-\item{labels}{Labels for text field, see \code{\link{auth_labels}}.}
 
 \item{tag_img}{A \code{tags$img} to be displayed on the authentication module.}
 

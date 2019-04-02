@@ -1,9 +1,10 @@
 
-pwd_ui <- function(id, labels = pwd_labels(), tag_img = NULL, status = "primary") {
+pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 
   ns <- shiny::NS(id)
 
-  .globals$labels_pwd <- labels
+  lan <- use_language()
+
   htmltools::tagList(
     htmltools::singleton(htmltools::tags$head(
       htmltools::tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
@@ -22,17 +23,17 @@ pwd_ui <- function(id, labels = pwd_labels(), tag_img = NULL, status = "primary"
               htmltools::tags$div(
                 style = "text-align: center;",
                 if (!is.null(tag_img)) tag_img,
-                htmltools::tags$h3(labels$change_password)
+                htmltools::tags$h3(lan$get("Please change your password"))
               ),
               htmltools::tags$br(),
               shiny::passwordInput(
                 inputId = ns("pwd_one"),
-                label = labels$new_password,
+                label = lan$get("New password:"),
                 width = "100%"
               ),
               shiny::passwordInput(
                 inputId = ns("pwd_two"),
-                label = labels$confirm_password,
+                label = lan$get("Confirm password:"),
                 width = "100%"
               ),
               htmltools::tags$br(),
@@ -40,7 +41,7 @@ pwd_ui <- function(id, labels = pwd_labels(), tag_img = NULL, status = "primary"
                 id = ns("container-btn-update"),
                 shiny::actionButton(
                   inputId = ns("update_pwd"),
-                  label = labels$update_pwd,
+                  label = lan$get("Update new password"),
                   width = "100%",
                   class = paste0("btn-", status)
                 ),
@@ -68,6 +69,8 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
 
   password <- shiny::reactiveValues(result = FALSE)
 
+  lan <- use_language()
+
   shiny::observeEvent(input$update_pwd, {
     shiny::removeUI(selector = jns("msg_pwd"))
     if (!identical(input$pwd_one, input$pwd_two)) {
@@ -75,7 +78,7 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
         selector = jns("result_pwd"),
         ui = htmltools::tags$div(
           id = ns("msg_pwd"), class = "alert alert-danger",
-          shiny::icon("exclamation-triangle"), .globals$labels_pwd$error_not_identical
+          shiny::icon("exclamation-triangle"), lan$get("The two passwords are different")
         )
       )
     } else {
@@ -88,11 +91,11 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
             id = ns("msg_pwd"),
             htmltools::tags$div(
               class = "alert alert-success",
-              shiny::icon("check"), .globals$labels_pwd$success_update
+              shiny::icon("check"), lan$get("Password successfully updated! Please re-login")
             ),
             shiny::actionButton(
               inputId = ns("relog"),
-              label = .globals$labels_pwd$login,
+              label = lan$get("Login"),
               width = "100%"
             )
           )
@@ -102,7 +105,7 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
           selector = jns("result_pwd"),
           ui = htmltools::tags$div(
             id = ns("msg_pwd"), class = "alert alert-danger",
-            shiny::icon("exclamation-triangle"), .globals$labels_pwd$error_update
+            shiny::icon("exclamation-triangle"), lan$get("Failed to update password")
           )
         )
       }
@@ -122,26 +125,6 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
   return(password)
 }
 
-
-pwd_labels <- function(change_password = "Please change your password",
-                       new_password = "New password:",
-                       confirm_password = "Confirm password:",
-                       update_pwd = "Update new password",
-                       success_update = "Password successfully updated! Please re-login",
-                       error_not_identical = "The two passwords are different",
-                       error_update = "Failed to update password",
-                       login = "Login") {
-  list(
-    change_password = change_password,
-    new_password = new_password,
-    confirm_password = confirm_password,
-    update_pwd = update_pwd,
-    success_update = success_update,
-    error_not_identical = error_not_identical,
-    error_update = error_update,
-    login = login
-  )
-}
 
 
 
