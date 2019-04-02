@@ -18,13 +18,13 @@ manage_auth_app <- function(ui, ..., head_auth = NULL) {
     query <- parseQueryString(req$QUERY_STRING)
     token <- query$token
     admin <- query$admin
-    if (validate_token(token)) {
-      if (is_token_admin(token) & identical(admin, "true")) {
+    if (.tok$is_valid(token)) {
+      if (.tok$is_admin(token) & identical(admin, "true")) {
         fluidPage(
           tags$h2("Welcome to admin mode!")
         )
       } else {
-        if (is_token_admin(token)) {
+        if (.tok$is_admin(token)) {
           menu <- fab_button(
             actionButton(
               inputId = ".shinymanager_logout",
@@ -87,7 +87,7 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
     query <- getQueryString(session = session)
     token <- query$token
     if (!is.null(token)) {
-      user_info <- get_user_info(token)
+      user_info <- .tok$get(token)
       for (i in names(user_info)) {
         user_info_rv[[i]] <- user_info[[i]]
       }
@@ -104,7 +104,7 @@ manage_auth_server <- function(check_credentials, session = shiny::getDefaultRea
   observeEvent(session$input$.shinymanager_logout, {
     query <- getQueryString(session = session)
     token <- query$token
-    remove_token(token)
+    .tok$remove(token)
     updateQueryString(queryString = "?", session = session, mode = "replace")
     session$reload()
   })

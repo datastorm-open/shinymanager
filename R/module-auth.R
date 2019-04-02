@@ -191,11 +191,12 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       authentication$result <- TRUE
       authentication$user <- input$user_id
       authentication$user_info <- res_auth$user_info
-      token <- generate_token(input$user_id)
+      # token <- generate_token(input$user_id)
+      token <- .tok$generate(input$user_id)
 
       if (isTRUE(use_token)) {
-        add_token(setNames(list(token), input$user_id))
-        store_user_info(setNames(list(res_auth$user_info), input$user_id))
+        # add_token(token, as.list(res_auth$user_info))
+        .tok$add(token, as.list(res_auth$user_info))
         updateQueryString(queryString = paste0("?token=", token), session = session)
         session$reload()
       }
