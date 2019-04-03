@@ -4,10 +4,10 @@
 
 function(input, output, session) {
 
-  test <- manage_auth_server(session, check_credentials = check_credentials(credentials))
+  result_auth <- secure_server(check_credentials = check_credentials(credentials))
 
   output$res_auth <- renderPrint({
-    reactiveValuesToList(test)
+    reactiveValuesToList(result_auth)
   })
 
   # classic app

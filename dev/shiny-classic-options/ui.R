@@ -3,7 +3,7 @@
 # UI ----------------------------------------------------------------------
 
 
-manage_auth_app(
+secure_app(
   ui = fluidPage(
 
     # classic app

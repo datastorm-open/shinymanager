@@ -4,12 +4,12 @@
 
 function(input, output, session) {
 
-  test <- manage_auth_server(
+  auth_out <- secure_server(
     check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret")
   )
 
   output$res_auth <- renderPrint({
-    reactiveValuesToList(test)
+    reactiveValuesToList(auth_out)
   })
 
   # classic app

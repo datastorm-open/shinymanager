@@ -21,5 +21,5 @@ ui <- fluidPage(
 
 )
 
-manage_auth_app(ui, enable_admin = TRUE)
+secure_app(ui, enable_admin = TRUE)
 

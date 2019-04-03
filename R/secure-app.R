@@ -1,5 +1,5 @@
 
-#' Manage authentication in a Shiny application
+#' Secure a Shiny application and manage authentication
 #'
 #' @param ui UI of the application.
 #' @param ... Arguments passed to \code{\link{auth_ui}}.
@@ -13,14 +13,59 @@
 #' @importFrom shiny parseQueryString fluidPage actionButton icon
 #' @importFrom htmltools tagList
 #'
-#' @name manage-auth
+#' @name secure-app
 #'
-manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
+#' @examples
+#' if (interactive()) {
+#'
+#'   # define some credentials
+#'   credentials <- data.frame(
+#'     user = c("shiny", "shinymanager"),
+#'     password = c("azerty", "12345"),
+#'     stringsAsFactors = FALSE
+#'   )
+#'
+#'   library(shiny)
+#'   library(shinymanager)
+#'
+#'   ui <- fluidPage(
+#'     tags$h2("My secure application"),
+#'     verbatimTextOutput("auth_output")
+#'   )
+#'
+#'   # Wrap your UI with secure_app
+#'   ui <- secure_app(ui)
+#'
+#'
+#'   server <- function(input, output, session) {
+#'
+#'     # call the server part
+#'     # check_credentials returns a function to authenticate users
+#'     res_auth <- secure_server(
+#'       check_credentials = check_credentials(credentials)
+#'     )
+#'
+#'     output$auth_output <- renderPrint({
+#'       reactiveValuesToList(res_auth)
+#'     })
+#'
+#'     # your classic server logic
+#'
+#'   }
+#'
+#'   shinyApp(ui, server)
+#'
+#' }
+secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
   lan <- use_language()
-  function(req) {
-    query <- parseQueryString(req$QUERY_STRING)
+  ui <- force(ui)
+  enable_admin <- force(enable_admin)
+  head_auth <- force(head_auth)
+  function(request) {
+    query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
     admin <- query$admin
+    # browser()
     if (.tok$is_valid(token)) {
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
         fluidPage(
@@ -88,8 +133,8 @@ manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain
 #'
-#' @rdname manage-auth
-manage_auth_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
+#' @rdname secure-app
+secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
   callModule(
     module = auth_server,

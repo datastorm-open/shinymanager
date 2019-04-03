@@ -36,5 +36,5 @@ ui <- dashboardPage(
 )
 
 
-manage_auth_app(ui)
+secure_app(ui)
 

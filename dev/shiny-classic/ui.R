@@ -3,7 +3,7 @@
 # UI ----------------------------------------------------------------------
 
 
-manage_auth_app(fluidPage(
+secure_app(fluidPage(
 
   # classic app
   headerPanel('Iris k-means clustering'),

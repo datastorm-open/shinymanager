@@ -86,7 +86,7 @@ is_token_admin <- function(token) {
     },
     set_passphrase = function(passphrase) {
       private$passphrase <- passphrase
-      invisible(private$passphrase)
+      invisible()
     },
     get_passphrase = function() {
       private$passphrase

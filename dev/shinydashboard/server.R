@@ -4,7 +4,7 @@
 
 function(input, output, session) {
 
-  manage_auth_server(session, check_credentials = check_credentials(credentials))
+  secure_server(check_credentials = check_credentials(credentials))
 
   # classic app
   set.seed(122)

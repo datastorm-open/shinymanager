@@ -10,7 +10,7 @@ library(shinymanager)
 credentials <- data.frame(
   user = c("fanny", "victor", "benoit"),
   password = c("azerty", "12345", "azerty"),
-  comment = c("alsace", "auvergne", "bretagne"),
+  # comment = c("alsace", "auvergne", "bretagne"),
   stringsAsFactors = FALSE
 )
 
