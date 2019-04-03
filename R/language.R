@@ -62,7 +62,10 @@ language <- R6::R6Class(
       "Confirm change" = "Confirm change",
       "Are you sure to remove user: %s from the database ?" = "Are you sure to remove user: %s from the database ?",
       "Delete user" = "Delete user",
-      "Edit user" = "Edit user"
+      "Edit user" = "Edit user",
+      "User already exist!" = "User already exist!",
+      "Dismiss" = "Dismiss",
+      "New user succesfully created!" = "New user succesfully created!"
     ),
     labels_lan = list(
       fr = list(
@@ -90,7 +93,10 @@ language <- R6::R6Class(
         "Confirm change" = "Valider les modifications",
         "Are you sure to remove user: %s from the database ?" = "Etes-vous s\u00fbr de vouloir supprimer %s de la base de donn\u00e9es ?",
         "Delete user" = "Supprimer l'utilisateur",
-        "Edit user" = "Modifier l'utilisateur"
+        "Edit user" = "Modifier l'utilisateur",
+        "User already exist!" = "L'utilisateur existe d\u00e9j\u00e0",
+        "Dismiss" = "Fermer",
+        "New user succesfully created!" = "Nouvel utilisateur cr\u00e9\u00e9 avec succ\u00e8s !"
       )
     ),
     DT_lan = list(
