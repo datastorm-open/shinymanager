@@ -7,12 +7,47 @@
 create_db(credentials_data, sqlite_path, passphrase = NULL)
 }
 \arguments{
-\item{credentials_data}{A \code{data.frame}}
+\item{credentials_data}{A \code{data.frame} with information about users, \code{user} and \code{password} are required.}
 
 \item{sqlite_path}{Path to the SQLite database.}
 
 \item{passphrase}{A password to protect the data inside the database.}
 }
 \description{
-Create credentials database
+Create a SQLite database with credentials data protected by a password.
+}
+\details{
+The credentials \code{data.frame} can have the following columns:
+ \itemize{
+  \item \strong{user (mandatory)} : the user's name.
+  \item \strong{password (mandatory)} : the user's password.
+  \item \strong{admin (optional)} : logical, is user have admin right ? If so,
+   user can access the admin mode (only available using a SQLite database)
+  \item \strong{start (optional)} : the date from which the user will have access to the application
+  \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+  \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
+ }
+}
+\examples{
+\dontrun{
+
+# Credentials data
+credentials <- data.frame(
+  user = c("shiny", "shinymanager"),
+  password = c("azerty", "12345"),
+  stringsAsFactors = FALSE
+)
+
+# you can use keyring package to set database key
+library(keyring)
+key_set("R-shinymanager-key", "obiwankenobi")
+
+# Create the database
+create_db(
+  credentials_data = credentials,
+  sqlite_path = "path/to/database.sqlite", # will be created
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+
+}
 }

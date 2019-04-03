@@ -1,7 +1,7 @@
 
 #' Check credentials
 #'
-#' @param db A \code{data.frame} with credentials data or path to SQLite database..
+#' @param db A \code{data.frame} with credentials data or path to SQLite database created with \code{\link{create_db}}.
 #' @param passphrase Passphrase to decrypt the SQLite database.
 #'
 #' @return Return a \code{function} with two arguments: \code{user} and \code{password}
@@ -10,7 +10,19 @@
 #'  \itemize{
 #'   \item \strong{result} : logical, result of authentication.
 #'   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
-#'   \item \strong{user_info} : the line in \code{credentials_df} corresponding to the user.
+#'   \item \strong{user_info} : the line in \code{db} corresponding to the user.
+#'  }
+#'
+#'
+#' @details The credentials \code{data.frame} can have the following columns:
+#'  \itemize{
+#'   \item \strong{user (mandatory)} : the user's name.
+#'   \item \strong{password (mandatory)} : the user's password.
+#'   \item \strong{admin (optional)} : logical, is user have admin right ? If so,
+#'    user can access the admin mode (only available using a SQLite database)
+#'   \item \strong{start (optional)} : the date from which the user will have access to the application
+#'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+#'   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
 #'  }
 #'
 #' @export
@@ -30,6 +42,14 @@
 #' check_credentials(credentials)("fanny", "azerty")
 #' check_credentials(credentials)("fanny", "azert")
 #' check_credentials(credentials)("fannyyy", "azerty")
+#'
+#' \dontrun{
+#'
+#' ## With a SQLite database:
+#'
+#' check_credentials("credentials.sqlite", passphrase = "supersecret")
+#'
+#' }
 #'
 check_credentials <- function(db, passphrase = NULL) {
   if (is.data.frame(db)) {
