@@ -1,4 +1,6 @@
 
+#' @importFrom R6 R6Class
+#' @importFrom utils modifyList
 language <- R6::R6Class(
   classname = "language",
   public = list(

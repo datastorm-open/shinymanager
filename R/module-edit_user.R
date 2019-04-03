@@ -2,23 +2,23 @@
 #' @importFrom shiny NS dateInput checkboxInput textInput
 #' @importFrom htmltools tagList
 #' @importFrom R.utils capitalize
-edit_user_UI <- function(id, data, user = NULL) {
+edit_user_UI <- function(id, credentials, username = NULL) {
   ns <- NS(id)
-  if (!is.null(user) && user %in% data$user) {
-    data_user <- data[data$user == user, ]
+  if (!is.null(username) && username %in% credentials$user) {
+    data_user <- credentials[credentials$user == username, ]
   } else {
     data_user <- list()
   }
   tagList(
     lapply(
-      X = names(data),
+      X = names(credentials),
       FUN = function(x) {
         if (x %in% c("expire", "start")) {
           dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
         } else if (identical(x, "password")) {
           NULL
         } else if (identical(x, "admin")) {
-          checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]])
+          checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
         } else {
           textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
         }
@@ -39,3 +39,12 @@ edit_user <- function(input, output, session) {
   return(rv)
 }
 
+
+#' @importFrom utils modifyList
+update_user <- function(df, value, username) {
+  df <- split(x = df, f = df$user)
+  user <- as.list(df[[username]])
+  new <-  modifyList(x = user, val = value)
+  df[[username]] <- as.data.frame(new)
+  do.call(rbind, c(df, list(make.row.names = FALSE)))
+}
