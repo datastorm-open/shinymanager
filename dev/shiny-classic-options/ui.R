@@ -20,13 +20,6 @@ manage_auth_app(
     )
 
   ),
-  tag_img = tags$img(src = "https://www.r-project.org/logo/Rlogo.png", width = 100),
-  labels = auth_labels(
-    please_authenticate = "Veuillez vous authentifier",
-    username = "Nom d'utilisateur",
-    password = "Mot de passe",
-    login = "S'identifier",
-    invalid_usr_pwd = "Nom d'utilisateur ou mot de passe incorrect"
-  )
+  tag_img = tags$img(src = "https://www.r-project.org/logo/Rlogo.png", width = 100)
 )
 

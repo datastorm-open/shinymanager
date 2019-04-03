@@ -22,6 +22,7 @@ language <- R6::R6Class(
       if (!lan %in% names(private$labels_lan)) {
         stop("Unsupported language !", call. = FALSE)
       }
+      private$language <- lan
       private$labels <- private$labels_lan[[lan]]
     },
     get = function(label) {
@@ -29,9 +30,13 @@ language <- R6::R6Class(
     },
     get_all = function() {
       private$labels
+    },
+    get_DT = function() {
+      private$DT_lan[[private$language]]
     }
   ),
   private = list(
+    language = "en",
     labels = list(
       "Please authenticate" = "Please authenticate",
       "Username:" = "Username:",
@@ -45,7 +50,19 @@ language <- R6::R6Class(
       "Update new password" = "Update new password",
       "Password successfully updated! Please re-login" = "Password successfully updated! Please re-login",
       "The two passwords are different" = "The two passwords are different",
-      "Failed to update password" = "Failed to update password"
+      "Failed to update password" = "Failed to update password",
+      "Logout" = "Logout",
+      "Go to application" = "Go to application",
+      "Administrator mode" = "Administrator mode",
+      "Add a user" = "Add a user",
+      "Fail to update user" = "Fail to update user",
+      "User successfully updated" = "User successfully updated",
+      "Cancel" = "Cancel",
+      "Confirm new user" = "Confirm new user",
+      "Confirm change" = "Confirm change",
+      "Are you sure to remove user: %s from the database ?" = "Are you sure to remove user: %s from the database ?",
+      "Delete user" = "Delete user",
+      "Edit user" = "Edit user"
     ),
     labels_lan = list(
       fr = list(
@@ -61,7 +78,62 @@ language <- R6::R6Class(
         "Update new password" = "Mettre \u00e0 jour",
         "Password successfully updated! Please re-login" = "Mot de passe modifi\u00e9! Veuillez vous reconnecter",
         "The two passwords are different" = "Les deux mots de passe sont diff\u00e9rents",
-        "Failed to update password" = "Echec de la mise \u00e0 jour du mot de passe"
+        "Failed to update password" = "Echec de la mise \u00e0 jour du mot de passe",
+        "Logout" = "Se d\u00e9connecter",
+        "Go to application" = "Aller \u00e0 l'application",
+        "Administrator mode" = "Mode administrateur",
+        "Add a user" = "Ajouter un utilisateur",
+        "Fail to update user" = "Echec de la mise \u00e0 jour de l'utilisateur",
+        "User successfully updated" = "Mise \u00e0 jour r\u00e9ussie",
+        "Cancel" = "Annuler",
+        "Confirm new user" = "Valider l'ajout",
+        "Confirm change" = "Valider les modifications",
+        "Are you sure to remove user: %s from the database ?" = "Etes-vous s\u00fbr de vouloir supprimer %s de la base de donn\u00e9es ?",
+        "Delete user" = "Supprimer l'utilisateur",
+        "Edit user" = "Modifier l'utilisateur"
+      )
+    ),
+    DT_lan = list(
+      fr = list(
+        sProcessing = "Traitement en cours...", sSearch = "Rechercher&nbsp;:",
+        sLengthMenu = "Afficher _MENU_ &eacute;l&eacute;ments",
+        sInfo = "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        sInfoEmpty = "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        sInfoFiltered = "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        sInfoPostFix = "", sLoadingRecords = "Chargement en cours...",
+        sZeroRecords = "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        sEmptyTable = "Aucune donn&eacute;e disponible dans le tableau",
+        oPaginate = list(
+          sFirst = "Premier", sPrevious = "Pr&eacute;c&eacute;dent",
+          sNext = "Suivant", sLast = "Dernier"
+        ),
+        oAria = list(
+          sSortAscending = ": activer pour trier la colonne par ordre croissant",
+          sSortDescending = ": activer pour trier la colonne par ordre d&eacute;croissant"
+        )
+      ),
+      en = list(
+        sEmptyTable = "No data available in table",
+        sInfo = "Showing _START_ to _END_ of _TOTAL_ entries",
+        sInfoEmpty = "Showing 0 to 0 of 0 entries",
+        sInfoFiltered = "(filtered from _MAX_ total entries)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Show _MENU_ entries",
+        sLoadingRecords = "Loading...",
+        sProcessing = "Processing...",
+        sSearch = "Search:",
+        sZeroRecords = "No matching records found",
+        oPaginate = list(
+          sFirst = "First",
+          sLast = "Last",
+          sNext = "Next",
+          sPrevious = "Previous"
+        ),
+        oAria = list(
+          sSortAscending = ": activate to sort column ascending",
+          sSortDescending = ": activate to sort column descending"
+        )
       )
     ),
     length = function() base::length(private$labels)

@@ -14,3 +14,7 @@ credentials <- data.frame(
   stringsAsFactors = FALSE
 )
 
+
+# not exported yet
+lan <- shinymanager:::language$new()
+lan$set_language("fr")

@@ -7,6 +7,8 @@ admin_UI <- function(id) {
 
   ns <- shiny::NS(id)
 
+  lan <- use_language()
+
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-admin.css", rel="stylesheet")
@@ -14,11 +16,11 @@ admin_UI <- function(id) {
     shiny::fluidRow(
       shiny::column(
         width = 10, offset = 1,
-        htmltools::tags$h2("Administrator mode"),
+        htmltools::tags$h2(lan$get("Administrator mode")),
         htmltools::tags$br(), htmltools::tags$br(),
         shiny::actionButton(
           inputId = ns("add_user"),
-          label = "Add a user",
+          label = lan$get("Add a user"),
           icon = shiny::icon("plus"),
           width = "100%",
           class = "btn-primary"
@@ -39,6 +41,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   jns <- function(x) {
     paste0("#", ns(x))
   }
+
+  lan <- use_language()
 
   update_read_db <- shiny::reactiveValues(x = NULL)
 
@@ -71,9 +75,10 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       escape = FALSE,
       selection = "none",
       options = list(
+        language = lan$get_DT(),
         initComplete = DT::JS(
           "function(settings, json) {",
-          "$(this.api().table().header()).css({\'background-color\': \'#222222\', \'color\': \'#fff\'});",
+          "$(this.api().table().header()).css({\'background-color\': \'#428bca\', \'color\': \'#fff\'});",
           "}"),
         # autoWidth = TRUE,
         columnDefs = list(
@@ -89,10 +94,10 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       title = "Edit user",
       edit_user_UI(ns("edit_user"), credentials = users, username = input$edit_user),
       footer = tagList(
-        shiny::modalButton("Cancel"),
+        shiny::modalButton(lan$get("Cancel")),
         shiny::actionButton(
           inputId = ns("edited_user"),
-          label = "Confirm change",
+          label = lan$get("Confirm change"),
           class = "btn-primary",
           `data-dismiss` = "modal"
         )
@@ -113,9 +118,9 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_edit, "try-error")) {
-      shiny::showNotification(ui = "Fail to update user", type = "error")
+      shiny::showNotification(ui = lan$get("Fail to update user"), type = "error")
     } else {
-      shiny::showNotification(ui = "User successfully updated", type = "message")
+      shiny::showNotification(ui = lan$get("User successfully updated"), type = "message")
       update_read_db$x <- Sys.time()
     }
   })
@@ -126,10 +131,10 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       title = "Add user",
       edit_user_UI(ns("add_user"), users, NULL),
       footer = tagList(
-        shiny::modalButton("Cancel"),
+        shiny::modalButton(lan$get("Cancel")),
         shiny::actionButton(
           inputId = ns("added_user"),
-          label = "Confirm new user",
+          label = lan$get("Confirm new user"),
           class = "btn-primary",
           `data-dismiss` = "modal"
         )
@@ -160,6 +165,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 #' @importFrom htmltools tags doRenderTags
 #' @importFrom shiny icon
 edit_btns <- function(inputId, users) {
+  lan <- use_language()
   tag <- lapply(
     X = users,
     FUN = function(x) {
@@ -169,8 +175,12 @@ edit_btns <- function(inputId, users) {
           "Shiny.setInputValue('%s', '%s',  {priority: 'event'})",
           inputId, x
         ),
-        shiny::icon("pencil-square-o"), tooltip = "Edit user"
+        shiny::icon("pencil-square-o"),
+        `data-toggle` = "tooltip",
+        `data-title` = lan$get("Edit user"),
+        `data-container` = "body"
       )
+      res <- tagList(res, tags$script(HTML("$('[data-toggle=\"tooltip\"]').tooltip();")))
       htmltools::doRenderTags(res)
     }
   )
@@ -180,6 +190,7 @@ edit_btns <- function(inputId, users) {
 #' @importFrom htmltools tags doRenderTags
 #' @importFrom shiny icon
 remove_btns <- function(inputId, users) {
+  lan <- use_language()
   tag <- lapply(
     X = users,
     FUN = function(x) {
@@ -189,8 +200,12 @@ remove_btns <- function(inputId, users) {
           "Shiny.setInputValue('%s', '%s',  {priority: 'event'})",
           inputId, x
         ),
-        shiny::icon("trash-o "), tooltip = "Remove user"
+        shiny::icon("trash-o "),
+        `data-toggle` = "tooltip",
+        `data-title` = lan$get("Delete user"),
+        `data-container` = "body"
       )
+      res <- tagList(res, tags$script(HTML("$('[data-toggle=\"tooltip\"]').tooltip();")))
       htmltools::doRenderTags(res)
     }
   )
@@ -198,19 +213,23 @@ remove_btns <- function(inputId, users) {
 }
 
 
-
+#' @importFrom htmltools HTML tags tagList
+#' @importFrom shiny showModal modalDialog modalButton actionButton
 remove_modal <- function(ns, user) {
+  lan <- use_language()
   shiny::showModal(shiny::modalDialog(
-    tags$p("Are you sure to remove user: ", tags$b(user), " from the database ?"),
+    tags$p(HTML(sprintf(
+      lan$get("Are you sure to remove user: %s from the database ?"), tags$b(user)
+    ))),
     fade = FALSE,
     footer = tagList(
       shiny::actionButton(
         inputId = ns("delete_user"),
-        label = "Delete user",
+        label = lan$get("Delete user"),
         class = "btn-danger",
         `data-dismiss` = "modal"
       ),
-      shiny::modalButton("Cancel")
+      shiny::modalButton(lan$get("Cancel"))
     )
   ))
 }

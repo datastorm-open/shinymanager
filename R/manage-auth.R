@@ -16,6 +16,7 @@
 #' @name manage-auth
 #'
 manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
+  lan <- use_language()
   function(req) {
     query <- parseQueryString(req$QUERY_STRING)
     token <- query$token
@@ -28,13 +29,13 @@ manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
             actionButton(
               inputId = ".shinymanager_logout",
               label = NULL,
-              tooltip = "Logout",
+              tooltip = lan$get("Logout"),
               icon = icon("sign-out")
             ),
             actionButton(
               inputId = ".shinymanager_app",
               label = NULL,
-              tooltip = "Go to application",
+              tooltip = lan$get("Go to application"),
               icon = icon("share")
             )
           )
@@ -45,13 +46,13 @@ manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
             actionButton(
               inputId = ".shinymanager_logout",
               label = NULL,
-              tooltip = "Logout",
+              tooltip = lan$get("Logout"),
               icon = icon("sign-out")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
               label = NULL,
-              tooltip = "Admin mode",
+              tooltip = lan$get("Administrator mode"),
               icon = icon("cogs")
             )
           )
@@ -60,7 +61,7 @@ manage_auth_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
             actionButton(
               inputId = ".shinymanager_logout",
               label = NULL,
-              tooltip = "Logout",
+              tooltip = lan$get("Logout"),
               icon = icon("sign-out")
             )
           )

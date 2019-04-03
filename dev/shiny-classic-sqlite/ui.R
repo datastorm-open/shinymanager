@@ -3,7 +3,7 @@
 # UI ----------------------------------------------------------------------
 
 
-manage_auth_app(fluidPage(
+ui <- fluidPage(
 
   # classic app
   headerPanel('Iris k-means clustering'),
@@ -19,5 +19,7 @@ manage_auth_app(fluidPage(
     verbatimTextOutput("res_auth")
   )
 
-), enable_admin = TRUE)
+)
+
+manage_auth_app(ui, enable_admin = TRUE)
 
