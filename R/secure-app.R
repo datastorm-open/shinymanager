@@ -4,7 +4,7 @@
 #' @param ui UI of the application.
 #' @param ... Arguments passed to \code{\link{auth_ui}}.
 #' @param enable_admin Enable or not access to admin mode, note that
-#'  admin mode is only available using a SQLite backend for credentials.
+#'  admin mode is only available when using SQLite backend for credentials.
 #' @param head_auth Tag or list of tags to use in the \code{<head>}
 #'  of the authentication page (for custom CSS for example).
 #'
@@ -136,6 +136,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
 #' @rdname secure-app
 secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
+  clearQueryString(session = session)
+
   callModule(
     module = auth_server,
     id = "auth",
@@ -156,8 +158,7 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
   user_info_rv <- reactiveValues()
 
   observe({
-    query <- getQueryString(session = session)
-    token <- query$token
+    token <- getToken(session = session)
     if (!is.null(token)) {
       user_info <- .tok$get(token)
       for (i in names(user_info)) {
@@ -167,26 +168,38 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
   })
 
   observeEvent(session$input$.shinymanager_admin, {
-    query <- getQueryString(session = session)
-    token <- query$token
+    token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
+    .tok$reset_count(token)
     session$reload()
   })
 
   observeEvent(session$input$.shinymanager_app, {
-    query <- getQueryString(session = session)
-    token <- query$token
+    token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
+    .tok$reset_count(token)
     session$reload()
   })
 
   observeEvent(session$input$.shinymanager_logout, {
-    query <- getQueryString(session = session)
-    token <- query$token
+    token <- getToken(session = session)
     .tok$remove(token)
-    updateQueryString(queryString = "?", session = session, mode = "replace")
+    clearQueryString(session = session)
     session$reload()
   })
 
   return(user_info_rv)
 }
+
+
+
+clearQueryString <- function(session = getDefaultReactiveDomain()) {
+  updateQueryString("/", mode = "replace", session = session)
+}
+getToken <- function(session = getDefaultReactiveDomain()) {
+  query <- getQueryString(session = session)
+  query$token
+}
+
+
+

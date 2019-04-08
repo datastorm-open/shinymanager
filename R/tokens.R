@@ -51,31 +51,44 @@ is_token_admin <- function(token) {
       sha256(paste0(user, Sys.time()), key = rand_bytes(32))
     },
     add = function(token, ...) {
-      private$tokens <- append(
-        x = private$tokens,
-        values = setNames(
-          object = list(...),
-          nm = token
+      args <- list(...)
+      private$tokens <- union(private$tokens, token)
+      if (length(args) > 0) {
+        private$tokens_user <- append(
+          x = private$tokens_user,
+          values = setNames(
+            object = args,
+            nm = token
+          )
         )
-      )
+      }
       invisible(self)
     },
     get_user = function(token) {
-      private$tokens[[token]]$user
+      private$tokens_user[[token]]$user
     },
     is_valid = function(token) {
-      isTRUE(token %in% names(private$tokens))
+      valid <- token %in% private$tokens
+      count <- sum(private$tokens_count %in% token, na.rm = TRUE)
+      private$tokens_count <- c(private$tokens_count, token)
+      isTRUE(valid) & isTRUE(count < 1)
+    },
+    is_valid_server = function(token) {
+      isTRUE(token %in% private$tokens)
     },
     is_admin = function(token) {
-      isTRUE(as.logical(private$tokens[[token]]$admin))
+      isTRUE(as.logical(private$tokens_user[[token]]$admin))
     },
     get = function(token) {
-      private$tokens[[token]]
+      private$tokens_user[[token]]
     },
     remove = function(token) {
       if (private$length() == 0) return(NULL)
-      private$tokens[[token]] <- NULL
+      private$tokens <- setdiff(private$tokens, token)
       invisible()
+    },
+    reset_count = function(token) {
+      private$tokens_count <- setdiff(private$tokens_count, token)
     },
     set_sqlite_path = function(path) {
       private$sqlite_path <- path
@@ -93,7 +106,9 @@ is_token_admin <- function(token) {
     }
   ),
   private = list(
-    tokens = list(),
+    tokens = character(0),
+    tokens_count = character(0),
+    tokens_user = list(),
     sqlite_path = NULL,
     passphrase = NULL,
     length = function() base::length(private$tokens)

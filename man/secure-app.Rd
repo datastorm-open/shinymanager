@@ -17,7 +17,7 @@ secure_server(check_credentials,
 \item{...}{Arguments passed to \code{\link{auth_ui}}.}
 
 \item{enable_admin}{Enable or not access to admin mode, note that
-admin mode is only available using a SQLite backend for credentials.}
+admin mode is only available when using SQLite backend for credentials.}
 
 \item{head_auth}{Tag or list of tags to use in the \code{<head>}
 of the authentication page (for custom CSS for example).}
