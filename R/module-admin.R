@@ -219,7 +219,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   })
 
   observeEvent(input$changed_password, {
-    res_chg <- try(force_chg_pwd(input$change_pwd, sqlite_path = sqlite_path, passphrase = passphrase), silent = TRUE)
+    res_chg <- try(force_chg_pwd(input$change_pwd), silent = TRUE)
     if (inherits(res_chg, "try-error")) {
       showNotification(ui = lan$get("Failed to update the database"), type = "error")
     } else {

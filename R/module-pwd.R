@@ -1,56 +1,58 @@
 
+#' @importFrom htmltools tagList singleton tags
+#' @importFrom shiny NS fluidRow column passwordInput actionButton
 pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 
-  ns <- shiny::NS(id)
+  ns <- NS(id)
 
   lan <- use_language()
 
-  htmltools::tagList(
-    htmltools::singleton(htmltools::tags$head(
-      htmltools::tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
-      htmltools::tags$script(src = "shinymanager/bindEnter.js")
+  tagList(
+    singleton(tags$head(
+      tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
+      tags$script(src = "shinymanager/bindEnter.js")
     )),
-    htmltools::tags$div(
+    tags$div(
       id = ns("pwd-mod"), class = "panel-auth",
-      htmltools::tags$br(), htmltools::tags$div(style = "height: 70px;"), htmltools::tags$br(),
-      shiny::fluidRow(
-        shiny::column(
+      tags$br(), tags$div(style = "height: 70px;"), tags$br(),
+      fluidRow(
+        column(
           width = 4, offset = 4,
-          htmltools::tags$div(
+          tags$div(
             class = paste0("panel panel-", status),
-            htmltools::tags$div(
+            tags$div(
               class = "panel-body",
-              htmltools::tags$div(
+              tags$div(
                 style = "text-align: center;",
                 if (!is.null(tag_img)) tag_img,
-                htmltools::tags$h3(lan$get("Please change your password"))
+                tags$h3(lan$get("Please change your password"))
               ),
-              htmltools::tags$br(),
-              shiny::passwordInput(
+              tags$br(),
+              passwordInput(
                 inputId = ns("pwd_one"),
                 label = lan$get("New password:"),
                 width = "100%"
               ),
-              shiny::passwordInput(
+              passwordInput(
                 inputId = ns("pwd_two"),
                 label = lan$get("Confirm password:"),
                 width = "100%"
               ),
-              htmltools::tags$br(),
-              htmltools::tags$div(
+              tags$br(),
+              tags$div(
                 id = ns("container-btn-update"),
-                shiny::actionButton(
+                actionButton(
                   inputId = ns("update_pwd"),
                   label = lan$get("Update new password"),
                   width = "100%",
                   class = paste0("btn-", status)
                 ),
-                htmltools::tags$br(), htmltools::tags$br()
+                tags$br(), tags$br()
               ),
-              htmltools::tags$script(
+              tags$script(
                 sprintf("bindEnter('%s');", ns(""))
               ),
-              htmltools::tags$div(id = ns("result_pwd"))
+              tags$div(id = ns("result_pwd"))
             )
           )
         )
@@ -60,40 +62,42 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 }
 
 
-pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
+#' @importFrom htmltools tags
+#' @importFrom shiny reactiveValues observeEvent removeUI insertUI icon actionButton
+pwd_server <- function(input, output, session, user, update_pwd, use_token = FALSE) {
 
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
 
-  password <- shiny::reactiveValues(result = FALSE)
+  password <- reactiveValues(result = FALSE)
 
   lan <- use_language()
 
-  shiny::observeEvent(input$update_pwd, {
-    shiny::removeUI(selector = jns("msg_pwd"))
+  observeEvent(input$update_pwd, {
+    removeUI(selector = jns("msg_pwd"))
     if (!identical(input$pwd_one, input$pwd_two)) {
-      shiny::insertUI(
+      insertUI(
         selector = jns("result_pwd"),
-        ui = htmltools::tags$div(
+        ui = tags$div(
           id = ns("msg_pwd"), class = "alert alert-danger",
-          shiny::icon("exclamation-triangle"), lan$get("The two passwords are different")
+          icon("exclamation-triangle"), lan$get("The two passwords are different")
         )
       )
     } else {
-      res_pwd <- update_pwd(input$pwd_one)
+      res_pwd <- update_pwd(user$user, input$pwd_one)
       if (isTRUE(res_pwd$result)) {
-        shiny::removeUI(selector = jns("container-btn-update"))
-        shiny::insertUI(
+        removeUI(selector = jns("container-btn-update"))
+        insertUI(
           selector = jns("result_pwd"),
-          ui = htmltools::tags$div(
+          ui = tags$div(
             id = ns("msg_pwd"),
-            htmltools::tags$div(
+            tags$div(
               class = "alert alert-success",
-              shiny::icon("check"), lan$get("Password successfully updated! Please re-login")
+              icon("check"), lan$get("Password successfully updated! Please re-login")
             ),
-            shiny::actionButton(
+            actionButton(
               inputId = ns("relog"),
               label = lan$get("Login"),
               width = "100%"
@@ -101,25 +105,25 @@ pwd_server <- function(input, output, session, update_pwd, use_token = FALSE) {
           )
         )
       } else {
-        shiny::insertUI(
+        insertUI(
           selector = jns("result_pwd"),
-          ui = htmltools::tags$div(
+          ui = tags$div(
             id = ns("msg_pwd"), class = "alert alert-danger",
-            shiny::icon("exclamation-triangle"), lan$get("Failed to update password")
+            icon("exclamation-triangle"), lan$get("Failed to update password")
           )
         )
       }
     }
   })
 
-  shiny::observeEvent(input$relog, {
+  observeEvent(input$relog, {
     if (isTRUE(use_token)) {
-      query <- shiny::getQueryString()
-      token <- query$token
+      token <- getToken(session = session)
       remove_token(token)
-      shiny::updateQueryString(queryString = "?", session = session)
+      resetQueryString(session = session)
       session$reload()
     }
+    password$relog <- input$relog
   })
 
   return(password)

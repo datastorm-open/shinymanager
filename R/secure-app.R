@@ -67,6 +67,16 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
     admin <- query$admin
     # browser()
     if (.tok$is_valid(token)) {
+      is_forced_chg_pwd <- is_force_chg_pwd(token = token)
+      if (is_forced_chg_pwd) {
+        args <- get_args(..., fun = pwd_ui)
+        args$id <- "password"
+        pwd_ui <- fluidPage(
+          tags$head(head_auth),
+          do.call(pwd_ui, args)
+        )
+        return(pwd_ui)
+      }
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
         fluidPage(
           admin_UI("admin"),
@@ -115,7 +125,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
         tagList(ui, menu)
       }
     } else {
-      args <- list(...)
+      args <- get_args(..., fun = auth_ui)
       args$id <- "auth"
       fluidPage(
         tags$head(head_auth),
@@ -137,11 +147,20 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
 secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
   isolate(resetQueryString(session = session))
+  token_start <- isolate(getToken(session = session))
 
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
+    use_token = TRUE
+  )
+
+  callModule(
+    module = pwd_server,
+    id = "password",
+    user = reactiveValues(user = .tok$get(token_start)$user),
+    update_pwd = update_pwd,
     use_token = TRUE
   )
 

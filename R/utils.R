@@ -7,15 +7,23 @@ hasName <- function(x, name) {
   match(name, names(x), nomatch = 0L) > 0L
 }
 
+get_args <- function(..., fun) {
+  args_fun <- names(formals(fun))
+  args <- list(...)
+  args[names(args) %in% args_fun]
+}
+
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
-is_force_chg_pwd <- function(token, sqlite_path = NULL, passphrase = NULL) {
+is_force_chg_pwd <- function(token) {
   user_info <- .tok$get(token)
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
   if (!is.null(sqlite_path)) {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     resetpwd <- read_db_decrypt(conn, name = "resetpwd", passphrase = passphrase)
-    ind_user <- user_info$user %in% resetpwd$user
+    ind_user <- resetpwd$user %in% user_info$user
     isTRUE(resetpwd$reset_pwd[ind_user])
   } else {
     return(FALSE)
@@ -24,13 +32,38 @@ is_force_chg_pwd <- function(token, sqlite_path = NULL, passphrase = NULL) {
 
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
-force_chg_pwd <- function(user, sqlite_path, passphrase) {
-  conn <- dbConnect(SQLite(), dbname = sqlite_path)
-  on.exit(dbDisconnect(conn))
-  resetpwd <- read_db_decrypt(conn, name = "resetpwd", passphrase = passphrase)
-  ind_user <- resetpwd$user %in% user
-  resetpwd$reset_pwd[ind_user] <- TRUE
-  write_db_encrypt(conn, value = resetpwd, name = "resetpwd", passphrase = passphrase)
+force_chg_pwd <- function(user, change = TRUE) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    resetpwd <- read_db_decrypt(conn, name = "resetpwd", passphrase = passphrase)
+    ind_user <- resetpwd$user %in% user
+    resetpwd$reset_pwd[ind_user] <- change
+    write_db_encrypt(conn, value = resetpwd, name = "resetpwd", passphrase = passphrase)
+  }
+}
+
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RSQLite SQLite
+update_pwd <- function(user, pwd) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_pwd <- try({
+      users <- read_db_decrypt(conn, name = "credentials", passphrase = passphrase)
+      ind_user <- users$user %in% user
+      users$password[ind_user] <- pwd
+      write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
+      force_chg_pwd(user, FALSE)
+    }, silent = TRUE)
+    return(list(result = !inherits(res_pwd, "try-error")))
+  } else {
+    return(list(result = FALSE))
+  }
 }
 
 
