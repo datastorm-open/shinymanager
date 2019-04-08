@@ -136,7 +136,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
 #' @rdname secure-app
 secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
-  clearQueryString(session = session)
+  # clearQueryString(session = session)
 
   callModule(
     module = auth_server,
