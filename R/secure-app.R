@@ -191,15 +191,29 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
   return(user_info_rv)
 }
 
-
-
+# Remove the whole query string
+#' @importFrom shiny updateQueryString getDefaultReactiveDomain
 clearQueryString <- function(session = getDefaultReactiveDomain()) {
   updateQueryString("/", mode = "replace", session = session)
 }
+
+# Retrieve token from the query string
+#' @importFrom shiny getQueryString getDefaultReactiveDomain
 getToken <- function(session = getDefaultReactiveDomain()) {
   query <- getQueryString(session = session)
   query$token
 }
 
-
+# Remove the token from the query string
+#' @importFrom shiny updateQueryString getQueryString getDefaultReactiveDomain
+resetQueryString <- function(session = getDefaultReactiveDomain()) {
+  query <- getQueryString(session = session)
+  query$token <- NULL
+  if (length(query) == 0) {
+    updateQueryString(queryString = "/", mode = "replace", session = session)
+  } else {
+    query <- paste(names(query), query, sep = "=", collapse="&")
+    updateQueryString(queryString = paste0("?", query), mode = "replace", session = session)
+  }
+}
 
