@@ -27,7 +27,6 @@
 #'
 #' @export
 #'
-#' @importFrom utils hasName
 #'
 #'
 #' @examples

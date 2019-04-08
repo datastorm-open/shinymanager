@@ -3,6 +3,10 @@ is_sqlite <- function(path) {
   is.character(path) && file.exists(path) && grepl(pattern = "\\.sqlite$", x = path)
 }
 
+hasName <- function(x, name) {
+  match(name, names(x), nomatch = 0L) > 0L
+}
+
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
 is_force_chg_pwd <- function(token, sqlite_path = NULL, passphrase = NULL) {
