@@ -124,6 +124,4 @@ check_credentials_sqlite <- function(sqlite_path, passphrase) {
 }
 
 
-is_sqlite <- function(path) {
-  is.character(path) && file.exists(path) && grepl(pattern = "\\.sqlite$", x = path)
-}
+

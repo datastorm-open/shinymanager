@@ -70,8 +70,9 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     req(users())
     users <- users()
     users <- users[, setdiff(names(users), "password"), drop = FALSE]
-    users$Edit <- edit_btns(ns("edit_user"), users$user)
-    users$Remove <- remove_btns(ns("remove_user"), users$user)
+    users$`Change password` <- input_btns(ns("change_pwd"), users$user, "Ask to change password", icon("key"), status = "primary")
+    users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary")
+    users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger")
     datatable(
       data = users,
       colnames = capitalize(names(users)),
@@ -86,7 +87,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
           "}"),
         # autoWidth = TRUE,
         columnDefs = list(
-          list(width = "50px", targets = (ncol(users)-2):(ncol(users)-1))
+          list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
         )
       )
     )
@@ -186,7 +187,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_add, "try-error")) {
-      showNotification(ui = lan$get("Fail to update user"), type = "error")
+      showNotification(ui = lan$get("Failed to update user"), type = "error")
     } else {
       showModal(modalDialog(
         tags$p(lan$get("New user succesfully created!")),
@@ -194,6 +195,35 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         footer = modalButton(lan$get("Dismiss"))
       ))
       update_read_db$x <- Sys.time()
+    }
+  })
+
+
+  observeEvent(input$change_pwd, {
+    users <- users()
+    showModal(modalDialog(
+      title = "Change password",
+      tags$p(
+        sprintf(lan$get("Ask %s to change password on next connection?"), input$change_pwd)
+      ),
+      footer = tagList(
+        modalButton(lan$get("Cancel")),
+        actionButton(
+          inputId = ns("changed_password"),
+          label = lan$get("Confirm"),
+          class = "btn-primary",
+          `data-dismiss` = "modal"
+        )
+      )
+    ))
+  })
+
+  observeEvent(input$changed_password, {
+    res_chg <- try(force_chg_pwd(input$change_pwd, sqlite_path = sqlite_path, passphrase = passphrase), silent = TRUE)
+    if (inherits(res_chg, "try-error")) {
+      showNotification(ui = lan$get("Failed to update the database"), type = "error")
+    } else {
+      showNotification(ui = lan$get("Change saved!"), type = "message")
     }
   })
 
@@ -211,57 +241,6 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     update_read_db$x <- Sys.time()
   })
 
-}
-
-
-#' @importFrom htmltools tags doRenderTags
-#' @importFrom shiny icon
-edit_btns <- function(inputId, users) {
-  lan <- use_language()
-  tag <- lapply(
-    X = users,
-    FUN = function(x) {
-      res <- tags$button(
-        class = "btn btn-primary",
-        onclick = sprintf(
-          "Shiny.setInputValue('%s', '%s',  {priority: 'event'})",
-          inputId, x
-        ),
-        icon("pencil-square-o"),
-        `data-toggle` = "tooltip",
-        `data-title` = lan$get("Edit user"),
-        `data-container` = "body"
-      )
-      res <- tagList(res, tags$script(HTML("$('[data-toggle=\"tooltip\"]').tooltip();")))
-      doRenderTags(res)
-    }
-  )
-  unlist(tag, use.names = FALSE)
-}
-
-#' @importFrom htmltools tags doRenderTags
-#' @importFrom shiny icon
-remove_btns <- function(inputId, users) {
-  lan <- use_language()
-  tag <- lapply(
-    X = users,
-    FUN = function(x) {
-      res <- tags$button(
-        class = "btn btn-danger",
-        onclick = sprintf(
-          "Shiny.setInputValue('%s', '%s',  {priority: 'event'})",
-          inputId, x
-        ),
-        icon("trash-o "),
-        `data-toggle` = "tooltip",
-        `data-title` = lan$get("Delete user"),
-        `data-container` = "body"
-      )
-      res <- tagList(res, tags$script(HTML("$('[data-toggle=\"tooltip\"]').tooltip();")))
-      doRenderTags(res)
-    }
-  )
-  unlist(tag, use.names = FALSE)
 }
 
 

@@ -55,7 +55,7 @@ language <- R6::R6Class(
       "Go to application" = "Go to application",
       "Administrator mode" = "Administrator mode",
       "Add a user" = "Add a user",
-      "Fail to update user" = "Fail to update user",
+      "Failed to update user" = "Failed to update user",
       "User successfully updated" = "User successfully updated",
       "Cancel" = "Cancel",
       "Confirm new user" = "Confirm new user",
@@ -65,7 +65,12 @@ language <- R6::R6Class(
       "Edit user" = "Edit user",
       "User already exist!" = "User already exist!",
       "Dismiss" = "Dismiss",
-      "New user succesfully created!" = "New user succesfully created!"
+      "New user succesfully created!" = "New user succesfully created!",
+      "Ask to change password" = "Ask to change password",
+      "Confirm" = "Confirm",
+      "Ask %s to change password on next connection?" = "Ask %s to change password on next connection?",
+      "Change saved!" = "Change saved!",
+      "Failed to update the database" = "Failed to update the database"
     ),
     labels_lan = list(
       fr = list(
@@ -86,7 +91,7 @@ language <- R6::R6Class(
         "Go to application" = "Aller \u00e0 l'application",
         "Administrator mode" = "Mode administrateur",
         "Add a user" = "Ajouter un utilisateur",
-        "Fail to update user" = "Echec de la mise \u00e0 jour de l'utilisateur",
+        "Failed to update user" = "Echec de la mise \u00e0 jour de l'utilisateur",
         "User successfully updated" = "Mise \u00e0 jour r\u00e9ussie",
         "Cancel" = "Annuler",
         "Confirm new user" = "Valider l'ajout",
@@ -96,7 +101,12 @@ language <- R6::R6Class(
         "Edit user" = "Modifier l'utilisateur",
         "User already exist!" = "L'utilisateur existe d\u00e9j\u00e0",
         "Dismiss" = "Fermer",
-        "New user succesfully created!" = "Nouvel utilisateur cr\u00e9\u00e9 avec succ\u00e8s !"
+        "New user succesfully created!" = "Nouvel utilisateur cr\u00e9\u00e9 avec succ\u00e8s !",
+        "Ask to change password" = "Demander \u00e0 changer le mot de passe",
+        "Confirm" = "Confirmer",
+        "Ask %s to change password on next connection?" = "Demander \u00e0 de changer son mot de passe \u00e0 la prochaine connexion ?",
+        "Change saved!" = "Changements sauvegard\u00e9s !",
+        "Failed to update the database" = "Une erreur s'est produite"
       )
     ),
     DT_lan = list(

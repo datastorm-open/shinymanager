@@ -63,7 +63,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
     name = "resetpwd",
     value = data.frame(
       user = credentials_data$user,
-      reset_pwd = TRUE,
+      reset_pwd = FALSE,
       stringsAsFactors = FALSE
     ),
     passphrase = passphrase
@@ -102,22 +102,6 @@ read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
 
 
 
-#' Simple password generation
-#'
-#' @param n Number of password(s)
-#'
-#' @return a \code{character}
-#' @export
-#'
-#' @importFrom openssl base64_encode rand_bytes
-#'
-#' @examples
-#' generate_pwd()
-#'
-#' generate_pwd(3)
-generate_pwd <- function(n = 1) {
-  replicate(n = n, base64_encode(rand_bytes(6)))
-}
 
 
 
