@@ -18,7 +18,7 @@ toggleBtn <- function(session, inputId, type = "disable") {
 # Remove the whole query string
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 clearQueryString <- function(session = getDefaultReactiveDomain()) {
-  updateQueryString("/", mode = "replace", session = session)
+  updateQueryString(session$clientData$url_pathname, mode = "replace", session = session)
 }
 
 # Retrieve token from the query string
@@ -34,7 +34,7 @@ resetQueryString <- function(session = getDefaultReactiveDomain()) {
   query <- getQueryString(session = session)
   query$token <- NULL
   if (length(query) == 0) {
-    updateQueryString(queryString = "/", mode = "replace", session = session)
+    clearQueryString(session = session)
   } else {
     query <- paste(names(query), query, sep = "=", collapse="&")
     updateQueryString(queryString = paste0("?", query), mode = "replace", session = session)

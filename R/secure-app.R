@@ -131,12 +131,12 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
 #'
 #' @export
 #'
-#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain
+#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain isolate
 #'
 #' @rdname secure-app
 secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
 
-  # clearQueryString(session = session)
+  isolate(resetQueryString(session = session))
 
   callModule(
     module = auth_server,
