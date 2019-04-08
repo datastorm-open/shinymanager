@@ -49,6 +49,19 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
   }
+  if(!"admin" %in% names(credentials_data)){
+    credentials_data$admin <- FALSE
+  }
+  if(!"start" %in% names(credentials_data)){
+    credentials_data$start <- NA
+  }
+  if(!"expire" %in% names(credentials_data)){
+    credentials_data$expire <- NA
+  }
+  
+  default_col <- c("user", "password", "start", "expire", "admin")
+  credentials_data <- credentials_data[, c(default_col, 
+                                           setdiff(colnames(credentials_data), default_col))]
   conn <- dbConnect(SQLite(), dbname = sqlite_path)
   on.exit(dbDisconnect(conn))
   credentials_data[] <- lapply(credentials_data, as.character)

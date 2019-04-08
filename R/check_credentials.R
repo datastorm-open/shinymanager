@@ -77,9 +77,12 @@ check_credentials_df <- function(user, password, credentials_df) {
   user_info <- credentials_df[credentials_df$user == user, setdiff(names(credentials_df), "password"), drop = FALSE]
   pwd <- credentials_df$password[credentials_df$user == user]
   good_password <- isTRUE(pwd == password)
-  if (hasName(credentials_df, "expire")) {
-    if (is.null(user_info$start)) {
+  if (hasName(credentials_df, "expire") | hasName(credentials_df, "start")) {
+    if (is.null(user_info$start) | (!is.null(user_info$start) && is.na(user_info$start))) {
       user_info$start <- Sys.Date() - 1
+    }
+    if (is.null(user_info$expire) | (!is.null(user_info$expire) && is.na(user_info$expire))) {
+      user_info$expire <- Sys.Date() + 1
     }
     good_time <- isTRUE(user_info$start <= Sys.Date() & user_info$expire >= Sys.Date())
   } else {
