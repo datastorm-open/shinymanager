@@ -23,4 +23,5 @@ Imports:
     openssl,
     R.utils
 Suggests: 
-    keyring
+    keyring,
+    testthat
