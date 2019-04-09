@@ -1,3 +1,4 @@
+^\.travis\.yml$
 ^shinymanager\.Rproj$
 ^\.Rproj\.user$
 ^todo\.md$
