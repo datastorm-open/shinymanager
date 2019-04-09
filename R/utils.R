@@ -56,6 +56,9 @@ update_pwd <- function(user, pwd) {
     res_pwd <- try({
       users <- read_db_decrypt(conn, name = "credentials", passphrase = passphrase)
       ind_user <- users$user %in% user
+      if (identical(users$password[ind_user], pwd)) {
+        return(list(result = FALSE))
+      }
       users$password[ind_user] <- pwd
       write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       force_chg_pwd(user, FALSE)
@@ -85,7 +88,12 @@ generate_pwd <- function(n = 1) {
 }
 
 
-
+validate_pwd <- function(pwd) {
+  all(vapply(
+    X = c("[0-9]+", "[a-z]+", "[A-Z]+", ".{6,}"),
+    FUN = grepl, x = pwd, FUN.VALUE = logical(1)
+  ))
+}
 
 
 

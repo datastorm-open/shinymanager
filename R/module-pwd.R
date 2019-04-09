@@ -1,6 +1,65 @@
 
+#' New password module
+#'
+#' @param id Module's id.
+#' @param tag_img A \code{tags$img} to be displayed on the authentication module.
+#' @param status Bootstrap status to use for the panel and the button.
+#'  Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
+#'  \code{"warning"}, \code{"danger"}.
+#'
+#' @export
+#'
+#' @name module-password
+#'
 #' @importFrom htmltools tagList singleton tags
 #' @importFrom shiny NS fluidRow column passwordInput actionButton
+#'
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(shinymanager)
+#'
+#'   ui <- fluidPage(
+#'     tags$h2("Change password module"),
+#'     actionButton(
+#'       inputId = "ask", label = "Ask to change password"
+#'     ),
+#'     verbatimTextOutput(outputId = "res_pwd")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'
+#'     observeEvent(input$ask, {
+#'       insertUI(
+#'         selector = "body",
+#'         ui = tags$div(
+#'           id = "module-pwd",
+#'           pwd_ui(id = "pwd")
+#'         )
+#'       )
+#'     })
+#'
+#'     output$res_pwd <- renderPrint({
+#'       reactiveValuesToList(pwd_out)
+#'     })
+#'
+#'     pwd_out <- callModule(
+#'       module = pwd_server,
+#'       id = "pwd",
+#'       user = reactiveValues(user = "me"),
+#'       update_pwd = function(user, pwd) {
+#'         # store the password somewhere
+#'         list(result = TRUE)
+#'       }
+#'     )
+#'
+#'     observeEvent(pwd_out$relog, {
+#'       removeUI(selector = "#module-pwd")
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
 pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 
   ns <- NS(id)
@@ -38,6 +97,11 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
                 label = lan$get("Confirm password:"),
                 width = "100%"
               ),
+              tags$span(
+                class = "help-block",
+                icon("info-circle"),
+                lan$get("Password must contain at least one number, one lowercase, one uppercase and must be at least length 6.")
+              ),
               tags$br(),
               tags$div(
                 id = ns("container-btn-update"),
@@ -61,21 +125,42 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
   )
 }
 
-
+#' @param input,output,session Standard Shiny server arguments.
+#' @param user A \code{reactiveValues} with a slot \code{user},
+#'  referring to the user for whom the password is to be changed.
+#' @param update_pwd A \code{function} to perform an action when changing password is successful.
+#'  Two arguments will be passed to the function: \code{user} (username) and \code{password}
+#'  (the new password). Must return a list with at least a slot \code{result} with \code{TRUE}
+#'  or \code{FALSE}, according if the update has been successful.
+#' @param validate_pwd A \code{function} to validate the password enter by the user.
+#'  Default is to check for the password to have at least one number, one lowercase,
+#'  one uppercase and be of length 6 at least.
+#' @param use_token Add a token in the URL to check authentication. Should not be used directly.
+#'
+#' @export
+#'
+#' @rdname module-password
+#'
 #' @importFrom htmltools tags
 #' @importFrom shiny reactiveValues observeEvent removeUI insertUI icon actionButton
-pwd_server <- function(input, output, session, user, update_pwd, use_token = FALSE) {
+#' @importFrom utils getFromNamespace
+pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = NULL, use_token = FALSE) {
+
+  if (is.null(validate_pwd)) {
+    validate_pwd <- getFromNamespace("validate_pwd", "shinymanager")
+  }
 
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
 
-  password <- reactiveValues(result = FALSE)
+  password <- reactiveValues(result = FALSE, user = NULL, relog = NULL)
 
   lan <- use_language()
 
   observeEvent(input$update_pwd, {
+    password$relog <- NULL
     removeUI(selector = jns("msg_pwd"))
     if (!identical(input$pwd_one, input$pwd_two)) {
       insertUI(
@@ -86,32 +171,44 @@ pwd_server <- function(input, output, session, user, update_pwd, use_token = FAL
         )
       )
     } else {
-      res_pwd <- update_pwd(user$user, input$pwd_one)
-      if (isTRUE(res_pwd$result)) {
-        removeUI(selector = jns("container-btn-update"))
-        insertUI(
-          selector = jns("result_pwd"),
-          ui = tags$div(
-            id = ns("msg_pwd"),
-            tags$div(
-              class = "alert alert-success",
-              icon("check"), lan$get("Password successfully updated! Please re-login")
-            ),
-            actionButton(
-              inputId = ns("relog"),
-              label = lan$get("Login"),
-              width = "100%"
-            )
-          )
-        )
-      } else {
+      if (!isTRUE(validate_pwd(input$pwd_one))) {
         insertUI(
           selector = jns("result_pwd"),
           ui = tags$div(
             id = ns("msg_pwd"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan$get("Failed to update password")
+            icon("exclamation-triangle"), lan$get("Password does not respect safety requirements")
           )
         )
+      } else {
+        res_pwd <- update_pwd(user$user, input$pwd_one)
+        if (isTRUE(res_pwd$result)) {
+          password$result <- TRUE
+          password$user <- user$user
+          removeUI(selector = jns("container-btn-update"))
+          insertUI(
+            selector = jns("result_pwd"),
+            ui = tags$div(
+              id = ns("msg_pwd"),
+              tags$div(
+                class = "alert alert-success",
+                icon("check"), lan$get("Password successfully updated! Please re-login")
+              ),
+              actionButton(
+                inputId = ns("relog"),
+                label = lan$get("Login"),
+                width = "100%"
+              )
+            )
+          )
+        } else {
+          insertUI(
+            selector = jns("result_pwd"),
+            ui = tags$div(
+              id = ns("msg_pwd"), class = "alert alert-danger",
+              icon("exclamation-triangle"), lan$get("Failed to update password")
+            )
+          )
+        }
       }
     }
   })

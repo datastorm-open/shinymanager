@@ -71,5 +71,3 @@ input_btns <- function(inputId, users, tooltip, icon, status = "primary") {
 
 
 
-
-

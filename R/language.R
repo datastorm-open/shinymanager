@@ -70,7 +70,9 @@ language <- R6::R6Class(
       "Confirm" = "Confirm",
       "Ask %s to change password on next connection?" = "Ask %s to change password on next connection?",
       "Change saved!" = "Change saved!",
-      "Failed to update the database" = "Failed to update the database"
+      "Failed to update the database" = "Failed to update the database",
+      "Password does not respect safety requirements" = "Password does not respect safety requirements",
+      "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6."
     ),
     labels_lan = list(
       fr = list(
@@ -106,7 +108,9 @@ language <- R6::R6Class(
         "Confirm" = "Confirmer",
         "Ask %s to change password on next connection?" = "Demander \u00e0 de changer son mot de passe \u00e0 la prochaine connexion ?",
         "Change saved!" = "Changements sauvegard\u00e9s !",
-        "Failed to update the database" = "Une erreur s'est produite"
+        "Failed to update the database" = "Une erreur s'est produite",
+        "Password does not respect safety requirements" = "Le mot de passe ne respecte les r\u00e8gles de s\u00e9curit\u00e9",
+        "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Le mot de passe doit contenir au minimum un chiffre, une lettre majuscule, une lettre minuscule et doit \u00eatre au moins de longueur 6."
       )
     ),
     DT_lan = list(
