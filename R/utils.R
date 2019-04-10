@@ -13,6 +13,13 @@ get_args <- function(..., fun) {
   args[names(args) %in% args_fun]
 }
 
+#' @importFrom R.utils capitalize
+make_title <- function(x) {
+  capitalize(gsub(
+    pattern = "_", replacement = " ", x = x
+  ))
+}
+
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
 is_force_chg_pwd <- function(token) {
@@ -22,9 +29,9 @@ is_force_chg_pwd <- function(token) {
   if (!is.null(sqlite_path)) {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
-    resetpwd <- read_db_decrypt(conn, name = "resetpwd", passphrase = passphrase)
+    resetpwd <- read_db_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     ind_user <- resetpwd$user %in% user_info$user
-    isTRUE(resetpwd$reset_pwd[ind_user])
+    identical(resetpwd$must_change[ind_user], "TRUE")
   } else {
     return(FALSE)
   }
@@ -38,10 +45,14 @@ force_chg_pwd <- function(user, change = TRUE) {
   if (!is.null(sqlite_path)) {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
-    resetpwd <- read_db_decrypt(conn, name = "resetpwd", passphrase = passphrase)
+    resetpwd <- read_db_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     ind_user <- resetpwd$user %in% user
-    resetpwd$reset_pwd[ind_user] <- change
-    write_db_encrypt(conn, value = resetpwd, name = "resetpwd", passphrase = passphrase)
+    resetpwd$must_change[ind_user] <- change
+    if (!isTRUE(change)) {
+      resetpwd$have_changed[ind_user] <- TRUE
+      resetpwd$date_change[ind_user] <- as.character(Sys.Date())
+    }
+    write_db_encrypt(conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
   }
 }
 

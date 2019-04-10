@@ -58,9 +58,9 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   if(!"expire" %in% names(credentials_data)){
     credentials_data$expire <- NA
   }
-  
+
   default_col <- c("user", "password", "start", "expire", "admin")
-  credentials_data <- credentials_data[, c(default_col, 
+  credentials_data <- credentials_data[, c(default_col,
                                            setdiff(colnames(credentials_data), default_col))]
   conn <- dbConnect(SQLite(), dbname = sqlite_path)
   on.exit(dbDisconnect(conn))
@@ -73,10 +73,12 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   )
   write_db_encrypt(
     conn = conn,
-    name = "resetpwd",
+    name = "pwd_mngt",
     value = data.frame(
       user = credentials_data$user,
-      reset_pwd = FALSE,
+      must_change = as.character(FALSE),
+      have_changed = as.character(FALSE),
+      date_change = character(length(credentials_data$user)),
       stringsAsFactors = FALSE
     ),
     passphrase = passphrase
