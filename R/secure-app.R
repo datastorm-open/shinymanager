@@ -121,7 +121,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
             )
           )
         }
-
+        save_logs(token)
         tagList(ui, menu)
       }
     } else {

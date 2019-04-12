@@ -81,6 +81,32 @@ update_pwd <- function(user, pwd) {
 }
 
 
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RSQLite SQLite
+save_logs <- function(token) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  user <- .tok$get_user(token)
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_logs <- try({
+      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      logs <- rbind(logs, data.frame(
+        user = user,
+        server_connected = as.character(Sys.time()),
+        token = token,
+        stringsAsFactors = FALSE
+      ))
+      write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+    }, silent = TRUE)
+    if (inherits(res_logs, "try-error")) {
+      warning("shinymanager: unable to save logs", call. = FALSE)
+    }
+  }
+}
+
+
 #' Simple password generation
 #'
 #' @param n Number of password(s)

@@ -83,11 +83,58 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
     ),
     passphrase = passphrase
   )
+  write_db_encrypt(
+    conn = conn,
+    name = "logs",
+    value = data.frame(
+      user = character(0),
+      server_connected = character(0),
+      token = character(0),
+      stringsAsFactors = FALSE
+    ),
+    passphrase = passphrase
+  )
 }
 
-#' @importFrom DBI dbWriteTable
+
+#' Read / Write crypted table from / to a SQLite database
+#'
+#' @param conn A DBIConnection object, as returned by \code{\link[DBI]{dbConnect}}.
+#' @param value A \code{data.frame}.
+#' @param name A character string specifying the unquoted DBMS table name.
+#' @param passphrase A secret passphrase to crypt the table inside the database
+#'
+#' @return a\code{data.frame} for \code{read_db_decrypt}.
+#' @export
+#'
+#' @name db-crypted
+#'
+#' @importFrom DBI dbConnect dbDisconnect dbWriteTable
+#' @importFrom RSQLite SQLite
 #' @importFrom openssl sha256 aes_cbc_encrypt
+#'
+#' @examples
+#' # connect to database
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+#'
+#' # write to database
+#' write_db_encrypt(conn, value = head(iris), name = "iris", passphrase = "supersecret")
+#'
+#' # read
+#' read_db_decrypt(conn = conn, name = "iris", passphrase = "supersecret")
+#'
+#' # with wrong passphrase
+#' \dontrun{
+#' read_db_decrypt(conn = conn, name = "iris", passphrase = "forgotten")
+#' }
+#'
+#' # with DBI method you'll get a crypted blob
+#' DBI::dbReadTable(conn = conn, name = "iris")
 write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
+  if (is.character(conn)) {
+    conn <- dbConnect(RSQLite::SQLite(), dbname = conn)
+    on.exit(dbDisconnect(conn))
+  }
   if (!is.null(passphrase)) {
     passphrase <- as.character(passphrase)
     passphrase <- charToRaw(passphrase)
@@ -99,9 +146,20 @@ write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NUL
   dbWriteTable(conn = conn, name = name, value = value, overwrite = TRUE)
 }
 
-#' @importFrom DBI dbReadTable
+
+#' @export
+#'
+#' @rdname db-crypted
+#'
+#' @importFrom DBI dbConnect dbDisconnect dbReadTable
+#' @importFrom RSQLite SQLite
 #' @importFrom openssl sha256 aes_cbc_decrypt
+#'
 read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
+  if (is.character(conn)) {
+    conn <- dbConnect(RSQLite::SQLite(), dbname = conn)
+    on.exit(dbDisconnect(conn))
+  }
   out <- dbReadTable(conn = conn, name = name)
   if (!is.null(passphrase)) {
     passphrase <- as.character(passphrase)
