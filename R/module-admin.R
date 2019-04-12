@@ -247,6 +247,15 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     res_add <- try({
       users <- rbind(users, as.data.frame(newuser))
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+      resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+      resetpwd <- rbind(resetpwd, data.frame(
+        user = newuser$user,
+        must_change = as.character(FALSE),
+        have_changed = as.character(FALSE),
+        date_change = character(1),
+        stringsAsFactors = FALSE
+      ))
+      write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_add, "try-error")) {
       showNotification(ui = lan$get("Failed to update user"), type = "error")

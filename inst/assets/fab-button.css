@@ -8,24 +8,23 @@
   bottom: 0;
   position: fixed;
   margin: 1em;
-  right: 0px;
+  right: 0;
+  z-index: 99999;
 }
 
 .buttons-fab {
-  /*box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.18), 
-              0px 4px 12px -7px rgba(0, 0, 0, 0.15);*/
-  border-radius: 50% !important;
+  border-radius: 50%;
   display: block;
   width: 48px;
   height: 48px;
   margin: 20px auto 0;
   position: relative;
   -webkit-transition: all .1s ease-out;
-          transition: all .1s ease-out;  
+          transition: all .1s ease-out;
 }
 
-.buttons-fab:active, 
-.buttons-fab:focus, 
+.buttons-fab:active,
+.buttons-fab:focus,
 .buttons-fab:hover {
   box-shadow: 0 0 4px rgba(0,0,0,.14),
     0 4px 8px rgba(0,0,0,.28);
@@ -46,7 +45,7 @@
           transform: translateY(50px);
 }
 
-.container-fab:hover 
+.container-fab:hover
 .buttons-fab:not(:last-child) {
   opacity: 1;
   -webkit-transform: none;
