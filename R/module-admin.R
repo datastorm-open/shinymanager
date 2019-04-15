@@ -2,7 +2,7 @@
 
 #' @importFrom DT DTOutput
 #' @importFrom htmltools tags singleton tagList
-#' @importFrom shiny NS fluidRow column actionButton icon navlistPanel tabPanel
+#' @importFrom shiny NS fluidRow column actionButton icon
 admin_UI <- function(id) {
 
   ns <- NS(id)
@@ -16,33 +16,32 @@ admin_UI <- function(id) {
     )),
     fluidRow(
       column(
-        width = 10, offset = 1,
-        tags$h2(lan$get("Administrator mode")),
-        tags$br(), tags$br(),
-        navlistPanel(
-          id = ns("tabs"),
-          widths = c(3, 9),
-          well = FALSE,
-          tabPanel(
-            title = "Users",
-            actionButton(
-              inputId = ns("add_user"),
-              label = lan$get("Add a user"),
-              icon = icon("plus"),
-              width = "100%",
-              class = "btn-primary"
-            ),
-            tags$br(), tags$br(), tags$br(),
-            DTOutput(outputId = ns("table_users"))
-          ),
-          tabPanel(
-            title = "Passwords",
-            DTOutput(outputId = ns("table_pwds"))
-          ),
-          tabPanel(
-            title = "Logs"
-          )
-        )
+        width = 8, offset = 2,
+        # tags$h2(lan$get("Administrator mode")),
+        # tags$br(), tags$br(),
+
+        tags$h3(icon("users"), "Users", class = "text-primary"),
+        tags$hr(),
+
+        actionButton(
+          inputId = ns("add_user"),
+          label = lan$get("Add a user"),
+          icon = icon("plus"),
+          width = "100%",
+          class = "btn-primary"
+        ),
+        tags$br(), tags$br(), tags$br(),
+        DTOutput(outputId = ns("table_users")),
+
+        tags$br(),
+
+        tags$h3(icon("key"), "Passwords", class = "text-primary"),
+        tags$hr(),
+
+        DTOutput(outputId = ns("table_pwds")),
+
+        tags$br()
+
       )
     )
   )
@@ -61,6 +60,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   }
 
   lan <- use_language()
+
+  token_start <- isolate(getToken(session = session))
 
   update_read_db <- reactiveValues(x = NULL)
 
@@ -112,11 +113,11 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({\'background-color\': \'#428bca\', \'color\': \'#fff\'});",
-          "}"),
-        # autoWidth = TRUE,
+        # initComplete = JS(
+          # "function(settings, json) {",
+          # "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
+          # "}"),
+        scrollX = TRUE,
         columnDefs = list(
           list(width = "50px", targets = (ncol(users)-2):(ncol(users)-1))
         )
@@ -137,11 +138,11 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({\'background-color\': \'#428bca\', \'color\': \'#fff\'});",
-          "}"),
-        # autoWidth = TRUE,
+        # initComplete = JS(
+        #   "function(settings, json) {",
+        #   "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
+        #   "}"),
+        scrollX = TRUE,
         columnDefs = list(
           list(width = "50px", targets = ncol(pwds)-1)
         )
@@ -304,7 +305,16 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
   # launch modal to remove a user from the database
   observeEvent(input$remove_user, {
-    remove_modal(ns, input$remove_user)
+    current_user <- .tok$get_user(token_start)
+    if (identical(current_user, input$remove_user)) {
+      showModal(modalDialog(
+        lan$get("You can't remove yourself!"),
+        footer = modalButton(lan$get("Cancel")),
+        easyClose = TRUE
+      ))
+    } else {
+      remove_modal(ns, input$remove_user)
+    }
   })
 
   # delete the user

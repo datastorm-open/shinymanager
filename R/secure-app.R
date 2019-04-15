@@ -10,7 +10,7 @@
 #'
 #' @export
 #'
-#' @importFrom shiny parseQueryString fluidPage actionButton icon
+#' @importFrom shiny parseQueryString fluidPage actionButton icon navbarPage tabPanel
 #' @importFrom htmltools tagList
 #'
 #' @name secure-app
@@ -78,21 +78,34 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
         return(pwd_ui)
       }
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
-        fluidPage(
-          admin_UI("admin"),
-          fab_button(
-            actionButton(
-              inputId = ".shinymanager_logout",
-              label = NULL,
-              tooltip = lan$get("Logout"),
-              icon = icon("sign-out")
-            ),
-            actionButton(
-              inputId = ".shinymanager_app",
-              label = NULL,
-              tooltip = lan$get("Go to application"),
-              icon = icon("share")
+        navbarPage(
+          title = "Admin",
+          theme = "shinymanager/css/readable.min.css",
+          header = tagList(
+            tags$style(".navbar-header {margin-left: 16.66% !important;}"),
+            fab_button(
+              actionButton(
+                inputId = ".shinymanager_logout",
+                label = NULL,
+                tooltip = lan$get("Logout"),
+                icon = icon("sign-out")
+              ),
+              actionButton(
+                inputId = ".shinymanager_app",
+                label = NULL,
+                tooltip = lan$get("Go to application"),
+                icon = icon("share")
+              )
             )
+          ),
+          tabPanel(
+            title = tagList(icon("home"), "Home"),
+            value = "home",
+            admin_UI("admin")
+          ),
+          tabPanel(
+            title = "Logs",
+            logs_UI("logs")
           )
         )
       } else {
@@ -169,6 +182,12 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
     callModule(
       module = admin,
       id = "admin",
+      sqlite_path = path_sqlite,
+      passphrase = .tok$get_passphrase()
+    )
+    callModule(
+      module = logs,
+      id = "logs",
       sqlite_path = path_sqlite,
       passphrase = .tok$get_passphrase()
     )

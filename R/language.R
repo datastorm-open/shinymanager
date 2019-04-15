@@ -72,7 +72,11 @@ language <- R6::R6Class(
       "Change saved!" = "Change saved!",
       "Failed to update the database" = "Failed to update the database",
       "Password does not respect safety requirements" = "Password does not respect safety requirements",
-      "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6."
+      "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6.",
+      "Number of connections per user" = "Number of connections per user",
+      "Number of connections per day" = "Number of connections per day",
+      "Total number of connection" = "Total number of connection",
+      "You can't remove yourself!" = "You can't remove yourself!"
     ),
     labels_lan = list(
       fr = list(
@@ -110,7 +114,11 @@ language <- R6::R6Class(
         "Change saved!" = "Changements sauvegard\u00e9s !",
         "Failed to update the database" = "Une erreur s'est produite",
         "Password does not respect safety requirements" = "Le mot de passe ne respecte les r\u00e8gles de s\u00e9curit\u00e9",
-        "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Le mot de passe doit contenir au minimum un chiffre, une lettre majuscule, une lettre minuscule et doit \u00eatre au moins de longueur 6."
+        "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Le mot de passe doit contenir au minimum un chiffre, une lettre majuscule, une lettre minuscule et doit \u00eatre au moins de longueur 6.",
+        "Number of connections per user" = "Nombre de connexions par utilisateur",
+        "Number of connections per day" = "Nombre de connexions par jour",
+        "Total number of connection" = "Nombre total de connexions",
+        "You can't remove yourself!" = "Vous ne pouvez pas supprimer votre propre compte!"
       )
     ),
     DT_lan = list(
