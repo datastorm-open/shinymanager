@@ -6,6 +6,12 @@
 > Simple and secure authentification mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Source code of main application is protected until authentication is successful.
 
 
+Live demo: http://shinyapps.dreamrs.fr/shinymanager-demo/
+You can authenticate with:
+ * user: `shiny` / password: `shiny`
+ * user: `shinymanager` / password: `shinymanager` (Admin)
+
+
 ### Installation
 
 ```r
@@ -56,9 +62,37 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+Starting page of the application will be :
+
+![](figures/shinymanager-login.png)
+
+
+Once logged, the application will be launched and a button added to navigate between the app and the admin panel (if user is authorized to access it), and to logout from the application :
+
+![](figures/shinymanager-info-nav.png)
+
+
+
+### Admin mode
+
+An admin mode is available to manage access to the application, features included are
+
+ * manage users account : add, modify and delete users
+ * ask the user to change his password
+ * see logs about application usage
+
+![](figures/shinymanager-pwd.png)
+![](figures/shinymanager-admin.png)
+![](figures/shinymanager-logs.png)
+
+
+
+
 ### HTTP request
 
-`shinymanager` use http request and sha256 tokens to grant acces to the application, like this the source code is protected without having the need to change your UI or server code.
+`shinymanager` use http request and sha256 tokens to grant access to the application, like this the source code is protected without having the need to change your UI or server code.
+
+
 
 
 ### Secure database
@@ -86,6 +120,18 @@ create_db(
 )
 ```
 
-### Admin mode
 
-An admin mode is available to manage access to the application.
+
+
+### About security
+
+The credentials database is secured with a pass phrase and the [`openssl`](https://github.com/jeroen/openssl) package. If you have concern about method we use, please fill an [issue](https://github.com/datastorm-open/shinymanager/issues).
+
+
+
+### Related work
+
+Package [`shinyauthr`](https://github.com/PaulC91/shinyauthr) provides a nice shiny module to add an authentication layer to your shiny apps.
+
+
+
