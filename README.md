@@ -7,6 +7,7 @@
 
 
 Live demo: http://shinyapps.dreamrs.fr/shinymanager-demo/
+
 You can authenticate with:
  * user: `shiny` / password: `shiny`
  * user: `shinymanager` / password: `shinymanager` (Admin)
@@ -64,12 +65,12 @@ shinyApp(ui, server)
 
 Starting page of the application will be :
 
-![](figures/shinymanager-login.png)
+![](man/figures/shinymanager-login.png)
 
 
 Once logged, the application will be launched and a button added to navigate between the app and the admin panel (if user is authorized to access it), and to logout from the application :
 
-![](figures/shinymanager-info-nav.png)
+![](man/figures/shinymanager-info-nav.png)
 
 
 
@@ -81,9 +82,9 @@ An admin mode is available to manage access to the application, features include
  * ask the user to change his password
  * see logs about application usage
 
-![](figures/shinymanager-pwd.png)
-![](figures/shinymanager-admin.png)
-![](figures/shinymanager-logs.png)
+![](man/figures/shinymanager-pwd.png)
+![](man/figures/shinymanager-admin.png)
+![](man/figures/shinymanager-logs.png)
 
 
 
