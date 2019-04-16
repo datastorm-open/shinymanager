@@ -96,8 +96,28 @@ save_logs <- function(token) {
         user = user,
         server_connected = as.character(Sys.time()),
         token = token,
+        logout = NA_character_,
         stringsAsFactors = FALSE
       ))
+      write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+    }, silent = TRUE)
+    if (inherits(res_logs, "try-error")) {
+      warning("shinymanager: unable to save logs", call. = FALSE)
+    }
+  }
+}
+
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RSQLite SQLite
+logout_logs <- function(token) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_logs <- try({
+      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      logs$logout[logs$token  %in% token] <- as.character(Sys.time())
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {

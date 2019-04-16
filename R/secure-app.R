@@ -221,6 +221,7 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
 
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
+    logout_logs(token)
     .tok$remove(token)
     clearQueryString(session = session)
     session$reload()

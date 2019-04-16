@@ -90,6 +90,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
       user = character(0),
       server_connected = character(0),
       token = character(0),
+      logout = character(0),
       stringsAsFactors = FALSE
     ),
     passphrase = passphrase
