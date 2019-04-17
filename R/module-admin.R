@@ -86,7 +86,6 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   # read users table from database
   users <- reactive({
     unbindDT(ns("table_users"))
-    unbindDT(ns("table_pwds"))
     update_read_db$x
     db <- try({
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -103,6 +102,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
   # read password management table from database
   pwds <- reactive({
+    unbindDT(ns("table_pwds"))
     update_read_db$x
     db <- try({
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -212,6 +212,20 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "enable")
     } else {
       toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "disable")
+    }
+  })
+
+  observeEvent(input$change_selected_pwds, {
+    change_pwd_modal(ns("changed_password_users"), r_selected_pwds())
+  })
+
+  observeEvent(input$changed_password_users, {
+    res_chg <- try(force_chg_pwd(r_selected_pwds()), silent = TRUE)
+    if (inherits(res_chg, "try-error")) {
+      showNotification(ui = lan$get("Failed to update the database"), type = "error")
+    } else {
+      showNotification(ui = lan$get("Change saved!"), type = "message")
+      update_read_db$x <- Sys.time()
     }
   })
 
@@ -341,22 +355,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
   # launch modal to force a user to change password
   observeEvent(input$change_pwd, {
-    users <- users()
-    showModal(modalDialog(
-      title = "Change password",
-      tags$p(
-        sprintf(lan$get("Ask %s to change password on next connection?"), input$change_pwd)
-      ),
-      footer = tagList(
-        modalButton(lan$get("Cancel")),
-        actionButton(
-          inputId = ns("changed_password"),
-          label = lan$get("Confirm"),
-          class = "btn-primary",
-          `data-dismiss` = "modal"
-        )
-      )
-    ))
+    change_pwd_modal(ns("changed_password"), input$change_pwd)
   })
 
   # store in database that the user must change password on next connection
@@ -418,6 +417,25 @@ remove_modal <- function(inputId, user) {
         `data-dismiss` = "modal"
       ),
       modalButton(lan$get("Cancel"))
+    )
+  ))
+}
+
+change_pwd_modal <- function(inputId, user) {
+  lan <- use_language()
+  showModal(modalDialog(
+    title = "Change password",
+    tags$p(HTML(
+      sprintf(lan$get("Ask %s to change password on next connection?"), tags$b(paste(user, collapse = ", ")))
+    )),
+    footer = tagList(
+      modalButton(lan$get("Cancel")),
+      actionButton(
+        inputId = inputId,
+        label = lan$get("Confirm"),
+        class = "btn-primary",
+        `data-dismiss` = "modal"
+      )
     )
   ))
 }
