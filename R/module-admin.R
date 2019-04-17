@@ -35,6 +35,15 @@ admin_UI <- function(id) {
 
         tags$br(),
 
+        actionButton(
+          inputId = ns("remove_selected_users"),
+          label = "Remove selected users",
+          class = "btn-danger pull-right disabled",
+          icon = icon("trash-o")
+        ),
+
+        tags$br(),
+
         tags$h3(icon("key"), "Passwords", class = "text-primary"),
         tags$hr(),
 
@@ -105,6 +114,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     users <- users[, setdiff(names(users), "password"), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary")
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger")
+    users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
     datatable(
       data = users,
       colnames = make_title(names(users)),
@@ -113,13 +123,15 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
+        preDrawCallback = JS("function() {Shiny.unbindAll(this.api().table().node());}"),
+        drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
           # "function(settings, json) {",
           # "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
           # "}"),
         scrollX = TRUE,
         columnDefs = list(
-          list(width = "50px", targets = (ncol(users)-2):(ncol(users)-1))
+          list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
         )
       )
     )
@@ -149,6 +161,19 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       )
     )
   })
+
+
+  # Remove all selected users
+  r_selected_users <- callModule(module = input_checkbox, id = "remove_mult_users")
+  observeEvent(r_selected_users(), {
+    selected_users <- r_selected_users()
+    if (length(selected_users) > 0) {
+      toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "enable")
+    } else {
+      toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "disable")
+    }
+  })
+
 
   # launch modal to edit informations about a user
   observeEvent(input$edit_user, {

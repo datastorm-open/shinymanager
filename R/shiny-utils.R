@@ -70,4 +70,27 @@ input_btns <- function(inputId, users, tooltip, icon, status = "primary") {
 }
 
 
+input_checkbox_ui <- function(id, users) {
+  ns <- NS(id)
+  tag <- lapply(
+    X = users,
+    FUN = function(x) {
+      # res <- checkboxInput(inputId = ns(paste0("check_", x)), label = NULL, value = FALSE)
+      res <- tags$input(id = ns(paste0("check_", x)), type = "checkbox", style = "float: right;")
+      doRenderTags(res)
+    }
+  )
+  unlist(tag, use.names = FALSE)
+}
+
+input_checkbox <- function(input, output, session) {
+
+  reac <- reactive({
+    inputs <- reactiveValuesToList(input)
+    inputs <- dropFalse(inputs)
+    gsub(pattern = "^check_", replacement = "", x = names(inputs))
+  })
+
+  return(reac)
+}
 

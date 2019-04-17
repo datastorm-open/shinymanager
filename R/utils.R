@@ -20,6 +20,11 @@ make_title <- function(x) {
   ))
 }
 
+dropFalse <- function(x) {
+  isFALSE <- Negate(isTRUE)
+  x[!vapply(x, isFALSE, FUN.VALUE = logical(1))]
+}
+
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
 is_force_chg_pwd <- function(token) {
