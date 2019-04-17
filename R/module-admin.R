@@ -58,7 +58,7 @@ admin_UI <- function(id) {
           icon = icon("key")
         ),
 
-        tags$br()
+        tags$br(),tags$br(), tags$br()
 
       )
     )
@@ -85,6 +85,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
   # read users table from database
   users <- reactive({
+    unbindDT(ns("table_users"))
+    unbindDT(ns("table_pwds"))
     update_read_db$x
     db <- try({
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -132,7 +134,6 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
-        preDrawCallback = JS("function() {Shiny.unbindAll(this.api().table().node());}"),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
           # "function(settings, json) {",
@@ -160,7 +161,6 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
-        preDrawCallback = JS("function() {Shiny.unbindAll(this.api().table().node());}"),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
         #   "function(settings, json) {",
@@ -186,6 +186,23 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     }
   })
 
+  observeEvent(input$remove_selected_users, {
+    remove_modal(ns("delete_selected_users"), r_selected_users())
+  })
+
+  observeEvent(input$delete_selected_users, {
+    users <- users()
+    to_delete <- r_selected_users()
+    users <- users[!users$user %in% to_delete, , drop = FALSE]
+    pwds <- pwds()
+    pwds <- pwds[!pwds$user %in% to_delete, , drop = FALSE]
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+    write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
+    update_read_db$x <- Sys.time()
+  })
+
 
   # Force change password all selected users
   r_selected_pwds <- callModule(module = input_checkbox, id = "change_mult_pwds")
@@ -197,6 +214,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "disable")
     }
   })
+
+
 
 
   # launch modal to edit informations about a user
@@ -362,7 +381,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         easyClose = TRUE
       ))
     } else {
-      remove_modal(ns, input$remove_user)
+      remove_modal(ns("delete_user"), input$remove_user)
     }
   })
 
@@ -384,17 +403,17 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
 #' @importFrom htmltools HTML tags tagList
 #' @importFrom shiny showModal modalDialog modalButton actionButton
-remove_modal <- function(ns, user) {
+remove_modal <- function(inputId, user) {
   lan <- use_language()
   showModal(modalDialog(
     tags$p(HTML(sprintf(
-      lan$get("Are you sure to remove user: %s from the database ?"), tags$b(user)
+      lan$get("Are you sure to remove user(s): %s from the database ?"), tags$b(paste(user, collapse = ", "))
     ))),
     fade = FALSE,
     footer = tagList(
       actionButton(
-        inputId = ns("delete_user"),
-        label = lan$get("Delete user"),
+        inputId = inputId,
+        label = lan$get("Delete user(s)"),
         class = "btn-danger",
         `data-dismiss` = "modal"
       ),

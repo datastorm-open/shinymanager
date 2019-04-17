@@ -94,3 +94,9 @@ input_checkbox <- function(input, output, session) {
   return(reac)
 }
 
+unbindDT <- function(id, session = getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    type = "unbindDT",
+    message = list(id = id)
+  )
+}
