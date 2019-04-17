@@ -49,6 +49,15 @@ admin_UI <- function(id) {
 
         DTOutput(outputId = ns("table_pwds")),
 
+        tags$br(),
+
+        actionButton(
+          inputId = ns("change_selected_pwds"),
+          label = "Force selected users to change password",
+          class = "btn-primary pull-right disabled",
+          icon = icon("key")
+        ),
+
         tags$br()
 
       )
@@ -142,6 +151,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     req(pwds())
     pwds <- pwds()
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary")
+    pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user)
     datatable(
       data = pwds,
       colnames = make_title(names(pwds)),
@@ -150,6 +160,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       selection = "none",
       options = list(
         language = lan$get_DT(),
+        preDrawCallback = JS("function() {Shiny.unbindAll(this.api().table().node());}"),
+        drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
         #   "function(settings, json) {",
         #   "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
@@ -171,6 +183,18 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "enable")
     } else {
       toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "disable")
+    }
+  })
+
+
+  # Force change password all selected users
+  r_selected_pwds <- callModule(module = input_checkbox, id = "change_mult_pwds")
+  observeEvent(r_selected_pwds(), {
+    selected_pwds <- r_selected_pwds()
+    if (length(selected_pwds) > 0) {
+      toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "enable")
+    } else {
+      toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "disable")
     }
   })
 

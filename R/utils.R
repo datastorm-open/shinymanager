@@ -107,7 +107,9 @@ save_logs <- function(token) {
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
-      warning("shinymanager: unable to save logs", call. = FALSE)
+      warning(paste(
+        "shinymanager: unable to save logs | error:", attr(test, "condition")$message
+      ), call. = FALSE)
     }
   }
 }
@@ -126,7 +128,9 @@ logout_logs <- function(token) {
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
-      warning("shinymanager: unable to save logs", call. = FALSE)
+      warning(paste(
+        "shinymanager: unable to save logs | error:", attr(test, "condition")$message
+      ), call. = FALSE)
     }
   }
 }
