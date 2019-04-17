@@ -108,7 +108,7 @@ save_logs <- function(token) {
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
       warning(paste(
-        "shinymanager: unable to save logs | error:", attr(test, "condition")$message
+        "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
       ), call. = FALSE)
     }
   }
@@ -129,7 +129,7 @@ logout_logs <- function(token) {
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
       warning(paste(
-        "shinymanager: unable to save logs | error:", attr(test, "condition")$message
+        "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
       ), call. = FALSE)
     }
   }
