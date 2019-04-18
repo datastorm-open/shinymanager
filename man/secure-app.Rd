@@ -6,7 +6,8 @@
 \alias{secure_server}
 \title{Secure a Shiny application and manage authentication}
 \usage{
-secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL)
+secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL,
+  theme = NULL)
 
 secure_server(check_credentials,
   session = shiny::getDefaultReactiveDomain())
@@ -21,6 +22,10 @@ admin mode is only available when using SQLite backend for credentials.}
 
 \item{head_auth}{Tag or list of tags to use in the \code{<head>}
 of the authentication page (for custom CSS for example).}
+
+\item{theme}{Alternative Bootstrap stylesheet, default is to use \code{readable},
+you can use themes provided by \code{shinythemes}.
+It will affect the authentication panel and the admin page.}
 
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
 

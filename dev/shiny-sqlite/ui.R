@@ -21,5 +21,5 @@ ui <- fluidPage(
 
 )
 
-secure_app(ui, enable_admin = TRUE)
+secure_app(ui, enable_admin = TRUE, theme = shinythemes::shinytheme("sandstone"))
 

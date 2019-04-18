@@ -7,6 +7,9 @@
 #'  admin mode is only available when using SQLite backend for credentials.
 #' @param head_auth Tag or list of tags to use in the \code{<head>}
 #'  of the authentication page (for custom CSS for example).
+#' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
+#'  you can use themes provided by \code{shinythemes}.
+#'  It will affect the authentication panel and the admin page.
 #'
 #' @export
 #'
@@ -56,11 +59,14 @@
 #'   shinyApp(ui, server)
 #'
 #' }
-secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
+secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL) {
   lan <- use_language()
   ui <- force(ui)
   enable_admin <- force(enable_admin)
   head_auth <- force(head_auth)
+  if (is.null(theme)) {
+    theme <- "shinymanager/css/readable.min.css"
+  }
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
@@ -72,6 +78,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
         args <- get_args(..., fun = pwd_ui)
         args$id <- "password"
         pwd_ui <- fluidPage(
+          theme = theme,
           tags$head(head_auth),
           do.call(pwd_ui, args)
         )
@@ -80,7 +87,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
         navbarPage(
           title = "Admin",
-          theme = "shinymanager/css/readable.min.css",
+          theme = theme,
           header = tagList(
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
             fab_button(
@@ -141,6 +148,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL) {
       args <- get_args(..., fun = auth_ui)
       args$id <- "auth"
       fluidPage(
+        theme = theme,
         tags$head(head_auth),
         do.call(auth_ui, args)
       )
