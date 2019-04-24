@@ -150,6 +150,8 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     }
 
     nb_log_day <- as.data.frame(table(day = substr(logs$server_connected, 1, 10)), stringsAsFactors = FALSE)
+    req(nrow(nb_log_day) > 0)
+    
     nb_log_day$day <- as.Date(nb_log_day$day)
     nb_log_day <- merge(
       x = data.frame(day = seq(
