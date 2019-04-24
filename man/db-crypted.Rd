@@ -20,7 +20,7 @@ read_db_decrypt(conn, name = "credentials", passphrase = NULL)
 \item{passphrase}{A secret passphrase to crypt the table inside the database}
 }
 \value{
-a\code{data.frame} for \code{read_db_decrypt}.
+a \code{data.frame} for \code{read_db_decrypt}.
 }
 \description{
 Read / Write crypted table from / to a SQLite database
@@ -42,4 +42,7 @@ read_db_decrypt(conn = conn, name = "iris", passphrase = "forgotten")
 
 # with DBI method you'll get a crypted blob
 DBI::dbReadTable(conn = conn, name = "iris")
+}
+\seealso{
+\code{\link{create_db}}
 }

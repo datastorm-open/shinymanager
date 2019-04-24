@@ -51,3 +51,6 @@ create_db(
 
 }
 }
+\seealso{
+\code{\link{read_db_decrypt}}
+}

@@ -23,6 +23,8 @@
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable
 #' @importFrom RSQLite SQLite
 #'
+#' @seealso \code{\link{read_db_decrypt}}
+#' 
 #' @examples
 #' \dontrun{
 #'
@@ -105,7 +107,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #' @param name A character string specifying the unquoted DBMS table name.
 #' @param passphrase A secret passphrase to crypt the table inside the database
 #'
-#' @return a\code{data.frame} for \code{read_db_decrypt}.
+#' @return a \code{data.frame} for \code{read_db_decrypt}.
 #' @export
 #'
 #' @name db-crypted
@@ -114,6 +116,8 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #' @importFrom RSQLite SQLite
 #' @importFrom openssl sha256 aes_cbc_encrypt
 #'
+#' @seealso \code{\link{create_db}}
+#' 
 #' @examples
 #' # connect to database
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
