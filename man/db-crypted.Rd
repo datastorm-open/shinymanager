@@ -42,6 +42,50 @@ read_db_decrypt(conn = conn, name = "iris", passphrase = "forgotten")
 
 # with DBI method you'll get a crypted blob
 DBI::dbReadTable(conn = conn, name = "iris")
+
+# add some users to database
+\dontrun{
+conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = "path/to/database.sqlite")
+
+# update "credentials" table
+current_user <- read_db_decrypt(
+  conn, 
+  name = "credentials", 
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+
+add_user <- data.frame(user = "new", password = "pwdToChange", 
+                      start = NA, expire = NA, admin = TRUE)
+
+new_users <- rbind.data.frame(current_user, add_user)
+
+write_db_encrypt(
+  conn, 
+  value = new_users, 
+  name = "credentials", 
+  key_get("R-shinymanager-key", "obiwankenobi")
+)
+
+# update "pwd_mngt" table
+pwd_mngt <- read_db_decrypt(
+  conn, 
+  name = "pwd_mngt", 
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+
+pwd_mngt <- rbind.data.frame(
+  pwd_mngt, 
+  data.frame(user = "new", must_change = T, have_changed = F, date_change = "")
+)
+
+write_db_encrypt(
+  conn, 
+  value = pwd_mngt, 
+  name = "pwd_mngt", 
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+}
+
 }
 \seealso{
 \code{\link{create_db}}
