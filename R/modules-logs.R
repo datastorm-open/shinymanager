@@ -19,7 +19,7 @@ logs_UI <- function(id) {
             width = 3,
             selectInput(
               inputId = ns("user"),
-              label = "User:",
+              label = lan$get("User:"),
               choices = "All users",
               selected = "All users",
               width = "100%"
@@ -29,7 +29,7 @@ logs_UI <- function(id) {
             width = 3,
             dateRangeInput(
               inputId = ns("overview_period"),
-              label = "Period:",
+              label = lan$get("Period:"),
               start = Sys.Date() - 31,
               end = Sys.Date(),
               width = "100%"
@@ -39,17 +39,17 @@ logs_UI <- function(id) {
             width = 6,
             actionButton(
               inputId = ns("last_week"),
-              label = "Last week",
+              label = lan$get("Last week"),
               class = "btn-primary btn-sm btn-margin"
             ),
             actionButton(
               inputId = ns("last_month"),
-              label = "Last month",
+              label = lan$get("Last month"),
               class = "btn-primary btn-sm btn-margin"
             ),
             actionButton(
               inputId = ns("all_period"),
-              label = "All period",
+              label = lan$get("All period"),
               class = "btn-primary btn-sm btn-margin"
             )
           )
@@ -131,6 +131,10 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
       bb_labs(
         # title = "Number of connection by user",
         y = lan$get("Total number of connection")
+      ) %>%
+      bb_zoom(
+        enabled = list(type = "drag"),
+        resetButton = list(text = "Unzoom")
       )
   })
 

@@ -10,6 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
+#' @param language Language to use for labels, supported values are : "en", "fr".
 #'
 #' @export
 #'
@@ -59,7 +60,12 @@
 #'   shinyApp(ui, server)
 #'
 #' }
-secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL) {
+secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL, language = "en") {
+  if (!language %in% c("en", "fr")) {
+    warning("Only supported language for the now are: en, fr", call. = FALSE)
+    language <- "en"
+  }
+  set_language(language)
   lan <- use_language()
   ui <- force(ui)
   enable_admin <- force(enable_admin)
@@ -85,6 +91,9 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
         return(pwd_ui)
       }
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
+        if (is.null(.tok$get_sqlite_path())) {
+          warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
+        }
         navbarPage(
           title = "Admin",
           theme = theme,
@@ -106,7 +115,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             )
           ),
           tabPanel(
-            title = tagList(icon("home"), "Home"),
+            title = tagList(icon("home"), lan$get("Home")),
             value = "home",
             admin_UI("admin")
           ),

@@ -20,7 +20,7 @@ admin_UI <- function(id) {
         # tags$h2(lan$get("Administrator mode")),
         # tags$br(), tags$br(),
 
-        tags$h3(icon("users"), "Users", class = "text-primary"),
+        tags$h3(icon("users"), lan$get("Users"), class = "text-primary"),
         tags$hr(),
 
         actionButton(
@@ -37,14 +37,14 @@ admin_UI <- function(id) {
 
         actionButton(
           inputId = ns("remove_selected_users"),
-          label = "Remove selected users",
+          label = lan$get("Remove selected users"),
           class = "btn-danger pull-right disabled",
           icon = icon("trash-o")
         ),
 
         tags$br(),
 
-        tags$h3(icon("key"), "Passwords", class = "text-primary"),
+        tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
 
         DTOutput(outputId = ns("table_pwds")),
@@ -53,7 +53,7 @@ admin_UI <- function(id) {
 
         actionButton(
           inputId = ns("change_selected_pwds"),
-          label = "Force selected users to change password",
+          label = lan$get("Force selected users to change password"),
           class = "btn-primary pull-right disabled",
           icon = icon("key")
         ),

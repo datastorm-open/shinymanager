@@ -7,7 +7,7 @@
 \title{Secure a Shiny application and manage authentication}
 \usage{
 secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL,
-  theme = NULL)
+  theme = NULL, language = "en")
 
 secure_server(check_credentials,
   session = shiny::getDefaultReactiveDomain())
@@ -26,6 +26,8 @@ of the authentication page (for custom CSS for example).}
 \item{theme}{Alternative Bootstrap stylesheet, default is to use \code{readable},
 you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
+
+\item{language}{Language to use for labels, supported values are : "en", "fr".}
 
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
 

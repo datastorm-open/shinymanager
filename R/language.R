@@ -19,7 +19,7 @@ language <- R6::R6Class(
       invisible(self)
     },
     set_language = function(lan) {
-      if (!lan %in% names(private$labels_lan)) {
+      if (!lan %in% private$language_registered) {
         stop("Unsupported language !", call. = FALSE)
       }
       private$language <- lan
@@ -37,6 +37,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
+    language_registered = c("en", "fr"),
     labels = list(
       "Please authenticate" = "Please authenticate",
       "Username:" = "Username:",
@@ -76,7 +77,17 @@ language <- R6::R6Class(
       "Number of connections per user" = "Number of connections per user",
       "Number of connections per day" = "Number of connections per day",
       "Total number of connection" = "Total number of connection",
-      "You can't remove yourself!" = "You can't remove yourself!"
+      "You can't remove yourself!" = "You can't remove yourself!",
+      "User:" = "User:",
+      "Period:" = "Period:",
+      "Last week" = "Last week",
+      "Last month" = "Last month",
+      "All period" = "All period",
+      "Home" = "Home",
+      "Remove selected users" = "Remove selected users",
+      "Force selected users to change password" = "Force selected users to change password",
+      "Users" = "Users",
+      "Passwords" = "Passwords"
     ),
     labels_lan = list(
       fr = list(
@@ -118,7 +129,17 @@ language <- R6::R6Class(
         "Number of connections per user" = "Nombre de connexions par utilisateur",
         "Number of connections per day" = "Nombre de connexions par jour",
         "Total number of connection" = "Nombre total de connexions",
-        "You can't remove yourself!" = "Vous ne pouvez pas supprimer votre propre compte!"
+        "You can't remove yourself!" = "Vous ne pouvez pas supprimer votre propre compte!",
+        "User:" = "Utilisateur :",
+        "Period:" = "P\u00e9riode :",
+        "Last week" = "Semaine derni\u00e8re",
+        "Last month" = "Mois dernier",
+        "All period" = "P\u00e9riode enti\u00e8re",
+        "Home" = "Accueil",
+        "Remove selected users" = "Supprimer les utilisateurs s\u00e9lectionn\u00e9s",
+        "Force selected users to change password" = "Forcer les utilisateurs s\u00e9l\u00e9ctionn\u00e9s \u00e0 changer de mot de passe",
+        "Users" = "Utilisateurs",
+        "Passwords" = "Mots de passe"
       )
     ),
     DT_lan = list(
@@ -175,5 +196,10 @@ use_language <- function() {
     language$new()
   .globals$language
 }
-
+set_language <- function(lan) {
+  if (!identical(lan, "en")) {
+    lan_set <- language$new()
+    lan_set$set_language(lan)
+  }
+}
 

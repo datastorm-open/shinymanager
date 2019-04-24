@@ -20,6 +20,8 @@ secure_app(
     )
 
   ),
-  tag_img = tags$img(src = "https://www.r-project.org/logo/Rlogo.png", width = 100)
+  tag_img = tags$img(src = "https://www.r-project.org/logo/Rlogo.png", width = 100),
+  enable_admin = TRUE,
+  language = "fr"
 )
 

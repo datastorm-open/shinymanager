@@ -4,7 +4,7 @@
 
 function(input, output, session) {
 
-  secure_server(session, check_credentials = check_credentials(credentials))
+  secure_server(session, check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret"))
 
   # classic app
   selectedData <- reactive({
