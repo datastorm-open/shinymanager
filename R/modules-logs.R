@@ -22,6 +22,7 @@ logs_UI <- function(id) {
               label = lan$get("User:"),
               choices = "All users",
               selected = "All users",
+              multiple = TRUE,
               width = "100%"
             )
           ),
@@ -94,7 +95,8 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     updateSelectInput(
       session = session,
       inputId = "user",
-      choices = c("All users", logs_rv$users$user)
+      choices = c("All users", logs_rv$users$user),
+      selected = "All users"
     )
   })
 
@@ -108,7 +110,8 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
   output$graph_conn_users <- renderBillboarder({
     req(logs_rv$logs_period)
     req(nrow(logs_rv$logs_period) > 0)
-
+    req(length(input$user) > 0)
+    
     logs <- logs_rv$logs_period
 
     nb_log <- as.data.frame(table(user = logs$user), stringsAsFactors = FALSE)
@@ -118,8 +121,8 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     colors <- rep("#4582ec", length(nb_log$user))
     names(colors) <- nb_log$user
 
-    if (input$user != "All users") {
-      colors[[input$user]] <- "#d9534f"
+    if (!"All users" %in% input$user) {
+      colors[input$user] <- "#d9534f"
     }
 
     billboarder() %>%
@@ -142,10 +145,11 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
   output$graph_conn_days <- renderBillboarder({
     req(logs_rv$logs_period)
     req(nrow(logs_rv$logs_period) > 0)
-
+    req(length(input$user) > 0)
+    
     logs <- logs_rv$logs_period
 
-    if (input$user != "All users") {
+    if (!"All users" %in% input$user) {
       logs <- logs[logs$user %in% input$user, ]
     }
 
