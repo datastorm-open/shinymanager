@@ -1,7 +1,7 @@
 
 
 #' @importFrom billboarder billboarderOutput
-#' @importFrom shiny NS fluidRow column icon selectInput dateRangeInput
+#' @importFrom shiny NS fluidRow column icon selectInput dateRangeInput downloadButton downloadHandler
 #' @importFrom htmltools tagList tags
 logs_UI <- function(id) {
 
@@ -66,7 +66,16 @@ logs_UI <- function(id) {
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
-        tags$br(), tags$br(), tags$br()
+        tags$br(), tags$br(), 
+        
+        downloadButton(
+          outputId = ns("download_logs"),
+          label = lan$get("Download logs database"),
+          class = "btn-primary center-block",
+          icon = icon("download")
+        ),
+        
+        tags$br()
       )
     )
   )
@@ -202,6 +211,16 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     )
   })
 
+  output$download_logs <- downloadHandler(
+    filename = function() {
+      paste('shinymanager-logs-', Sys.Date(), '.csv', sep = '')
+    },
+    content = function(con) {
+      logs <- logs_rv$logs
+      logs$token <- NULL
+      write.table(logs, con, sep = ";", row.names = FALSE)
+    }
+  )
 }
 
 

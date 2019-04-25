@@ -87,7 +87,8 @@ language <- R6::R6Class(
       "Remove selected users" = "Remove selected users",
       "Force selected users to change password" = "Force selected users to change password",
       "Users" = "Users",
-      "Passwords" = "Passwords"
+      "Passwords" = "Passwords",
+      "Download logs database" = "Download logs database"
     ),
     labels_lan = list(
       fr = list(
@@ -139,7 +140,8 @@ language <- R6::R6Class(
         "Remove selected users" = "Supprimer les utilisateurs s\u00e9lectionn\u00e9s",
         "Force selected users to change password" = "Forcer les utilisateurs s\u00e9l\u00e9ctionn\u00e9s \u00e0 changer de mot de passe",
         "Users" = "Utilisateurs",
-        "Passwords" = "Mots de passe"
+        "Passwords" = "Mots de passe",
+        "Download logs database" = "Télécharger les logs"
       )
     ),
     DT_lan = list(
