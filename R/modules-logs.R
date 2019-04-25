@@ -100,10 +100,13 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     )
   })
 
-  observeEvent(input$overview_period, {
-    logs <- logs_rv$logs
+  observe({
+    logs <- isolate(logs_rv$logs)
     logs$date <- as.Date(substr(logs$server_connected, 1, 10))
     logs <- logs[logs$date >= input$overview_period[1] & logs$date <= input$overview_period[2], ]
+    if (!"All users" %in% input$user) {
+      logs <- logs[logs$user %in% input$user, ]
+    }
     logs_rv$logs_period <- logs
   })
 
@@ -115,19 +118,11 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     logs <- logs_rv$logs_period
 
     nb_log <- as.data.frame(table(user = logs$user), stringsAsFactors = FALSE)
-    nb_log <- merge(x = logs[, "user", drop = FALSE], y = nb_log, by = "user", all.x = TRUE)
     nb_log <- nb_log[order(nb_log$Freq, decreasing = TRUE), ]
-
-    colors <- rep("#4582ec", length(nb_log$user))
-    names(colors) <- nb_log$user
-
-    if (!"All users" %in% input$user) {
-      colors[input$user] <- "#d9534f"
-    }
 
     billboarder() %>%
       bb_barchart(data = nb_log, rotated = TRUE) %>%
-      bb_bar_color_manual(values = colors) %>%
+      bb_bar_color_manual(list(Freq = "#4582ec")) %>%
       bb_y_grid(show = TRUE) %>%
       bb_data(names = list(Freq = "Nb logged")) %>%
       bb_legend(show = FALSE) %>%
@@ -149,12 +144,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     
     logs <- logs_rv$logs_period
 
-    if (!"All users" %in% input$user) {
-      logs <- logs[logs$user %in% input$user, ]
-    }
-
     nb_log_day <- as.data.frame(table(day = substr(logs$server_connected, 1, 10)), stringsAsFactors = FALSE)
-    req(nrow(nb_log_day) > 0)
     
     nb_log_day$day <- as.Date(nb_log_day$day)
     nb_log_day <- merge(
