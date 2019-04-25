@@ -2,11 +2,12 @@
 #' Authentication module
 #'
 #' @param id Module's id.
-#' @param tag_img A \code{tags$img} to be displayed on the authentication module.
 #' @param status Bootstrap status to use for the panel and the button.
 #'  Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 #'  \code{"warning"}, \code{"danger"}.
-#'
+#' @param tag_img A \code{tags$img} to be displayed on top of the authentication module.
+#' @param tag_div A \code{tags$div} to be displayed on bottom of the authentication module.
+#' 
 #' @export
 #'
 #' @name module-authentication
@@ -35,6 +36,15 @@
 #'       id = "auth",
 #'       tag_img = tags$img(
 #'         src = "https://www.r-project.org/logo/Rlogo.png", width = 100
+#'       ), 
+#'       tag_div = tags$div(
+#'         tags$p(
+#'           "For any question, please  contact ", 
+#'           tags$a(
+#'             href = "mailto:someone@example.com?Subject=Shiny%20aManager", 
+#'             target="_top", "administrator"
+#'           )
+#'         )
 #'       )
 #'     ),
 #'
@@ -94,7 +104,7 @@
 #'
 #'   shinyApp(ui, server)
 #' }
-auth_ui <- function(id, tag_img = NULL, status = "primary") {
+auth_ui <- function(id, status = "primary", tag_img = NULL, tag_div = NULL) {
 
   ns <- NS(id)
 
@@ -142,7 +152,8 @@ auth_ui <- function(id, tag_img = NULL, status = "primary") {
               tags$script(
                 sprintf("bindEnter('%s');", ns(""))
               ),
-              tags$div(id = ns("result_auth"))
+              tags$div(id = ns("result_auth")),
+              if (!is.null(tag_div)) tags$hr(), tag_div
             )
           )
         )
