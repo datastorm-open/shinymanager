@@ -152,6 +152,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     req(pwds())
     pwds <- pwds()
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary")
+    pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("undo"), status = "warning")
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user)
     datatable(
       data = pwds,
@@ -168,7 +169,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         #   "}"),
         scrollX = TRUE,
         columnDefs = list(
-          list(width = "50px", targets = ncol(pwds)-1)
+          list(width = "50px", targets = (ncol(pwds)-3):(ncol(pwds)-1))
         )
       )
     )
@@ -370,6 +371,29 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   })
 
 
+  # launch modal to reset password
+  observeEvent(input$reset_pwd, {
+    reset_pwd_modal(ns("reseted_password"), input$reset_pwd)
+  })
+  observeEvent(input$reseted_password, {
+    password <- generate_pwd()
+    users <- users()
+    users$password[users$user %in% input$reset_pwd] <- password
+    write_db_encrypt(conn = sqlite_path, value = users, name = "credentials", passphrase = passphrase)
+    res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
+    if (inherits(res_chg, "try-error")) {
+      showNotification(ui = lan$get("Failed to update user"), type = "error")
+    } else {
+      showModal(modalDialog(
+        tags$p(lan$get("Password succesfully reset!")),
+        tags$p(lan$get("Temporary password:"), tags$b(password)),
+        footer = modalButton(lan$get("Dismiss"))
+      ))
+      update_read_db$x <- Sys.time()
+    }
+  })
+
+
   # launch modal to remove a user from the database
   observeEvent(input$remove_user, {
     current_user <- .tok$get_user(token_start)
@@ -440,3 +464,21 @@ change_pwd_modal <- function(inputId, user) {
   ))
 }
 
+reset_pwd_modal <- function(inputId, user) {
+  lan <- use_language()
+  showModal(modalDialog(
+    title = "Reset password",
+    tags$p(HTML(
+      sprintf(lan$get("Reset password for %s?"), tags$b(paste(user, collapse = ", ")))
+    )),
+    footer = tagList(
+      modalButton(lan$get("Cancel")),
+      actionButton(
+        inputId = inputId,
+        label = lan$get("Confirm"),
+        class = "btn-primary",
+        `data-dismiss` = "modal"
+      )
+    )
+  ))
+}

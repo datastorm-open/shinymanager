@@ -66,15 +66,15 @@ logs_UI <- function(id) {
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
-        tags$br(), tags$br(), 
-        
+        tags$br(), tags$br(),
+
         downloadButton(
           outputId = ns("download_logs"),
           label = lan$get("Download logs database"),
           class = "btn-primary center-block",
           icon = icon("download")
         ),
-        
+
         tags$br()
       )
     )
@@ -85,6 +85,7 @@ logs_UI <- function(id) {
 #'  bb_y_grid bb_data bb_legend bb_labs bb_linechart bb_colors_manual
 #'  bb_x_axis bb_zoom %>% bb_bar_color_manual
 #' @importFrom shiny reactiveValues observe req updateSelectInput updateDateRangeInput
+#' @importFrom utils write.table
 logs <- function(input, output, session, sqlite_path, passphrase) {
 
   ns <- session$ns
@@ -123,7 +124,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     req(logs_rv$logs_period)
     req(nrow(logs_rv$logs_period) > 0)
     req(length(input$user) > 0)
-    
+
     logs <- logs_rv$logs_period
 
     nb_log <- as.data.frame(table(user = logs$user), stringsAsFactors = FALSE)
@@ -150,11 +151,11 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     req(logs_rv$logs_period)
     req(nrow(logs_rv$logs_period) > 0)
     req(length(input$user) > 0)
-    
+
     logs <- logs_rv$logs_period
 
     nb_log_day <- as.data.frame(table(day = substr(logs$server_connected, 1, 10)), stringsAsFactors = FALSE)
-    
+
     nb_log_day$day <- as.Date(nb_log_day$day)
     nb_log_day <- merge(
       x = data.frame(day = seq(

@@ -88,7 +88,10 @@ language <- R6::R6Class(
       "Force selected users to change password" = "Force selected users to change password",
       "Users" = "Users",
       "Passwords" = "Passwords",
-      "Download logs database" = "Download logs database"
+      "Download logs database" = "Download logs database",
+      "Reset password for %s?" = "Reset password for %s?",
+      "Temporary password:" = "Temporary password:",
+      "Password succesfully reset!" = "Password succesfully reset!"
     ),
     labels_lan = list(
       fr = list(
@@ -141,7 +144,10 @@ language <- R6::R6Class(
         "Force selected users to change password" = "Forcer les utilisateurs s\u00e9l\u00e9ctionn\u00e9s \u00e0 changer de mot de passe",
         "Users" = "Utilisateurs",
         "Passwords" = "Mots de passe",
-        "Download logs database" = "Télécharger les logs"
+        "Download logs database" = "T\u00e9l\u00e9charger les logs",
+        "Reset password for %s?" = "R\u00e9initialiser le mot de passe de %s ?",
+        "Temporary password:" = "Mot de passe temporaire",
+        "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9"
       )
     ),
     DT_lan = list(
