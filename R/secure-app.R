@@ -12,6 +12,11 @@
 #'  It will affect the authentication panel and the admin page.
 #' @param language Language to use for labels, supported values are : "en", "fr".
 #'
+#' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
+#'  to know in which step user is : authentication, application, admin or password.
+#'
+#' @return A \code{reactiveValues} containing informations about the user connected.
+#'
 #' @export
 #'
 #' @importFrom shiny parseQueryString fluidPage actionButton icon navbarPage tabPanel
@@ -86,7 +91,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
         pwd_ui <- fluidPage(
           theme = theme,
           tags$head(head_auth),
-          do.call(pwd_ui, args)
+          do.call(pwd_ui, args),
+          shinymanager_where("password")
         )
         return(pwd_ui)
       }
@@ -117,7 +123,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           tabPanel(
             title = tagList(icon("home"), lan$get("Home")),
             value = "home",
-            admin_UI("admin")
+            admin_UI("admin"),
+            shinymanager_where("admin")
           ),
           tabPanel(
             title = "Logs",
@@ -151,7 +158,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           )
         }
         save_logs(token)
-        tagList(ui, menu)
+        tagList(ui, menu, shinymanager_where("application"))
       }
     } else {
       args <- get_args(..., fun = auth_ui)
@@ -159,7 +166,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
       fluidPage(
         theme = theme,
         tags$head(head_auth),
-        do.call(auth_ui, args)
+        do.call(auth_ui, args),
+        shinymanager_where("authentication")
       )
     }
   }

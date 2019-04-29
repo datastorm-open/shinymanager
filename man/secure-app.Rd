@@ -33,8 +33,15 @@ It will affect the authentication panel and the admin page.}
 
 \item{session}{Shiny session.}
 }
+\value{
+A \code{reactiveValues} containing informations about the user connected.
+}
 \description{
 Secure a Shiny application and manage authentication
+}
+\note{
+A special input value will be accessible server-side with \code{input$shinymanager_where}
+ to know in which step user is : authentication, application, admin or password.
 }
 \examples{
 if (interactive()) {

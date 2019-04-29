@@ -8,6 +8,10 @@ function(input, output, session) {
     check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret")
   )
 
+  observe({
+    print(input$shinymanager_where)
+  })
+
   output$res_auth <- renderPrint({
     reactiveValuesToList(auth_out)
   })

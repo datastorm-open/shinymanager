@@ -14,6 +14,19 @@ toggleBtn <- function(session, inputId, type = "disable") {
 }
 
 
+# Send input value to know where we are (what ui is displayed: auth, admin, app, ...)
+
+shinymanager_where <- function(where) {
+  # tags$script(sprintf(
+  #   "$(document).ready(function(){Shiny.setInputValue('shinymanager_where', '%s');})", where
+  # ))
+  # humm, little hack ^^
+  tags$div(
+    style = "display: none;",
+    textInput(inputId = "shinymanager_where", label = NULL, value = where)
+  )
+}
+
 
 # Remove the whole query string
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
