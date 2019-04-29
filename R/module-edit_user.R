@@ -63,10 +63,11 @@ edit_user <- function(input, output, session) {
 
 #' @importFrom utils modifyList
 update_user <- function(df, value, username) {
-  df <- split(x = df, f = df$user)
+  users_order <- factor(df$user, levels=unique(df$user))
+  df <- split(df, f = users_order)
   user <- as.list(df[[username]])
   value <- lapply(value, function(x) ifelse(length(x) == 0, NA, x))
   new <-  modifyList(x = user, val = value)
-  df[[username]] <- as.data.frame(new)
+  df[[username]] <- as.data.frame(new, stringsAsFactors = FALSE)
   do.call(rbind, c(df, list(make.row.names = FALSE)))
 }
