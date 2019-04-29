@@ -19,13 +19,15 @@ edit_user_UI <- function(id, credentials, username = NULL) {
         if (x %in% "start") {
           value <- data_user[[x]]
           if (is.null(value)) {
-            value <- Sys.Date()
+            # value <- Sys.Date()
+            value <- NA
           }
           dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
         } else if (x %in% "expire") {
           value <- data_user[[x]]
           if (is.null(value)) {
-            value <- Sys.Date() + 60
+            # value <- Sys.Date() + 60
+            value <- NA
           }
           dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
         } else if (identical(x, "password")) {
@@ -48,7 +50,10 @@ edit_user <- function(input, output, session) {
   observe({
     rv$user <- lapply(
       X = reactiveValuesToList(input),
-      FUN = as.character
+      FUN = function(x){
+        x <- as.character(x)
+        ifelse(length(x) == 0, NA, x)
+      }
     )
   })
 

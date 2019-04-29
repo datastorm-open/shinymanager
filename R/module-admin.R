@@ -334,7 +334,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
       resetpwd <- rbind(resetpwd, data.frame(
         user = newuser$user,
-        must_change = as.character(FALSE),
+        must_change = as.character(TRUE),
         have_changed = as.character(FALSE),
         date_change = character(1),
         stringsAsFactors = FALSE
