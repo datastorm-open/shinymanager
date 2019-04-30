@@ -22,6 +22,9 @@
 #'    user can access the admin mode (only available using a SQLite database)
 #'   \item \strong{start (optional)} : the date from which the user will have access to the application
 #'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+#'   \item \strong{applications (optional)} : the name of the applications to which the user is authorized,
+#'    separated by a semicolon. The name of the application corresponds to the name of the directory,
+#'    or can be declared using : \code{options("shinymanager.application" = "my-app")}
 #'   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
 #'  }
 #'
@@ -71,6 +74,7 @@ check_credentials_df <- function(user, password, credentials_df) {
     return(list(
       result = FALSE,
       expired = FALSE,
+      authorized = FALSE,
       user_info = NULL
     ))
   }
@@ -88,17 +92,30 @@ check_credentials_df <- function(user, password, credentials_df) {
   } else {
     good_time <- TRUE
   }
+  authorized <- TRUE
+  if (hasName(credentials_df, "applications")) {
+    appname <- get_appname()
+    appsnames <- credentials_df$applications[credentials_df$user == user]
+    appsnames <- strsplit(x = as.character(appsnames), split = ";")
+    appsnames <- unlist(x = appsnames, use.names = FALSE)
+    if (!isTRUE(appname %in% appsnames)) {
+      good_password <- FALSE
+      authorized <- FALSE
+    }
+  }
   if (good_password) {
     if (good_time) {
       auth <- list(
         result = TRUE,
         expired = FALSE,
+        authorized = authorized,
         user_info = user_info
       )
     } else {
       auth <- list(
         result = FALSE,
         expired = TRUE,
+        authorized = authorized,
         user_info = user_info
       )
     }
@@ -106,6 +123,7 @@ check_credentials_df <- function(user, password, credentials_df) {
     auth <- list(
       result = FALSE,
       expired = FALSE,
+      authorized = authorized,
       user_info = NULL
     )
   }

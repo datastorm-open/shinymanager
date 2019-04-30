@@ -17,6 +17,9 @@
 #'    user can access the admin mode (only available using a SQLite database)
 #'   \item \strong{start (optional)} : the date from which the user will have access to the application
 #'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+#'   \item \strong{applications (optional)} : the name of the applications to which the user is authorized,
+#'    separated by a semicolon. The name of the application corresponds to the name of the directory,
+#'    or can be declared using : \code{options("shinymanager.application" = "my-app")}
 #'   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
 #'  }
 #'
@@ -24,7 +27,7 @@
 #' @importFrom RSQLite SQLite
 #'
 #' @seealso \code{\link{read_db_decrypt}}
-#' 
+#'
 #' @examples
 #' \dontrun{
 #'
@@ -93,6 +96,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
       server_connected = character(0),
       token = character(0),
       logout = character(0),
+      app = character(0),
       stringsAsFactors = FALSE
     ),
     passphrase = passphrase
@@ -117,7 +121,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #' @importFrom openssl sha256 aes_cbc_encrypt
 #'
 #' @seealso \code{\link{create_db}}
-#' 
+#'
 #' @examples
 #' # connect to database
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
@@ -135,50 +139,50 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #'
 #' # with DBI method you'll get a crypted blob
 #' DBI::dbReadTable(conn = conn, name = "iris")
-#' 
+#'
 #' # add some users to database
 #' \dontrun{
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = "path/to/database.sqlite")
 #'
 #' # update "credentials" table
 #' current_user <- read_db_decrypt(
-#'   conn, 
-#'   name = "credentials", 
+#'   conn,
+#'   name = "credentials",
 #'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #'
-#' add_user <- data.frame(user = "new", password = "pwdToChange", 
+#' add_user <- data.frame(user = "new", password = "pwdToChange",
 #'                       start = NA, expire = NA, admin = TRUE)
 #'
 #' new_users <- rbind.data.frame(current_user, add_user)
 #'
 #' write_db_encrypt(
-#'   conn, 
-#'   value = new_users, 
-#'   name = "credentials", 
+#'   conn,
+#'   value = new_users,
+#'   name = "credentials",
 #'   key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #'
 #' # update "pwd_mngt" table
 #' pwd_mngt <- read_db_decrypt(
-#'   conn, 
-#'   name = "pwd_mngt", 
+#'   conn,
+#'   name = "pwd_mngt",
 #'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #'
 #' pwd_mngt <- rbind.data.frame(
-#'   pwd_mngt, 
+#'   pwd_mngt,
 #'   data.frame(user = "new", must_change = T, have_changed = F, date_change = "")
 #' )
 #'
 #' write_db_encrypt(
-#'   conn, 
-#'   value = pwd_mngt, 
-#'   name = "pwd_mngt", 
+#'   conn,
+#'   value = pwd_mngt,
+#'   name = "pwd_mngt",
 #'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #' }
-#' 
+#'
 write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
   if (is.character(conn)) {
     conn <- dbConnect(RSQLite::SQLite(), dbname = conn)

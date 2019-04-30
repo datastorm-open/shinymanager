@@ -7,6 +7,10 @@ hasName <- function(x, name) {
   match(name, names(x), nomatch = 0L) > 0L
 }
 
+get_appname <- function() {
+  getOption("shinymanager.application", default = basename(getwd()))
+}
+
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
   args <- list(...)
@@ -102,6 +106,7 @@ save_logs <- function(token) {
         server_connected = as.character(Sys.time()),
         token = token,
         logout = NA_character_,
+        app = get_appname(),
         stringsAsFactors = FALSE
       ))
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)

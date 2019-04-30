@@ -91,7 +91,8 @@ language <- R6::R6Class(
       "Download logs database" = "Download logs database",
       "Reset password for %s?" = "Reset password for %s?",
       "Temporary password:" = "Temporary password:",
-      "Password succesfully reset!" = "Password succesfully reset!"
+      "Password succesfully reset!" = "Password succesfully reset!",
+      "You are not authorized for this application" = "You are not authorized for this application"
     ),
     labels_lan = list(
       fr = list(
@@ -147,7 +148,8 @@ language <- R6::R6Class(
         "Download logs database" = "T\u00e9l\u00e9charger les logs",
         "Reset password for %s?" = "R\u00e9initialiser le mot de passe de %s ?",
         "Temporary password:" = "Mot de passe temporaire",
-        "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9"
+        "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
+        "You are not authorized for this application" = "Vous n'\u00eates pas habilit\u00e9 pour cette application"
       )
     ),
     DT_lan = list(

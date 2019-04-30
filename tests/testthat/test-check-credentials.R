@@ -31,3 +31,22 @@ test_that("check_credentials (expired) works", {
   expect_true(check_credentials(credentials)("victor", "12345")$expired)
 })
 
+
+test_that("check_credentials (applications) works", {
+
+  credentials <- data.frame(
+    user = c("fanny", "victor", "benoit"),
+    password = c("azerty", "12345", "azerty"),
+    comment = c("alsace", "auvergne", "bretagne"),
+    applications = c("app1;app2", "app1", "app2"),
+    stringsAsFactors = FALSE
+  )
+
+  options("shinymanager.application" = "app2")
+
+  expect_true(check_credentials(credentials)("fanny", "azerty")$result)
+  expect_true(check_credentials(credentials)("fanny", "azerty")$authorized)
+  expect_false(check_credentials(credentials)("victor", "12345")$result)
+  expect_false(check_credentials(credentials)("victor", "12345")$authorized)
+})
+

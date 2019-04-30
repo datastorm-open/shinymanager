@@ -62,12 +62,12 @@ if (interactive()) {
       id = "auth",
       tag_img = tags$img(
         src = "https://www.r-project.org/logo/Rlogo.png", width = 100
-      ), 
+      ),
       tag_div = tags$div(
         tags$p(
-          "For any question, please  contact ", 
+          "For any question, please  contact ",
           tags$a(
-            href = "mailto:someone@example.com?Subject=Shiny\%20aManager", 
+            href = "mailto:someone@example.com?Subject=Shiny\%20aManager",
             target="_top", "administrator"
           )
         )

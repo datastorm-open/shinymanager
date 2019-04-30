@@ -7,7 +7,7 @@
 #'  \code{"warning"}, \code{"danger"}.
 #' @param tag_img A \code{tags$img} to be displayed on top of the authentication module.
 #' @param tag_div A \code{tags$div} to be displayed on bottom of the authentication module.
-#' 
+#'
 #' @export
 #'
 #' @name module-authentication
@@ -36,12 +36,12 @@
 #'       id = "auth",
 #'       tag_img = tags$img(
 #'         src = "https://www.r-project.org/logo/Rlogo.png", width = 100
-#'       ), 
+#'       ),
 #'       tag_div = tags$div(
 #'         tags$p(
-#'           "For any question, please  contact ", 
+#'           "For any question, please  contact ",
 #'           tags$a(
-#'             href = "mailto:someone@example.com?Subject=Shiny%20aManager", 
+#'             href = "mailto:someone@example.com?Subject=Shiny%20aManager",
 #'             target="_top", "administrator"
 #'           )
 #'         )
@@ -224,13 +224,23 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
           )
         )
       } else {
-        insertUI(
-          selector = jns("result_auth"),
-          ui = tags$div(
-            id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan$get("Username or password are incorrect")
+        if (!isTRUE(res_auth$authorized)) {
+          insertUI(
+            selector = jns("result_auth"),
+            ui = tags$div(
+              id = ns("msg_auth"), class = "alert alert-danger",
+              icon("exclamation-triangle"), lan$get("You are not authorized for this application")
+            )
           )
-        )
+        } else {
+          insertUI(
+            selector = jns("result_auth"),
+            ui = tags$div(
+              id = ns("msg_auth"), class = "alert alert-danger",
+              icon("exclamation-triangle"), lan$get("Username or password are incorrect")
+            )
+          )
+        }
       }
     }
   })

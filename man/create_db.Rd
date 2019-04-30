@@ -25,6 +25,9 @@ The credentials \code{data.frame} can have the following columns:
    user can access the admin mode (only available using a SQLite database)
   \item \strong{start (optional)} : the date from which the user will have access to the application
   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+  \item \strong{applications (optional)} : the name of the applications to which the user is authorized,
+   separated by a semicolon. The name of the application corresponds to the name of the directory,
+   or can be declared using : \code{options("shinymanager.application" = "my-app")}
   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
  }
 }
