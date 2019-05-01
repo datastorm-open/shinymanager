@@ -4,11 +4,11 @@
 #' @importFrom htmltools tags singleton tagList
 #' @importFrom shiny NS fluidRow column actionButton icon
 admin_UI <- function(id) {
-
+  
   ns <- NS(id)
-
+  
   lan <- use_language()
-
+  
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-admin.css", rel="stylesheet"),
@@ -19,10 +19,10 @@ admin_UI <- function(id) {
         width = 8, offset = 2,
         # tags$h2(lan$get("Administrator mode")),
         # tags$br(), tags$br(),
-
+        
         tags$h3(icon("users"), lan$get("Users"), class = "text-primary"),
         tags$hr(),
-
+        
         actionButton(
           inputId = ns("add_user"),
           label = lan$get("Add a user"),
@@ -32,34 +32,34 @@ admin_UI <- function(id) {
         ),
         tags$br(), tags$br(), tags$br(),
         DTOutput(outputId = ns("table_users")),
-
+        
         tags$br(),
-
+        
         actionButton(
           inputId = ns("remove_selected_users"),
           label = lan$get("Remove selected users"),
           class = "btn-danger pull-right disabled",
           icon = icon("trash-o")
         ),
-
+        
         tags$br(),
-
+        
         tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
-
+        
         DTOutput(outputId = ns("table_pwds")),
-
+        
         tags$br(),
-
+        
         actionButton(
           inputId = ns("change_selected_pwds"),
           label = lan$get("Force selected users to change password"),
           class = "btn-primary pull-right disabled",
           icon = icon("key")
         ),
-
+        
         tags$br(),tags$br(), tags$br()
-
+        
       )
     )
   )
@@ -71,18 +71,18 @@ admin_UI <- function(id) {
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
 admin <- function(input, output, session, sqlite_path, passphrase) {
-
+  
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
-
+  
   lan <- use_language()
-
+  
   token_start <- isolate(getToken(session = session))
-
+  
   update_read_db <- reactiveValues(x = NULL)
-
+  
   # read users table from database
   users <- reactive({
     unbindDT(ns("table_users"))
@@ -99,7 +99,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       return(db)
     }
   })
-
+  
   # read password management table from database
   pwds <- reactive({
     unbindDT(ns("table_pwds"))
@@ -116,8 +116,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       return(db)
     }
   })
-
-
+  
+  
   # displaying users table
   output$table_users <- renderDT({
     req(users())
@@ -136,9 +136,9 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         language = lan$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
-          # "function(settings, json) {",
-          # "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
-          # "}"),
+        # "function(settings, json) {",
+        # "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
+        # "}"),
         scrollX = TRUE,
         columnDefs = list(
           list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
@@ -146,7 +146,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       )
     )
   })
-
+  
   # displaying password management table
   output$table_pwds <- renderDT({
     req(pwds())
@@ -174,8 +174,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       )
     )
   })
-
-
+  
+  
   # Remove all selected users
   r_selected_users <- callModule(module = input_checkbox, id = "remove_mult_users")
   observeEvent(r_selected_users(), {
@@ -186,11 +186,11 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "disable")
     }
   })
-
+  
   observeEvent(input$remove_selected_users, {
     remove_modal(ns("delete_selected_users"), r_selected_users())
   })
-
+  
   observeEvent(input$delete_selected_users, {
     users <- users()
     to_delete <- r_selected_users()
@@ -203,8 +203,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     update_read_db$x <- Sys.time()
   })
-
-
+  
+  
   # Force change password all selected users
   r_selected_pwds <- callModule(module = input_checkbox, id = "change_mult_pwds")
   observeEvent(r_selected_pwds(), {
@@ -215,11 +215,11 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("change_selected_pwds"), type = "disable")
     }
   })
-
+  
   observeEvent(input$change_selected_pwds, {
     change_pwd_modal(ns("changed_password_users"), r_selected_pwds())
   })
-
+  
   observeEvent(input$changed_password_users, {
     res_chg <- try(force_chg_pwd(r_selected_pwds()), silent = TRUE)
     if (inherits(res_chg, "try-error")) {
@@ -229,10 +229,10 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       update_read_db$x <- Sys.time()
     }
   })
-
-
-
-
+  
+  
+  
+  
   # launch modal to edit informations about a user
   observeEvent(input$edit_user, {
     users <- users()
@@ -250,16 +250,16 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       )
     ))
   })
-
+  
   value_edited <- callModule(module = edit_user, id = "edit_user")
-
+  
   # Write in database edited values for the user
   observeEvent(input$edited_user, {
     users <- users()
     newval <- value_edited$user
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
-
+    
     res_edit <- try({
       users <- update_user(users, newval, input$edit_user)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
@@ -271,8 +271,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       update_read_db$x <- Sys.time()
     }
   })
-
-
+  
+  
   # launch modal to add a new user
   observeEvent(input$add_user, {
     users <- users()
@@ -291,9 +291,9 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       )
     ))
   })
-
+  
   value_added <- callModule(module = edit_user, id = "add_user")
-
+  
   # warning message if user already exist in database
   observeEvent(value_added$user, {
     req(value_added$user$user)
@@ -316,18 +316,18 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       toggleBtn(session = session, inputId = ns("added_user"), type = "enable")
     }
   })
-
+  
   # write in database the new user and display his password
   observeEvent(input$added_user, {
     users <- users()
     newuser <- value_added$user
-
+    
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
-
-    password <- generate_pwd()
-    newuser$password <- password
-
+    
+    # password <- generate_pwd()
+    # newuser$password <- password
+    
     res_add <- try({
       users <- rbind(users, as.data.frame(newuser))
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
@@ -345,20 +345,22 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       showNotification(ui = lan$get("Failed to update user"), type = "error")
     } else {
       showModal(modalDialog(
-        tags$p(lan$get("New user succesfully created!")),
-        tags$p(lan$get("Password:"), tags$b(password)),
+        tags$p(HTML(
+          sprintf(lan$get("New user %s succesfully created!"), tags$b(newuser$user))
+        )),
+        tags$p(lan$get("Password:"), tags$b(newuser$password)),
         footer = modalButton(lan$get("Dismiss"))
       ))
       update_read_db$x <- Sys.time()
     }
   })
-
-
+  
+  
   # launch modal to force a user to change password
   observeEvent(input$change_pwd, {
     change_pwd_modal(ns("changed_password"), input$change_pwd)
   })
-
+  
   # store in database that the user must change password on next connection
   observeEvent(input$changed_password, {
     res_chg <- try(force_chg_pwd(input$change_pwd), silent = TRUE)
@@ -369,8 +371,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       update_read_db$x <- Sys.time()
     }
   })
-
-
+  
+  
   # launch modal to reset password
   observeEvent(input$reset_pwd, {
     reset_pwd_modal(ns("reseted_password"), input$reset_pwd)
@@ -392,8 +394,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       update_read_db$x <- Sys.time()
     }
   })
-
-
+  
+  
   # launch modal to remove a user from the database
   observeEvent(input$remove_user, {
     current_user <- .tok$get_user(token_start)
@@ -407,7 +409,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       remove_modal(ns("delete_user"), input$remove_user)
     }
   })
-
+  
   # delete the user
   observeEvent(input$delete_user, {
     users <- users()
@@ -420,7 +422,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     update_read_db$x <- Sys.time()
   })
-
+  
 }
 
 

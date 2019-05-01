@@ -31,7 +31,11 @@ edit_user_UI <- function(id, credentials, username = NULL) {
           }
           dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
         } else if (identical(x, "password")) {
-          NULL
+          if(is.null(username)){
+            textInput(inputId = ns(x), label = R.utils::capitalize(x), value = generate_pwd(), width = "100%")
+          } else {
+            NULL
+          }
         } else if (identical(x, "admin")) {
           checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
         } else {
