@@ -114,7 +114,7 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
                 tags$br(), tags$br()
               ),
               tags$script(
-                sprintf("bindEnter('%s');", ns(""))
+                sprintf("bindEnterPwd('%s');", ns(""))
               ),
               tags$div(id = ns("result_pwd"))
             )

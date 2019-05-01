@@ -13,4 +13,15 @@ function bindEnter(ns) {
   });
 }
 
-
+function bindEnterPwd(ns) {
+  $('#' + ns + 'pwd_one').on('keypress',function(e) {
+    if(e.which == 13) {
+      $('#' + ns + 'update_pwd').click();
+    }
+  });
+  $('#' + ns + 'pwd_two').on('keypress',function(e) {
+    if(e.which == 13) {
+      $('#' + ns + 'update_pwd').click();
+    }
+  });
+}
