@@ -11,9 +11,7 @@ function bindEnter(ns) {
       $('#' + ns + 'go_auth').click();
     }
   });
-}
-
-function bindEnterPwd(ns) {
+  
   $('#' + ns + 'pwd_one').on('keypress',function(e) {
     if(e.which == 13) {
       $('#' + ns + 'update_pwd').click();
