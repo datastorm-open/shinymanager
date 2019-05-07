@@ -83,13 +83,14 @@ input_btns <- function(inputId, users, tooltip, icon, status = "primary") {
 }
 
 
-input_checkbox_ui <- function(id, users) {
+input_checkbox_ui <- function(id, users, checked = FALSE) {
   ns <- NS(id)
   tag <- lapply(
     X = users,
     FUN = function(x) {
       # res <- checkboxInput(inputId = ns(paste0("check_", x)), label = NULL, value = FALSE)
       res <- tags$input(id = ns(paste0("check_", x)), type = "checkbox", style = "float: right;")
+      if(checked) res$attribs$checked <- "checked"
       doRenderTags(res)
     }
   )

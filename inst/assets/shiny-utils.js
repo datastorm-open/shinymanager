@@ -15,4 +15,3 @@ Shiny.addCustomMessageHandler('togglewidget', function(data) {
 Shiny.addCustomMessageHandler('unbindDT', function(data) {
   Shiny.unbindAll($('#' + data.id).find('table').DataTable().table().node());
 });
-

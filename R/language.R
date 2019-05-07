@@ -142,7 +142,7 @@ language <- R6::R6Class(
         "Last month" = "Mois dernier",
         "All period" = "P\u00e9riode enti\u00e8re",
         "Home" = "Accueil",
-        "Select all users" = "S\u00e9lectionner tous les utilisateurs",
+        "Select all shown users" = "S\u00e9lectionner tous les utilisateurs affich\u00e9s",
         "Remove selected users" = "Supprimer les utilisateurs s\u00e9lectionn\u00e9s",
         "Force selected users to change password" = "Forcer les utilisateurs s\u00e9l\u00e9ctionn\u00e9s \u00e0 changer de mot de passe",
         "Users" = "Utilisateurs",

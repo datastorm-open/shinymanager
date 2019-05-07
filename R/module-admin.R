@@ -36,6 +36,14 @@ admin_UI <- function(id) {
         tags$br(),
         
         actionButton(
+          inputId = ns("remove_selected_allusers"),
+          label = lan$get("Select all shown users"),
+          class = "btn-secondary pull-right",
+          style = "margin-left: 5px",
+          icon = icon("check-square")
+        ),
+        
+        actionButton(
           inputId = ns("remove_selected_users"),
           label = lan$get("Remove selected users"),
           class = "btn-danger pull-right disabled",
@@ -50,6 +58,14 @@ admin_UI <- function(id) {
         DTOutput(outputId = ns("table_pwds")),
         
         tags$br(),
+        
+        actionButton(
+          inputId = ns("change_selected_allusers"),
+          label = lan$get("Select all shown users"),
+          class = "btn-secondary pull-right",
+          style = "margin-left: 5px",
+          icon = icon("check-square")
+        ),
         
         actionButton(
           inputId = ns("change_selected_pwds"),
@@ -67,7 +83,7 @@ admin_UI <- function(id) {
 
 #' @importFrom DT renderDT datatable JS
 #' @importFrom shiny reactive observeEvent isolate showModal modalDialog
-#'  removeUI insertUI reactiveValues showNotification callModule req
+#'  removeUI insertUI reactiveValues showNotification callModule req updateCheckboxInput
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
 admin <- function(input, output, session, sqlite_path, passphrase) {
@@ -147,6 +163,17 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     )
   })
   
+  
+  observeEvent(input$remove_selected_allusers, {
+    input_names <- names(input)
+    remove_mult_users_input <- input_names[grep("^remove_mult_users", input_names)]
+    if(length(remove_mult_users_input) > 0){
+      ctrl <- lapply(remove_mult_users_input, function(x){
+        updateCheckboxInput(session, x, value = TRUE)
+      })
+    }
+  })
+  
   # displaying password management table
   output$table_pwds <- renderDT({
     req(pwds())
@@ -175,6 +202,15 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     )
   })
   
+  observeEvent(input$change_selected_allusers, {
+    input_names <- names(input)
+    chge_mult_pwds_input <- input_names[grep("^change_mult_pwds", input_names)]
+    if(length(chge_mult_pwds_input) > 0){
+      ctrl <- lapply(chge_mult_pwds_input, function(x){
+        updateCheckboxInput(session, x, value = TRUE)
+      })
+    }
+  })
   
   # Remove all selected users
   r_selected_users <- callModule(module = input_checkbox, id = "remove_mult_users")
