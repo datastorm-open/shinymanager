@@ -277,6 +277,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     showModal(modalDialog(
       title = "Edit user",
       edit_user_UI(ns("edit_user"), credentials = users, username = input$edit_user),
+      tags$div(id = ns("placeholder-edituser-exist")),
       footer = tagList(
         modalButton(lan$get("Cancel")),
         actionButton(
@@ -290,6 +291,31 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   })
   
   value_edited <- callModule(module = edit_user, id = "edit_user")
+  
+  # warning message if user already exist in database
+  observeEvent(value_edited$user, {
+    req(!is.null(value_edited$user$user))
+    removeUI(selector = jns("alert-edituser-exist"), immediate = TRUE)
+    new <- value_edited$user$user
+    existing <- setdiff(users()$user, input$edit_user)
+    if (new %in% existing) {
+      insertUI(
+        selector = jns("placeholder-edituser-exist"),
+        ui = tags$div(
+          id = ns("alert-edituser-exist"),
+          class = "alert alert-warning",
+          icon("exclamation-triangle"),
+          lan$get("User already exist!")
+        ),
+        immediate = TRUE
+      )
+      toggleBtn(session = session, inputId = ns("edited_user"), type = "disable")
+    } else if(new %in% "") {
+      toggleBtn(session = session, inputId = ns("edited_user"), type = "disable")
+    } else {
+      toggleBtn(session = session, inputId = ns("edited_user"), type = "enable")
+    }
+  })
   
   # Write in database edited values for the user
   observeEvent(input$edited_user, {
@@ -334,7 +360,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   
   # warning message if user already exist in database
   observeEvent(value_added$user, {
-    req(value_added$user$user)
+    req(!is.null(value_added$user$user))
     removeUI(selector = jns("alert-user-exist"), immediate = TRUE)
     new <- value_added$user$user
     existing <- users()$user
@@ -349,6 +375,8 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         ),
         immediate = TRUE
       )
+      toggleBtn(session = session, inputId = ns("added_user"), type = "disable")
+    } else if(new %in% ""){
       toggleBtn(session = session, inputId = ns("added_user"), type = "disable")
     } else {
       toggleBtn(session = session, inputId = ns("added_user"), type = "enable")
