@@ -37,7 +37,8 @@ admin_UI <- function(id) {
         
         actionButton(
           inputId = ns("remove_selected_allusers"),
-          label = lan$get("Select all shown users"),
+          # label = lan$get("Select all shown users"),
+          label = "",
           class = "btn-secondary pull-right",
           style = "margin-left: 5px",
           icon = icon("check-square")
@@ -61,7 +62,8 @@ admin_UI <- function(id) {
         
         actionButton(
           inputId = ns("change_selected_allusers"),
-          label = lan$get("Select all shown users"),
+          # label = lan$get("Select all shown users"),
+          label = "",
           class = "btn-secondary pull-right",
           style = "margin-left: 5px",
           icon = icon("check-square")
@@ -161,7 +163,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         )
       )
     )
-  })
+  }, server = FALSE)
   
   
   observeEvent(input$remove_selected_allusers, {
@@ -200,7 +202,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
         )
       )
     )
-  })
+  }, server = FALSE)
   
   observeEvent(input$change_selected_allusers, {
     input_names <- names(input)

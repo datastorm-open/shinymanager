@@ -84,7 +84,7 @@ language <- R6::R6Class(
       "Last month" = "Last month",
       "All period" = "All period",
       "Home" = "Home",
-      "Select all users" = "Select all users",
+      "Select all shown users" = "Select all shown users",
       "Remove selected users" = "Remove selected users",
       "Force selected users to change password" = "Force selected users to change password",
       "Users" = "Users",
