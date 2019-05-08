@@ -6,43 +6,47 @@ edit_user_UI <- function(id, credentials, username = NULL) {
 
   ns <- NS(id)
 
+  lan <- use_language()
+  
   if (!is.null(username) && username %in% credentials$user) {
     data_user <- credentials[credentials$user == username, ]
   } else {
     data_user <- list()
   }
 
-  tagList(
-    lapply(
-      X = names(credentials),
-      FUN = function(x) {
-        if (x %in% "start") {
-          value <- data_user[[x]]
-          if (is.null(value)) {
-            # value <- Sys.Date()
-            value <- NA
-          }
-          dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
-        } else if (x %in% "expire") {
-          value <- data_user[[x]]
-          if (is.null(value)) {
-            # value <- Sys.Date() + 60
-            value <- NA
-          }
-          dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
-        } else if (identical(x, "password")) {
-          if(is.null(username)){
-            textInput(inputId = ns(x), label = R.utils::capitalize(x), value = generate_pwd(), width = "100%")
-          } else {
-            NULL
-          }
-        } else if (identical(x, "admin")) {
-          checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
-        } else {
-          textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
+  input_list <- lapply(
+    X = names(credentials),
+    FUN = function(x) {
+      if (x %in% "start") {
+        value <- data_user[[x]]
+        if (is.null(value)) {
+          # value <- Sys.Date()
+          value <- NA
         }
+        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+      } else if (x %in% "expire") {
+        value <- data_user[[x]]
+        if (is.null(value)) {
+          # value <- Sys.Date() + 60
+          value <- NA
+        }
+        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+      } else if (identical(x, "password")) {
+        NULL
+      } else if (identical(x, "admin")) {
+        checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
+      } else {
+        textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
       }
-    )
+    }
+  )
+  
+  if(is.null(username)){
+    input_list[[length(input_list) + 1]] <- textInput(inputId = ns("password"), label = "Password", value = generate_pwd(), width = "100%")
+    input_list[[length(input_list) + 1]] <- checkboxInput(inputId = ns("must_change"), label = lan$get("Ask to change password"), value = TRUE)
+  } 
+  tagList(
+    input_list
   )
 }
 

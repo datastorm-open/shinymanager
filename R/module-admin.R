@@ -357,7 +357,12 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   observeEvent(input$added_user, {
     users <- users()
     newuser <- value_added$user
-    
+    if("must_change" %in% names(newuser)){
+      must_change <- as.character(newuser$must_change)
+      newuser$must_change <- NULL
+    } else {
+      must_change <- as.character(TRUE)
+    }
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     
@@ -370,7 +375,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
       resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
       resetpwd <- rbind(resetpwd, data.frame(
         user = newuser$user,
-        must_change = as.character(TRUE),
+        must_change = must_change,
         have_changed = as.character(FALSE),
         date_change = character(1),
         stringsAsFactors = FALSE
