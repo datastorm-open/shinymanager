@@ -15,7 +15,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Imports: 
     R6,
-    shiny (>= 1.2.0),
+    shiny,
     htmltools,
     DT (>= 0.5),
     DBI,
