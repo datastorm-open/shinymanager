@@ -216,7 +216,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
   observeEvent(input$relog, {
     if (isTRUE(use_token)) {
       token <- getToken(session = session)
-      remove_token(token)
+      .tok$remove(token)
       resetQueryString(session = session)
       session$reload()
     }
