@@ -123,12 +123,12 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           tabPanel(
             title = tagList(icon("home"), lan$get("Home")),
             value = "home",
-            admin_UI("admin"),
+            admin_ui("admin"),
             shinymanager_where("admin")
           ),
           tabPanel(
             title = "Logs",
-            logs_UI("logs")
+            logs_ui("logs")
           )
         )
       } else {

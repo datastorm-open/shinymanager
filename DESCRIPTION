@@ -25,4 +25,4 @@ Imports:
     billboarder
 Suggests: 
     keyring,
-    testthat
+    testthat (>= 2.1.0)

@@ -2,12 +2,12 @@
 #' @importFrom shiny NS dateInput checkboxInput textInput
 #' @importFrom htmltools tagList
 #' @importFrom R.utils capitalize
-edit_user_UI <- function(id, credentials, username = NULL) {
+edit_user_ui <- function(id, credentials, username = NULL) {
 
   ns <- NS(id)
 
   lan <- use_language()
-  
+
   if (!is.null(username) && username %in% credentials$user) {
     data_user <- credentials[credentials$user == username, ]
   } else {
@@ -40,11 +40,11 @@ edit_user_UI <- function(id, credentials, username = NULL) {
       }
     }
   )
-  
+
   if(is.null(username)){
     input_list[[length(input_list) + 1]] <- textInput(inputId = ns("password"), label = "Password", value = generate_pwd(), width = "100%")
     input_list[[length(input_list) + 1]] <- checkboxInput(inputId = ns("must_change"), label = lan$get("Ask to change password"), value = TRUE)
-  } 
+  }
   tagList(
     input_list
   )
