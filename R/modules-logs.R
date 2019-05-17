@@ -122,7 +122,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     updateSelectInput(
       session = session,
       inputId = "user",
-      choices = c("All users", logs_rv$users$user),
+      choices = c("All users", as.character(logs_rv$users$user)),
       selected = "All users"
     )
 
@@ -130,7 +130,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     updateSelectInput(
       session = session,
       inputId = "app",
-      choices = c("All applications", app_choices),
+      choices = c("All applications", as.character(app_choices)),
       selected = get_appname()
     )
     if(length(app_choices) <= 1){
