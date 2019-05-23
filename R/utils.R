@@ -79,6 +79,9 @@ update_pwd <- function(user, pwd) {
       if (identical(users$password[ind_user], pwd)) {
         return(list(result = FALSE))
       }
+      if(!"character" %in% class(users$password)){
+        users$password <- as.character(users$password)
+      }
       users$password[ind_user] <- pwd
       write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       force_chg_pwd(user, FALSE)

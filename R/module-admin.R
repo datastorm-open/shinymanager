@@ -451,6 +451,9 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
   observeEvent(input$reseted_password, {
     password <- generate_pwd()
     users <- users()
+    if(!"character" %in% class(users$password)){
+      users$password <- as.character(users$password)
+    }
     users$password[users$user %in% input$reset_pwd] <- password
     write_db_encrypt(conn = sqlite_path, value = users, name = "credentials", passphrase = passphrase)
     res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
