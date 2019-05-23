@@ -118,6 +118,13 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     logs_rv$logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+
+    isolate({
+      if("status" %in% colnames(isolate({logs_rv$logs}))){
+        logs_rv$logs <- logs_rv$logs[logs_rv$logs$status %in% "Success", ]
+      }
+    })
+
     logs_rv$users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
     updateSelectInput(
       session = session,
@@ -255,7 +262,9 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
       paste('shinymanager-logs-', Sys.Date(), '.csv', sep = '')
     },
     content = function(con) {
-      logs <- logs_rv$logs
+      conn <- dbConnect(SQLite(), dbname = sqlite_path)
+      on.exit(dbDisconnect(conn))
+      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       logs$token <- NULL
       write.table(logs, con, sep = ";", row.names = FALSE)
     }

@@ -104,16 +104,61 @@ save_logs <- function(token) {
     on.exit(dbDisconnect(conn))
     res_logs <- try({
       logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      # patch for old logs database
+      if(!"status" %in% colnames(logs)){
+        if(nrow(logs) > 0){
+          logs$status <- "Success"
+        } else {
+          logs$status <- character(0)
+        }
+      }
       logs <- rbind(logs, data.frame(
         user = user,
         server_connected = as.character(Sys.time()),
         token = token,
         logout = NA_character_,
         app = get_appname(),
+        status = "Success",
         stringsAsFactors = FALSE
       ))
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
     }, silent = TRUE)
+    if (inherits(res_logs, "try-error")) {
+      warning(paste(
+        "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
+      ), call. = FALSE)
+    }
+  }
+}
+
+save_logs_failed <- function(user, status = "Failed") {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_logs <- try({
+      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      # patch for old logs database
+      if(!"status" %in% colnames(logs)){
+        if(nrow(logs) > 0){
+          logs$status <- "Success"
+        } else {
+          logs$status <- character(0)
+        }
+      }
+      logs <- rbind(logs, data.frame(
+        user = user,
+        server_connected = as.character(Sys.time()),
+        token = NA_character_,
+        logout = NA_character_,
+        app = get_appname(),
+        status = status,
+        stringsAsFactors = FALSE
+      ))
+      write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+    }, silent = TRUE)
+    
     if (inherits(res_logs, "try-error")) {
       warning(paste(
         "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message

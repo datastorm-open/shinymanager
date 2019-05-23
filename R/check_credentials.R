@@ -124,7 +124,7 @@ check_credentials_df <- function(user, password, credentials_df) {
       result = FALSE,
       expired = FALSE,
       authorized = authorized,
-      user_info = NULL
+      user_info = user_info
     )
   }
   return(auth)

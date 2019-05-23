@@ -215,7 +215,17 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       }
 
     } else {
-      if (isTRUE(res_auth$expired)) {
+      if (is.null(res_auth$user_info)) {
+        save_logs_failed(input$user_id, status = "Unknown user")
+        insertUI(
+          selector = jns("result_auth"),
+          ui = tags$div(
+            id = ns("msg_auth"), class = "alert alert-danger",
+            icon("exclamation-triangle"), lan$get("Username or password are incorrect")
+          )
+        )
+      } else if (isTRUE(res_auth$expired)) {
+        save_logs_failed(input$user_id, status = "Expired")
         insertUI(
           selector = jns("result_auth"),
           ui = tags$div(
@@ -225,6 +235,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
         )
       } else {
         if (!isTRUE(res_auth$authorized)) {
+          save_logs_failed(input$user_id, status = "Unauthorized")
           insertUI(
             selector = jns("result_auth"),
             ui = tags$div(
@@ -233,6 +244,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
             )
           )
         } else {
+          save_logs_failed(input$user_id, status = "Wrong pwd")
           insertUI(
             selector = jns("result_auth"),
             ui = tags$div(

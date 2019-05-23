@@ -183,17 +183,17 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #'
 #' @rdname secure-app
 secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
-
+  
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
-
+  
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
     use_token = TRUE
   )
-
+  
   callModule(
     module = pwd_server,
     id = "password",
@@ -201,7 +201,7 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
     update_pwd = update_pwd,
     use_token = TRUE
   )
-
+  
   path_sqlite <- .tok$get_sqlite_path()
   if (!is.null(path_sqlite)) {
     callModule(
@@ -217,9 +217,9 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
       passphrase = .tok$get_passphrase()
     )
   }
-
+  
   user_info_rv <- reactiveValues()
-
+  
   observe({
     token <- getToken(session = session)
     if (!is.null(token)) {
@@ -229,21 +229,21 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
       }
     }
   })
-
+  
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   })
-
+  
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   })
-
+  
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
     logout_logs(token)
@@ -251,7 +251,7 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
     clearQueryString(session = session)
     session$reload()
   })
-
+  
   return(user_info_rv)
 }
 
