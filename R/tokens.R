@@ -14,9 +14,9 @@
     add = function(token, ...) {
       args <- list(...)
       if(length(args) > 0){
-        args[[1]]$datetime <- Sys.time()
+        args[[1]]$shinymanager_datetime <- Sys.time()
       } else {
-        args <- list(list(datetime = Sys.time()))
+        args <- list(list(shinymanager_datetime = Sys.time()))
       }
       private$tokens <- union(private$tokens, token)
       if (length(args) > 0) {
@@ -31,13 +31,13 @@
       invisible(self)
     },
     is_valid_timeout = function(token, update = TRUE) {
-      datetime <- private$tokens_user[[token]]$datetime
+      datetime <- private$tokens_user[[token]]$shinymanager_datetime
       if(!is.null(datetime) && private$timeout  > 0){
         valid <- difftime(Sys.time(), datetime, units = "mins") <= private$timeout
       } else {
         valid <- TRUE
       }
-      if(valid && update) private$tokens_user[[token]]$datetime <- Sys.time()
+      if(valid && update) private$tokens_user[[token]]$shinymanager_datetime <- Sys.time()
       valid
     },
     get_user = function(token) {
@@ -56,7 +56,9 @@
       isTRUE(as.logical(private$tokens_user[[token]]$admin))
     },
     get = function(token) {
-      private$tokens_user[[token]]
+      info <- private$tokens_user[[token]]
+      if("shinymanager_datetime" %in% names(info)) info$shinymanager_datetime <- NULL
+      info
     },
     remove = function(token) {
       if (private$length() == 0) return(NULL)
