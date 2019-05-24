@@ -98,13 +98,13 @@ input_checkbox_ui <- function(id, users, checked = FALSE) {
 }
 
 input_checkbox <- function(input, output, session) {
-
+  
   reac <- reactive({
     inputs <- reactiveValuesToList(input)
     inputs <- dropFalse(inputs)
     gsub(pattern = "^check_", replacement = "", x = names(inputs))
   })
-
+  
   return(reac)
 }
 

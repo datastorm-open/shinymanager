@@ -9,7 +9,7 @@
 secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL,
   theme = NULL, language = "en")
 
-secure_server(check_credentials,
+secure_server(check_credentials, timeout = 15,
   session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
@@ -30,6 +30,8 @@ It will affect the authentication panel and the admin page.}
 \item{language}{Language to use for labels, supported values are : "en", "fr".}
 
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
+
+\item{timeout}{Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.}
 
 \item{session}{Shiny session.}
 }

@@ -13,6 +13,11 @@
     },
     add = function(token, ...) {
       args <- list(...)
+      if(length(args) > 0){
+        args[[1]]$datetime <- Sys.time()
+      } else {
+        args <- list(list(datetime = Sys.time()))
+      }
       private$tokens <- union(private$tokens, token)
       if (length(args) > 0) {
         private$tokens_user <- append(
@@ -24,6 +29,16 @@
         )
       }
       invisible(self)
+    },
+    is_valid_timeout = function(token, update = TRUE) {
+      datetime <- private$tokens_user[[token]]$datetime
+      if(!is.null(datetime) && private$timeout  > 0){
+        valid <- difftime(Sys.time(), datetime, units = "mins") <= private$timeout
+      } else {
+        valid <- TRUE
+      }
+      if(valid && update) private$tokens_user[[token]]$datetime <- Sys.time()
+      valid
     },
     get_user = function(token) {
       private$tokens_user[[token]]$user
@@ -64,6 +79,13 @@
     },
     get_passphrase = function() {
       private$passphrase
+    },
+    set_timeout = function(timeout) {
+      private$timeout <- timeout
+      invisible()
+    },
+    get_timeout = function() {
+      private$timeout
     }
   ),
   private = list(
@@ -72,6 +94,7 @@
     tokens_user = list(),
     sqlite_path = NULL,
     passphrase = NULL,
+    timeout = 0,
     length = function() base::length(private$tokens)
   )
 )

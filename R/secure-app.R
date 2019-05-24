@@ -78,6 +78,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
   if (is.null(theme)) {
     theme <- "shinymanager/css/readable.min.css"
   }
+  
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
@@ -158,7 +159,9 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           )
         }
         save_logs(token)
-        tagList(ui, menu, shinymanager_where("application"))
+        tagList(ui, menu, shinymanager_where("application"), 
+                singleton(tags$head(tags$script(src = "shinymanager/timeout.js")))
+        )
       }
     } else {
       args <- get_args(..., fun = auth_ui)
@@ -175,14 +178,15 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 
 
 #' @param check_credentials Function passed to \code{\link{auth_server}}.
+#' @param timeout Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.
 #' @param session Shiny session.
 #'
 #' @export
 #'
-#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain isolate
+#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
-secure_server <- function(check_credentials, session = shiny::getDefaultReactiveDomain()) {
+secure_server <- function(check_credentials, timeout = 15, session = shiny::getDefaultReactiveDomain()) {
   
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
@@ -201,6 +205,8 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
     update_pwd = update_pwd,
     use_token = TRUE
   )
+  
+  .tok$set_timeout(timeout)
   
   path_sqlite <- .tok$get_sqlite_path()
   if (!is.null(path_sqlite)) {
@@ -250,6 +256,31 @@ secure_server <- function(check_credentials, session = shiny::getDefaultReactive
     .tok$remove(token)
     clearQueryString(session = session)
     session$reload()
+  })
+  
+  observeEvent(session$input$.shinymanager_timeout, {
+    token <- getToken(session = session)
+    if (!is.null(token)) {
+      valid_timeout <- .tok$is_valid_timeout(token, update = TRUE)
+      if(!valid_timeout){
+        .tok$remove(token)
+        clearQueryString(session = session)
+        session$reload()
+      }
+    }
+  })
+
+  observe({
+    invalidateLater(30000, session)
+    token <- getToken(session = session)
+    if (!is.null(token)) {
+      valid_timeout <- .tok$is_valid_timeout(token, update = FALSE)
+      if(!valid_timeout){
+        .tok$remove(token)
+        clearQueryString(session = session)
+        session$reload()
+      }
+    }
   })
   
   return(user_info_rv)
