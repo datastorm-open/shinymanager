@@ -54,6 +54,9 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
   }
+  if(any(duplicated(credentials_data$user))){
+    stop("Duplicated users in credentials_data", call. = FALSE)
+  }
   if(!"admin" %in% names(credentials_data)){
     credentials_data$admin <- FALSE
   }
