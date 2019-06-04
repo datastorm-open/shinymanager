@@ -74,7 +74,7 @@ logs_ui <- function(id) {
 
         tags$h3(icon("users"), lan$get("Number of connections per user"), class = "text-primary"),
         tags$hr(),
-        billboarderOutput(outputId = ns("graph_conn_users")),
+        billboarderOutput(outputId = ns("graph_conn_users"), height = "600px"),
 
         tags$br(),
 
