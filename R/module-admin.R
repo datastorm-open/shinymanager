@@ -12,7 +12,8 @@ admin_ui <- function(id) {
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-admin.css", rel="stylesheet"),
-      tags$script(src = "shinymanager/shiny-utils.js")
+      tags$script(src = "shinymanager/shiny-utils.js"),
+      tags$script(src = "shinymanager/timeout.js")
     )),
     fluidRow(
       column(
