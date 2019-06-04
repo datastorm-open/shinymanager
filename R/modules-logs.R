@@ -181,6 +181,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
       bb_y_grid(show = TRUE) %>%
       bb_data(names = list(Freq = "Nb logged")) %>%
       bb_legend(show = FALSE) %>%
+      bb_x_axis(tick = list(width = 10000)) %>%
       bb_labs(
         # title = "Number of connection by user",
         y = lan$get("Total number of connection")
