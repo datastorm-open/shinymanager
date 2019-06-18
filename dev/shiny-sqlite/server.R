@@ -5,7 +5,8 @@
 function(input, output, session) {
 
   auth_out <- secure_server(
-    check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret")
+    check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret"), 
+    timeout = 1
   )
 
   observe({
