@@ -1,14 +1,14 @@
 require(hexSticker)
-library(showtext)
-library(rsvg)
+require(showtext)
+require(rsvg)
 
 ## Loading Google fonts (http://www.google.com/fonts)
 font_add_google("Indie Flower", "indi")
 ## Automatically use showtext to render text for future devices
 showtext_auto()
 
+p <- system.file("sticker/users-cog-solid.svg", package = "shinymanager")
 
-p <- "C:\\Users\\Datastorm\\Desktop\\users-cog-solid.svg"
 sticker(p, package="shinymanager", spotlight = F, 
         s_x=1, s_y=.75,
         p_family = "indi", p_size = 40,
@@ -22,7 +22,3 @@ sticker(p, package="shinymanager", spotlight = F,
         u_family = "indi", u_color = "white",
         u_x = 0.2, u_y = 0.47,
         u_angle =-30)
-
-?sticker_dev
-
-
