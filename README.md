@@ -1,4 +1,4 @@
-# shinymanager
+# shinymanager <img src="inst/sticker/shinymanager.png" width=200 align="right" />
 
 [![Travis build status](https://travis-ci.org/datastorm-open/shinymanager.svg?branch=master)](https://travis-ci.org/datastorm-open/shinymanager)
 [![version](http://www.r-pkg.org/badges/version/shinymanager)](https://CRAN.R-project.org/package=shinymanager)
