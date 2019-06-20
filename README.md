@@ -18,10 +18,17 @@ You can authenticate with:
 
 ### Installation
 
+Install from CRAN with :
+
+```r
+install.packages("shinymanager")
+```
+
+Or install development version from GitHub :
+
 ```r
 remotes::install_github("datastorm-open/shinymanager")
 ```
-
 
 ### Usage
 
