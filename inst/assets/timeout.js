@@ -2,7 +2,7 @@ $(function() {
   timeout_cpt = 1;
   $(document).on({
     'shiny:inputchanged': function(event) {
-      if (event.name !== '.shinymanager_timeout') {
+      if (event.name !== '.shinymanager_timeout' && event.name.includes(".clientdata") === false) {
         Shiny.onInputChange(".shinymanager_timeout", timeout_cpt);
         timeout_cpt = timeout_cpt + 1;
       }
