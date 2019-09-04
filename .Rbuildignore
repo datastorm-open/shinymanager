@@ -3,3 +3,5 @@
 ^\.Rproj\.user$
 ^todo\.md$
 ^dev$
+^doc$
+^Meta$
