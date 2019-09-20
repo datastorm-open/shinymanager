@@ -4,7 +4,7 @@
 
 function(input, output, session) {
 
-  auth_out <- secure_server(session, check_credentials = check_credentials(credentials))
+  auth_out <- secure_server(session = session, check_credentials = check_credentials(credentials))
 
   output$res_auth <- renderPrint({
     reactiveValuesToList(auth_out)
