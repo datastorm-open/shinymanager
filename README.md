@@ -9,11 +9,15 @@
 > Simple and secure authentification mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Source code of main application is protected until authentication is successful.
 
 
-Live demo: http://shinyapps.dreamrs.fr/shinymanager-demo/
+Live demo:
+
+* On Shiny-server: http://shinyapps.dreamrs.fr/shinymanager-demo/
+* On shinyapps.io : https://dreamrs.shinyapps.io/shinymanager-demo/
 
 You can authenticate with:
  * user: `shiny` / password: `shiny`
  * user: `shinymanager` / password: `shinymanager` (Admin)
+
 
 
 ### Installation
@@ -29,6 +33,7 @@ Or install development version from GitHub :
 ```r
 remotes::install_github("datastorm-open/shinymanager")
 ```
+
 
 ### Usage
 
