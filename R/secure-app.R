@@ -222,30 +222,36 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     session$reload()
   })
 
-  observeEvent(session$input$.shinymanager_timeout, {
-    token <- getToken(session = session)
-    if (!is.null(token)) {
-      valid_timeout <- .tok$is_valid_timeout(token, update = TRUE)
-      if(!valid_timeout){
-        .tok$remove(token)
-        clearQueryString(session = session)
-        session$reload()
-      }
-    }
-  })
 
-  observe({
-    invalidateLater(30000, session)
-    token <- getToken(session = session)
-    if (!is.null(token)) {
-      valid_timeout <- .tok$is_valid_timeout(token, update = FALSE)
-      if(!valid_timeout){
-        .tok$remove(token)
-        clearQueryString(session = session)
-        session$reload()
+
+  if (timeout > 0) {
+
+    observeEvent(session$input$.shinymanager_timeout, {
+      token <- getToken(session = session)
+      if (!is.null(token)) {
+        valid_timeout <- .tok$is_valid_timeout(token, update = TRUE)
+        if(!valid_timeout){
+          .tok$remove(token)
+          clearQueryString(session = session)
+          session$reload()
+        }
       }
-    }
-  })
+    })
+
+    observe({
+      invalidateLater(30000, session)
+      token <- getToken(session = session)
+      if (!is.null(token)) {
+        valid_timeout <- .tok$is_valid_timeout(token, update = FALSE)
+        if(!valid_timeout){
+          .tok$remove(token)
+          clearQueryString(session = session)
+          session$reload()
+        }
+      }
+    })
+
+  }
 
   return(user_info_rv)
 }
