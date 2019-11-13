@@ -167,7 +167,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
         }
       }
     }
-  })
+  }, ignoreInit = TRUE)
 
   return(authentication)
 }

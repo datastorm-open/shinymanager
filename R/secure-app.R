@@ -147,7 +147,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #'
 #' @export
 #'
-#' @importFrom shiny callModule getQueryString parseQueryString updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
+#' @importFrom shiny callModule getQueryString parseQueryString
+#'  updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
 secure_server <- function(check_credentials, timeout = 15, session = shiny::getDefaultReactiveDomain()) {
@@ -205,14 +206,14 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
-  })
+  }, ignoreInit = TRUE)
 
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
-  })
+  }, ignoreInit = TRUE)
 
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
@@ -220,7 +221,7 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     .tok$remove(token)
     clearQueryString(session = session)
     session$reload()
-  })
+  }, ignoreInit = TRUE)
 
 
 
