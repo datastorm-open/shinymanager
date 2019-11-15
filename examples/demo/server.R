@@ -10,7 +10,7 @@ function(input, output, session) {
     check_credentials = check_credentials(
       db = "credentials.sqlite",
       passphrase = "supersecret"
-    )
+    ), timeout = 0
   )
 
   observe({

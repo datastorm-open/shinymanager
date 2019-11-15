@@ -166,7 +166,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
         }
       }
     }
-  })
+  }, ignoreInit = TRUE)
 
   observeEvent(input$relog, {
     if (isTRUE(use_token)) {
@@ -176,7 +176,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
       session$reload()
     }
     password$relog <- input$relog
-  })
+  }, ignoreInit = TRUE)
 
   return(password)
 }
