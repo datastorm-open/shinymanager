@@ -8,8 +8,15 @@
 \usage{
 pwd_ui(id, tag_img = NULL, status = "primary")
 
-pwd_server(input, output, session, user, update_pwd, validate_pwd = NULL,
-  use_token = FALSE)
+pwd_server(
+  input,
+  output,
+  session,
+  user,
+  update_pwd,
+  validate_pwd = NULL,
+  use_token = FALSE
+)
 }
 \arguments{
 \item{id}{Module's id.}
