@@ -38,7 +38,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
   if (is.null(theme)) {
     theme <- "shinymanager/css/readable.min.css"
   }
-
+  
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
@@ -57,10 +57,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
         )
         return(pwd_ui)
       }
-      if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
-        if (is.null(.tok$get_sqlite_path())) {
-          warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
-        }
+      if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true") & !is.null(.tok$get_sqlite_path())) {
         navbarPage(
           title = "Admin",
           theme = theme,
@@ -93,7 +90,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           )
         )
       } else {
-        if (isTRUE(enable_admin) && .tok$is_admin(token)) {
+        if (isTRUE(enable_admin) && .tok$is_admin(token) && !is.null(.tok$get_sqlite_path())) {
           menu <- fab_button(
             actionButton(
               inputId = ".shinymanager_logout",
@@ -109,6 +106,9 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             )
           )
         } else {
+          if (isTRUE(enable_admin) && .tok$is_admin(token) && is.null(.tok$get_sqlite_path())) {
+            warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
+          }
           menu <- fab_button(
             actionButton(
               inputId = ".shinymanager_logout",
@@ -152,17 +152,17 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #'
 #' @rdname secure-app
 secure_server <- function(check_credentials, timeout = 15, session = shiny::getDefaultReactiveDomain()) {
-
+  
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
-
+  
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
     use_token = TRUE
   )
-
+  
   callModule(
     module = pwd_server,
     id = "password",
@@ -170,9 +170,9 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     update_pwd = update_pwd,
     use_token = TRUE
   )
-
+  
   .tok$set_timeout(timeout)
-
+  
   path_sqlite <- .tok$get_sqlite_path()
   if (!is.null(path_sqlite)) {
     callModule(
@@ -188,9 +188,9 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
       passphrase = .tok$get_passphrase()
     )
   }
-
+  
   user_info_rv <- reactiveValues()
-
+  
   observe({
     token <- getToken(session = session)
     if (!is.null(token)) {
@@ -200,21 +200,21 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
       }
     }
   })
-
+  
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-
+  
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-
+  
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
     logout_logs(token)
@@ -222,11 +222,11 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     clearQueryString(session = session)
     session$reload()
   }, ignoreInit = TRUE)
-
-
-
+  
+  
+  
   if (timeout > 0) {
-
+    
     observeEvent(session$input$.shinymanager_timeout, {
       token <- getToken(session = session)
       if (!is.null(token)) {
@@ -238,7 +238,7 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
         }
       }
     })
-
+    
     observe({
       invalidateLater(30000, session)
       token <- getToken(session = session)
@@ -251,9 +251,9 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
         }
       }
     })
-
+    
   }
-
+  
   return(user_info_rv)
 }
 
