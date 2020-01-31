@@ -39,7 +39,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("en", "fr"),
+    language_registered = c("en", "fr", "br"),
     labels = list(
       "Please authenticate" = "Please authenticate",
       "Username:" = "Username:",
@@ -156,6 +156,64 @@ language <- R6::R6Class(
         "Temporary password:" = "Mot de passe temporaire",
         "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
         "You are not authorized for this application" = "Vous n'\u00eates pas habilit\u00e9 pour cette application"
+      ),
+      br = list(
+        "Please authenticate" = "Autenticação",
+        "Username:" = "Usuário:",
+        "Password:" = "Senha:",
+        "Login" = "Conectar",
+        "Username or password are incorrect" = "Usuário ou senha incorreto",
+        "Your account has expired" = "Sua conta expirou",
+        "Please change your password" = "Por favor, mude sua senha",
+        "New password:" = "Nova senha:",
+        "Confirm password:" = "Confirmar nova senha:",
+        "Update new password" = "Atualizar nova senha",
+        "Password successfully updated! Please re-login" = "Senha alterada com sucesso! Por favor, autentique-se novamente",
+        "The two passwords are different" = "As duas senhas são diferentes",
+        "Failed to update password" = "Falha em atualizar a senha",
+        "Logout" = "Desconectar",
+        "Go to application" = "Ir à aplicação",
+        "Administrator mode" = "Modo administrador",
+        "Add a user" = "Adicionar usuário",
+        "Failed to update user" = "Falha em atualizar usuário",
+        "User successfully updated" = "Usuário atualizado com sucesso",
+        "Cancel" = "Cancelas",
+        "Confirm new user" = "Confirmar novo usuário",
+        "Confirm change" = "Confirmar mudança",
+        "Are you sure to remove user(s): %s from the database ?" = "Tem certeza que deseja remover o(s) usuário(s) %s do banco de dados?",
+        "Delete user(s)" = "Deletar usuário(s)",
+        "Edit user" = "Modificar usuário",
+        "User already exist!" = "O usuário já existe!",
+        "Dismiss" = "Fechar",
+        "New user %s succesfully created!" = "Novo usuário %s criado com sucesso!",
+        "Ask to change password" = "Pedir para alterar a senha",
+        "Confirm" = "Confirmar",
+        "Ask %s to change password on next connection?" = "Pedir a %s para alterar a senha na próxima conexão?",
+        "Change saved!" = "Mudanças salvas!",
+        "Failed to update the database" = "Erro em atualizar o banco de dados",
+        "Password does not respect safety requirements" = "Senha não conforme com as exigências de segurança",
+        "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "A senha deve conter pelo menos um número, uma letra minúscula, uma letra maiúscula e deve ter pelo menos 6 caracteres",
+        "Number of connections per user" = "Número de conexões por usuário",
+        "Number of connections per day" = "Número de conexões por dia",
+        "Total number of connection" = "Número total de conexões",
+        "You can't remove yourself!" = "Você não pode se remover!",
+        "User:" = "Usuário:",
+        "Period:" = "Período:",
+        "Last week" = "Semana passada",
+        "Last month" = "Mês passado",
+        "All period" = "Todo período",
+        "Home" = "Início",
+        "Select all shown users" = "Selecionar todos os usuários mostrados",
+        "Remove selected users" = "Remover usuários selecionados",
+        "Force selected users to change password" = "Forçar usuário selecionado a mudar a senha",
+        "Users" = "Usuários",
+        "Passwords" = "Senhas",
+        "Download logs database" = "Fazer download dos logs do banco de dados",
+        "Download SQL database" = "Fazer download do banco de dados SQL",
+        "Reset password for %s?" = "Resetar a senha de %s?",
+        "Temporary password:" = "Senha temporária",
+        "Password succesfully reset!" = "Senha resetada com sucesso!",
+        "You are not authorized for this application" = "Você não está autorizado a utilizar esse aplicativo"
       )
     ),
     DT_lan = list(
@@ -198,6 +256,29 @@ language <- R6::R6Class(
         oAria = list(
           sSortAscending = ": activate to sort column ascending",
           sSortDescending = ": activate to sort column descending"
+        )
+      ),
+      br = list(
+        sEmptyTable = "Nenhum dado disponível na tabela",
+        sInfo = "Mostrando entrada de _START_ até _END_ de um total de _TOTAL_ entradas",
+        sInfoEmpty = "Mostrando entrada de 0 até 0 de um total de 0 entradas",
+        sInfoFiltered = "(filtrado de um total de _MAX_ entradas)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Mostrar _MENU_ entradas",
+        sLoadingRecords = "Carregando...",
+        sProcessing = "Processando...",
+        sSearch = "Busca:",
+        sZeroRecords = "Nenhum registro compatível encontrado",
+        oPaginate = list(
+          sFirst = "Primeiro",
+          sLast = "Último",
+          sNext = "Próximo",
+          sPrevious = "Anterior"
+        ),
+        oAria = list(
+          sSortAscending = ": ativar para ordenar coluna de forma ascendente",
+          sSortDescending = ": ativar para ordenar coluna de forma descendente"
         )
       )
     ),
