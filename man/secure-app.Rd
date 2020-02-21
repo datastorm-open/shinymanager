@@ -75,6 +75,11 @@ if (interactive()) {
   # Wrap your UI with secure_app
   ui <- secure_app(ui)
 
+  # change auth ui background ?
+  # ui <- secure_app(ui,
+  #                  background  = "linear-gradient(rgba(0, 0, 255, 0.5), 
+  #                  rgba(255, 255, 0, 0.5)),
+  #                  url('https://www.r-project.org/logo/Rlogo.png');")
 
   server <- function(input, output, session) {
 

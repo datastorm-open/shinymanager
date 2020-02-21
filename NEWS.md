@@ -1,3 +1,7 @@
+# shinymanager 1.0.110
+
+* `auth_ui()` now accept a `background` argument change default css.
+
 # shinymanager 1.0.100
 
 * Fix bug on timeout.

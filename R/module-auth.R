@@ -7,7 +7,8 @@
 #'  \code{"warning"}, \code{"danger"}.
 #' @param tag_img A \code{tags$img} to be displayed on top of the authentication module.
 #' @param tag_div A \code{tags$div} to be displayed on bottom of the authentication module.
-#'
+#' @param background A optionnal \code{css} for authentication background. See example.
+#' 
 #' @export
 #'
 #' @name module-authentication
@@ -16,7 +17,8 @@
 #' @importFrom shiny NS fluidRow column textInput passwordInput actionButton
 #'
 #' @example examples/module-auth.R
-auth_ui <- function(id, status = "primary", tag_img = NULL, tag_div = NULL) {
+auth_ui <- function(id, status = "primary", tag_img = NULL, 
+                    tag_div = NULL, background = NULL) {
 
   ns <- NS(id)
 
@@ -25,7 +27,11 @@ auth_ui <- function(id, status = "primary", tag_img = NULL, tag_div = NULL) {
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
-      tags$script(src = "shinymanager/bindEnter.js")
+      tags$script(src = "shinymanager/bindEnter.js"),
+      if(!is.null(background)){
+        background <- gsub(";$", "", background)
+        tags$style(HTML(paste0(".panel-auth {background:", background, ",#FFF;}")))
+      }
     )),
     tags$div(
       id = ns("auth-mod"), class = "panel-auth",
