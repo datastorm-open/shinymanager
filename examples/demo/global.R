@@ -10,16 +10,17 @@ library(shinymanager)
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
   password = c("shiny", "shinymanager"),
+  group = c("all", NA),
   comment = c("Easy interactive web applications with R",
               "Simple and secure authentification mechanism for single 'Shiny' applications."),
   admin = c(FALSE, TRUE),
   stringsAsFactors = FALSE
 )
 
-# Create credentials DB (only once)
+# # Create credentials DB (only once)
 # create_db(
 #   credentials_data = credentials,
-#   sqlite_path = "examples/demo/credentials.sqlite",
+#   sqlite_path = "credentials.sqlite",
 #   passphrase = "supersecret"
 # )
 

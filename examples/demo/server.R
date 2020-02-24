@@ -10,7 +10,14 @@ function(input, output, session) {
     check_credentials = check_credentials(
       db = "credentials.sqlite",
       passphrase = "supersecret"
-    ), timeout = 0
+    ), timeout = 0, 
+    inputs_list = list(group = list(fun = "selectInput", 
+                                    args = list(choices = c("all", "restricted"), 
+                                                multiple = TRUE, 
+                                                selected = c("all", "restricted")
+                                                )
+                                    )
+                       )
   )
 
   observe({
