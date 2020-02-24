@@ -98,7 +98,7 @@ admin_ui <- function(id) {
 #'  removeUI insertUI reactiveValues showNotification callModule req updateCheckboxInput
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
-admin <- function(input, output, session, sqlite_path, passphrase) {
+admin <- function(input, output, session, sqlite_path, passphrase, inputs_list = NULL) {
 
   ns <- session$ns
   jns <- function(x) {
@@ -286,7 +286,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     users <- users()
     showModal(modalDialog(
       title = "Edit user",
-      edit_user_ui(ns("edit_user"), credentials = users, username = input$edit_user),
+      edit_user_ui(ns("edit_user"), credentials = users, username = input$edit_user, inputs_list = inputs_list),
       tags$div(id = ns("placeholder-edituser-exist")),
       footer = tagList(
         modalButton(lan$get("Cancel")),
@@ -352,7 +352,7 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
     users <- users()
     showModal(modalDialog(
       title = "Add user",
-      edit_user_ui(ns("add_user"), users, NULL),
+      edit_user_ui(ns("add_user"), users, NULL, inputs_list = inputs_list),
       tags$div(id = ns("placeholder-user-exist")),
       footer = tagList(
         modalButton(lan$get("Cancel")),
@@ -408,7 +408,6 @@ admin <- function(input, output, session, sqlite_path, passphrase) {
 
     # password <- generate_pwd()
     # newuser$password <- password
-
     res_add <- try({
       users <- rbind(users, as.data.frame(newuser))
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)

@@ -143,15 +143,36 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 
 #' @param check_credentials Function passed to \code{\link{auth_server}}.
 #' @param timeout Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.
+#' @param inputs_list \code{list}. If database credentials, you can configure inputs for editing users information. See Details.
 #' @param session Shiny session.
-#'
+#' 
+#' @details 
+#' 
+#' If database credentials, you can configure inputs with \code{inputs_list} for editing users information 
+#' from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable. 
+#' The others columns are rendering by defaut using a \code{textInput}. You can modify this using \code{inputs_list}.
+#' \code{inputs_list} must be a named list. Each name must be a column name, and then we must have the function
+#'  shiny to call \code{fun} and the arguments \code{args} like this : 
+#'  \code{
+#'  list(group = list(
+#'      fun = "selectInput", 
+#'      args = list(
+#'          choices = c("all", "restricted"), 
+#'          multiple = TRUE, 
+#'          selected = c("all", "restricted")
+#'       )
+#'      )
+#' )
+#' }
+#' 
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString
 #'  updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
-secure_server <- function(check_credentials, timeout = 15, session = shiny::getDefaultReactiveDomain()) {
+secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
+                          session = shiny::getDefaultReactiveDomain()) {
   
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
@@ -179,7 +200,8 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
       module = admin,
       id = "admin",
       sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase()
+      passphrase = .tok$get_passphrase(), 
+      inputs_list = inputs_list
     )
     callModule(
       module = logs,
@@ -196,7 +218,17 @@ secure_server <- function(check_credentials, timeout = 15, session = shiny::getD
     if (!is.null(token)) {
       user_info <- .tok$get(token)
       for (i in names(user_info)) {
-        user_info_rv[[i]] <- user_info[[i]]
+        value <- user_info[[i]]
+        if(i %in% "applications"){
+          value <- strsplit(x = as.character(value), split = ";")
+          value <- unlist(x = value, use.names = FALSE)
+        } else if(!is.null(inputs_list)){
+          if(i %in% names(inputs_list) && !is.null(inputs_list[[i]]$args$multiple) && inputs_list[[i]]$args$multiple){
+            value <- strsplit(x = as.character(value), split = ";")
+            value <- unlist(x = value, use.names = FALSE)
+          }
+        }
+        user_info_rv[[i]] <- value
       }
     }
   })
