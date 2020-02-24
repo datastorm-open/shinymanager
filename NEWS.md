@@ -2,6 +2,7 @@
 
 * Can configure shiny input for editing user in `secure_app()` with new `inputs_list`.
 * `auth_ui()` now accept a `background` argument change default css.
+* `auth_ui()` : `tag_img` -> `tags_top`, `tag_div` -> `tags_bottom`
 
 # shinymanager 1.0.100
 

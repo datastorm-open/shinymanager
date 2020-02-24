@@ -18,11 +18,15 @@ if (interactive()) {
     auth_ui(
       id = "auth",
       # add image on top ?
-      tag_img = tags$img(
-        src = "https://www.r-project.org/logo/Rlogo.png", width = 100
+      tags_top = 
+        tags$div(
+          tags$h4("Demo", style = "align:center"),
+          tags$img(
+            src = "https://www.r-project.org/logo/Rlogo.png", width = 100
+        )
       ),
       # add information on bottom ?
-      tag_div = tags$div(
+      tags_bottom = tags$div(
         tags$p(
           "For any question, please  contact ",
           tags$a(

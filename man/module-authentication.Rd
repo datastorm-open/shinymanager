@@ -9,9 +9,10 @@
 auth_ui(
   id,
   status = "primary",
-  tag_img = NULL,
-  tag_div = NULL,
-  background = NULL
+  tags_top = NULL,
+  tags_bottom = NULL,
+  background = NULL,
+  ...
 )
 
 auth_server(input, output, session, check_credentials, use_token = FALSE)
@@ -23,11 +24,13 @@ auth_server(input, output, session, check_credentials, use_token = FALSE)
 Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 \code{"warning"}, \code{"danger"}.}
 
-\item{tag_img}{A \code{tags$img} to be displayed on top of the authentication module.}
+\item{tags_top}{A \code{tags (div, img, ...)} to be displayed on top of the authentication module.}
 
-\item{tag_div}{A \code{tags$div} to be displayed on bottom of the authentication module.}
+\item{tags_bottom}{A \code{tags (div, img, ...)} to be displayed on bottom of the authentication module.}
 
 \item{background}{A optionnal \code{css} for authentication background. See example.}
+
+\item{...}{: Used for old version compatibility.}
 
 \item{input, output, session}{Standard Shiny server arguments.}
 
@@ -70,11 +73,15 @@ if (interactive()) {
     auth_ui(
       id = "auth",
       # add image on top ?
-      tag_img = tags$img(
-        src = "https://www.r-project.org/logo/Rlogo.png", width = 100
+      tags_top = 
+        tags$div(
+          tags$h4("Demo", style = "align:center"),
+          tags$img(
+            src = "https://www.r-project.org/logo/Rlogo.png", width = 100
+        )
       ),
       # add information on bottom ?
-      tag_div = tags$div(
+      tags_bottom = tags$div(
         tags$p(
           "For any question, please  contact ",
           tags$a(
