@@ -129,6 +129,16 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
       }
     } else {
       args <- get_args(..., fun = auth_ui)
+      # patch / message changing tag_img & tag_div
+      deprecated <- list(...)
+      if("tag_img" %in% names(deprecated)){
+        args$tags_top <- deprecated$tag_img
+        warning("'tag_img' (auth_ui, secure_app) is now deprecated. Please use 'tags_top'", call. = FALSE)
+      }
+      if("tag_div" %in% names(deprecated)){
+        args$tags_bottom <- deprecated$tag_div
+        warning("'tag_div' (auth_ui, secure_app) is now deprecated. Please use 'tags_bottom'", call. = FALSE)
+      }
       args$id <- "auth"
       fluidPage(
         theme = theme,
