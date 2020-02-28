@@ -39,11 +39,19 @@ remotes::install_github("datastorm-open/shinymanager")
 
 Secure your Shiny app to control who can access it : 
 
+- ``secure_app()`` & ``auth_ui()`` (customization)
+- ``secure_server()`` & ``check_credentials()``
+
 ```r
 # define some credentials
 credentials <- data.frame(
-  user = c("shiny", "shinymanager"),
-  password = c("azerty", "12345"),
+  user = c("shiny", "shinymanager"), # mandatory
+  password = c("azerty", "12345"), # mandatory
+  start = c("2019-04-15"), # optinal (all others)
+  expire = c(NA, "2019-12-31"),
+  admin = c(FALSE, TRUE),
+  comment = "Simple and secure authentification mechanism 
+  for single ‘Shiny’ applications.",
   stringsAsFactors = FALSE
 )
 
@@ -83,15 +91,40 @@ Starting page of the application will be :
 ![](man/figures/shinymanager-login.png)
 
 
-Once logged, the application will be launched and a button added to navigate between the app and the admin panel (if user is authorized to access it), and to logout from the application :
+Once logged, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application :
 
 ![](man/figures/shinymanager-info-nav.png)
 
+### Secure database
 
+Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl` : 
+
+- ``create_db()``
+
+```r
+# Credentials data
+credentials <- data.frame(
+  user = c("shiny", "shinymanager"),
+  password = c("azerty", "12345"),
+  admin = c(FALSE, TRUE),
+  stringsAsFactors = FALSE
+)
+
+# you can use keyring package to set database key
+library(keyring)
+key_set("R-shinymanager-key", "obiwankenobi")
+
+# Init the database
+create_db(
+  credentials_data = credentials,
+  sqlite_path = "path/to/database.sqlite", # will be created
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+```
 
 ### Admin mode
 
-An admin mode is available to manage access to the application, features included are
+Using SQL database protected, an admin mode is available to manage access to the application, features included are
 
  * manage users account : add, modify and delete users
  * ask the user to change his password
@@ -102,41 +135,9 @@ An admin mode is available to manage access to the application, features include
 ![](man/figures/shinymanager-logs.png)
 
 
-
-
 ### HTTP request
 
 `shinymanager` use http request and sha256 tokens to grant access to the application, like this the source code is protected without having the need to change your UI or server code.
-
-
-
-
-### Secure database
-
-Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl` : 
-
-
-```r
-# Credentials data
-credentials <- data.frame(
-  user = c("shiny", "shinymanager"),
-  password = c("azerty", "12345"),
-  stringsAsFactors = FALSE
-)
-
-# you can use keyring package to set database key
-library(keyring)
-key_set("R-shinymanager-key", "obiwankenobi")
-
-# Create the database
-create_db(
-  credentials_data = credentials,
-  sqlite_path = "path/to/database.sqlite", # will be created
-  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
-)
-```
-
-
 
 
 ### About security
