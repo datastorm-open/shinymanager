@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr".
+#' @param language Language to use for labels, supported values are : "en", "fr", "br".
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
 #'  to know in which step user is : authentication, application, admin or password.
@@ -26,8 +26,8 @@
 #'
 #' @example examples/secure_app.R
 secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL, language = "en") {
-  if (!language %in% c("en", "fr")) {
-    warning("Only supported language for the now are: en, fr", call. = FALSE)
+  if (!language %in% c("en", "fr", "br")) {
+    warning("Only supported language for the now are: en, fr, br", call. = FALSE)
     language <- "en"
   }
   set_language(language)
