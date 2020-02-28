@@ -37,7 +37,7 @@ of the authentication page (for custom CSS for example).}
 you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
-\item{language}{Language to use for labels, supported values are : "en", "fr".}
+\item{language}{Language to use for labels, supported values are : "en", "fr", "br".}
 
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
 
