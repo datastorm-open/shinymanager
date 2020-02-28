@@ -17,6 +17,34 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
+Using SQL database protected (``create_db()``), an admin mode is available to manage access to the application, features included are
+
+ * manage users account : add, modify and delete users
+ * ask the user to change his password
+ * see logs about application usage
+
+
+```r
+# Credentials data
+credentials <- data.frame(
+  user = c("shiny", "shinymanager"),
+  password = c("azerty", "12345"),
+  admin = c(FALSE, TRUE),
+  stringsAsFactors = FALSE
+)
+
+# you can use keyring package to set database key
+library(keyring)
+key_set("R-shinymanager-key", "obiwankenobi")
+
+# Init the database
+create_db(
+  credentials_data = credentials,
+  sqlite_path = "path/to/database.sqlite", # will be created
+  passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+)
+```
+
 Starting page of the application will be :
 
 ![](../man/figures/shinymanager-login.png){width=100%}
@@ -31,12 +59,6 @@ Once logged, the application will be launched and a button added to navigate bet
 
 ## Admin mode
 
-An admin mode is available to manage access to the application, features included are
-
- * manage users account : add, modify and delete users
- * ask the user to change his password
- * see logs about application usage
- 
 ![](../man/figures/shinymanager-admin.png){width=100%}
 
 

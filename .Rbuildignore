@@ -4,5 +4,6 @@
 ^todo\.md$
 ^dev$
 ^doc$
+^docs$
 ^Meta$
 ^examples$

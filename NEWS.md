@@ -1,10 +1,10 @@
-# shinymanager 1.0.120
+# shinymanager 1.0.200
 
 * Can configure shiny input for editing user in `secure_app()` with new `inputs_list`.
 * `auth_ui()` now accept a `background` argument change default css.
 * `auth_ui()` : `tag_img` -> `tags_top`, `tag_div` -> `tags_bottom`
-* #18 IE compatibility (timeout & admin log)
-* #17 Add support to Brazilian Portuguese. Thanks to @erikson84
+* (#18) IE compatibility (timeout & admin log)
+* (#17) Add support to Brazilian Portuguese. Thanks to @erikson84
 
 # shinymanager 1.0.100
 
