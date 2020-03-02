@@ -100,7 +100,7 @@ if (interactive()) {
   # ui <- secure_app(ui,
   #                  background  = "linear-gradient(rgba(0, 0, 255, 0.5), 
   #                  rgba(255, 255, 0, 0.5)),
-  #                  url('https://www.r-project.org/logo/Rlogo.png');")
+  #                  url('https://www.r-project.org/logo/Rlogo.png')  no-repeat center fixed;")
 
   server <- function(input, output, session) {
 
