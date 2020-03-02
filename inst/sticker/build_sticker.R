@@ -35,4 +35,4 @@ sticker(p, package="shinymanager", spotlight = F,
         url = "Developed by Datastorm & DreamRs", u_size = 8, 
         u_family = "indi", u_color = "white",
         u_x = 0.2, u_y = 0.52,
-        u_angle =-30, filename = "inst/sticker/shinymanager.png")
+        u_angle =-30, filename = "man/figures/shinymanager.png")
