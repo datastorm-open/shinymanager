@@ -122,6 +122,13 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
     paste0("#", ns(x))
   }
 
+  observe({
+    session$sendCustomMessage(
+      type = "focus_input",
+      message = list(inputId = ns("user_id"))
+    )
+  })
+  
   lan <- use_language()
 
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)

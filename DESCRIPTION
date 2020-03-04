@@ -1,6 +1,6 @@
 Package: shinymanager
 Title: Authentication Management for 'Shiny' Applications
-Version: 1.0.200
+Version: 1.0.210
 Authors@R: c(
     person("Benoit", "Thieurmel", email = "benoit.thieurmel@datastorm.fr", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut"))

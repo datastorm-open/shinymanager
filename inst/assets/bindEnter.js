@@ -23,3 +23,7 @@ function bindEnter(ns) {
     }
   });
 }
+
+Shiny.addCustomMessageHandler('focus_input', function(data) {
+  $('#' + data.inputId).focus();
+});

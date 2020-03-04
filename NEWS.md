@@ -1,3 +1,7 @@
+# shinymanager 1.0.210
+
+* Add ``autofocus`` on username input.
+
 # shinymanager 1.0.200
 
 * Can configure shiny input for editing user in `secure_app()` with new `inputs_list`.
