@@ -409,7 +409,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, inputs_list =
     # password <- generate_pwd()
     # newuser$password <- password
     res_add <- try({
-      users <- rbind(users, as.data.frame(newuser))
+      newuser <- as.data.frame(newuser)
+      newuser <- newuser[, colnames(users)]
+      users <- rbind(users, newuser)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
       resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
       resetpwd <- rbind(resetpwd, data.frame(

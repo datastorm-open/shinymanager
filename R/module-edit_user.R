@@ -112,6 +112,7 @@ edit_user <- function(input, output, session) {
 
 #' @importFrom utils modifyList
 update_user <- function(df, value, username) {
+  value <- value[intersect(names(value), names(df))]
   users_order <- factor(df$user, levels=unique(df$user))
   df <- split(df, f = users_order)
   user <- as.list(df[[username]])
