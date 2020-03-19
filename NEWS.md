@@ -1,6 +1,7 @@
 # shinymanager 1.0.210
 
 * Add ``autofocus`` on username input.
+* Fix some (strange) bug with ``input$shinymanager_where``
 
 # shinymanager 1.0.200
 

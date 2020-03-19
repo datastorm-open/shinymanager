@@ -18,12 +18,13 @@ toggleBtn <- function(session, inputId, type = "disable") {
 
 shinymanager_where <- function(where) {
   # tags$script(sprintf(
-  #   "$(document).ready(function(){Shiny.setInputValue('shinymanager_where', '%s');})", where
+  #   paste0("$(document).ready(function(){Shiny.setInputValue('shinymanager_where', '", where, "');})")
   # ))
   # humm, little hack ^^
   tags$div(
     style = "display: none;",
-    textInput(inputId = "shinymanager_where", label = NULL, value = where)
+    selectInput(inputId = "shinymanager_where", label = NULL, 
+               choices = where, selected = where, multiple = TRUE)
   )
 }
 
