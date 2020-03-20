@@ -24,11 +24,11 @@
 auth_ui <- function(id, status = "primary", tags_top = NULL, 
                     tags_bottom = NULL, background = NULL, 
                     choose_language = NULL, ...) {
-
+  
   ns <- NS(id)
-
+  
   lan <- use_language()
-
+  
   # patch / message changing tag_img & tag_div
   deprecated <- list(...)
   if("tag_img" %in% names(deprecated)){
@@ -86,7 +86,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
               tags$div(
                 style = "text-align: center;",
                 if (!is.null(tags_top)) tags_top,
-                uiOutput(ns("auth_title"))
+                tags$h3(lan$get("Please authenticate"), id = ns("shinymanager-auth-head"))
               ),
               tags$br(),
               textInput(
@@ -145,12 +145,12 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI icon updateActionButton updateTextInput renderUI
 #' @importFrom stats setNames
 auth_server <- function(input, output, session, check_credentials, use_token = FALSE) {
-
+  
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
-
+  
   observe({
     session$sendCustomMessage(
       type = "focus_input",
@@ -159,16 +159,21 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
   })
   
   lan <- use_language()
-
-  auth_title <- reactiveVal(lan$get("Please authenticate"))
+  
   observe({
     if(!is.null(input$language)){
       lan$set_language(input$language) 
       updateTextInput(session, inputId = "user_id", label = lan$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan$get("Password:"))
       updateActionButton(session, inputId = "go_auth", label = lan$get("Login"))
-
-      auth_title(lan$get("Please authenticate"))
+      
+      session$sendCustomMessage(
+        type = "update_auth_title",
+        message = list(
+          inputId = ns("shinymanager-auth-head"), 
+          title = lan$get("Please authenticate")
+        )
+      )
       
       output$update_shinymanager_language <- renderUI({
         shinymanager_language(lan$get_language())
@@ -176,12 +181,8 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
     }
   })
   
-  output$auth_title <- renderUI({
-    tags$h3(auth_title())
-  })
-  
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
-
+  
   observeEvent(input$go_auth, {
     removeUI(selector = jns("msg_auth"))
     res_auth <- check_credentials(input$user_id, input$user_pwd)
@@ -192,14 +193,14 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       authentication$user_info <- res_auth$user_info
       # token <- generate_token(input$user_id)
       token <- .tok$generate(input$user_id)
-
+      
       if (isTRUE(use_token)) {
         # add_token(token, as.list(res_auth$user_info))
         .tok$add(token, as.list(res_auth$user_info))
         updateQueryString(queryString = paste0("?token=", token), session = session)
         session$reload()
       }
-
+      
     } else {
       if (is.null(res_auth$user_info)) {
         save_logs_failed(input$user_id, status = "Unknown user")
@@ -242,7 +243,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       }
     }
   }, ignoreInit = TRUE)
-
+  
   return(authentication)
 }
 
