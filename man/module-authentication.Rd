@@ -12,6 +12,7 @@ auth_ui(
   tags_top = NULL,
   tags_bottom = NULL,
   background = NULL,
+  choose_language = NULL,
   ...
 )
 
@@ -29,6 +30,9 @@ Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 \item{tags_bottom}{A \code{tags (div, img, ...)} to be displayed on bottom of the authentication module.}
 
 \item{background}{A optionnal \code{css} for authentication background. See example.}
+
+\item{choose_language}{\code{logical/character}. Add language selection on top ? TRUE for all supported languages
+or a vector of possibilities like \code{c("fr", "en")}. If enabled, \code{input$shinymanager_language} is created}
 
 \item{...}{: Used for old version compatibility.}
 
@@ -91,9 +95,11 @@ if (interactive()) {
         )
       ),
       # change auth ui background ?
+      # https://developer.mozilla.org/fr/docs/Web/CSS/background
       background  = "linear-gradient(rgba(0, 0, 255, 0.5),
                        rgba(255, 255, 0, 0.5)),
-                       url('https://www.r-project.org/logo/Rlogo.png');"
+                       url('https://www.r-project.org/logo/Rlogo.png');", 
+      choose_language = TRUE
     ),
     
     # result of authentication

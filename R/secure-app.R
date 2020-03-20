@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "br".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
 #'  to know in which step user is : authentication, application, admin or password.
@@ -26,8 +26,8 @@
 #'
 #' @example examples/secure_app.R
 secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL, language = "en") {
-  if (!language %in% c("en", "fr", "br")) {
-    warning("Only supported language for the now are: en, fr, br", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR")) {
+    warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
   }
   set_language(language)
@@ -53,7 +53,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           theme = theme,
           tags$head(head_auth),
           do.call(pwd_ui, args),
-          shinymanager_where("password")
+          shinymanager_where("password"),
+          shinymanager_language(lan$get_language())
         )
         return(pwd_ui)
       }
@@ -82,7 +83,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             title = tagList(icon("home"), lan$get("Home")),
             value = "home",
             admin_ui("admin"),
-            shinymanager_where("admin")
+            shinymanager_where("admin"),
+            shinymanager_language(lan$get_language())
           ),
           tabPanel(
             title = "Logs",
@@ -123,7 +125,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           ui <- ui(request)
         }
         tagList(
-          ui, menu, shinymanager_where("application"),
+          ui, menu, shinymanager_where("application"), shinymanager_language(lan$get_language()),
           singleton(tags$head(tags$script(src = "shinymanager/timeout.js")))
         )
       }

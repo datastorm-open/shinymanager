@@ -22,6 +22,7 @@ function(input, output, session) {
 
   observe({
     print(input$shinymanager_where)
+    print(input$shinymanager_language)
   })
 
   output$res_auth <- renderPrint({

@@ -8,6 +8,8 @@
 #' @param tags_top A \code{tags (div, img, ...)} to be displayed on top of the authentication module.
 #' @param tags_bottom A \code{tags (div, img, ...)} to be displayed on bottom of the authentication module.
 #' @param background A optionnal \code{css} for authentication background. See example.
+#' @param choose_language \code{logical/character}. Add language selection on top ? TRUE for all supported languages
+#' or a vector of possibilities like \code{c("fr", "en")}. If enabled, \code{input$shinymanager_language} is created
 #' @param ... : Used for old version compatibility.
 #' 
 #' 
@@ -16,11 +18,12 @@
 #' @name module-authentication
 #'
 #' @importFrom htmltools tagList tags singleton
-#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton
+#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
 #'
 #' @example examples/module-auth.R
 auth_ui <- function(id, status = "primary", tags_top = NULL, 
-                    tags_bottom = NULL, background = NULL, ...) {
+                    tags_bottom = NULL, background = NULL, 
+                    choose_language = NULL, ...) {
 
   ns <- NS(id)
 
@@ -55,10 +58,35 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
             class = paste0("panel panel-", status),
             tags$div(
               class = "panel-body",
+              if (!is.null(choose_language)){
+                choices = NULL
+                if(is.logical(choose_language) && choose_language){
+                  choices = lan$get_language_registered()
+                } else if(is.character(choose_language)){
+                  choices = unique(c(intersect(choose_language, lan$get_language_registered()), lan$get_language()))
+                }
+                
+                if(length(choices) > 1){
+                  selected = ifelse(lan$get_language() %in% choices, 
+                                    lan$get_language(),
+                                    choices[1])
+                  
+                  tags$div(
+                    style = "text-align: left; font-size: 12px;",
+                    selectInput(
+                      inputId = ns("language"),
+                      label = NULL,
+                      choices = choices,
+                      selected = selected,
+                      width = "20%"
+                    )
+                  )
+                }
+              },
               tags$div(
                 style = "text-align: center;",
                 if (!is.null(tags_top)) tags_top,
-                tags$h3(lan$get("Please authenticate"))
+                uiOutput(ns("auth_title"))
               ),
               tags$br(),
               textInput(
@@ -83,7 +111,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 sprintf("bindEnter('%s');", ns(""))
               ),
               tags$div(id = ns("result_auth")),
-              if (!is.null(tags_bottom)) tags$hr(), tags_bottom
+              if (!is.null(tags_bottom)) tags$hr(), tags_bottom,
+              uiOutput(ns("update_shinymanager_language"))
             )
           )
         )
@@ -113,7 +142,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI icon
+#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI icon updateActionButton updateTextInput renderUI
 #' @importFrom stats setNames
 auth_server <- function(input, output, session, check_credentials, use_token = FALSE) {
 
@@ -131,6 +160,26 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
   
   lan <- use_language()
 
+  auth_title <- reactiveVal(lan$get("Please authenticate"))
+  observe({
+    if(!is.null(input$language)){
+      lan$set_language(input$language) 
+      updateTextInput(session, inputId = "user_id", label = lan$get("Username:"))
+      updateTextInput(session, inputId = "user_pwd", label = lan$get("Password:"))
+      updateActionButton(session, inputId = "go_auth", label = lan$get("Login"))
+
+      auth_title(lan$get("Please authenticate"))
+      
+      output$update_shinymanager_language <- renderUI({
+        shinymanager_language(lan$get_language())
+      })
+    }
+  })
+  
+  output$auth_title <- renderUI({
+    tags$h3(auth_title())
+  })
+  
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
 
   observeEvent(input$go_auth, {

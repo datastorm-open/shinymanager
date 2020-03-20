@@ -16,7 +16,7 @@ if (interactive()) {
   )
 
   # Wrap your UI with secure_app
-  ui <- secure_app(ui)
+  ui <- secure_app(ui, choose_language = TRUE)
 
   # change auth ui background ?
   # ui <- secure_app(ui,
@@ -36,6 +36,11 @@ if (interactive()) {
       reactiveValuesToList(res_auth)
     })
 
+    observe({
+      print(input$shinymanager_where)
+      print(input$shinymanager_language)
+    })
+    
     # your classic server logic
 
   }

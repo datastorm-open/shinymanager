@@ -37,7 +37,7 @@ of the authentication page (for custom CSS for example).}
 you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
-\item{language}{Language to use for labels, supported values are : "en", "fr", "br".}
+\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR".}
 
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
 
@@ -94,7 +94,7 @@ if (interactive()) {
   )
 
   # Wrap your UI with secure_app
-  ui <- secure_app(ui)
+  ui <- secure_app(ui, choose_language = TRUE)
 
   # change auth ui background ?
   # ui <- secure_app(ui,
@@ -114,6 +114,11 @@ if (interactive()) {
       reactiveValuesToList(res_auth)
     })
 
+    observe({
+      print(input$shinymanager_where)
+      print(input$shinymanager_language)
+    })
+    
     # your classic server logic
 
   }

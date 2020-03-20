@@ -3,6 +3,8 @@
 * Add ``autofocus`` on username input.
 * Fix some (strange) bug with ``input$shinymanager_where``
 * Fix `inputs_list` with some shiny version
+* `auth_ui()` now accept a `choose_language` arguments.
+* Rename `br` language into `pt-BR` (iso code)
 
 # shinymanager 1.0.200
 

@@ -23,6 +23,8 @@ ui <- fluidPage(
 # Call UI inside secure_app()
 secure_app(
   ui = ui,
-  enable_admin = TRUE
+  enable_admin = TRUE,
+  language = "fr",
+  choose_language = c("en")
 )
 

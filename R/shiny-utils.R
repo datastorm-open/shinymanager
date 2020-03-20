@@ -28,6 +28,14 @@ shinymanager_where <- function(where) {
   )
 }
 
+shinymanager_language <- function(lan) {
+  tags$div(
+    style = "display: none;",
+    selectInput(inputId = "shinymanager_language", label = NULL, 
+                choices = lan, selected = lan, multiple = TRUE)
+  )
+}
+
 
 # Remove the whole query string
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
