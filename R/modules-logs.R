@@ -267,7 +267,13 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
       on.exit(dbDisconnect(conn))
       logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       logs$token <- NULL
-      write.table(logs, con, sep = ";", row.names = FALSE)
+      users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      users$password <- NULL
+      if(all(is.na(users$start))) users$start <- NULL
+      if(all(is.na(users$expire))) users$expire <- NULL
+      logs <- merge(logs, users, by = "user", all.x = TRUE, sort = FALSE)
+      logs <- logs[order(logs$server_connected, decreasing = TRUE), ]
+      write.table(logs, con, sep = ";", row.names = FALSE, na = '')
     }
   )
 }

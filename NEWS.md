@@ -5,6 +5,7 @@
 * Fix `inputs_list` with some shiny version
 * `auth_ui()` now accept a `choose_language` arguments.
 * Rename `br` language into `pt-BR` (iso code)
+* add user info in downloaded log file
 
 # shinymanager 1.0.200
 
