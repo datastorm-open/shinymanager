@@ -102,7 +102,7 @@ logs_ui <- function(id) {
 #'  bb_x_axis bb_zoom %>% bb_bar_color_manual
 #' @importFrom shiny reactiveValues observe req updateSelectInput updateDateRangeInput reactiveVal outputOptions
 #' @importFrom utils write.table
-logs <- function(input, output, session, sqlite_path, passphrase) {
+logs <- function(input, output, session, sqlite_path, passphrase, fileEncoding = "") {
 
   ns <- session$ns
   jns <- function(x) {
@@ -273,7 +273,7 @@ logs <- function(input, output, session, sqlite_path, passphrase) {
       if(all(is.na(users$expire))) users$expire <- NULL
       logs <- merge(logs, users, by = "user", all.x = TRUE, sort = FALSE)
       logs <- logs[order(logs$server_connected, decreasing = TRUE), ]
-      write.table(logs, con, sep = ";", row.names = FALSE, na = '')
+      write.table(logs, con, sep = ";", row.names = FALSE, na = '', fileEncoding = fileEncoding)
     }
   )
 }

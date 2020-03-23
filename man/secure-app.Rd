@@ -6,21 +6,11 @@
 \alias{secure_server}
 \title{Secure a Shiny application and manage authentication}
 \usage{
-secure_app(
-  ui,
-  ...,
-  enable_admin = FALSE,
-  head_auth = NULL,
-  theme = NULL,
-  language = "en"
-)
+secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL,
+  theme = NULL, language = "en")
 
-secure_server(
-  check_credentials,
-  timeout = 15,
-  inputs_list = NULL,
-  session = shiny::getDefaultReactiveDomain()
-)
+secure_server(check_credentials, timeout = 15, inputs_list = NULL,
+  fileEncoding = "", session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{ui}{UI of the application.}
@@ -44,6 +34,8 @@ It will affect the authentication panel and the admin page.}
 \item{timeout}{Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.}
 
 \item{inputs_list}{\code{list}. If database credentials, you can configure inputs for editing users information. See Details.}
+
+\item{fileEncoding}{character string: Encoding of logs downloaded file. See \code{\link{write.table}}}
 
 \item{session}{Shiny session.}
 }

@@ -6,15 +6,8 @@
 \alias{auth_server}
 \title{Authentication module}
 \usage{
-auth_ui(
-  id,
-  status = "primary",
-  tags_top = NULL,
-  tags_bottom = NULL,
-  background = NULL,
-  choose_language = NULL,
-  ...
-)
+auth_ui(id, status = "primary", tags_top = NULL, tags_bottom = NULL,
+  background = NULL, choose_language = NULL, ...)
 
 auth_server(input, output, session, check_credentials, use_token = FALSE)
 }
