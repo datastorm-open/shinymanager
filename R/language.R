@@ -193,7 +193,8 @@ language <- R6::R6Class(
         stop("All arguments must be named!", call. = FALSE)
       }
       private$labels <- modifyList(
-        x = private$labels, val = args
+        x = private$labels,
+        val = lapply(args, I)
       )
       invisible(self)
     },
@@ -202,7 +203,13 @@ language <- R6::R6Class(
         stop("Unsupported language !", call. = FALSE)
       }
       private$language <- lan
-      private$labels <- private$labels_lan[[lan]]
+      as_is <- vapply(
+        X = private$labels,
+        FUN = inherits, "AsIs",
+        FUN.VALUE = logical(1),
+        USE.NAMES = FALSE
+      )
+      private$labels[!as_is] <- private$labels_lan[[lan]][!as_is]
     },
     get = function(label) {
       private$labels[[label]]
@@ -212,7 +219,7 @@ language <- R6::R6Class(
     },
     get_DT = function() {
       private$DT_lan[[private$language]]
-    }, 
+    },
     get_language_registered = function() {
       private$language_registered
     },
@@ -303,11 +310,48 @@ language <- R6::R6Class(
 
 use_language <- function() {
   if (is.null(.globals$language))
-    language$new()
+    .globals$language <- language$new()
   .globals$language
 }
 set_language <- function(lan) {
-    lan_set <- language$new()
-    lan_set$set_language(lan)
+  lan_set <- use_language()
+  lan_set$set_language(lan)
 }
+
+
+
+#' @title Modify {shinymanager} labels to use custom text
+#'
+#' @description See all labels registered with \code{get_labels()},
+#'  then set custom text with \code{set_labels()}.
+#'
+#' @param ... A named list with labels to replace.
+#'
+#' @return \code{get_labels()} return a named list with all labels registered.
+#' @export
+#'
+#' @name custom-labels
+#'
+#' @examples
+#'
+#' # In global.R for example:
+#' set_labels(
+#'   "Please authenticate" = "You have to login",
+#'   "Username:" = "What's your name:",
+#'   "Password:" = "Enter your password:"
+#' )
+set_labels <- function(...) {
+  lang <- use_language()
+  lang$add(...)
+}
+
+#' @export
+#'
+#' @rdname custom-labels
+get_labels <- function() {
+  lang <- use_language()
+  lang$get_all()
+}
+
+
 
