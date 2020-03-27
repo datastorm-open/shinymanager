@@ -15,11 +15,13 @@
 #' @importFrom shiny NS fluidRow column passwordInput actionButton
 #'
 #' @example examples/module-pwd.R
-pwd_ui <- function(id, tag_img = NULL, status = "primary") {
+pwd_ui <- function(id, tag_img = NULL, status = "primary", lan = NULL) {
 
   ns <- NS(id)
 
-  lan <- use_language()
+  if(is.null(lan)){
+    lan <- use_language()
+  }
 
   tagList(
     singleton(tags$head(
@@ -91,7 +93,8 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 #'  Default is to check for the password to have at least one number, one lowercase,
 #'  one uppercase and be of length 6 at least.
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
-#'
+#' @param lan An langauge object. Should not be used directly.
+#' 
 #' @export
 #'
 #' @rdname module-password
@@ -99,8 +102,17 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary") {
 #' @importFrom htmltools tags
 #' @importFrom shiny reactiveValues observeEvent removeUI insertUI icon actionButton
 #' @importFrom utils getFromNamespace
-pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = NULL, use_token = FALSE) {
+pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = NULL, 
+                       use_token = FALSE, lan = NULL) {
 
+  if(!is.reactive(lan)){
+    if(is.null(lan)){
+      lan <- reactive(use_language())
+    } else {
+      lan <- reactive(lan)
+    }
+  }
+  
   if (is.null(validate_pwd)) {
     validate_pwd <- getFromNamespace("validate_pwd", "shinymanager")
   }
@@ -112,8 +124,6 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
 
   password <- reactiveValues(result = FALSE, user = NULL, relog = NULL)
 
-  lan <- use_language()
-
   observeEvent(input$update_pwd, {
     password$relog <- NULL
     removeUI(selector = jns("msg_pwd"))
@@ -122,7 +132,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
         selector = jns("result_pwd"),
         ui = tags$div(
           id = ns("msg_pwd"), class = "alert alert-danger",
-          icon("exclamation-triangle"), lan$get("The two passwords are different")
+          icon("exclamation-triangle"), lan()$get("The two passwords are different")
         )
       )
     } else {
@@ -131,7 +141,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
           selector = jns("result_pwd"),
           ui = tags$div(
             id = ns("msg_pwd"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan$get("Password does not respect safety requirements")
+            icon("exclamation-triangle"), lan()$get("Password does not respect safety requirements")
           )
         )
       } else {
@@ -146,11 +156,11 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
               id = ns("msg_pwd"),
               tags$div(
                 class = "alert alert-success",
-                icon("check"), lan$get("Password successfully updated! Please re-login")
+                icon("check"), lan()$get("Password successfully updated! Please re-login")
               ),
               actionButton(
                 inputId = ns("relog"),
-                label = lan$get("Login"),
+                label = lan()$get("Login"),
                 width = "100%"
               )
             )
@@ -160,7 +170,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
             selector = jns("result_pwd"),
             ui = tags$div(
               id = ns("msg_pwd"), class = "alert alert-danger",
-              icon("exclamation-triangle"), lan$get("Failed to update password")
+              icon("exclamation-triangle"), lan()$get("Failed to update password")
             )
           )
         }

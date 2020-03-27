@@ -3,11 +3,13 @@
 #' @importFrom billboarder billboarderOutput
 #' @importFrom shiny NS fluidRow column icon selectInput dateRangeInput downloadButton downloadHandler conditionalPanel
 #' @importFrom htmltools tagList tags
-logs_ui <- function(id) {
+logs_ui <- function(id, lan = NULL) {
 
   ns <- NS(id)
 
-  lan <- use_language()
+  if(is.null(lan)){
+    lan <- use_language()
+  }
 
   tagList(
     fluidRow(
@@ -102,14 +104,13 @@ logs_ui <- function(id) {
 #'  bb_x_axis bb_zoom %>% bb_bar_color_manual
 #' @importFrom shiny reactiveValues observe req updateSelectInput updateDateRangeInput reactiveVal outputOptions
 #' @importFrom utils write.table
-logs <- function(input, output, session, sqlite_path, passphrase, fileEncoding = "") {
+logs <- function(input, output, session, sqlite_path, passphrase, 
+                 fileEncoding = "", lan = NULL) {
 
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
-
-  lan <- use_language()
 
   logs_rv <- reactiveValues(logs = NULL, logs_period = NULL, users = NULL)
   print_app_input <- reactiveVal(FALSE)
@@ -184,7 +185,7 @@ logs <- function(input, output, session, sqlite_path, passphrase, fileEncoding =
       bb_x_axis(tick = list(width = 10000)) %>%
       bb_labs(
         # title = "Number of connection by user",
-        y = lan$get("Total number of connection")
+        y = lan()$get("Total number of connection")
       ) %>%
       bb_zoom(
         enabled = list(type = "drag"),
@@ -221,7 +222,7 @@ logs <- function(input, output, session, sqlite_path, passphrase, fileEncoding =
       bb_legend(show = FALSE) %>%
       bb_labs(
         # title = "Number of connection by user",
-        y = lan$get("Total number of connection")
+        y = lan()$get("Total number of connection")
       ) %>%
       # bb_bar(width = list(ratio = 1, max = 30)) %>%
       bb_zoom(

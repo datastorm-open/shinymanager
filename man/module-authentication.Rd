@@ -6,10 +6,25 @@
 \alias{auth_server}
 \title{Authentication module}
 \usage{
-auth_ui(id, status = "primary", tags_top = NULL, tags_bottom = NULL,
-  background = NULL, choose_language = NULL, ...)
+auth_ui(
+  id,
+  status = "primary",
+  tags_top = NULL,
+  tags_bottom = NULL,
+  background = NULL,
+  choose_language = NULL,
+  lan = NULL,
+  ...
+)
 
-auth_server(input, output, session, check_credentials, use_token = FALSE)
+auth_server(
+  input,
+  output,
+  session,
+  check_credentials,
+  use_token = FALSE,
+  lan = NULL
+)
 }
 \arguments{
 \item{id}{Module's id.}
@@ -26,6 +41,8 @@ Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 
 \item{choose_language}{\code{logical/character}. Add language selection on top ? TRUE for all supported languages
 or a vector of possibilities like \code{c("fr", "en")}. If enabled, \code{input$shinymanager_language} is created}
+
+\item{lan}{An langauge object. Should not be used directly.}
 
 \item{...}{: Used for old version compatibility.}
 

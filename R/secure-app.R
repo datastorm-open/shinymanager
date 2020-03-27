@@ -30,8 +30,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
     warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
   }
-  set_language(language)
-  lan <- use_language()
+  
+  lan <- use_language(language)
   ui <- force(ui)
   enable_admin <- force(enable_admin)
   head_auth <- force(head_auth)
@@ -43,12 +43,16 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
     query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
     admin <- query$admin
-    # browser()
+    language <- query$language
+    if(!is.null(language)){
+      lan <- use_language(language)
+    }
     if (.tok$is_valid(token)) {
       is_forced_chg_pwd <- is_force_chg_pwd(token = token)
       if (is_forced_chg_pwd) {
         args <- get_args(..., fun = pwd_ui)
         args$id <- "password"
+        args$lan <- lan
         pwd_ui <- fluidPage(
           theme = theme,
           tags$head(head_auth),
@@ -77,18 +81,19 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
                 tooltip = lan$get("Go to application"),
                 icon = icon("share")
               )
-            )
+            ), 
+            shinymanager_where("admin")
           ),
           tabPanel(
             title = tagList(icon("home"), lan$get("Home")),
             value = "home",
-            admin_ui("admin"),
-            shinymanager_where("admin"),
+            admin_ui("admin", lan),
             shinymanager_language(lan$get_language())
           ),
           tabPanel(
             title = "Logs",
-            logs_ui("logs")
+            logs_ui("logs", lan),
+            shinymanager_language(lan$get_language())
           )
         )
       } else {
@@ -125,7 +130,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           ui <- ui(request)
         }
         tagList(
-          ui, menu, shinymanager_where("application"), shinymanager_language(lan$get_language()),
+          ui, menu, shinymanager_where("application"),
+          shinymanager_language(lan$get_language()),
           singleton(tags$head(tags$script(src = "shinymanager/timeout.js")))
         )
       }
@@ -142,11 +148,13 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
         warning("'tag_div' (auth_ui, secure_app) is now deprecated. Please use 'tags_bottom'", call. = FALSE)
       }
       args$id <- "auth"
+      args$lan <- lan
       fluidPage(
         theme = theme,
         tags$head(head_auth),
         do.call(auth_ui, args),
-        shinymanager_where("authentication")
+        shinymanager_where("authentication"),
+        shinymanager_language(lan$get_language())
       )
     }
   }
@@ -191,11 +199,20 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
   
+  lan <- reactiveVal(use_language())
+  observe({
+    lang <- getLanguage(session = session)
+    if(!is.null(lang)) {
+      lan(use_language(lang))
+    }
+  })
+  
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
-    use_token = TRUE
+    use_token = TRUE, 
+    lan = lan
   )
   
   callModule(
@@ -203,7 +220,8 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
     id = "password",
     user = reactiveValues(user = .tok$get(token_start)$user),
     update_pwd = update_pwd,
-    use_token = TRUE
+    use_token = TRUE, 
+    lan = lan
   )
   
   .tok$set_timeout(timeout)
@@ -215,14 +233,16 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
       id = "admin",
       sqlite_path = path_sqlite,
       passphrase = .tok$get_passphrase(), 
-      inputs_list = inputs_list
+      inputs_list = inputs_list, 
+      lan = lan
     )
     callModule(
       module = logs,
       id = "logs",
       sqlite_path = path_sqlite,
       passphrase = .tok$get_passphrase(), 
-      fileEncoding = fileEncoding
+      fileEncoding = fileEncoding, 
+      lan = lan
     )
   }
   
@@ -250,14 +270,14 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
   
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
-    updateQueryString(queryString = sprintf("?token=%s&admin=true", token), session = session, mode = "replace")
+    updateQueryString(queryString = sprintf("?token=%s&admin=true&language=%s", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
   
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
-    updateQueryString(queryString = sprintf("?token=%s", token), session = session, mode = "replace")
+    updateQueryString(queryString = sprintf("?token=%s&language=%s", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)

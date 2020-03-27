@@ -6,11 +6,22 @@
 \alias{secure_server}
 \title{Secure a Shiny application and manage authentication}
 \usage{
-secure_app(ui, ..., enable_admin = FALSE, head_auth = NULL,
-  theme = NULL, language = "en")
+secure_app(
+  ui,
+  ...,
+  enable_admin = FALSE,
+  head_auth = NULL,
+  theme = NULL,
+  language = "en"
+)
 
-secure_server(check_credentials, timeout = 15, inputs_list = NULL,
-  fileEncoding = "", session = shiny::getDefaultReactiveDomain())
+secure_server(
+  check_credentials,
+  timeout = 15,
+  inputs_list = NULL,
+  fileEncoding = "",
+  session = shiny::getDefaultReactiveDomain()
+)
 }
 \arguments{
 \item{ui}{UI of the application.}

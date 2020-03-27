@@ -23,11 +23,13 @@
 #' @example examples/module-auth.R
 auth_ui <- function(id, status = "primary", tags_top = NULL, 
                     tags_bottom = NULL, background = NULL, 
-                    choose_language = NULL, ...) {
+                    choose_language = NULL, lan = NULL, ...) {
   
   ns <- NS(id)
   
-  lan <- use_language()
+  if(is.null(lan)){
+    lan <- use_language()
+  }
   
   # patch / message changing tag_img & tag_div
   deprecated <- list(...)
@@ -129,7 +131,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  Must return \code{TRUE} or \code{FALSE}.
 #'  To use additionnals arguments, set them with \code{purrr::partial} (see examples).
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
-#'
+#' @param lan An langauge object. Should not be used directly.
+#' 
 #' @export
 #'
 #' @rdname module-authentication
@@ -142,13 +145,22 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI icon updateActionButton updateTextInput renderUI
+#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI
 #' @importFrom stats setNames
-auth_server <- function(input, output, session, check_credentials, use_token = FALSE) {
+auth_server <- function(input, output, session, check_credentials, 
+                        use_token = FALSE, lan = NULL) {
   
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
+  }
+  
+  if(!is.reactive(lan)){
+    if(is.null(lan)){
+      lan <- reactive(use_language())
+    } else {
+      lan <- reactive(lan)
+    }
   }
   
   observe({
@@ -158,25 +170,23 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
     )
   })
   
-  lan <- use_language()
-  
   observe({
     if(!is.null(input$language)){
-      lan$set_language(input$language) 
-      updateTextInput(session, inputId = "user_id", label = lan$get("Username:"))
-      updateTextInput(session, inputId = "user_pwd", label = lan$get("Password:"))
-      updateActionButton(session, inputId = "go_auth", label = lan$get("Login"))
+      lan()$set_language(input$language) 
+      updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
+      updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
+      updateActionButton(session, inputId = "go_auth", label = lan()$get("Login"))
       
       session$sendCustomMessage(
         type = "update_auth_title",
         message = list(
           inputId = ns("shinymanager-auth-head"), 
-          title = lan$get("Please authenticate")
+          title = lan()$get("Please authenticate")
         )
       )
       
       output$update_shinymanager_language <- renderUI({
-        shinymanager_language(lan$get_language())
+        shinymanager_language(lan()$get_language())
       })
     }
   })
@@ -197,7 +207,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
       if (isTRUE(use_token)) {
         # add_token(token, as.list(res_auth$user_info))
         .tok$add(token, as.list(res_auth$user_info))
-        updateQueryString(queryString = paste0("?token=", token), session = session)
+        updateQueryString(queryString = paste0("?token=", token, "&language=", lan()$get_language()), session = session)
         session$reload()
       }
       
@@ -208,7 +218,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan$get("Username or password are incorrect")
+            icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
           )
         )
       } else if (isTRUE(res_auth$expired)) {
@@ -217,7 +227,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan$get("Your account has expired")
+            icon("exclamation-triangle"), lan()$get("Your account has expired")
           )
         )
       } else {
@@ -227,7 +237,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
             selector = jns("result_auth"),
             ui = tags$div(
               id = ns("msg_auth"), class = "alert alert-danger",
-              icon("exclamation-triangle"), lan$get("You are not authorized for this application")
+              icon("exclamation-triangle"), lan()$get("You are not authorized for this application")
             )
           )
         } else {
@@ -236,7 +246,7 @@ auth_server <- function(input, output, session, check_credentials, use_token = F
             selector = jns("result_auth"),
             ui = tags$div(
               id = ns("msg_auth"), class = "alert alert-danger",
-              icon("exclamation-triangle"), lan$get("Username or password are incorrect")
+              icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
             )
           )
         }

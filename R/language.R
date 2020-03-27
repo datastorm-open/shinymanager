@@ -1,7 +1,6 @@
+pkgEnv <- new.env()
 
-.globals <- new.env(parent = emptyenv())
-
-.label_en = list(
+pkgEnv$label_en = list(
   "Please authenticate" = "Please authenticate",
   "Username:" = "Username:",
   "Password:" = "Password:",
@@ -26,6 +25,7 @@
   "Confirm change" = "Confirm change",
   "Are you sure to remove user(s): %s from the database ?" = "Are you sure to remove user(s): %s from the database ?",
   "Delete user(s)" = "Delete user(s)",
+  "Delete user" = "Delete user",
   "Edit user" = "Edit user",
   "User already exist!" = "User already exist!",
   "Dismiss" = "Dismiss",
@@ -55,12 +55,13 @@
   "Download logs database" = "Download logs database",
   "Download SQL database" = "Download SQL database",
   "Reset password for %s?" = "Reset password for %s?",
+  "Reset password" = "Reset password",
   "Temporary password:" = "Temporary password:",
   "Password succesfully reset!" = "Password succesfully reset!",
   "You are not authorized for this application" = "You are not authorized for this application"
 )
 
-.label_fr = list(
+pkgEnv$label_fr = list(
   "Please authenticate" = "Veuillez vous authentifier",
   "Username:" = "Nom d\'utilisateur :",
   "Password:" = "Mot de passe :",
@@ -85,6 +86,7 @@
   "Confirm change" = "Valider les modifications",
   "Are you sure to remove user(s): %s from the database ?" = "Etes-vous s\u00fbr de vouloir supprimer %s de la base de donn\u00e9es ?",
   "Delete user(s)" = "Supprimer l\'/les utilisateur(s)",
+  "Delete user" = "Supprimer l\'utilisateur",
   "Edit user" = "Modifier l\'utilisateur",
   "User already exist!" = "L\'utilisateur existe d\u00e9j\u00e0",
   "Dismiss" = "Fermer",
@@ -114,12 +116,13 @@
   "Download logs database" = "T\u00e9l\u00e9charger les logs",
   "Download SQL database" = "T\u00e9l\u00e9charger la base SQL",
   "Reset password for %s?" = "R\u00e9initialiser le mot de passe de %s ?",
+  "Reset password" = "R\u00e9initialiser le mot de passe",
   "Temporary password:" = "Mot de passe temporaire",
   "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
   "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application"
 )
 
-.label_ptbr = list(
+pkgEnv$label_ptbr = list(
   "Please authenticate" = "Autentica\u00e7\u00e3o",
   "Username:" = "Usu\u00e1rio:",
   "Password:" = "Senha:",
@@ -144,6 +147,7 @@
   "Confirm change" = "Confirmar mudan\u00e7a",
   "Are you sure to remove user(s): %s from the database ?" = "Tem certeza que deseja remover o(s) usu\u00e1rio(s) %s do banco de dados?",
   "Delete user(s)" = "Deletar usu\u00e1rio(s)",
+  "Delete user" = "Deletar usu\u00e1rio",
   "Edit user" = "Modificar usu\u00e1rio",
   "User already exist!" = "O usu\u00e1rio j\u00e1 existe!",
   "Dismiss" = "Fechar",
@@ -173,6 +177,7 @@
   "Download logs database" = "Fazer download dos logs do banco de dados",
   "Download SQL database" = "Fazer download do banco de dados SQL",
   "Reset password for %s?" = "Resetar a senha de %s?",
+  "Reset password" = "Resetar a senha",
   "Temporary password:" = "Senha tempor\u00e1ria",
   "Password succesfully reset!" = "Senha resetada com sucesso!",
   "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo"
@@ -184,18 +189,6 @@ language <- R6::R6Class(
   classname = "language",
   public = list(
     initialize = function() {
-      .globals$language <- self
-      invisible(self)
-    },
-    add = function(...) {
-      args <- list(...)
-      if (!all(nzchar(names(args)))) {
-        stop("All arguments must be named!", call. = FALSE)
-      }
-      private$labels <- modifyList(
-        x = private$labels,
-        val = lapply(args, I)
-      )
       invisible(self)
     },
     set_language = function(lan) {
@@ -203,13 +196,11 @@ language <- R6::R6Class(
         stop("Unsupported language !", call. = FALSE)
       }
       private$language <- lan
-      as_is <- vapply(
-        X = private$labels,
-        FUN = inherits, "AsIs",
-        FUN.VALUE = logical(1),
-        USE.NAMES = FALSE
+      private$labels <-   switch (lan,
+                                  "en" = pkgEnv$label_en,
+                                  "fr" = pkgEnv$label_fr,
+                                  "pt-BR" = pkgEnv$label_ptbr
       )
-      private$labels[!as_is] <- private$labels_lan[[lan]][!as_is]
     },
     get = function(label) {
       private$labels[[label]]
@@ -230,12 +221,7 @@ language <- R6::R6Class(
   private = list(
     language = "en",
     language_registered = c("en", "fr", "pt-BR"),
-    labels = .label_en,
-    labels_lan = list(
-      en = .label_en,
-      fr = .label_fr,
-      `pt-BR` = .label_ptbr
-    ),
+    labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(
         sProcessing = "Traitement en cours...", sSearch = "Rechercher&nbsp;:",
@@ -307,24 +293,18 @@ language <- R6::R6Class(
 )
 
 
-
-use_language <- function() {
-  if (is.null(.globals$language))
-    .globals$language <- language$new()
-  .globals$language
+use_language <- function(lan = "en") {
+  lang <- language$new()
+  lang$set_language(lan)
+  lang
 }
-set_language <- function(lan) {
-  lan_set <- use_language()
-  lan_set$set_language(lan)
-}
-
-
 
 #' @title Modify {shinymanager} labels to use custom text
 #'
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -336,21 +316,56 @@ set_language <- function(lan) {
 #'
 #' # In global.R for example:
 #' set_labels(
+#'   language = "en",
 #'   "Please authenticate" = "You have to login",
 #'   "Username:" = "What's your name:",
 #'   "Password:" = "Enter your password:"
 #' )
-set_labels <- function(...) {
-  lang <- use_language()
-  lang$add(...)
+set_labels <- function(language, ...) {
+  if (!language %in% c("en", "fr", "pt-BR")) {
+    stop("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
+  }
+  args <- list(...)
+  if (!all(nzchar(names(args)))) {
+    stop("All arguments must be named!", call. = FALSE)
+  }
+  
+  current_labels <- switch (language,
+                   "en" = pkgEnv$label_en,
+                   "fr" = pkgEnv$label_fr,
+                   "pt-BR" = pkgEnv$label_ptbr
+  )
+  
+  udpate_labels <- modifyList(
+    x = current_labels,
+    val = lapply(args, I)
+  )
+  
+  if(language %in% "en"){
+    pkgEnv$label_en <- udpate_labels
+  } else if(language %in% "fr"){
+    pkgEnv$label_fr <- udpate_labels
+  } else if(language %in% "pt-BR"){
+    pkgEnv$label_ptbr <- udpate_labels
+  }
+
+  invisible(TRUE)
 }
 
 #' @export
 #'
 #' @rdname custom-labels
-get_labels <- function() {
-  lang <- use_language()
-  lang$get_all()
+get_labels <- function(language = "en") {
+  if (!language %in% c("en", "fr", "pt-BR")) {
+    warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
+    language <- "en"
+  }
+  
+  switch (language,
+          "en" = pkgEnv$label_en,
+          "fr" = pkgEnv$label_fr,
+          "pt-BR" = pkgEnv$label_ptbr
+  )
 }
 
 

@@ -6,11 +6,13 @@
 \alias{get_labels}
 \title{Modify {shinymanager} labels to use custom text}
 \usage{
-set_labels(...)
+set_labels(language, ...)
 
-get_labels()
+get_labels(language = "en")
 }
 \arguments{
+\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR".}
+
 \item{...}{A named list with labels to replace.}
 }
 \value{
@@ -24,6 +26,7 @@ See all labels registered with \code{get_labels()},
 
 # In global.R for example:
 set_labels(
+  language = "en",
   "Please authenticate" = "You have to login",
   "Username:" = "What's your name:",
   "Password:" = "Enter your password:"

@@ -24,7 +24,7 @@ shinymanager_where <- function(where) {
   tags$div(
     style = "display: none;",
     selectInput(inputId = "shinymanager_where", label = NULL, 
-               choices = where, selected = where, multiple = TRUE)
+               choices = where, selected = where, multiple = FALSE)
   )
 }
 
@@ -32,7 +32,7 @@ shinymanager_language <- function(lan) {
   tags$div(
     style = "display: none;",
     selectInput(inputId = "shinymanager_language", label = NULL, 
-                choices = lan, selected = lan, multiple = TRUE)
+                choices = lan, selected = lan, multiple = FALSE)
   )
 }
 
@@ -50,11 +50,19 @@ getToken <- function(session = getDefaultReactiveDomain()) {
   query$token
 }
 
+# Retrieve language from the query string
+#' @importFrom shiny getQueryString getDefaultReactiveDomain
+getLanguage <- function(session = getDefaultReactiveDomain()) {
+  query <- getQueryString(session = session)
+  query$language
+}
+
 # Remove the token from the query string
 #' @importFrom shiny updateQueryString getQueryString getDefaultReactiveDomain
 resetQueryString <- function(session = getDefaultReactiveDomain()) {
   query <- getQueryString(session = session)
   query$token <- NULL
+  query$language <- NULL
   if (length(query) == 0) {
     clearQueryString(session = session)
   } else {
@@ -67,8 +75,12 @@ resetQueryString <- function(session = getDefaultReactiveDomain()) {
 
 #' @importFrom htmltools tags doRenderTags
 #' @importFrom shiny icon
-input_btns <- function(inputId, users, tooltip, icon, status = "primary") {
-  lan <- use_language()
+input_btns <- function(inputId, users, tooltip, icon, status = "primary", lan = NULL) {
+
+  if(is.null(lan)){
+    lan <- use_language()
+  }
+  
   tag <- lapply(
     X = users,
     FUN = function(x) {
@@ -122,4 +134,11 @@ unbindDT <- function(id, session = getDefaultReactiveDomain()) {
     type = "unbindDT",
     message = list(id = id)
   )
+}
+
+filelReaderDB <- function(sqlite_path, passphrase, name){
+  conn <- dbConnect(SQLite(), dbname = sqlite_path)
+  on.exit(dbDisconnect(conn))
+  tryCatch(read_db_decrypt(conn = conn, name = name, passphrase = passphrase), 
+           error = function(e) NULL)
 }

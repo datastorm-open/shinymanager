@@ -1,4 +1,4 @@
-# shinymanager 1.0.210
+# shinymanager 1.0.215
 
 * Add ``autofocus`` on username input.
 * Fix some (strange) bug with ``input$shinymanager_where``
@@ -6,6 +6,8 @@
 * `auth_ui()` now accept a `choose_language` arguments.
 * Rename `br` language into `pt-BR` (iso code)
 * add user info in downloaded log file
+* add `set_labels()` for customize labels
+* Fix simultaneous admin session
 
 # shinymanager 1.0.200
 

@@ -2,11 +2,13 @@
 #' @importFrom shiny NS dateInput checkboxInput textInput
 #' @importFrom htmltools tagList
 #' @importFrom R.utils capitalize
-edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL) {
+edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, lan = NULL) {
 
   ns <- NS(id)
 
-  lan <- use_language()
+  if(is.null(lan)){
+    lan <- use_language()
+  }
 
   if (!is.null(username) && username %in% credentials$user) {
     data_user <- credentials[credentials$user == username, ]
