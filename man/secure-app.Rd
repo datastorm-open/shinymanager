@@ -20,6 +20,7 @@ secure_server(
   timeout = 15,
   inputs_list = NULL,
   fileEncoding = "",
+  keep_token = FALSE,
   session = shiny::getDefaultReactiveDomain()
 )
 }
@@ -46,7 +47,10 @@ It will affect the authentication panel and the admin page.}
 
 \item{inputs_list}{\code{list}. If database credentials, you can configure inputs for editing users information. See Details.}
 
-\item{fileEncoding}{character string: Encoding of logs downloaded file. See \code{\link{write.table}}}
+\item{fileEncoding}{character string: Encoding of logs downloaded file. See \code{\link{write.table}}.}
+
+\item{keep_token}{Logical, keep the token used to authenticate in the URL, it allow to refresh the
+application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.}
 
 \item{session}{Shiny session.}
 }
@@ -57,17 +61,17 @@ A \code{reactiveValues} containing informations about the user connected.
 Secure a Shiny application and manage authentication
 }
 \details{
-If database credentials, you can configure inputs with \code{inputs_list} for editing users information 
-from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable. 
+If database credentials, you can configure inputs with \code{inputs_list} for editing users information
+from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable.
 The others columns are rendering by defaut using a \code{textInput}. You can modify this using \code{inputs_list}.
 \code{inputs_list} must be a named list. Each name must be a column name, and then we must have the function
- shiny to call \code{fun} and the arguments \code{args} like this : 
+ shiny to call \code{fun} and the arguments \code{args} like this :
  \code{
  list(group = list(
-     fun = "selectInput", 
+     fun = "selectInput",
      args = list(
-         choices = c("all", "restricted"), 
-         multiple = TRUE, 
+         choices = c("all", "restricted"),
+         multiple = TRUE,
          selected = c("all", "restricted")
       )
      )
