@@ -19,7 +19,7 @@ admin_ui <- function(id, lan = NULL) {
     )),
     fluidRow(
       column(
-        width = 8, offset = 2,
+        width = 10, offset = 1,
         # tags$h2(lan$get("Administrator mode")),
         # tags$br(), tags$br(),
 
@@ -176,6 +176,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
+      extensions = 'FixedColumns',
       options = list(
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
@@ -186,7 +187,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         scrollX = TRUE,
         columnDefs = list(
           list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
-        )
+        ),
+        fixedColumns = list(leftColumns = 1, rightColumns = 3)
       )
     )
   }, server = FALSE)

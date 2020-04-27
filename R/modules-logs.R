@@ -14,7 +14,7 @@ logs_ui <- function(id, lan = NULL) {
   tagList(
     fluidRow(
       column(
-        width = 8, offset = 2,
+        width = 10, offset = 1,
 
         fluidRow(
           column(
