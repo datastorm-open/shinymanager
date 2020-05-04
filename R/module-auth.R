@@ -18,7 +18,7 @@
 #' @name module-authentication
 #'
 #' @importFrom htmltools tagList tags singleton
-#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
+#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput 
 #'
 #' @example examples/module-auth.R
 auth_ui <- function(id, status = "primary", tags_top = NULL, 
@@ -73,15 +73,22 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                                     lan$get_language(),
                                     choices[1])
                   
-                  tags$div(
-                    style = "text-align: left; font-size: 12px;",
-                    selectInput(
-                      inputId = ns("language"),
-                      label = NULL,
-                      choices = choices,
-                      selected = selected,
-                      width = "20%"
-                    )
+                  tags$div(style = "margin-bottom:-50px;",
+                           fluidRow(
+                             column(width = 3, offset = 6, uiOutput(ns("label_language"))),
+                             column(3,
+                                    tags$div(
+                                      style = "text-align: left; font-size: 12px;",
+                                      selectInput(
+                                        inputId = ns("language"),
+                                        label = NULL,
+                                        choices = choices,
+                                        selected = selected,
+                                        width = "100%"
+                                      )
+                                    )
+                             )
+                           )
                   )
                 }
               },
@@ -113,7 +120,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 sprintf("bindEnter('%s');", ns(""))
               ),
               tags$div(id = ns("result_auth")),
-              if (!is.null(tags_bottom)) tags$hr(), tags_bottom,
+              if (!is.null(tags_bottom)) tags$div(style = "margin-top:-10px;", tags$hr()), tags_bottom,
               uiOutput(ns("update_shinymanager_language"))
             )
           )
@@ -188,8 +195,15 @@ auth_server <- function(input, output, session, check_credentials,
       output$update_shinymanager_language <- renderUI({
         shinymanager_language(lan()$get_language())
       })
+      
+      output$label_language <- renderUI({
+        tags$p(paste0(lan()$get("Language"), " :"), 
+               style = "text-align: right; font-style: italic; margin-top:5px")
+      })
+      
     }
   })
+  
   
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
   

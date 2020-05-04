@@ -58,7 +58,8 @@ pkgEnv$label_en = list(
   "Reset password" = "Reset password",
   "Temporary password:" = "Temporary password:",
   "Password succesfully reset!" = "Password succesfully reset!",
-  "You are not authorized for this application" = "You are not authorized for this application"
+  "You are not authorized for this application" = "You are not authorized for this application",
+  "Language"  = "Language"
 )
 
 pkgEnv$label_fr = list(
@@ -119,7 +120,8 @@ pkgEnv$label_fr = list(
   "Reset password" = "R\u00e9initialiser le mot de passe",
   "Temporary password:" = "Mot de passe temporaire",
   "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
-  "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application"
+  "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application",
+  "Language"  = "Langue"
 )
 
 pkgEnv$label_ptbr = list(
@@ -180,7 +182,8 @@ pkgEnv$label_ptbr = list(
   "Reset password" = "Resetar a senha",
   "Temporary password:" = "Senha tempor\u00e1ria",
   "Password succesfully reset!" = "Senha resetada com sucesso!",
-  "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo"
+  "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo",
+  "Language"  = "L\u00edngua"
 )
 
 #' @importFrom R6 R6Class
