@@ -60,20 +60,23 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
             class = paste0("panel panel-", status),
             tags$div(
               class = "panel-body",
-              if (!is.null(choose_language)){
-                choices = NULL
+              {
+                choices = lan$get_language()
                 if(is.logical(choose_language) && choose_language){
                   choices = lan$get_language_registered()
                 } else if(is.character(choose_language)){
                   choices = unique(c(intersect(choose_language, lan$get_language_registered()), lan$get_language()))
                 }
                 
-                if(length(choices) > 1){
                   selected = ifelse(lan$get_language() %in% choices, 
                                     lan$get_language(),
                                     choices[1])
-                  
-                  tags$div(style = "margin-bottom:-50px;",
+                  if(length(choices) == 1){
+                    style = "display:none"
+                  } else {
+                    style = "margin-bottom:-50px;"
+                  }
+                  tags$div(style = style,
                            fluidRow(
                              column(width = 3, offset = 6, uiOutput(ns("label_language"))),
                              column(3,
@@ -90,7 +93,6 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                              )
                            )
                   )
-                }
               },
               tags$div(
                 style = "text-align: center;",
@@ -169,6 +171,7 @@ auth_server <- function(input, output, session, check_credentials,
       lan <- reactive(lan)
     }
   }
+  
   
   observe({
     session$sendCustomMessage(
