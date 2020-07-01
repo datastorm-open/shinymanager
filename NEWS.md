@@ -1,4 +1,4 @@
-# shinymanager 1.0.215
+# shinymanager 1.0.250
 
 * Add ``autofocus`` on username input.
 * Fix some (strange) bug with ``input$shinymanager_where``
@@ -8,6 +8,7 @@
 * add user info in downloaded log file
 * add `set_labels()` for customize labels
 * Fix simultaneous admin session
+* (#37) hashing password using `scrypt`
 
 # shinymanager 1.0.200
 

@@ -270,6 +270,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
       logs$token <- NULL
       users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
       users$password <- NULL
+      users$is_hashed_password <- NULL
       if(all(is.na(users$start))) users$start <- NULL
       if(all(is.na(users$expire))) users$expire <- NULL
       logs <- merge(logs, users, by = "user", all.x = TRUE, sort = FALSE)

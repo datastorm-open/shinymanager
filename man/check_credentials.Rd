@@ -52,6 +52,20 @@ check_credentials(credentials)("fanny", "azerty")
 check_credentials(credentials)("fanny", "azert")
 check_credentials(credentials)("fannyyy", "azerty")
 
+# data.frame with credentials info
+# using hashed password with scrypt
+credentials <- data.frame(
+  user = c("fanny", "victor"),
+  password = c(scrypt::hashPassword("azerty"), scrypt::hashPassword("12345")),
+  is_hashed_password = TRUE,
+  stringsAsFactors = FALSE
+)
+
+# check a user
+check_credentials(credentials)("fanny", "azerty")
+check_credentials(credentials)("fanny", "azert")
+check_credentials(credentials)("fannyyy", "azerty")
+
 \dontrun{
 
 ## With a SQLite database:

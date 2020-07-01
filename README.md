@@ -6,7 +6,7 @@
 [![cran checks](https://cranchecks.info/badges/worst/shinymanager)](https://cranchecks.info/pkgs/shinymanager)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Source code of main application is protected until authentication is successful.
+> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Password are hashed using 'scrypt'  R package. Source code of main application is protected until authentication is successful.
 
 
 Live demo:
@@ -97,12 +97,12 @@ Once logged, the application will be launched and a button added to navigate bet
 
 ### Secure database
 
-Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl` : 
+Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt` : 
 
 - ``create_db()``
 
 ```r
-# Credentials data
+# Init DB using credentials data
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
   password = c("azerty", "12345"),
@@ -142,7 +142,7 @@ Using SQL database protected, an admin mode is available to manage access to the
 
 ### About security
 
-The credentials database is secured with a pass phrase and the [`openssl`](https://github.com/jeroen/openssl) package. If you have concern about method we use, please fill an [issue](https://github.com/datastorm-open/shinymanager/issues).
+The credentials database is secured with a pass phrase and the [`openssl`](https://github.com/jeroen/openssl) package. Hashed password using [`scrypt`](https://github.com/rstudio/rscrypt). If you have concern about method we use, please fill an [issue](https://github.com/datastorm-open/shinymanager/issues).
 
 
 
