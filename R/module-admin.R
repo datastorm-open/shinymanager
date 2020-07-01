@@ -166,7 +166,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   output$table_users <- renderDT({
     req(users())
     users <- users()
-    users <- users[, setdiff(names(users), "password"), drop = FALSE]
+    users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
@@ -428,6 +428,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     # newuser$password <- password
     res_add <- try({
       newuser <- as.data.frame(newuser)
+      newuser$is_hashed_password <- FALSE
+      if(!"is_hashed_password" %in% colnames(users)){
+        users$is_hashed_password <- FALSE
+      }
       newuser <- newuser[, colnames(users)]
       users <- rbind(users, newuser)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
@@ -484,6 +488,11 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       users$password <- as.character(users$password)
     }
     users$password[users$user %in% input$reset_pwd] <- password
+    if(!"is_hashed_password" %in% colnames(users)){
+      users$is_hashed_password <- FALSE
+    } else {
+      users$is_hashed_password[users$user %in% input$reset_pwd] <- FALSE
+    }
     write_db_encrypt(conn = sqlite_path, value = users, name = "credentials", passphrase = passphrase)
     res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
     if (inherits(res_chg, "try-error")) {

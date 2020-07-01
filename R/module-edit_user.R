@@ -35,6 +35,8 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
         dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
       } else if (identical(x, "password")) {
         NULL
+      } else if (identical(x, "is_hashed_password")) {
+        NULL
       } else if (identical(x, "admin")) {
         checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
       } else {

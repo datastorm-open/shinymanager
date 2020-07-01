@@ -45,6 +45,20 @@
 #' check_credentials(credentials)("fanny", "azert")
 #' check_credentials(credentials)("fannyyy", "azerty")
 #'
+#' # data.frame with credentials info
+#' # using hashed password with scrypt
+#' credentials <- data.frame(
+#'   user = c("fanny", "victor"),
+#'   password = c(scrypt::hashPassword("azerty"), scrypt::hashPassword("12345")),
+#'   is_hashed_password = TRUE,
+#'   stringsAsFactors = FALSE
+#' )
+#'
+#' # check a user
+#' check_credentials(credentials)("fanny", "azerty")
+#' check_credentials(credentials)("fanny", "azert")
+#' check_credentials(credentials)("fannyyy", "azerty")
+#' 
 #' \dontrun{
 #'
 #' ## With a SQLite database:
@@ -52,6 +66,8 @@
 #' check_credentials("credentials.sqlite", passphrase = "supersecret")
 #'
 #' }
+#' 
+#' @importFrom scrypt verifyPassword
 #'
 check_credentials <- function(db, passphrase = NULL) {
   if (is.data.frame(db)) {
@@ -78,9 +94,20 @@ check_credentials_df <- function(user, password, credentials_df) {
       user_info = NULL
     ))
   }
-  user_info <- credentials_df[credentials_df$user == user, setdiff(names(credentials_df), "password"), drop = FALSE]
+  user_info <- credentials_df[credentials_df$user == user, setdiff(names(credentials_df), c("password", "is_hashed_password")), drop = FALSE]
   pwd <- credentials_df$password[credentials_df$user == user]
-  good_password <- isTRUE(pwd == password)
+  if("is_hashed_password" %in% colnames(credentials_df)){
+    is_hashed_pwd <- credentials_df$is_hashed_password[credentials_df$user == user]
+  } else {
+    is_hashed_pwd <- FALSE
+  }
+  
+  if(is_hashed_pwd){
+    good_password <- isTRUE(scrypt::verifyPassword(pwd, password))
+  } else {
+    good_password <- isTRUE(pwd == password)
+  }
+
   if (hasName(credentials_df, "expire") | hasName(credentials_df, "start")) {
     if (is.null(user_info$start) | (!is.null(user_info$start) && is.na(user_info$start))) {
       user_info$start <- Sys.Date() - 1

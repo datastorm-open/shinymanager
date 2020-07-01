@@ -4,9 +4,20 @@ if (interactive()) {
   library(shinymanager)
   
   # data.frame with credentials info
+  # credentials <- data.frame(
+  #   user = c("fanny", "victor"),
+  #   password = c("azerty", "12345"),
+  #   comment = c("alsace", "auvergne"),
+  #   stringsAsFactors = FALSE
+  # )
+  
+  # you can hash the password using scrypt
+  # and adding a column is_hashed_password
+  # data.frame with credentials info
   credentials <- data.frame(
     user = c("fanny", "victor"),
-    password = c("azerty", "12345"),
+    password = c(scrypt::hashPassword("azerty"), scrypt::hashPassword("12345")),
+    is_hashed_password = TRUE,
     comment = c("alsace", "auvergne"),
     stringsAsFactors = FALSE
   )
