@@ -26,7 +26,7 @@
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable
 #' @importFrom RSQLite SQLite
 #' @importFrom scrypt hashPassword
-#' 
+#'
 #' @seealso \code{\link{read_db_decrypt}}
 #'
 #' @examples
@@ -198,7 +198,7 @@ write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NUL
     if(!"is_hashed_password" %in% colnames(value)){
       value$is_hashed_password <- FALSE
     }
-    to_hash <- which(!value$is_hashed_password)
+    to_hash <- which(!as.logical(value$is_hashed_password))
     if(length(to_hash) > 0){
       # store hashed password
       value$password[to_hash] <- sapply(value$password[to_hash], function(x) scrypt::hashPassword(x))
