@@ -106,6 +106,7 @@ Store your credentials data in SQL database protected with a symmetric AES encry
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
   password = c("azerty", "12345"),
+  # password will automatically be hashed
   admin = c(FALSE, TRUE),
   stringsAsFactors = FALSE
 )

@@ -29,6 +29,7 @@ Using SQL database protected (``create_db()``), an admin mode is available to ma
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
   password = c("azerty", "12345"),
+  # password will automatically be hashed
   admin = c(FALSE, TRUE),
   stringsAsFactors = FALSE
 )
