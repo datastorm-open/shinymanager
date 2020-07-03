@@ -35,7 +35,7 @@ admin_ui <- function(id, lan = NULL) {
         ),
         tags$br(), tags$br(), tags$br(),
         DTOutput(outputId = ns("table_users")),
-
+        
         tags$br(),
 
         actionButton(
@@ -162,6 +162,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     if(!is.null(pwds_update())) pwds(pwds_update())
   })
 
+
   # displaying users table
   output$table_users <- renderDT({
     req(users())
@@ -176,7 +177,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
-      extensions = 'FixedColumns',
+      # extensions = 'FixedColumns', # bug using FixedColumns on checkbox + update table...
       options = list(
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
@@ -187,8 +188,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         scrollX = TRUE,
         columnDefs = list(
           list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
-        ),
-        fixedColumns = list(leftColumns = 1, rightColumns = 3)
+        )
+        # fixedColumns = list(leftColumns = 1)
       )
     )
   }, server = FALSE)
