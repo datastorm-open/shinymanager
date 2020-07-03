@@ -35,7 +35,7 @@
 #' # Credentials data
 #' credentials <- data.frame(
 #'   user = c("shiny", "shinymanager"),
-#'   password = c("azerty", "12345"),
+#'   password = c("azerty", "12345"), # password will automaticcaly be hashed
 #'   stringsAsFactors = FALSE
 #' )
 #'
