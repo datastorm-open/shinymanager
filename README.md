@@ -18,6 +18,7 @@ You can authenticate with:
  * user: `shiny` / password: `shiny`
  * user: `shinymanager` / password: `shinymanager` (Admin)
 
+Online documentation : https://datastorm-open.github.io/shinymanager/
 
 
 ### Installation
@@ -120,6 +121,7 @@ create_db(
   credentials_data = credentials,
   sqlite_path = "path/to/database.sqlite", # will be created
   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+  # passphrase = "passphrase_wihtout_keyring"
 )
 
 # Wrap your UI with secure_app, enabled admin mode or not
@@ -132,7 +134,8 @@ server <- function(input, output, session) {
   res_auth <- secure_server(
     check_credentials = check_credentials(
         "path/to/database.sqlite",
-        passphrase = key_get("R-shinymanager-key", "obiwankenobi"
+        passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+        # passphrase = "passphrase_wihtout_keyring"
     )
   )
   
@@ -157,6 +160,52 @@ Using SQL database protected, an admin mode is available to manage access to the
 ![](man/figures/shinymanager-admin.png)
 ![](man/figures/shinymanager-logs.png)
 
+### shiny input
+
+Two inputs are created : 
+
+````
+observe({
+    print(input$shinymanager_where)
+    print(input$shinymanager_language)
+})
+````
+
+### Customization
+
+You can customize the module (css, image, language, ...).
+
+````
+?secure_app
+?auth_ui
+?set_labels
+````
+
+### Troubleshooting
+
+The application works fine without ``shinymanager`` but not you have trouble using ``shinymanager``. 
+
+There is a *lag* between your ``ui`` and the ``server``, since ``shinymanger`` hides the ``ui`` part until authentication is successful. It is therefore possible that some of `ui element`` (input) are not defined and are NULL. In this case, you'll see some warning / error message in your R console.
+
+So we recommend to use in all your reactive/observer functions the ``req`` instruction  to **validate the inputs**.
+
+One more *global and brutal* solution can be :
+
+````
+server <- function(input, output, session) {
+  
+  auth_out <- secure_server(....)
+  
+  observe({
+    if(is.null(input$shinymanager_where) || (!is.null(input$shinymanager_where) && input$shinymanager_where %in% "application")){
+      
+      # your server app code
+    }
+  })
+}
+````
+
+But it's better to use ``req`` solution. More discussion on https://github.com/datastorm-open/shinymanager/issues/36
 
 ### HTTP request
 

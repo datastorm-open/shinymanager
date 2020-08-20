@@ -43,6 +43,7 @@ create_db(
   credentials_data = credentials,
   sqlite_path = "path/to/database.sqlite", # will be created
   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+  # passphrase = "passphrase_wihtout_keyring"
 )
 
 # Wrap your UI with secure_app, enabled admin mode or not
@@ -55,7 +56,8 @@ server <- function(input, output, session) {
   res_auth <- secure_server(
     check_credentials = check_credentials(
         "path/to/database.sqlite",
-        passphrase = key_get("R-shinymanager-key", "obiwankenobi"
+        passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+        # passphrase = "passphrase_wihtout_keyring"
     )
   )
   
