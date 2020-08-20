@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>shinymanager : SQLite Admin • shinymanager</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="shinymanager : SQLite Admin">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="shinymanager">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.200</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
       </span>
     </div>
 
@@ -64,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/datastorm-open/shinymanager">
+  <a href="https://github.com/datastorm-open/shinymanager/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -79,10 +79,10 @@
 
       
 
-      </header><div class="row">
+      </header><script src="SQLite_Admin_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>shinymanager : SQLite Admin</h1>
+      <h1 data-toc-skip>shinymanager : SQLite Admin</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/datastorm-open/shinymanager/blob/master/vignettes/SQLite_Admin.Rmd"><code>vignettes/SQLite_Admin.Rmd</code></a></small>
@@ -101,46 +101,63 @@
 <li>ask the user to change his password</li>
 <li>see logs about application usage</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Credentials data</span>
-credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="dt">user =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"shiny"</span>, <span class="st">"shinymanager"</span>),
-  <span class="dt">password =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"azerty"</span>, <span class="st">"12345"</span>),
-  <span class="dt">admin =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>),
-  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># Credentials data</span>
+<span class="no">credentials</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  <span class="kw">user</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"shiny"</span>, <span class="st">"shinymanager"</span>),
+  <span class="kw">password</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"azerty"</span>, <span class="st">"12345"</span>),
+  <span class="co"># password will automatically be hashed</span>
+  <span class="kw">admin</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">FALSE</span>, <span class="fl">TRUE</span>),
+  <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>
 )
 
 <span class="co"># you can use keyring package to set database key</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(keyring)
-<span class="kw">key_set</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">keyring</span>)
+<span class="fu">key_set</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
 
 <span class="co"># Init the database</span>
-<span class="kw"><a href="../reference/create_db.html">create_db</a></span>(
-  <span class="dt">credentials_data =</span> credentials,
-  <span class="dt">sqlite_path =</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span>
-  <span class="dt">passphrase =</span> <span class="kw">key_get</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
-)</code></pre></div>
+<span class="fu"><a href="../reference/create_db.html">create_db</a></span>(
+  <span class="kw">credentials_data</span> <span class="kw">=</span> <span class="no">credentials</span>,
+  <span class="kw">sqlite_path</span> <span class="kw">=</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span>
+  <span class="kw">passphrase</span> <span class="kw">=</span> <span class="fu">key_get</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+  <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
+)
+
+<span class="co"># Wrap your UI with secure_app, enabled admin mode or not</span>
+<span class="no">ui</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_app</a></span>(<span class="no">ui</span>, <span class="kw">enable_admin</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+
+
+<span class="no">server</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">input</span>, <span class="no">output</span>, <span class="no">session</span>) {
+
+  <span class="co"># check_credentials directly on sqlite db</span>
+  <span class="no">res_auth</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_server</a></span>(
+    <span class="kw">check_credentials</span> <span class="kw">=</span> <span class="fu"><a href="../reference/check_credentials.html">check_credentials</a></span>(
+        <span class="st">"path/to/database.sqlite"</span>,
+        <span class="kw">passphrase</span> <span class="kw">=</span> <span class="fu">key_get</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+        <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
+    )
+  )
+
+  <span class="no">output</span>$<span class="no">auth_output</span> <span class="kw">&lt;-</span> <span class="fu">renderPrint</span>({
+    <span class="fu">reactiveValuesToList</span>(<span class="no">res_auth</span>)
+  })
+
+  <span class="co"># your classic server logic</span>
+  <span class="no">...</span>
+}</pre></body></html></div>
 <p>Starting page of the application will be :</p>
-<div class="figure">
-<img src="../man/figures/shinymanager-login.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/shinymanager-login.png" style="width:100.0%"></p>
 <p>Once logged, the application will be launched and a button added to navigate between the app and the admin panel (if user is authorized to access it), and to logout from the application :</p>
-<div class="figure">
-<img src="../man/figures/shinymanager-info-nav.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/shinymanager-info-nav.png" style="width:100.0%"></p>
 </div>
 <div id="admin-mode" class="section level2">
 <h2 class="hasAnchor">
 <a href="#admin-mode" class="anchor"></a>Admin mode</h2>
-<div class="figure">
-<img src="../man/figures/shinymanager-admin.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/shinymanager-admin.png" style="width:100.0%"></p>
 <div id="manage-users" class="section level3">
 <h3 class="hasAnchor">
 <a href="#manage-users" class="anchor"></a>Manage users</h3>
 <p>The first table lists all current users :</p>
-<div class="figure">
-<img src="../man/figures/user_table.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/user_table.png" style="width:100.0%"></p>
 <p>A user is defined (at least) by the following information :</p>
 <ul>
 <li>
@@ -153,13 +170,9 @@ credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 <div id="add-user" class="section level4">
 <h4 class="hasAnchor">
 <a href="#add-user" class="anchor"></a>Add user</h4>
-<div class="figure">
-<img src="../man/figures/add_user.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/add_user.png" style="width:100.0%"></p>
 <p>Using <strong>Add user</strong> button. So you can edit user information in the modal box :</p>
-<div class="figure">
-<img src="../man/figures/popup.png" style="width:50.0%">
-</div>
+<p><img src="../man/figures/popup.png" style="width:50.0%"></p>
 <p>Notes :</p>
 <ul>
 <li>
@@ -169,9 +182,7 @@ credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 <li>
 <strong>Password</strong> : By defaut, a temporary password is generated. But you can put your own password and disable asking user to change it on first connexion.</li>
 </ul>
-<div class="figure">
-<img src="../man/figures/shinymanager-pwd.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/shinymanager-pwd.png" style="width:100.0%"></p>
 <p>Finally, the creation is effective clicking on validation button.</p>
 </div>
 </div>
@@ -188,9 +199,7 @@ credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 <h4 class="hasAnchor">
 <a href="#password-management" class="anchor"></a>Password management</h4>
 <p>The second table allows password management :</p>
-<div class="figure">
-<img src="../man/figures/password_table.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/password_table.png" style="width:100.0%"></p>
 <ul>
 <li>
 <strong>Change password button :</strong> Ask user to change password on next connexion</li>
@@ -217,23 +226,16 @@ credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 <h3 class="hasAnchor">
 <a href="#logs" class="anchor"></a>Logs</h3>
 <p>You can visualize and download connexion logs on the second tab.</p>
-<div class="figure">
-<img src="../man/figures/shinymanager-logs.png" style="width:100.0%">
-</div>
+<p><img src="../man/figures/shinymanager-logs.png" style="width:100.0%"></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction">Introduction</a></li>
-      <li><a href="#admin-mode">Admin mode</a></li>
-      </ul>
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -244,7 +246,7 @@ credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
