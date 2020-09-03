@@ -186,6 +186,129 @@ pkgEnv$label_ptbr = list(
   "Language"  = "L\u00edngua"
 )
 
+pkgEnv$label_es = list(
+  "Please authenticate" = "Favor de autenticarse",
+  "Username:" = "Usuario:",
+  "Password:" = "Contraseña:",
+  "Login" = "Iniciar sesión",
+  "Username or password are incorrect" = "Usuario o contraseña incorrecto",
+  "Your account has expired" = "Su cuenta ha expirado",
+  "Please change your password" = "Por favor, cambie su contraseña",
+  "New password:" = "Nueva contraseña:",
+  "Confirm password:" = "Confirme contraseña:",
+  "Update new password" = "Actualizar nueva contraseña",
+  "Password successfully updated! Please re-login" = "¡Cambio de contraseña exitoso! Por favor, vuelva a iniciar sesión",
+  "The two passwords are different" = "Las dos contraseñas son diferentes",
+  "Failed to update password" = "Falló la actualización de la contraseña",
+  "Logout" = "Cerrar sesión",
+  "Go to application" = "Ir a aplicación",
+  "Administrator mode" = "Modo administración",
+  "Add a user" = "Agregar usuario",
+  "Failed to update user" = "Falló la actualización del usuario",
+  "User successfully updated" = "Usuario actualizado correctamente",
+  "Cancel" = "Cancelar",
+  "Confirm new user" = "Confirmar nuevo usuario",
+  "Confirm change" = "Confirmar cambio",
+  "Are you sure to remove user(s): %s from the database ?" = "¿Está seguro de remover el(los) usuario(s): %s de la base de datos?",
+  "Delete user(s)" = "Borrar usuario(s)",
+  "Delete user" = "Borrar usuario",
+  "Edit user" = "Editar usuario",
+  "User already exist!" = "¡Usuario ya existente!",
+  "Dismiss" = "Descartar",
+  "New user %s succesfully created!" = "¡Nuevo usuario %s creado satisfactoriamente!",
+  "Ask to change password" = "Pedir que cambie la contraseña",
+  "Confirm" = "Confirmar",
+  "Ask %s to change password on next connection?" = "¿Desea pedir a %s que cambie la contraseña en su siguiente connexión?",
+  "Change saved!" = "¡Cambio guardado!",
+  "Failed to update the database" = "Falló la actualización de la base de datos",
+  "Password does not respect safety requirements" = "La contraseña no contiene los requerimientos de seguridad",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "La contraseña debe contener al menos un número, una mínuscula, una mayúscula y debe ser de almenos seis caracteres.",
+  "Number of connections per user" = "Número de conexiones por usuario",
+  "Number of connections per day" = "Número de conexiones por día",
+  "Total number of connection" = "Total de conexiones",
+  "You can\'t remove yourself!" = "No puede eliminarse usted mismo",
+  "User:" = "Usuario:",
+  "Period:" = "Periodo:",
+  "Last week" = "Semana pasada",
+  "Last month" = "Mes pasado",
+  "All period" = "Todo el periodo",
+  "Home" = "Inicio",
+  "Select all shown users" = "Seleccionar todos los usuarios mostrados",
+  "Remove selected users" = "Remover los usuarios seleccionados",
+  "Force selected users to change password" = "Forzar a los usuarios seleccionados que cambien la contraseña",
+  "Users" = "Usuarios",
+  "Passwords" = "Contraseñas",
+  "Download logs database" = "Descargar la base de datos de registros",
+  "Download SQL database" = "Descargar la base de datos SQL",
+  "Reset password for %s?" = "Reiniciar contraseña para %s?",
+  "Reset password" = "Reiniciar contraseña",
+  "Temporary password:" = "Contraseña temporal:",
+  "Password succesfully reset!" = "¡Contraseña reiniciada satisfactoriamente!",
+  "You are not authorized for this application" = "No estás autorizado para esta aplicación",
+  "Language" = "Lenguaje"
+)
+
+en <-  list(
+  "Please authenticate" = "Please authenticate",
+  "Username:" = "Username :",
+  "Password:" = "Password :",
+  "Login" = "Login",
+  "Username or password are incorrect" = "Username or password are incorrect",
+  "Your account has expired" = "Your account has expired",
+  "Please change your password" = "Please change your password",
+  "New password:" = "New password :",
+  "Confirm password:" = "Confirm password :",
+  "Update new password" = "Update new password",
+  "Password successfully updated! Please re-login" = "Password successfully updated! Please re-login",
+  "The two passwords are different" = "The two passwords are different",
+  "Failed to update password" = "Failed to update password",
+  "Logout" = "Logout",
+  "Go to application" = "Go to application",
+  "Administrator mode" = "Administrator mode",
+  "Add a user" = "Add a user",
+  "Failed to update user" = "Failed to update user",
+  "User successfully updated" = "User successfully updated",
+  "Cancel" = "Cancel",
+  "Confirm new user" = "Confirm new user",
+  "Confirm change" = "Confirm change",
+  "Are you sure to remove user(s): %s from the database ?" = "Are you sure to remove user(s): %s from the database ?",
+  "Delete user(s)" = "Delete user(s)",
+  "Delete user" = "Delete user",
+  "Edit user" = "Edit user",
+  "User already exist!" = "User already exist!",
+  "Dismiss" = "Dismiss",
+  "New user %s succesfully created!" = "New user %s succesfully created!",
+  "Ask to change password" = "Ask to change password",
+  "Confirm" = "Confirm",
+  "Ask %s to change password on next connection?" = "Ask %s to change password on next connection?",
+  "Change saved!" = "Change saved!",
+  "Failed to update the database" = "Failed to update the database",
+  "Password does not respect safety requirements" = "Password does not respect safety requirements",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6.",
+  "Number of connections per user" = "Number of connections per user",
+  "Number of connections per day" = "Number of connections per day",
+  "Total number of connection" = "Total number of connection",
+  "You can\'t remove yourself!" = "You can\'t remove yourself!",
+  "User:" = "User :",
+  "Period:" = "Period :",
+  "Last week" = "Last week",
+  "Last month" = "Last month",
+  "All period" = "All period",
+  "Home" = "Home",
+  "Select all shown users" = "Select all shown users",
+  "Remove selected users" = "Remove selected users",
+  "Force selected users to change password" = "Force selected users to change password",
+  "Users" = "Users",
+  "Passwords" = "Passwords",
+  "Download logs database" = "Download logs database",
+  "Download SQL database" = "Download SQL database",
+  "Reset password for %s?" = "Reset password for %s?",
+  "Reset password" = "Reset password",
+  "Temporary password:" = "Temporary password:",
+  "Password succesfully reset!" = "Password succesfully reset!",
+  "You are not authorized for this application" = "You are not authorized for this application",
+  "Language"  = "Language"
+)
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
 language <- R6::R6Class(
@@ -202,7 +325,8 @@ language <- R6::R6Class(
       private$labels <-   switch (lan,
                                   "en" = pkgEnv$label_en,
                                   "fr" = pkgEnv$label_fr,
-                                  "pt-BR" = pkgEnv$label_ptbr
+                                  "pt-BR" = pkgEnv$label_ptbr,
+                                  "es" = pkgEnv$label_es
       )
     },
     get = function(label) {
@@ -223,7 +347,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("en", "fr", "pt-BR"),
+    language_registered = c("en", "fr", "pt-BR","es"),
     labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(
@@ -289,6 +413,29 @@ language <- R6::R6Class(
           sSortAscending = ": ativar para ordenar coluna de forma ascendente",
           sSortDescending = ": ativar para ordenar coluna de forma descendente"
         )
+      ),
+      es = list(
+        sEmptyTable = "No se encontraron resultados",
+        sInfo = "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ regisdtros",
+        sInfoEmpty = "Mostrando registros del 0 al 0 de 0 registros",
+        sInfoFiltered = "(filtrado de un total de _MAX_ registros)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Motrar _MENU_ registros",
+        sLoadingRecords = "Cargando...",
+        sProcessing = "Procesando...",
+        sSearch = "Buscar:",
+        sZeroRecords = "No se encontraron resultados",
+        oPaginate = list(
+          sFirst = "Primera",
+          sLast = "Última",
+          sNext = "Siguiente",
+          sPrevious = "Anterior"
+        ),
+        oAria = list(
+          sSortAscending = ": activar para ordenar la columna de forma ascendente",
+          sSortDescending = ": activar para ordenar la columna de forma descendente"
+        )
       )
     ),
     length = function() base::length(private$labels)
@@ -325,31 +472,34 @@ use_language <- function(lan = "en") {
 #'   "Password:" = "Enter your password:"
 #' )
 set_labels <- function(language, ...) {
-  if (!language %in% c("en", "fr", "pt-BR")) {
-    stop("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
-  
+
   current_labels <- switch (language,
                    "en" = pkgEnv$label_en,
                    "fr" = pkgEnv$label_fr,
-                   "pt-BR" = pkgEnv$label_ptbr
+                   "pt-BR" = pkgEnv$label_ptbr,
+                   "es" = pkgEnv$label_es
   )
-  
+
   udpate_labels <- modifyList(
     x = current_labels,
     val = lapply(args, I)
   )
-  
+
   if(language %in% "en"){
     pkgEnv$label_en <- udpate_labels
   } else if(language %in% "fr"){
     pkgEnv$label_fr <- udpate_labels
   } else if(language %in% "pt-BR"){
     pkgEnv$label_ptbr <- udpate_labels
+  } else if(language %in% "es"){
+    pkgEnv$label_es <- udpate_labels
   }
 
   invisible(TRUE)
@@ -359,15 +509,16 @@ set_labels <- function(language, ...) {
 #'
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
-  if (!language %in% c("en", "fr", "pt-BR")) {
-    warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es", call. = FALSE)
     language <- "en"
   }
-  
+
   switch (language,
           "en" = pkgEnv$label_en,
           "fr" = pkgEnv$label_fr,
-          "pt-BR" = pkgEnv$label_ptbr
+          "pt-BR" = pkgEnv$label_ptbr,
+          "es" = pkgEnv$label_es
   )
 }
 
