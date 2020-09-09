@@ -35,7 +35,7 @@ admin_ui <- function(id, lan = NULL) {
         ),
         tags$br(), tags$br(), tags$br(),
         DTOutput(outputId = ns("table_users")),
-        
+
         tags$br(),
 
         actionButton(
@@ -80,14 +80,14 @@ admin_ui <- function(id, lan = NULL) {
         ),
 
         tags$br(),tags$br(), tags$br(), tags$hr(),
-        
+
         downloadButton(
           outputId = ns("download_sql_database"),
           label = lan$get("Download SQL database"),
           class = "btn-primary center-block",
           icon = icon("download")
         ),
-        
+
         tags$br(),tags$br()
 
       )
@@ -107,14 +107,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   jns <- function(x) {
     paste0("#", ns(x))
   }
-  
+
   token_start <- isolate(getToken(session = session))
 
   update_read_db <- reactiveValues(x = NULL)
 
   # read users table from database
   users <- reactiveVal(NULL)
-  
+
   observe({
     unbindDT(ns("table_users"))
     update_read_db$x
@@ -136,10 +136,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   observe({
     if(!is.null(users_update())) users(users_update())
   })
-  
+
   # read password management table from database
   pwds <- reactiveVal(NULL)
-  
+
   observe({
     unbindDT(ns("table_pwds"))
     update_read_db$x
@@ -171,9 +171,13 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
+    names <- base::do.call(base::c,lapply(names(users), function(x) lan()$get(x)))
+    change <- as.logical(users$admin)
+    users[change, "admin"] <- "Sí"
+    users[!change, "admin"] <- "No"
     datatable(
       data = users,
-      colnames = c("Usuario","Empieza","Caduca", "Editar", "Remover", "Seleccionar"),
+      colnames = make_title(names),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
@@ -212,9 +216,16 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
     pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("undo"), status = "warning", lan = lan())
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user)
+    names <- base::do.call(base::c,lapply(names(pwds), function(x) lan()$get(x)))
+    change <- as.logical(pwds$must_change)
+    pwds[change, "must_change"] <- "Sí"
+    pwds[!change, "must_change"] <- "No"
+    change <- as.logical(pwds$have_changed)
+    pwds[change,"have_changed"] <- "Sí"
+    pwds[!change,"have_changed"] <- "No"
     datatable(
       data = pwds,
-      colnames = make_title(names(pwds)),
+      colnames = make_title(names),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",

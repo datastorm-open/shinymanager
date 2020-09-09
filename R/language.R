@@ -59,9 +59,7 @@ pkgEnv$label_en = list(
   "Temporary password:" = "Temporary password:",
   "Password succesfully reset!" = "Password succesfully reset!",
   "You are not authorized for this application" = "You are not authorized for this application",
-  "Language"  = "Language",
-  "Password" = "Password",
-  "Edit user" = "Edit user"
+  "Language"  = "Language"
 )
 
 pkgEnv$label_fr = list(
@@ -123,9 +121,7 @@ pkgEnv$label_fr = list(
   "Temporary password:" = "Mot de passe temporaire",
   "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
   "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application",
-  "Language"  = "Langue",
-  "Password" = "Password",
-  "Edit user" = "Edit user"
+  "Language"  = "Langue"
 )
 
 pkgEnv$label_ptbr = list(
@@ -187,9 +183,7 @@ pkgEnv$label_ptbr = list(
   "Temporary password:" = "Senha tempor\u00e1ria",
   "Password succesfully reset!" = "Senha resetada com sucesso!",
   "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo",
-  "Language"  = "L\u00edngua",
-  "Password" = "Password",
-  "Edit user" = "Edit user"
+  "Language"  = "L\u00edngua"
 )
 
 pkgEnv$label_es = list(
@@ -246,14 +240,28 @@ pkgEnv$label_es = list(
   "Passwords" = "Contraseñas",
   "Download logs database" = "Descargar la base de datos de registros",
   "Download SQL database" = "Descargar la base de datos SQL",
-  "Reset password for %s?" = "Reiniciar contraseña para %s?",
+  "Reset password for %s?" = "¿Reiniciar contraseña para %s?",
   "Reset password" = "Reiniciar contraseña",
   "Temporary password:" = "Contraseña temporal:",
   "Password succesfully reset!" = "¡Contraseña reiniciada satisfactoriamente!",
   "You are not authorized for this application" = "No estás autorizado para esta aplicación",
   "Language" = "Lenguaje",
   "Password" = "Contraseña",
-  "Edit user" = "Editar usuario"
+  "Edit user" = "Editar usuario",
+  "start" = "empieza",
+  "expire" = "expira",
+  "admin" = "administrador",
+  "user" = "usuario",
+  "Edit" = "Editar",
+  "Remove" = "Remover",
+  "must_change" = "debe_cambiar",
+  "have_changed" = "ha_cambiado",
+  "date_change" = "fecha_de_cambio",
+  "Change password" = "Cambiar",
+  "Reset password" = "Reiniciar",
+  "Select" = "Seleccionar",
+  "Logs" = "Registros",
+  "All users" = "Todos los usuarios"
 )
 
 en <-  list(
@@ -315,8 +323,7 @@ en <-  list(
   "Temporary password:" = "Temporary password:",
   "Password succesfully reset!" = "Password succesfully reset!",
   "You are not authorized for this application" = "You are not authorized for this application",
-  "Language"  = "Language",
-  "Password"  = "Password",
+  "Language"  = "Language"
 )
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList

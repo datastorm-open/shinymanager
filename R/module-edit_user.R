@@ -25,30 +25,30 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           # value <- Sys.Date()
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+        dateInput(inputId = ns(x), label = R.utils::capitalize("empieza"), value = value, width = "100%")
       } else if (x %in% "expire") {
         value <- data_user[[x]]
         if (is.null(value)) {
           # value <- Sys.Date() + 60
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+        dateInput(inputId = ns(x), label = R.utils::capitalize("expira"), value = value, width = "100%")
       } else if (identical(x, "password")) {
         NULL
       } else if (identical(x, "is_hashed_password")) {
         NULL
       } else if (identical(x, "admin")) {
-        checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
+        checkboxInput(inputId = ns(x), label = R.utils::capitalize("administrador"), value = isTRUE(as.logical(data_user[[x]])))
       } else {
-        if(!is.null(inputs_list) && x %in% names(inputs_list) && 
+        if(!is.null(inputs_list) && x %in% names(inputs_list) &&
            all(c("fun", "args") %in% names(inputs_list[[x]])) && exists(inputs_list[[x]]$fun)){
-          
+
           fun <- inputs_list[[x]]$fun
           fun_args <- names(formals(fun))
           list_args <- inputs_list[[x]]$args
-          
+
           list_args$inputId <- ns(x)
-          
+
           if(!"value" %in% fun_args){
             list_args$value <- NULL
           } else {
@@ -67,27 +67,32 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           }
           if(!"label" %in% fun_args){
             list_args$label <- NULL
-          } else if(is.null(list_args$label)) list_args$label <- R.utils::capitalize(x)
-          
+          } else if(is.null(list_args$label)) list_args$label <- R.utils::capitalize("usuario")
+
           if(!"width" %in% fun_args){
             list_args$width <- NULL
           } else if(is.null(list_args$width)) list_args$width <- "100%"
-          
+
           tryCatch(do.call(fun, list_args), error = function(e){
-            warning("Error building custom input for column '", x, 
+            warning("Error building custom input for column '", x,
                     "'. (fun : '", fun, "'). Verify 'inputs_list' argument.", call. = FALSE)
             textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
           })
-          
+
         } else {
-          textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
+          if(identical(x,"user")){
+            textInput(inputId = ns(x), label = R.utils::capitalize("usuario"), value = data_user[[x]], width = "100%")
+          } else{
+            textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
+          }
+
         }
       }
     }
   )
 
   if(is.null(username)){
-    input_list[[length(input_list) + 1]] <- textInput(inputId = ns("password"), label = "Password", value = generate_pwd(), width = "100%")
+    input_list[[length(input_list) + 1]] <- textInput(inputId = ns("password"), label = lan$get("Password"), value = generate_pwd(), width = "100%")
     input_list[[length(input_list) + 1]] <- checkboxInput(inputId = ns("must_change"), label = lan$get("Ask to change password"), value = TRUE)
   }
   tagList(

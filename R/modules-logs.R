@@ -10,7 +10,6 @@ logs_ui <- function(id, lan = NULL) {
   if(is.null(lan)){
     lan <- use_language()
   }
-
   tagList(
     fluidRow(
       column(
@@ -22,8 +21,8 @@ logs_ui <- function(id, lan = NULL) {
             selectInput(
               inputId = ns("user"),
               label = lan$get("User:"),
-              choices = "All users",
-              selected = "All users",
+              choices = lan$get("All users"),
+              selected = lan$get("All users"),
               multiple = TRUE,
               width = "100%"
             )
@@ -35,7 +34,7 @@ logs_ui <- function(id, lan = NULL) {
               label = lan$get("Period:"),
               start = Sys.Date() - 31,
               end = Sys.Date(),
-              width = "100%"
+              width = "100%",language = "es",format = "d M yy",separator = "a"
             )
           ),
           column(
@@ -104,7 +103,7 @@ logs_ui <- function(id, lan = NULL) {
 #'  bb_x_axis bb_zoom %>% bb_bar_color_manual
 #' @importFrom shiny reactiveValues observe req updateSelectInput updateDateRangeInput reactiveVal outputOptions
 #' @importFrom utils write.table
-logs <- function(input, output, session, sqlite_path, passphrase, 
+logs <- function(input, output, session, sqlite_path, passphrase,
                  fileEncoding = "", lan = NULL) {
 
   ns <- session$ns
@@ -130,8 +129,8 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     updateSelectInput(
       session = session,
       inputId = "user",
-      choices = c("All users", as.character(logs_rv$users$user)),
-      selected = "All users"
+      choices = c("Todos los usuarios", as.character(logs_rv$users$user)),
+      selected = "Todos los usuarios"
     )
 
     app_choices <- unique(unique(logs_rv$logs$app), get_appname())
@@ -157,7 +156,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     logs <- isolate(logs_rv$logs)
     logs$date <- as.Date(substr(logs$server_connected, 1, 10))
     logs <- logs[logs$date >= input$overview_period[1] & logs$date <= input$overview_period[2], ]
-    if (!"All users" %in% input$user) {
+    if (!"Todos los usuarios" %in% input$user) {
       logs <- logs[logs$user %in% input$user, ]
     }
     if (length(input$app) > 0 && !"All applications" %in% input$app) {

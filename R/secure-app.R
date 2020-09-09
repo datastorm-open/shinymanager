@@ -91,7 +91,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             shinymanager_language(lan$get_language())
           ),
           tabPanel(
-            title = "Logs",
+            title = lan$get("Logs"),
             logs_ui("logs", lan),
             shinymanager_language(lan$get_language())
           )
