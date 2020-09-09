@@ -173,7 +173,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
     datatable(
       data = users,
-      colnames = make_title(names(users)),
+      colnames = c("Usuario","Empieza","Caduca", "Editar", "Remover", "Seleccionar"),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
@@ -304,7 +304,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   observeEvent(input$edit_user, {
     users <- users()
     showModal(modalDialog(
-      title = "Edit user",
+      title = lan()$get("Edit user"),
       edit_user_ui(ns("edit_user"), credentials = users, username = input$edit_user, inputs_list = inputs_list, lan = lan()),
       tags$div(id = ns("placeholder-edituser-exist")),
       footer = tagList(
