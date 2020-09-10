@@ -261,7 +261,7 @@ pkgEnv$label_es = list(
   "Select" = "Seleccionar",
   "Logs" = "Registros",
   "All users" = "Todos los usuarios",
-  "menus" = "Menús"
+  "menu" = "Menu"
 )
 
 en <-  list(
