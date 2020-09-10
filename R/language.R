@@ -241,7 +241,7 @@ pkgEnv$label_es = list(
   "Download logs database" = "Descargar la base de datos de registros",
   "Download SQL database" = "Descargar la base de datos SQL",
   "Reset password for %s?" = "¿Reiniciar contraseña para %s?",
-  "Reset password" = "Reiniciar contraseña",
+  "Reset password" = "Reiniciar",
   "Temporary password:" = "Contraseña temporal:",
   "Password succesfully reset!" = "¡Contraseña reiniciada satisfactoriamente!",
   "You are not authorized for this application" = "No estás autorizado para esta aplicación",
@@ -253,15 +253,15 @@ pkgEnv$label_es = list(
   "admin" = "administrador",
   "user" = "usuario",
   "Edit" = "Editar",
-  "Remove" = "Remover",
-  "must_change" = "debe_cambiar",
-  "have_changed" = "ha_cambiado",
+  "Remove" = "Eliminar",
+  "must_change" = "cambiará_contraseña",
+  "have_changed" = "cambió_contraseña",
   "date_change" = "fecha_de_cambio",
   "Change password" = "Cambiar",
-  "Reset password" = "Reiniciar",
   "Select" = "Seleccionar",
   "Logs" = "Registros",
-  "All users" = "Todos los usuarios"
+  "All users" = "Todos los usuarios",
+  "menus" = "Menús"
 )
 
 en <-  list(
