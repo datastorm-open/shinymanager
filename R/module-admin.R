@@ -189,10 +189,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         # "function(settings, json) {",
         # "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
         # "}"),
-        scrollX = TRUE,
-        columnDefs = list(
-          list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
-        )
+        scrollX = TRUE#,
+        # columnDefs = list(
+        #   list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
+        # )
         # fixedColumns = list(leftColumns = 1)
       )
     )
@@ -236,10 +236,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         #   "function(settings, json) {",
         #   "$(this.api().table().header()).css({\'background-color\': \'#fff\', \'color\': \'#4582ec\'});",
         #   "}"),
-        scrollX = TRUE,
-        columnDefs = list(
-          list(width = "50px", targets = (ncol(pwds)-3):(ncol(pwds)-1))
-        )
+        scrollX = TRUE#,
+        # columnDefs = list(
+        #   list(width = "50px", targets = (ncol(pwds)-3):(ncol(pwds)-1))
+        # )
       )
     )
   }, server = FALSE)
