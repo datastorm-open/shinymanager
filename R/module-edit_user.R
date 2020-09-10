@@ -67,7 +67,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           }
           if(!"label" %in% fun_args){
             list_args$label <- NULL
-          } else if(is.null(list_args$label)) list_args$label <- R.utils::capitalize("usuario")
+          } else if(is.null(list_args$label)) list_args$label <- R.utils::capitalize(x)
 
           if(!"width" %in% fun_args){
             list_args$width <- NULL
