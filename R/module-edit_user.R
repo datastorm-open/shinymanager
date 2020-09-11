@@ -85,7 +85,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
 
         } else {
           if(identical(x,"user")){
-            textInput(inputId = ns(x), label = R.utils::capitalize("usuario"), value = data_user[[x]], width = "100%")
+            textInput(inputId = ns(x), label = R.utils::capitalize("usuario (primera letra del nombre y el apellido en minúsculas y sin espacios)"), value = data_user[[x]], width = "100%")
           } else{
             textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
           }
