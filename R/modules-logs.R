@@ -177,9 +177,9 @@ logs <- function(input, output, session, sqlite_path, passphrase,
 
     billboarder() %>%
       bb_barchart(data = nb_log, rotated = TRUE) %>%
-      bb_bar_color_manual(list(Freq = "#4582ec")) %>%
+      bb_colors_manual(list(Freq = "#6e1b33")) %>%
       bb_y_grid(show = TRUE) %>%
-      bb_data(names = list(Freq = "Nb logged")) %>%
+      bb_data(names = list(Freq = lan()$get("Nb logged"))) %>%
       bb_legend(show = FALSE) %>%
       bb_x_axis(tick = list(width = 10000)) %>%
       bb_labs(
@@ -214,10 +214,10 @@ logs <- function(input, output, session, sqlite_path, passphrase,
 
     billboarder() %>%
       bb_linechart(data = nb_log_day, type = "area-step") %>%
-      bb_colors_manual(list(Freq = "#4582ec")) %>%
+      bb_colors_manual(list(Freq = "#6e1b33")) %>%
       bb_x_axis(type = "timeseries", tick = list(fit = FALSE), max = max(nb_log_day$day) + 1) %>%
       bb_y_grid(show = TRUE) %>%
-      bb_data(names = list(Freq = "Nb logged")) %>%
+      bb_data(names = list(Freq = lan()$get("Nb logged"))) %>%
       bb_legend(show = FALSE) %>%
       bb_labs(
         # title = "Number of connection by user",

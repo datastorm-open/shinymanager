@@ -248,6 +248,7 @@ pkgEnv$label_es = list(
   "Language" = "Lenguaje",
   "Password" = "Contraseña",
   "Edit user" = "Editar usuario",
+  "nombre" = "nombre",
   "start" = "empieza",
   "expire" = "expira",
   "admin" = "administrador",
@@ -261,7 +262,8 @@ pkgEnv$label_es = list(
   "Select" = "Seleccionar",
   "Logs" = "Registros",
   "All users" = "Todos los usuarios",
-  "menu" = "Menu"
+  "menu" = "Menu",
+  "Nb logged" = "Conexiones"
 )
 
 en <-  list(
