@@ -252,6 +252,7 @@ pkgEnv$label_es = list(
   "start" = "empieza",
   "expire" = "expira",
   "admin" = "administrador",
+  "correo" = "Correo",
   "user" = "usuario",
   "Edit" = "Editar",
   "Remove" = "Eliminar",
