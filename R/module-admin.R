@@ -167,7 +167,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   output$table_users <- renderDT({
     req(users())
     users <- users()
-    users <- users[,-which(names(users) %in% c("expire","start"))]
+    users <- users[,-which(names(users) %in% c("expire","start","idResponsable"))]
     users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     # users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
