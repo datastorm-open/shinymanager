@@ -87,7 +87,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 }
                 tags$div(style = style,
                          fluidRow(
-                           column(width = 3, offset = 5, uiOutput(ns("label_language"))),
+                           column(width = 4, offset = 4, uiOutput(ns("label_language"))),
                            column(4,
                                   tags$div(
                                     style = "text-align: left; font-size: 12px;",
