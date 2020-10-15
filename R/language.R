@@ -223,7 +223,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("en", "fr", "pt-BR"),
+    language_registered = c("English" = "en", "Fran\u00e7ais" = "fr", "Portuguese" = "pt-BR"),
     labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(

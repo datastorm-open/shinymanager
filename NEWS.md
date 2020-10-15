@@ -1,3 +1,7 @@
+# shinymanager 1.0.305
+
+* Add full language label using `choose_language`
+
 # shinymanager 1.0.300
 
 * Add ``autofocus`` on username input.

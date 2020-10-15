@@ -61,38 +61,47 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
             tags$div(
               class = "panel-body",
               {
+                
                 choices = lan$get_language()
+                lan_registered <- lan$get_language_registered()
                 if(is.logical(choose_language) && choose_language){
-                  choices = lan$get_language_registered()
+                  choices = unname(lan$get_language_registered())
                 } else if(is.character(choose_language)){
-                  choices = unique(c(intersect(choose_language, lan$get_language_registered()), lan$get_language()))
+                  choices = unique(c(intersect(choose_language, unname(lan$get_language_registered())), lan$get_language()))
                 }
                 
-                  selected = ifelse(lan$get_language() %in% choices, 
-                                    lan$get_language(),
-                                    choices[1])
-                  if(length(choices) == 1){
-                    style = "display:none"
-                  } else {
-                    style = "margin-bottom:-50px;"
+                names(choices) <- choices
+                for(i in 1:length(choices)){
+                  ind <- which(lan_registered %in% choices[i])
+                  if(length(ind) > 0){
+                    names(choices)[i] <- names(lan_registered)[ind]
                   }
-                  tags$div(style = style,
-                           fluidRow(
-                             column(width = 3, offset = 6, uiOutput(ns("label_language"))),
-                             column(3,
-                                    tags$div(
-                                      style = "text-align: left; font-size: 12px;",
-                                      selectInput(
-                                        inputId = ns("language"),
-                                        label = NULL,
-                                        choices = choices,
-                                        selected = selected,
-                                        width = "100%"
-                                      )
+                }
+                selected = ifelse(lan$get_language() %in% choices, 
+                                  lan$get_language(),
+                                  choices[1])
+                if(length(choices) == 1){
+                  style = "display:none"
+                } else {
+                  style = "margin-bottom:-50px;"
+                }
+                tags$div(style = style,
+                         fluidRow(
+                           column(width = 3, offset = 6, uiOutput(ns("label_language"))),
+                           column(3,
+                                  tags$div(
+                                    style = "text-align: left; font-size: 12px;",
+                                    selectInput(
+                                      inputId = ns("language"),
+                                      label = NULL,
+                                      choices = choices,
+                                      selected = selected,
+                                      width = "100%"
                                     )
-                             )
+                                  )
                            )
-                  )
+                         )
+                )
               },
               tags$div(
                 style = "text-align: center;",
