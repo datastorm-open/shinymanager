@@ -189,7 +189,7 @@ pkgEnv$label_ptbr = list(
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
 language <- R6::R6Class(
-  classname = "language",
+  classname = "shinymanager_language",
   public = list(
     initialize = function() {
       invisible(self)
@@ -332,18 +332,18 @@ set_labels <- function(language, ...) {
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
-  
+
   current_labels <- switch (language,
                    "en" = pkgEnv$label_en,
                    "fr" = pkgEnv$label_fr,
                    "pt-BR" = pkgEnv$label_ptbr
   )
-  
+
   udpate_labels <- modifyList(
     x = current_labels,
     val = lapply(args, I)
   )
-  
+
   if(language %in% "en"){
     pkgEnv$label_en <- udpate_labels
   } else if(language %in% "fr"){
@@ -363,7 +363,7 @@ get_labels <- function(language = "en") {
     warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
   }
-  
+
   switch (language,
           "en" = pkgEnv$label_en,
           "fr" = pkgEnv$label_fr,
