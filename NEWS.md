@@ -1,6 +1,7 @@
 # shinymanager 1.0.305
 
 * Add full language label using `choose_language`
+* (#66) fix ``quanteda`` bad interaction 
 
 # shinymanager 1.0.300
 
