@@ -3,7 +3,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom openssl sha256 rand_bytes
 .tokens <- R6::R6Class(
-  classname = "tokens",
+  classname = "shinymanager_tokens",
   public = list(
     initialize = function() {
       invisible(self)
