@@ -194,7 +194,7 @@ You can customize the module (css, image, language, ...).
 
 ### Flexdasboard
 
-It's possible to use ``shinymanager`` authentification on ``flexdashboard (but not admin console at moment). You can find information on [this discussion](https://github.com/datastorm-open/shinymanager/issues/51)
+It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but not admin console at moment). You can find information on [this discussion](https://github.com/datastorm-open/shinymanager/issues/51)
 
 ### Troubleshooting
 
