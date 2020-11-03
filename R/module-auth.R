@@ -146,8 +146,14 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @param input,output,session Standard Shiny server arguments.
 #' @param check_credentials Function with two arguments (\code{user},
 #'  the username provided by the user and \code{password}, his/her password).
-#'  Must return \code{TRUE} or \code{FALSE}.
-#'  To use additionnals arguments, set them with \code{purrr::partial} (see examples).
+#'  Must return a \code{list} with at least 4 slots :
+#'  \itemize{
+#'   \item \strong{result} : logical, result of authentication.
+#'   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
+#'   \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column.
+#'   \item \strong{user_info} : the line in \code{db} corresponding to the user.
+#'  }
+#'  
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
 #' @param lan An langauge object. Should not be used directly.
 #' 
@@ -165,7 +171,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @importFrom htmltools tags
 #' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI
 #' @importFrom stats setNames
-auth_server <- function(input, output, session, check_credentials, 
+auth_server <- function(input, output, session, 
+                        check_credentials, 
                         use_token = FALSE, lan = NULL) {
   
   ns <- session$ns
