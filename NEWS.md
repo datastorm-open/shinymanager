@@ -1,7 +1,8 @@
-# shinymanager 1.0.305
+# shinymanager 1.0.310
 
 * Add full language label using `choose_language`
 * (#66) fix ``quanteda`` bad interaction 
+* (#71) fix logs count for admin user
 
 # shinymanager 1.0.300
 
