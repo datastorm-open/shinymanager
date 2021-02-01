@@ -164,6 +164,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #' @param check_credentials Function passed to \code{\link{auth_server}}.
 #' @param timeout Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.
 #' @param inputs_list \code{list}. If database credentials, you can configure inputs for editing users information. See Details.
+#' @param max_users \code{integer}. If not NULL, maximum of users in sql credentials.
 #' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}
 #' @param session Shiny session.
 #'
@@ -192,7 +193,10 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #'  updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
-secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
+secure_server <- function(check_credentials,
+                          timeout = 15,
+                          inputs_list = NULL,
+                          max_users = NULL,
                           fileEncoding = "",
                           session = shiny::getDefaultReactiveDomain()) {
 
@@ -234,6 +238,7 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
       sqlite_path = path_sqlite,
       passphrase = .tok$get_passphrase(),
       inputs_list = inputs_list,
+      max_users = max_users,
       lan = lan
     )
     callModule(

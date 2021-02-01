@@ -14,10 +14,11 @@ check_credentials(db, passphrase = NULL)
 \value{
 Return a \code{function} with two arguments: \code{user} and \code{password}
 to be used in \code{\link{module-authentication}}. The authentication function returns
-a \code{list} with 3 slots :
+a \code{list} with 4 slots :
  \itemize{
   \item \strong{result} : logical, result of authentication.
   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
+  \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column.
   \item \strong{user_info} : the line in \code{db} corresponding to the user.
  }
 }

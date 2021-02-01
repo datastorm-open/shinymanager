@@ -50,8 +50,13 @@ or a vector of possibilities like \code{c("fr", "en")}. If enabled, \code{input$
 
 \item{check_credentials}{Function with two arguments (\code{user},
 the username provided by the user and \code{password}, his/her password).
-Must return \code{TRUE} or \code{FALSE}.
-To use additionnals arguments, set them with \code{purrr::partial} (see examples).}
+Must return a \code{list} with at least 4 slots :
+\itemize{
+ \item \strong{result} : logical, result of authentication.
+ \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
+ \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column.
+ \item \strong{user_info} : the line in \code{db} corresponding to the user.
+}}
 
 \item{use_token}{Add a token in the URL to check authentication. Should not be used directly.}
 }

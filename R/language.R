@@ -18,6 +18,8 @@ pkgEnv$label_en = list(
   "Go to application" = "Go to application",
   "Administrator mode" = "Administrator mode",
   "Add a user" = "Add a user",
+  "Too many users" = "Too many users",
+  "Maximum number of users : %s" = "Maximum number of users : %s",
   "Failed to update user" = "Failed to update user",
   "User successfully updated" = "User successfully updated",
   "Cancel" = "Cancel",
@@ -80,6 +82,8 @@ pkgEnv$label_fr = list(
   "Go to application" = "Aller \u00e0 l\'application",
   "Administrator mode" = "Mode administrateur",
   "Add a user" = "Ajouter un utilisateur",
+  "Too many users" = "Trops d'utilisateur",
+  "Maximum number of users : %s" = "Nombre maximum : %s",
   "Failed to update user" = "Echec de la mise \u00e0 jour de l\'utilisateur",
   "User successfully updated" = "Mise \u00e0 jour r\u00e9ussie",
   "Cancel" = "Annuler",
@@ -142,6 +146,8 @@ pkgEnv$label_ptbr = list(
   "Go to application" = "Ir \u00e0 aplica\u00e7\u00e3o",
   "Administrator mode" = "Modo administrador",
   "Add a user" = "Adicionar usu\u00e1rio",
+  "Too many users" = "Muitos usu\u00e1rios",
+  "Maximum number of users : %s" = "N\u00f9mero m\u00e1ximo : %s",
   "Failed to update user" = "Falha em atualizar usu\u00e1rio",
   "User successfully updated" = "Usu\u00e1rio atualizado com sucesso",
   "Cancel" = "Cancelas",
@@ -332,7 +338,7 @@ en <-  list(
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
 language <- R6::R6Class(
-  classname = "language",
+  classname = "shinymanager_language",
   public = list(
     initialize = function() {
       invisible(self)
@@ -367,7 +373,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("en", "fr", "pt-BR","es"),
+    language_registered = c("English" = "en", "Fran\u00e7ais" = "fr", "Portuguese" = "pt-BR", "Español" = "es"),
     labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(
