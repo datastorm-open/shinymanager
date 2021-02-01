@@ -101,7 +101,7 @@ admin_ui <- function(id, lan = NULL) {
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
 admin <- function(input, output, session, sqlite_path, passphrase, lan,
-                  inputs_list = NULL) {
+                  inputs_list = NULL, max_users = NULL) {
 
   ns <- session$ns
   jns <- function(x) {
@@ -381,20 +381,29 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   # launch modal to add a new user
   observeEvent(input$add_user, {
     users <- users()
-    showModal(modalDialog(
-      title = lan()$get("Add a user"),
-      edit_user_ui(ns("add_user"), users, NULL, inputs_list = inputs_list, lan = lan()),
-      tags$div(id = ns("placeholder-user-exist")),
-      footer = tagList(
-        modalButton(lan()$get("Cancel")),
-        actionButton(
-          inputId = ns("added_user"),
-          label = lan()$get("Confirm new user"),
-          class = "btn-primary",
-          `data-dismiss` = "modal"
+    if(!is.null(max_users) && is.numeric(max_users) && nrow(users) >= max_users){
+      showModal(
+        modalDialog(
+        title = lan()$get("Too many users"),
+        sprintf(lan()$get("Maximum number of users : %s"), max_users)
         )
       )
-    ))
+    } else {
+      showModal(modalDialog(
+        title = lan()$get("Add a user"),
+        edit_user_ui(ns("add_user"), users, NULL, inputs_list = inputs_list, lan = lan()),
+        tags$div(id = ns("placeholder-user-exist")),
+        footer = tagList(
+          modalButton(lan()$get("Cancel")),
+          actionButton(
+            inputId = ns("added_user"),
+            label = lan()$get("Confirm new user"),
+            class = "btn-primary",
+            `data-dismiss` = "modal"
+          )
+        )
+      ))
+    }
   })
 
   value_added <- callModule(module = edit_user, id = "add_user")

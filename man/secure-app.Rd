@@ -19,6 +19,7 @@ secure_server(
   check_credentials,
   timeout = 15,
   inputs_list = NULL,
+  max_users = NULL,
   fileEncoding = "",
   session = shiny::getDefaultReactiveDomain()
 )
@@ -45,6 +46,8 @@ It will affect the authentication panel and the admin page.}
 \item{timeout}{Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.}
 
 \item{inputs_list}{\code{list}. If database credentials, you can configure inputs for editing users information. See Details.}
+
+\item{max_users}{\code{integer}. If not NULL, maximum of users in sql credentials.}
 
 \item{fileEncoding}{character string: Encoding of logs downloaded file. See \code{\link{write.table}}}
 

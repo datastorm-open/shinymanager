@@ -1,3 +1,10 @@
+# shinymanager 1.0.310
+
+* Add full language label using `choose_language`
+* (#66) fix ``quanteda`` bad interaction 
+* (#71) fix logs count for admin user
+* (#26) : restrict number of users
+
 # shinymanager 1.0.300
 
 * Add ``autofocus`` on username input.

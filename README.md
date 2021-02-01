@@ -192,6 +192,10 @@ You can customize the module (css, image, language, ...).
 ?set_labels
 ````
 
+### Flexdasboard
+
+It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but not admin console at moment). You can find information on [this discussion](https://github.com/datastorm-open/shinymanager/issues/51). But it's not a really secure way because user can overpass the authentification using developper console... Prefer use  ``shiny`` application with ``secure_app`` function.
+
 ### Troubleshooting
 
 The application works fine without ``shinymanager`` but not you have trouble using ``shinymanager``. 

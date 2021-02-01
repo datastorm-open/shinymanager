@@ -61,38 +61,47 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
             tags$div(
               class = "panel-body",
               {
+                
                 choices = lan$get_language()
+                lan_registered <- lan$get_language_registered()
                 if(is.logical(choose_language) && choose_language){
-                  choices = lan$get_language_registered()
+                  choices = unname(lan$get_language_registered())
                 } else if(is.character(choose_language)){
-                  choices = unique(c(intersect(choose_language, lan$get_language_registered()), lan$get_language()))
+                  choices = unique(c(intersect(choose_language, unname(lan$get_language_registered())), lan$get_language()))
                 }
                 
-                  selected = ifelse(lan$get_language() %in% choices, 
-                                    lan$get_language(),
-                                    choices[1])
-                  if(length(choices) == 1){
-                    style = "display:none"
-                  } else {
-                    style = "margin-bottom:-50px;"
+                names(choices) <- choices
+                for(i in 1:length(choices)){
+                  ind <- which(lan_registered %in% choices[i])
+                  if(length(ind) > 0){
+                    names(choices)[i] <- names(lan_registered)[ind]
                   }
-                  tags$div(style = style,
-                           fluidRow(
-                             column(width = 3, offset = 6, uiOutput(ns("label_language"))),
-                             column(3,
-                                    tags$div(
-                                      style = "text-align: left; font-size: 12px;",
-                                      selectInput(
-                                        inputId = ns("language"),
-                                        label = NULL,
-                                        choices = choices,
-                                        selected = selected,
-                                        width = "100%"
-                                      )
+                }
+                selected = ifelse(lan$get_language() %in% choices, 
+                                  lan$get_language(),
+                                  choices[1])
+                if(length(choices) == 1){
+                  style = "display:none"
+                } else {
+                  style = "margin-bottom:-50px;"
+                }
+                tags$div(style = style,
+                         fluidRow(
+                           column(width = 4, offset = 4, uiOutput(ns("label_language"))),
+                           column(4,
+                                  tags$div(
+                                    style = "text-align: left; font-size: 12px;",
+                                    selectInput(
+                                      inputId = ns("language"),
+                                      label = NULL,
+                                      choices = choices,
+                                      selected = selected,
+                                      width = "100%"
                                     )
-                             )
+                                  )
                            )
-                  )
+                         )
+                )
               },
               tags$div(
                 style = "text-align: center;",
@@ -137,8 +146,14 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @param input,output,session Standard Shiny server arguments.
 #' @param check_credentials Function with two arguments (\code{user},
 #'  the username provided by the user and \code{password}, his/her password).
-#'  Must return \code{TRUE} or \code{FALSE}.
-#'  To use additionnals arguments, set them with \code{purrr::partial} (see examples).
+#'  Must return a \code{list} with at least 4 slots :
+#'  \itemize{
+#'   \item \strong{result} : logical, result of authentication.
+#'   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
+#'   \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column.
+#'   \item \strong{user_info} : the line in \code{db} corresponding to the user.
+#'  }
+#'  
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
 #' @param lan An langauge object. Should not be used directly.
 #' 
@@ -156,7 +171,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @importFrom htmltools tags
 #' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI
 #' @importFrom stats setNames
-auth_server <- function(input, output, session, check_credentials, 
+auth_server <- function(input, output, session, 
+                        check_credentials, 
                         use_token = FALSE, lan = NULL) {
   
   ns <- session$ns
