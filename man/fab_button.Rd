@@ -4,72 +4,81 @@
 \alias{fab_button}
 \title{Create a FAB button}
 \usage{
-fab_button(..., inputId = NULL, icon = NULL, status = "default")
+fab_button(
+  ...,
+  position = c("bottom-right", "top-right", "bottom-left", "top-left"),
+  animation = c("slidein", "slidein-spring", "fountain", "zoomin"),
+  toggle = c("hover", "click"),
+  inputId = NULL,
+  label = NULL
+)
 }
 \arguments{
-\item{...}{HTML tags 'a' or 'button' or \code{actionButton} (with \code{NULL} labels).}
+\item{...}{\code{actionButton}s to be used as floating buttons.}
+
+\item{position}{Position for the button.}
+
+\item{animation}{Animation when displaying floating buttons.}
+
+\item{toggle}{Display floating buttons when main button is clicked or hovered.}
 
 \item{inputId}{Id for the FAB button (act like an \code{actionButton}).}
 
-\item{icon}{An \code{icon} for the main button.}
-
-\item{status}{Bootstra^p status to apply to the main button.}
+\item{label}{Label for main button.}
 }
 \description{
-Create a fixed button in bottom right corner with additional button(s) in it
+Create a fixed button in page corner with additional button(s) in it
 }
 \examples{
-if (interactive()) {
-  library(shiny)
-  library(shinymanager)
+library(shiny)
+library(shinymanager)
 
-  ui <- fluidPage(
+ui <- fluidPage(
 
-    tags$h1("FAB button"),
+  tags$h1("FAB button"),
 
-    tags$p("FAB button:"),
-    verbatimTextOutput(outputId = "res_fab"),
+  tags$p("FAB button:"),
+  verbatimTextOutput(outputId = "res_fab"),
 
-    tags$p("Logout button:"),
-    verbatimTextOutput(outputId = "res_logout"),
+  tags$p("Logout button:"),
+  verbatimTextOutput(outputId = "res_logout"),
 
-    tags$p("Info button:"),
-    verbatimTextOutput(outputId = "res_info"),
+  tags$p("Info button:"),
+  verbatimTextOutput(outputId = "res_info"),
 
-    fab_button(
-      actionButton(
-        inputId = "logout",
-        label = NULL,
-        tooltip = "Logout",
-        icon = icon("sign-out")
-      ),
-      actionButton(
-        inputId = "info",
-        label = NULL,
-        tooltip = "Information",
-        icon = icon("info")
-      ),
-      inputId = "fab"
-    )
-
+  fab_button(
+    actionButton(
+      inputId = "logout",
+      label = "Logout",
+      icon = icon("sign-out")
+    ),
+    actionButton(
+      inputId = "info",
+      label = "Information",
+      icon = icon("info")
+    ),
+    inputId = "fab"
   )
 
-  server <- function(input, output, session) {
+)
 
-    output$res_fab <- renderPrint({
-      input$fab
-    })
+server <- function(input, output, session) {
 
-    output$res_logout <- renderPrint({
-      input$logout
-    })
+  output$res_fab <- renderPrint({
+    input$fab
+  })
 
-    output$res_info <- renderPrint({
-      input$info
-    })
+  output$res_logout <- renderPrint({
+    input$logout
+  })
 
-  }
+  output$res_info <- renderPrint({
+    input$info
+  })
 
+}
+
+if (interactive()) {
   shinyApp(ui, server)
 }
 }
