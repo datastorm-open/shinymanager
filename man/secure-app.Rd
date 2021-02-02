@@ -12,7 +12,8 @@ secure_app(
   enable_admin = FALSE,
   head_auth = NULL,
   theme = NULL,
-  language = "en"
+  language = "en",
+  fab_position = "bottom-right"
 )
 
 secure_server(
@@ -41,6 +42,8 @@ It will affect the authentication panel and the admin page.}
 
 \item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR".}
 
+\item{fab_position}{Position for the FAB button, see \code{\link{fab_button}} for options.}
+
 \item{check_credentials}{Function passed to \code{\link{auth_server}}.}
 
 \item{timeout}{Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.}
@@ -60,17 +63,17 @@ A \code{reactiveValues} containing informations about the user connected.
 Secure a Shiny application and manage authentication
 }
 \details{
-If database credentials, you can configure inputs with \code{inputs_list} for editing users information 
-from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable. 
+If database credentials, you can configure inputs with \code{inputs_list} for editing users information
+from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable.
 The others columns are rendering by defaut using a \code{textInput}. You can modify this using \code{inputs_list}.
 \code{inputs_list} must be a named list. Each name must be a column name, and then we must have the function
- shiny to call \code{fun} and the arguments \code{args} like this : 
+ shiny to call \code{fun} and the arguments \code{args} like this :
  \code{
  list(group = list(
-     fun = "selectInput", 
+     fun = "selectInput",
      args = list(
-         choices = c("all", "restricted"), 
-         multiple = TRUE, 
+         choices = c("all", "restricted"),
+         multiple = TRUE,
          selected = c("all", "restricted")
       )
      )
