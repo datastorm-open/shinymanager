@@ -19,6 +19,6 @@ sass(
       input = "inst/assets/fab-button/mfb.scss"
     )
   ),
-  output = "inst/assets/fab-button/fab-button2.min.css",
+  output = "inst/assets/fab-button/fab-button.min.css",
   options = sass_options(output_style = "compressed")
 )
