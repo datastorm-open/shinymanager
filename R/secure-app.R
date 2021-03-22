@@ -11,6 +11,7 @@
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
 #' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
+#' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
 #'  to know in which step user is : authentication, application, admin or password.
@@ -25,12 +26,18 @@
 #' @name secure-app
 #'
 #' @example examples/secure_app.R
-secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL, language = "en") {
+secure_app <- function(ui,
+                       ...,
+                       enable_admin = FALSE,
+                       head_auth = NULL,
+                       theme = NULL,
+                       language = "en",
+                       fab_position = "bottom-right") {
   if (!language %in% c("en", "fr", "pt-BR")) {
     warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
   }
-  
+
   lan <- use_language(language)
   ui <- force(ui)
   enable_admin <- force(enable_admin)
@@ -38,7 +45,7 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
   if (is.null(theme)) {
     theme <- "shinymanager/css/readable.min.css"
   }
-  
+
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
     token <- query$token
@@ -69,19 +76,18 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           header = tagList(
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
             fab_button(
+              position = fab_position,
               actionButton(
                 inputId = ".shinymanager_logout",
-                label = NULL,
-                tooltip = lan$get("Logout"),
+                label = lan$get("Logout"),
                 icon = icon("sign-out")
               ),
               actionButton(
                 inputId = ".shinymanager_app",
-                label = NULL,
-                tooltip = lan$get("Go to application"),
+                label = lan$get("Go to application"),
                 icon = icon("share")
               )
-            ), 
+            ),
             shinymanager_where("admin")
           ),
           tabPanel(
@@ -99,16 +105,15 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
       } else {
         if (isTRUE(enable_admin) && .tok$is_admin(token) && !is.null(.tok$get_sqlite_path())) {
           menu <- fab_button(
+            position = fab_position,
             actionButton(
               inputId = ".shinymanager_logout",
-              label = NULL,
-              tooltip = lan$get("Logout"),
+              label = lan$get("Logout"),
               icon = icon("sign-out")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
-              label = NULL,
-              tooltip = lan$get("Administrator mode"),
+              label = lan$get("Administrator mode"),
               icon = icon("cogs")
             )
           )
@@ -117,10 +122,10 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
           }
           menu <- fab_button(
+            position = fab_position,
             actionButton(
               inputId = ".shinymanager_logout",
-              label = NULL,
-              tooltip = lan$get("Logout"),
+              label = lan$get("Logout"),
               icon = icon("sign-out")
             )
           )
@@ -167,42 +172,42 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #' @param max_users \code{integer}. If not NULL, maximum of users in sql credentials.
 #' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}
 #' @param session Shiny session.
-#' 
-#' @details 
-#' 
-#' If database credentials, you can configure inputs with \code{inputs_list} for editing users information 
-#' from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable. 
+#'
+#' @details
+#'
+#' If database credentials, you can configure inputs with \code{inputs_list} for editing users information
+#' from the admin console. \code{start}, \code{expire}, \code{admin} and \code{password} are not configurable.
 #' The others columns are rendering by defaut using a \code{textInput}. You can modify this using \code{inputs_list}.
 #' \code{inputs_list} must be a named list. Each name must be a column name, and then we must have the function
-#'  shiny to call \code{fun} and the arguments \code{args} like this : 
+#'  shiny to call \code{fun} and the arguments \code{args} like this :
 #'  \code{
 #'  list(group = list(
-#'      fun = "selectInput", 
+#'      fun = "selectInput",
 #'      args = list(
-#'          choices = c("all", "restricted"), 
-#'          multiple = TRUE, 
+#'          choices = c("all", "restricted"),
+#'          multiple = TRUE,
 #'          selected = c("all", "restricted")
 #'       )
 #'      )
 #' )
 #' }
-#' 
+#'
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString
 #'  updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
-secure_server <- function(check_credentials, 
-                          timeout = 15, 
+secure_server <- function(check_credentials,
+                          timeout = 15,
                           inputs_list = NULL,
                           max_users = NULL,
                           fileEncoding = "",
                           session = shiny::getDefaultReactiveDomain()) {
-  
+
   isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
-  
+
   lan <- reactiveVal(use_language())
   observe({
     lang <- getLanguage(session = session)
@@ -210,34 +215,34 @@ secure_server <- function(check_credentials,
       lan(use_language(lang))
     }
   })
-  
+
   callModule(
     module = auth_server,
     id = "auth",
     check_credentials = check_credentials,
-    use_token = TRUE, 
+    use_token = TRUE,
     lan = lan
   )
-  
+
   callModule(
     module = pwd_server,
     id = "password",
     user = reactiveValues(user = .tok$get(token_start)$user),
     update_pwd = update_pwd,
-    use_token = TRUE, 
+    use_token = TRUE,
     lan = lan
   )
-  
+
   .tok$set_timeout(timeout)
-  
+
   path_sqlite <- .tok$get_sqlite_path()
   if (!is.null(path_sqlite)) {
     callModule(
       module = admin,
       id = "admin",
       sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase(), 
-      inputs_list = inputs_list, 
+      passphrase = .tok$get_passphrase(),
+      inputs_list = inputs_list,
       max_users = max_users,
       lan = lan
     )
@@ -245,14 +250,14 @@ secure_server <- function(check_credentials,
       module = logs,
       id = "logs",
       sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase(), 
-      fileEncoding = fileEncoding, 
+      passphrase = .tok$get_passphrase(),
+      fileEncoding = fileEncoding,
       lan = lan
     )
   }
-  
+
   user_info_rv <- reactiveValues()
-  
+
   observe({
     token <- getToken(session = session)
     if (!is.null(token)) {
@@ -272,21 +277,21 @@ secure_server <- function(check_credentials,
       }
     }
   })
-  
+
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s&admin=true&language=%s", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-  
+
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=%s&language=%s", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-  
+
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
     logout_logs(token)
@@ -294,11 +299,11 @@ secure_server <- function(check_credentials,
     clearQueryString(session = session)
     session$reload()
   }, ignoreInit = TRUE)
-  
-  
-  
+
+
+
   if (timeout > 0) {
-    
+
     observeEvent(session$input$.shinymanager_timeout, {
       token <- getToken(session = session)
       if (!is.null(token)) {
@@ -310,7 +315,7 @@ secure_server <- function(check_credentials,
         }
       }
     })
-    
+
     observe({
       invalidateLater(30000, session)
       token <- getToken(session = session)
@@ -323,9 +328,9 @@ secure_server <- function(check_credentials,
         }
       }
     })
-    
+
   }
-  
+
   return(user_info_rv)
 }
 
