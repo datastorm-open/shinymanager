@@ -35,16 +35,24 @@ admin_ui <- function(id, lan = NULL) {
         ),
         tags$br(), tags$br(), tags$br(),
         DTOutput(outputId = ns("table_users")),
-        
+
         tags$br(),
 
         actionButton(
-          inputId = ns("remove_selected_allusers"),
+          inputId = ns("select_all_users"),
           # label = lan$get("Select all shown users"),
           label = "",
           class = "btn-secondary pull-right",
           style = "margin-left: 5px",
           icon = icon("check-square")
+        ),
+
+        actionButton(
+          inputId = ns("edit_selected_users"),
+          label = lan$get("Edit selected users"),
+          class = "btn-primary pull-right disabled",
+          style = "margin-left: 5px",
+          icon = icon("pencil-square-o")
         ),
 
         actionButton(
@@ -80,14 +88,14 @@ admin_ui <- function(id, lan = NULL) {
         ),
 
         tags$br(),tags$br(), tags$br(), tags$hr(),
-        
+
         downloadButton(
           outputId = ns("download_sql_database"),
           label = lan$get("Download SQL database"),
           class = "btn-primary center-block",
           icon = icon("download")
         ),
-        
+
         tags$br(),tags$br()
 
       )
@@ -107,14 +115,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   jns <- function(x) {
     paste0("#", ns(x))
   }
-  
+
   token_start <- isolate(getToken(session = session))
 
   update_read_db <- reactiveValues(x = NULL)
 
   # read users table from database
   users <- reactiveVal(NULL)
-  
+
   observe({
     unbindDT(ns("table_users"))
     update_read_db$x
@@ -136,10 +144,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   observe({
     if(!is.null(users_update())) users(users_update())
   })
-  
+
   # read password management table from database
   pwds <- reactiveVal(NULL)
-  
+
   observe({
     unbindDT(ns("table_pwds"))
     update_read_db$x
@@ -170,7 +178,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
-    users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
+    users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user)
     datatable(
       data = users,
       colnames = make_title(names(users)),
@@ -195,12 +203,17 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   }, server = FALSE)
 
 
-  observeEvent(input$remove_selected_allusers, {
+  observeEvent(input$select_all_users, {
     input_names <- names(input)
-    remove_mult_users_input <- input_names[grep("^remove_mult_users", input_names)]
-    if(length(remove_mult_users_input) > 0){
-      ctrl <- lapply(remove_mult_users_input, function(x){
+    select_mult_users_names <- grep("^select_mult_users", input_names, value = TRUE)
+    select_mult_users_value <- unlist(lapply(select_mult_users_names, function(x) input[[x]]))
+    if (!all(select_mult_users_value)) {
+      ctrl <- lapply(select_mult_users_names, function(x) {
         updateCheckboxInput(session, x, value = TRUE)
+      })
+    } else {
+      ctrl <- lapply(select_mult_users_names, function(x){
+        updateCheckboxInput(session, x, value = FALSE)
       })
     }
   })
@@ -244,13 +257,15 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   })
 
   # Remove all selected users
-  r_selected_users <- callModule(module = input_checkbox, id = "remove_mult_users")
+  r_selected_users <- callModule(module = input_checkbox, id = "select_mult_users")
   observeEvent(r_selected_users(), {
     selected_users <- r_selected_users()
     if (length(selected_users) > 0) {
       toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "enable")
+      toggleBtn(session = session, inputId = ns("edit_selected_users"), type = "enable")
     } else {
       toggleBtn(session = session, inputId = ns("remove_selected_users"), type = "disable")
+      toggleBtn(session = session, inputId = ns("edit_selected_users"), type = "disable")
     }
   })
 
@@ -300,7 +315,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
 
 
 
-  # launch modal to edit informations about a user
+  # EDIT USER: launch modal to edit informations about a user ----
+
   observeEvent(input$edit_user, {
     users <- users()
     showModal(modalDialog(
@@ -366,7 +382,49 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   })
 
 
-  # launch modal to add a new user
+
+
+  # EDIT MULTIPLE USERS: Launch modal to edit multiple users ----
+  observeEvent(input$edit_selected_users, {
+    users <- users()
+    showModal(modalDialog(
+      title = "Edit user",
+      edit_user_ui(ns("edit_mult_user"), credentials = users, username = r_selected_users(), inputs_list = inputs_list, lan = lan()),
+      footer = tagList(
+        modalButton(lan()$get("Cancel")),
+        actionButton(
+          inputId = ns("edited_mult_user"),
+          label = lan()$get("Confirm change"),
+          class = "btn-primary",
+          `data-dismiss` = "modal"
+        )
+      )
+    ))
+  })
+
+  value_mult_edited <- callModule(module = edit_user, id = "edit_mult_user")
+
+  observeEvent(input$edited_mult_user, {
+    users <- users()
+    newval <- value_mult_edited$user
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_edit <- try({
+      for (user in r_selected_users()) {
+        users <- update_user(users, newval, user)
+      }
+      write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+    }, silent = FALSE)
+    if (inherits(res_edit, "try-error")) {
+      showNotification(ui = lan()$get("Fail to update user"), type = "error")
+    } else {
+      showNotification(ui = lan()$get("User successfully updated"), type = "message")
+      update_read_db$x <- Sys.time()
+    }
+  })
+
+
+  # ADD NEW USER: launch modal to add a new user ----
   observeEvent(input$add_user, {
     users <- users()
     if(!is.null(max_users) && is.numeric(max_users) && nrow(users) >= max_users){

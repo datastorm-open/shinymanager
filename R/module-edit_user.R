@@ -6,89 +6,126 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
 
   ns <- NS(id)
 
-  if(is.null(lan)){
+  if (is.null(lan)) {
     lan <- use_language()
   }
 
-  if (!is.null(username) && username %in% credentials$user) {
-    data_user <- credentials[credentials$user == username, ]
+  if (!is.null(username) && all(username %in% credentials$user)) {
+    data_user <- credentials[credentials$user %in% username, ]
+    if (length(username) > 1) {
+      data_user$user <- NULL
+    }
   } else {
-    data_user <- list()
+    data_user <- credentials[0, ]
   }
 
   input_list <- lapply(
-    X = names(credentials),
+    X = names(data_user),
     FUN = function(x) {
-      if (x %in% "start") {
-        value <- data_user[[x]]
-        if (is.null(value)) {
+      if (identical(x, "start")) {
+        value <- unique(data_user[[x]])
+        if (is.null(value) || length(value) > 1) {
           # value <- Sys.Date()
           value <- NA
         }
         dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
-      } else if (x %in% "expire") {
-        value <- data_user[[x]]
-        if (is.null(value)) {
+      } else if (identical(x, "expire")) {
+        value <- unique(data_user[[x]])
+        if (is.null(value) || length(value) > 1) {
           # value <- Sys.Date() + 60
           value <- NA
         }
         dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+      } else if (identical(x, "user") && length(username) > 1) {
+        NULL # MULTIPLE USERS: dont modify user name
       } else if (identical(x, "password")) {
         NULL
       } else if (identical(x, "is_hashed_password")) {
         NULL
       } else if (identical(x, "admin")) {
-        checkboxInput(inputId = ns(x), label = R.utils::capitalize(x), value = isTRUE(as.logical(data_user[[x]])))
+        if (length(username) > 1) {
+          NULL # MULTIPLE USERS: dont allow to set all users admin
+        } else {
+          checkboxInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(x),
+            value = isTRUE(all(as.logical(data_user[[x]])))
+          )
+        }
       } else {
-        if(!is.null(inputs_list) && x %in% names(inputs_list) && 
-           all(c("fun", "args") %in% names(inputs_list[[x]])) && exists(inputs_list[[x]]$fun)){
-          
+        if (!is.null(inputs_list) && x %in% names(inputs_list) &&
+           all(c("fun", "args") %in% names(inputs_list[[x]])) && exists(inputs_list[[x]]$fun)) {
+
           fun <- inputs_list[[x]]$fun
           fun_args <- names(formals(fun))
           list_args <- inputs_list[[x]]$args
-          
+
           list_args$inputId <- ns(x)
-          
-          if(!"value" %in% fun_args){
+
+          if (!"value" %in% fun_args) {
             list_args$value <- NULL
           } else {
-            if(!is.null(username)) list_args$value <- data_user[[x]]
+            if (!is.null(username)) {
+              list_args$value <- data_user[[x]]
+            }
           }
-          if(!"selected" %in% fun_args){
+          if (!"selected" %in% fun_args) {
             list_args$selected <- NULL
           } else {
             if(!is.null(username)){
-              if(list_args$multiple && is.character(data_user[[x]])){
+              if (list_args$multiple && is.character(data_user[[x]])) {
                 list_args$selected <- unlist(strsplit(data_user[[x]], ";"))
               } else {
                 list_args$selected <- data_user[[x]]
               }
             }
           }
-          if(!"label" %in% fun_args){
+          if (!"label" %in% fun_args) {
             list_args$label <- NULL
-          } else if(is.null(list_args$label)) list_args$label <- R.utils::capitalize(x)
-          
-          if(!"width" %in% fun_args){
+          } else if (is.null(list_args$label)) {
+            list_args$label <- R.utils::capitalize(x)
+          }
+
+          if (!"width" %in% fun_args) {
             list_args$width <- NULL
-          } else if(is.null(list_args$width)) list_args$width <- "100%"
-          
+          } else if (is.null(list_args$width)) {
+            list_args$width <- "100%"
+          }
+
           tryCatch(do.call(fun, list_args), error = function(e){
-            warning("Error building custom input for column '", x, 
+            warning("Error building custom input for column '", x,
                     "'. (fun : '", fun, "'). Verify 'inputs_list' argument.", call. = FALSE)
             textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
           })
-          
+
         } else {
-          textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
+          value <- unique(data_user[[x]])
+          if (length(value) > 1) {
+            value <- ""
+          }
+          textInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(x),
+            value = value,
+            width = "100%"
+          )
         }
       }
     }
   )
 
   if(is.null(username)){
-    input_list[[length(input_list) + 1]] <- textInput(inputId = ns("password"), label = "Password", value = generate_pwd(), width = "100%")
-    input_list[[length(input_list) + 1]] <- checkboxInput(inputId = ns("must_change"), label = lan$get("Ask to change password"), value = TRUE)
+    input_list[[length(input_list) + 1]] <- textInput(
+      inputId = ns("password"),
+      label = "Password",
+      value = generate_pwd(),
+      width = "100%"
+    )
+    input_list[[length(input_list) + 1]] <- checkboxInput(
+      inputId = ns("must_change"),
+      label = lan$get("Ask to change password"),
+      value = TRUE
+    )
   }
   tagList(
     input_list
@@ -115,12 +152,16 @@ edit_user <- function(input, output, session) {
 
 
 #' @importFrom utils modifyList
+#' @importFrom shiny isTruthy
 update_user <- function(df, value, username) {
   value <- value[intersect(names(value), names(df))]
-  users_order <- factor(df$user, levels=unique(df$user))
+  users_order <- factor(df$user, levels = unique(df$user))
   df <- split(df, f = users_order)
   user <- as.list(df[[username]])
-  value <- lapply(value, function(x) ifelse(length(x) == 0 | (length(x) == 1 && is.na(x)), NA_character_, paste(x, collapse = ";")))
+  value <- lapply(value, function(x) {
+    ifelse(length(x) == 0 | (length(x) == 1 && is.na(x)), NA_character_, paste(x, collapse = ";"))
+  })
+  value <- value[vapply(value, isTruthy, logical(1))]
   new <-  modifyList(x = user, val = value)
   df[[username]] <- as.data.frame(new, stringsAsFactors = FALSE)
   do.call(rbind, c(df, list(make.row.names = FALSE)))
