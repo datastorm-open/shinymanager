@@ -185,8 +185,12 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
+      style = "bootstrap",
       # extensions = 'FixedColumns', # bug using FixedColumns on checkbox + update table...
       options = list(
+        scrollY = if (nrow(users) > 10) "500px",
+        lengthChange = FALSE,
+        paging = FALSE,
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
@@ -231,6 +235,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
+      style = "bootstrap",
       options = list(
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
