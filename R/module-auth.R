@@ -240,7 +240,7 @@ auth_server <- function(input, output, session,
       if (isTRUE(use_token)) {
         # add_token(token, as.list(res_auth$user_info))
         .tok$add(token, as.list(res_auth$user_info))
-        updateQueryString(queryString = paste0("?token=", token, "&language=", lan()$get_language()), session = session)
+        addAuthToQuery(session, token, lan()$get_language())
         session$reload()
       }
       

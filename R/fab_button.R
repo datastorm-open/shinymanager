@@ -1,95 +1,112 @@
 
 #' @title Create a FAB button
 #'
-#' @description Create a fixed button in bottom right corner with additional button(s) in it
+#' @description Create a fixed button in page corner with additional button(s) in it
 #'
-#' @param ... HTML tags 'a' or 'button' or \code{actionButton} (with \code{NULL} labels).
+#' @param ... \code{actionButton}s to be used as floating buttons.
+#' @param position Position for the button.
+#' @param animation Animation when displaying floating buttons.
+#' @param toggle Display floating buttons when main button is clicked or hovered.
 #' @param inputId Id for the FAB button (act like an \code{actionButton}).
-#' @param icon An \code{icon} for the main button.
-#' @param status Bootstra^p status to apply to the main button.
+#' @param label Label for main button.
 #'
 #' @export
 #'
 #' @importFrom shiny icon
-#' @importFrom htmltools tagList singleton tags
+#' @importFrom htmltools tagList tags tagAppendAttributes
 #'
-#' @examples
-#' if (interactive()) {
-#'   library(shiny)
-#'   library(shinymanager)
-#'
-#'   ui <- fluidPage(
-#'
-#'     tags$h1("FAB button"),
-#'
-#'     tags$p("FAB button:"),
-#'     verbatimTextOutput(outputId = "res_fab"),
-#'
-#'     tags$p("Logout button:"),
-#'     verbatimTextOutput(outputId = "res_logout"),
-#'
-#'     tags$p("Info button:"),
-#'     verbatimTextOutput(outputId = "res_info"),
-#'
-#'     fab_button(
-#'       actionButton(
-#'         inputId = "logout",
-#'         label = NULL,
-#'         tooltip = "Logout",
-#'         icon = icon("sign-out")
-#'       ),
-#'       actionButton(
-#'         inputId = "info",
-#'         label = NULL,
-#'         tooltip = "Information",
-#'         icon = icon("info")
-#'       ),
-#'       inputId = "fab"
-#'     )
-#'
-#'   )
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     output$res_fab <- renderPrint({
-#'       input$fab
-#'     })
-#'
-#'     output$res_logout <- renderPrint({
-#'       input$logout
-#'     })
-#'
-#'     output$res_info <- renderPrint({
-#'       input$info
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#' }
-fab_button <- function(..., inputId = NULL, icon = NULL, status = "default") {
-  if (is.null(icon))
-    icon <- icon("plus fa-lg")
+#' @example examples/fab_button.R
+fab_button <- function(...,
+                       position = c("bottom-right", "top-right", "bottom-left", "top-left"),
+                       animation = c("slidein", "slidein-spring", "fountain", "zoomin"),
+                       toggle = c("hover", "click"),
+                       inputId = NULL,
+                       label = NULL) {
   args <- list(...)
-  for (i in seq_along(args)) {
-    if (!is.null(args[[i]]$attribs$class)) {
-      args[[i]]$attribs$class <- paste(args[[i]]$attribs$class, "buttons-fab")
-    } else {
-      args[[i]]$attribs$class <- "buttons-fab"
-    }
+  if (!is.null(args$status)) {
+    warning("fab_button: status argument is deprecated.", call. = FALSE)
+    args$status <- NULL
   }
+  if (!is.null(args$icon)) {
+    warning("fab_button: icon argument is deprecated.", call. = FALSE)
+    args$icon <- NULL
+  }
+  toggle <- match.arg(toggle)
+  animation <- match.arg(animation)
+  position <- match.arg(position)
+  position <- switch(
+    position,
+    "bottom-right" = "br",
+    "top-right" = "tr",
+    "bottom-left" = "bl",
+    "top-left" = "tl"
+  )
   tagList(
-    htmltools::singleton(
-      tags$head(
-        tags$link(rel = "stylesheet", type = "text/css", href = "shinymanager/fab-button.css")
+    tags$ul(
+      class = paste("mfb-component", position, sep = "--"),
+      class = paste("mfb", animation, sep = "-"),
+      `data-mfb-toggle` = toggle,
+      tags$li(
+        class = "mfb-component__wrap",
+        tags$a(
+          id = inputId,
+          `data-mfb-label` = label,
+          class = "mfb-component__button--main action-button",
+          icon("plus", class = "mfb-component__main-icon--resting"),
+          icon("close", class = "mfb-component__main-icon--active")
+        ),
+        tags$ul(
+          class = "mfb-component__list",
+          lapply(
+            X = args,
+            FUN = function(x) {
+              if (inherits(x, "list")) {
+                id <- x$inputId
+                label <- x$label
+                tagIcon <- x$icon
+              } else if (inherits(x, "shiny.tag")) {
+                id <- x$attribs$id
+                label <- x$children[[1]][[2]]
+                tagIcon <- x$children[[1]][[1]]
+              } else {
+                stop("Arguments in `...` must be lists or actionButtons")
+              }
+              if (!is.null(tagIcon) && inherits(tagIcon, "shiny.tag")) {
+                tagIcon <- htmltools::tagAppendAttributes(
+                  tagIcon,
+                  class = "mfb-component__child-icon"
+                )
+              }
+              tags$li(
+                tags$a(
+                  `data-mfb-label` = label,
+                  id = id,
+                  class = "mfb-component__button--child action-button",
+                  tagIcon
+                )
+              )
+            }
+          )
+        )
       )
     ),
-    tags$nav(
-      class = "container-fab", args,
-      tags$button(
-        class = paste0("btn btn-", status, " buttons-fab btn-fab-main action-button"),
-        id = inputId, icon
-      )
-    )
+    html_dependency_fab()
   )
 }
+
+
+#' @importFrom htmltools htmlDependency
+html_dependency_fab <- function() {
+  htmlDependency(
+    name = "fab-button",
+    version = "0.3.7",
+    src = c(
+      href = "shinymanager/fab-button",
+      file = "assets/fab-button"
+    ),
+    package = "shinymanager",
+    stylesheet = "fab-button.min.css",
+    all_files = FALSE
+  )
+}
+
