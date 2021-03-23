@@ -171,6 +171,8 @@ secure_app <- function(ui,
 #' @param inputs_list \code{list}. If database credentials, you can configure inputs for editing users information. See Details.
 #' @param max_users \code{integer}. If not NULL, maximum of users in sql credentials.
 #' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}
+#' @param keep_token Logical, keep the token used to authenticate in the URL, it allow to refresh the
+#'  application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.
 #' @param session Shiny session.
 #'
 #' @details
@@ -203,10 +205,16 @@ secure_server <- function(check_credentials,
                           inputs_list = NULL,
                           max_users = NULL,
                           fileEncoding = "",
+                          keep_token = FALSE,
                           session = shiny::getDefaultReactiveDomain()) {
 
-  isolate(resetQueryString(session = session))
   token_start <- isolate(getToken(session = session))
+  if (isTRUE(keep_token)) {
+    .tok$reset_count(token_start)
+  } else {
+    isolate(resetQueryString(session = session))
+  }
+
 
   lan <- reactiveVal(use_language())
   observe({

@@ -22,6 +22,7 @@ secure_server(
   inputs_list = NULL,
   max_users = NULL,
   fileEncoding = "",
+  keep_token = FALSE,
   session = shiny::getDefaultReactiveDomain()
 )
 }
@@ -53,6 +54,9 @@ It will affect the authentication panel and the admin page.}
 \item{max_users}{\code{integer}. If not NULL, maximum of users in sql credentials.}
 
 \item{fileEncoding}{character string: Encoding of logs downloaded file. See \code{\link{write.table}}}
+
+\item{keep_token}{Logical, keep the token used to authenticate in the URL, it allow to refresh the
+application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.}
 
 \item{session}{Shiny session.}
 }
