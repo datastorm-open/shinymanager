@@ -255,7 +255,7 @@ pkgEnv$label_es = list(
   "New password:" = "Nueva contrase\u00f1a:",
   "Confirm password:" = "Confirme contrase\u00f1a:",
   "Update new password" = "Actualizar nueva contrase\u00f1a",
-  "Password successfully updated! Please re-login" = "¡Cambio de contrase\u00f1a exitoso! Por favor, vuelva a iniciar sesi\u00f3n",
+  "Password successfully updated! Please re-login" = "\u00a1Cambio de contrase\u00f1a exitoso! Por favor, vuelva a iniciar sesi\u00f3n",
   "The two passwords are different" = "Las dos contrase\u00f1as son diferentes",
   "Failed to update password" = "Fall\u00f3 la actualizaci\u00f3n de la contrase\u00f1a",
   "Logout" = "Cerrar sesi\u00f3n",
@@ -269,22 +269,22 @@ pkgEnv$label_es = list(
   "Cancel" = "Cancelar",
   "Confirm new user" = "Confirmar nuevo usuario",
   "Confirm change" = "Confirmar cambio",
-  "Are you sure to remove user(s): %s from the database ?" = "¿Est\u00e1 seguro de remover el(los) usuario(s): %s de la base de datos?",
+  "Are you sure to remove user(s): %s from the database ?" = "\u00bfEst\u00e1 seguro de remover el(los) usuario(s): %s de la base de datos?",
   "Delete user(s)" = "Borrar usuario(s)",
   "Delete user" = "Borrar usuario",
   "Edit user" = "Editar usuario",
-  "User already exist!" = "¡Usuario ya existente!",
+  "User already exist!" = "\u00a1Usuario ya existente!",
   "Dismiss" = "Descartar",
-  "New user %s succesfully created!" = "¡Nuevo usuario %s creado satisfactoriamente!",
+  "New user %s succesfully created!" = "\u00a1Nuevo usuario %s creado satisfactoriamente!",
   "Ask to change password" = "Pedir que cambie la contrase\u00f1a",
   "Confirm" = "Confirmar",
-  "Ask %s to change password on next connection?" = "¿Desea pedir a %s que cambie la contrase\u00f1a en su siguiente connexi\u00f3n?",
-  "Change saved!" = "¡Cambio guardado!",
+  "Ask %s to change password on next connection?" = "\u00bfDesea pedir a %s que cambie la contrase\u00f1a en su siguiente connexi\u00f3n?",
+  "Change saved!" = "\u00a1Cambio guardado!",
   "Failed to update the database" = "Fall\u00f3 la actualizaci\u00f3n de la base de datos",
   "Password does not respect safety requirements" = "La contrase\u00f1a no contiene los requerimientos de seguridad",
-  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "La contrase\u00f1a debe contener al menos un n\u00famero, una mínuscula, una may\u00fascula y debe ser de almenos seis caracteres.",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "La contrase\u00f1a debe contener al menos un n\u00famero, una m\u00ednuscula, una may\u00fascula y debe ser de almenos seis caracteres.",
   "Number of connections per user" = "N\u00famero de conexiones por usuario",
-  "Number of connections per day" = "N\u00famero de conexiones por día",
+  "Number of connections per day" = "N\u00famero de conexiones por d\u00eda",
   "Total number of connection" = "Total de conexiones",
   "You can\'t remove yourself!" = "No puede eliminarse usted mismo",
   "User:" = "Usuario:",
@@ -300,10 +300,10 @@ pkgEnv$label_es = list(
   "Passwords" = "Contrase\u00f1as",
   "Download logs database" = "Descargar la base de datos de registros",
   "Download SQL database" = "Descargar la base de datos SQL",
-  "Reset password for %s?" = "¿Reiniciar contrase\u00f1a para %s?",
+  "Reset password for %s?" = "\u00bfReiniciar contrase\u00f1a para %s?",
   "Reset password" = "Reiniciar",
   "Temporary password:" = "Contrase\u00f1a temporal:",
-  "Password succesfully reset!" = "¡Contrase\u00f1a reiniciada satisfactoriamente!",
+  "Password succesfully reset!" = "\u00a1Contrase\u00f1a reiniciada satisfactoriamente!",
   "You are not authorized for this application" = "No est\u00e1s autorizado para esta aplicaci\u00f3n",
   "Language" = "Lenguaje",
   "Yes" = "S\u00ed",
@@ -324,6 +324,9 @@ pkgEnv$label_es = list(
   "All users" = "Todos los usuarios",
   "Nb logged" = "Conexiones"
 )
+
+v_language_registered = c("en", "fr", "pt-BR", "es")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol")
 
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
@@ -368,8 +371,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("English" = "en", "Fran\u00e7ais" = "fr", 
-                            "Portuguese" = "pt-BR", "Espa\u00f1ol" = "es"),
+    language_registered = v_language_registered,
     labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(
