@@ -1,10 +1,16 @@
+# shinymanager 1.0.320
+
+* (#84) : new FAB button with a position argument
+* (#81) : keep request query string. Thanks @erikor 
+* (#24) : secure_server() : added keep_token arg 
+* add spanish. Thanks @EAMI91 
+
 # shinymanager 1.0.310
 
 * Add full language label using `choose_language`
 * (#66) fix ``quanteda`` bad interaction 
 * (#71) fix logs count for admin user
 * (#26) : restrict number of users
-* (#84) : new FAB button with a position argument
 
 # shinymanager 1.0.300
 

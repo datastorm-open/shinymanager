@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR")) {
-    warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es", call. = FALSE)
     language <- "en"
   }
 
@@ -97,7 +97,7 @@ secure_app <- function(ui,
             shinymanager_language(lan$get_language())
           ),
           tabPanel(
-            title = "Logs",
+            title = lan$get("Logs"),
             logs_ui("logs", lan),
             shinymanager_language(lan$get_language())
           )
