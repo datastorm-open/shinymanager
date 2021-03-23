@@ -71,7 +71,15 @@ resetQueryString <- function(session = getDefaultReactiveDomain()) {
   }
 }
 
-
+#  Add token to query string but leave rest of query (if any) in tact
+#' @importFrom shiny updateQueryString getQueryString getDefaultReactiveDomain
+addAuthToQuery <- function(session = getDefaultReactiveDomain(), token, language ) {
+  query <- getQueryString(session = session)
+  query$token <- token
+  query$language <- language
+  query <- paste(names(query), query, sep = "=", collapse="&")
+  updateQueryString(queryString = paste0("?", query), mode = "replace", session = session)
+}
 
 #' @importFrom htmltools tags doRenderTags
 #' @importFrom shiny icon

@@ -19,7 +19,7 @@ admin_ui <- function(id, lan = NULL) {
     )),
     fluidRow(
       column(
-        width = 8, offset = 2,
+        width = 10, offset = 1,
         # tags$h2(lan$get("Administrator mode")),
         # tags$br(), tags$br(),
 
@@ -35,7 +35,7 @@ admin_ui <- function(id, lan = NULL) {
         ),
         tags$br(), tags$br(), tags$br(),
         DTOutput(outputId = ns("table_users")),
-
+        
         tags$br(),
 
         actionButton(
@@ -101,7 +101,7 @@ admin_ui <- function(id, lan = NULL) {
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
 admin <- function(input, output, session, sqlite_path, passphrase, lan,
-                  inputs_list = NULL) {
+                  inputs_list = NULL, max_users = NULL) {
 
   ns <- session$ns
   jns <- function(x) {
@@ -162,11 +162,12 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     if(!is.null(pwds_update())) pwds(pwds_update())
   })
 
+
   # displaying users table
   output$table_users <- renderDT({
     req(users())
     users <- users()
-    users <- users[, setdiff(names(users), "password"), drop = FALSE]
+    users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("remove_mult_users"), users$user)
@@ -176,6 +177,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
+      # extensions = 'FixedColumns', # bug using FixedColumns on checkbox + update table...
       options = list(
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
@@ -187,6 +189,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         columnDefs = list(
           list(width = "50px", targets = (ncol(users)-3):(ncol(users)-1))
         )
+        # fixedColumns = list(leftColumns = 1)
       )
     )
   }, server = FALSE)
@@ -366,20 +369,29 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   # launch modal to add a new user
   observeEvent(input$add_user, {
     users <- users()
-    showModal(modalDialog(
-      title = lan()$get("Add a user"),
-      edit_user_ui(ns("add_user"), users, NULL, inputs_list = inputs_list, lan = lan()),
-      tags$div(id = ns("placeholder-user-exist")),
-      footer = tagList(
-        modalButton(lan()$get("Cancel")),
-        actionButton(
-          inputId = ns("added_user"),
-          label = lan()$get("Confirm new user"),
-          class = "btn-primary",
-          `data-dismiss` = "modal"
+    if(!is.null(max_users) && is.numeric(max_users) && nrow(users) >= max_users){
+      showModal(
+        modalDialog(
+        title = lan()$get("Too many users"),
+        sprintf(lan()$get("Maximum number of users : %s"), max_users)
         )
       )
-    ))
+    } else {
+      showModal(modalDialog(
+        title = lan()$get("Add a user"),
+        edit_user_ui(ns("add_user"), users, NULL, inputs_list = inputs_list, lan = lan()),
+        tags$div(id = ns("placeholder-user-exist")),
+        footer = tagList(
+          modalButton(lan()$get("Cancel")),
+          actionButton(
+            inputId = ns("added_user"),
+            label = lan()$get("Confirm new user"),
+            class = "btn-primary",
+            `data-dismiss` = "modal"
+          )
+        )
+      ))
+    }
   })
 
   value_added <- callModule(module = edit_user, id = "add_user")
@@ -426,6 +438,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     # newuser$password <- password
     res_add <- try({
       newuser <- as.data.frame(newuser)
+      newuser$is_hashed_password <- FALSE
+      if(!"is_hashed_password" %in% colnames(users)){
+        users$is_hashed_password <- FALSE
+      }
       newuser <- newuser[, colnames(users)]
       users <- rbind(users, newuser)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
@@ -482,6 +498,11 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       users$password <- as.character(users$password)
     }
     users$password[users$user %in% input$reset_pwd] <- password
+    if(!"is_hashed_password" %in% colnames(users)){
+      users$is_hashed_password <- FALSE
+    } else {
+      users$is_hashed_password[users$user %in% input$reset_pwd] <- FALSE
+    }
     write_db_encrypt(conn = sqlite_path, value = users, name = "credentials", passphrase = passphrase)
     res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
     if (inherits(res_chg, "try-error")) {

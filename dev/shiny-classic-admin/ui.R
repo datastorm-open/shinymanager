@@ -19,5 +19,5 @@ secure_app(fluidPage(
     verbatimTextOutput("res_auth")
   )
 
-), enable_admin = TRUE)
+), enable_admin = TRUE, language = "fr")
 

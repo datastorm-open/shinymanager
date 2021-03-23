@@ -6,7 +6,7 @@
 [![cran checks](https://cranchecks.info/badges/worst/shinymanager)](https://cranchecks.info/pkgs/shinymanager)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-> Simple and secure authentification mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Source code of main application is protected until authentication is successful.
+> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Password are hashed using 'scrypt'  R package. Source code of main application is protected until authentication is successful.
 
 
 Live demo:
@@ -18,7 +18,19 @@ You can authenticate with:
  * user: `shiny` / password: `shiny`
  * user: `shinymanager` / password: `shinymanager` (Admin)
 
+Online documentation : https://datastorm-open.github.io/shinymanager/
 
+### News on shinymanager 1.0.300
+
+* Add ``autofocus`` on username input.
+* Fix some (strange) bug with ``input$shinymanager_where``
+* Fix `inputs_list` with some shiny version
+* `auth_ui()` now accept a `choose_language` arguments.
+* Rename `br` language into `pt-BR` (iso code)
+* add user info in downloaded log file
+* add `set_labels()` for customize labels
+* Fix simultaneous admin session
+* (#37) hashing password using `scrypt`
 
 ### Installation
 
@@ -97,15 +109,16 @@ Once logged, the application will be launched and a button added to navigate bet
 
 ### Secure database
 
-Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl` : 
+Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt` : 
 
 - ``create_db()``
 
 ```r
-# Credentials data
+# Init DB using credentials data
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
   password = c("azerty", "12345"),
+  # password will automatically be hashed
   admin = c(FALSE, TRUE),
   stringsAsFactors = FALSE
 )
@@ -119,7 +132,31 @@ create_db(
   credentials_data = credentials,
   sqlite_path = "path/to/database.sqlite", # will be created
   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+  # passphrase = "passphrase_wihtout_keyring"
 )
+
+# Wrap your UI with secure_app, enabled admin mode or not
+ui <- secure_app(ui, enable_admin = TRUE)
+
+
+server <- function(input, output, session) {
+  
+  # check_credentials directly on sqlite db
+  res_auth <- secure_server(
+    check_credentials = check_credentials(
+        "path/to/database.sqlite",
+        passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+        # passphrase = "passphrase_wihtout_keyring"
+    )
+  )
+  
+  output$auth_output <- renderPrint({
+    reactiveValuesToList(res_auth)
+  })
+  
+  # your classic server logic
+  ...
+}
 ```
 
 ### Admin mode
@@ -134,6 +171,56 @@ Using SQL database protected, an admin mode is available to manage access to the
 ![](man/figures/shinymanager-admin.png)
 ![](man/figures/shinymanager-logs.png)
 
+### shiny input
+
+Two inputs are created : 
+
+````
+observe({
+    print(input$shinymanager_where)
+    print(input$shinymanager_language)
+})
+````
+
+### Customization
+
+You can customize the module (css, image, language, ...).
+
+````
+?secure_app
+?auth_ui
+?set_labels
+````
+
+### Flexdasboard
+
+It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but not admin console at moment). You can find information on [this discussion](https://github.com/datastorm-open/shinymanager/issues/51). But it's not a really secure way because user can overpass the authentification using developper console... Prefer use  ``shiny`` application with ``secure_app`` function.
+
+### Troubleshooting
+
+The application works fine without ``shinymanager`` but not you have trouble using ``shinymanager``. 
+
+There is a *lag* between your ``ui`` and the ``server``, since ``shinymanger`` hides the ``ui`` part until authentication is successful. It is therefore possible that some of `ui element`` (input) are not defined and are NULL. In this case, you'll see some warning / error message in your R console.
+
+So we recommend to use in all your reactive/observer functions the ``req`` instruction  to **validate the inputs**.
+
+One more *global and brutal* solution can be :
+
+````
+server <- function(input, output, session) {
+  
+  auth_out <- secure_server(....)
+  
+  observe({
+    if(is.null(input$shinymanager_where) || (!is.null(input$shinymanager_where) && input$shinymanager_where %in% "application")){
+      
+      # your server app code
+    }
+  })
+}
+````
+
+But it's better to use ``req`` solution. More discussion on https://github.com/datastorm-open/shinymanager/issues/36
 
 ### HTTP request
 
@@ -142,7 +229,7 @@ Using SQL database protected, an admin mode is available to manage access to the
 
 ### About security
 
-The credentials database is secured with a pass phrase and the [`openssl`](https://github.com/jeroen/openssl) package. If you have concern about method we use, please fill an [issue](https://github.com/datastorm-open/shinymanager/issues).
+The credentials database is secured with a pass phrase and the [`openssl`](https://github.com/jeroen/openssl) package. Hashed password using [`scrypt`](https://github.com/rstudio/rscrypt). If you have concern about method we use, please fill an [issue](https://github.com/datastorm-open/shinymanager/issues).
 
 
 

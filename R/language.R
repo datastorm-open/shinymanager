@@ -2,14 +2,14 @@ pkgEnv <- new.env()
 
 pkgEnv$label_en = list(
   "Please authenticate" = "Please authenticate",
-  "Username:" = "Username:",
-  "Password:" = "Password:",
+  "Username:" = "Username :",
+  "Password:" = "Password :",
   "Login" = "Login",
   "Username or password are incorrect" = "Username or password are incorrect",
   "Your account has expired" = "Your account has expired",
   "Please change your password" = "Please change your password",
-  "New password:" = "New password:",
-  "Confirm password:" = "Confirm password:",
+  "New password:" = "New password :",
+  "Confirm password:" = "Confirm password :",
   "Update new password" = "Update new password",
   "Password successfully updated! Please re-login" = "Password successfully updated! Please re-login",
   "The two passwords are different" = "The two passwords are different",
@@ -18,6 +18,8 @@ pkgEnv$label_en = list(
   "Go to application" = "Go to application",
   "Administrator mode" = "Administrator mode",
   "Add a user" = "Add a user",
+  "Too many users" = "Too many users",
+  "Maximum number of users : %s" = "Maximum number of users : %s",
   "Failed to update user" = "Failed to update user",
   "User successfully updated" = "User successfully updated",
   "Cancel" = "Cancel",
@@ -41,8 +43,8 @@ pkgEnv$label_en = list(
   "Number of connections per day" = "Number of connections per day",
   "Total number of connection" = "Total number of connection",
   "You can\'t remove yourself!" = "You can\'t remove yourself!",
-  "User:" = "User:",
-  "Period:" = "Period:",
+  "User:" = "User :",
+  "Period:" = "Period :",
   "Last week" = "Last week",
   "Last month" = "Last month",
   "All period" = "All period",
@@ -58,7 +60,8 @@ pkgEnv$label_en = list(
   "Reset password" = "Reset password",
   "Temporary password:" = "Temporary password:",
   "Password succesfully reset!" = "Password succesfully reset!",
-  "You are not authorized for this application" = "You are not authorized for this application"
+  "You are not authorized for this application" = "You are not authorized for this application",
+  "Language"  = "Language"
 )
 
 pkgEnv$label_fr = list(
@@ -79,6 +82,8 @@ pkgEnv$label_fr = list(
   "Go to application" = "Aller \u00e0 l\'application",
   "Administrator mode" = "Mode administrateur",
   "Add a user" = "Ajouter un utilisateur",
+  "Too many users" = "Trops d'utilisateur",
+  "Maximum number of users : %s" = "Nombre maximum : %s",
   "Failed to update user" = "Echec de la mise \u00e0 jour de l\'utilisateur",
   "User successfully updated" = "Mise \u00e0 jour r\u00e9ussie",
   "Cancel" = "Annuler",
@@ -119,18 +124,19 @@ pkgEnv$label_fr = list(
   "Reset password" = "R\u00e9initialiser le mot de passe",
   "Temporary password:" = "Mot de passe temporaire",
   "Password succesfully reset!" = "Mot de passe r\u00e9initialis\u00e9",
-  "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application"
+  "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application",
+  "Language"  = "Langue"
 )
 
 pkgEnv$label_ptbr = list(
   "Please authenticate" = "Autentica\u00e7\u00e3o",
-  "Username:" = "Usu\u00e1rio:",
-  "Password:" = "Senha:",
+  "Username:" = "Usu\u00e1rio :",
+  "Password:" = "Senha :",
   "Login" = "Conectar",
   "Username or password are incorrect" = "Usu\u00e1rio ou senha incorreto",
   "Your account has expired" = "Sua conta expirou",
   "Please change your password" = "Por favor, mude sua senha",
-  "New password:" = "Nova senha:",
+  "New password:" = "Nova senha :",
   "Confirm password:" = "Confirmar nova senha:",
   "Update new password" = "Atualizar nova senha",
   "Password successfully updated! Please re-login" = "Senha alterada com sucesso! Por favor, autentique-se novamente",
@@ -140,6 +146,8 @@ pkgEnv$label_ptbr = list(
   "Go to application" = "Ir \u00e0 aplica\u00e7\u00e3o",
   "Administrator mode" = "Modo administrador",
   "Add a user" = "Adicionar usu\u00e1rio",
+  "Too many users" = "Muitos usu\u00e1rios",
+  "Maximum number of users : %s" = "N\u00f9mero m\u00e1ximo : %s",
   "Failed to update user" = "Falha em atualizar usu\u00e1rio",
   "User successfully updated" = "Usu\u00e1rio atualizado com sucesso",
   "Cancel" = "Cancelas",
@@ -163,8 +171,8 @@ pkgEnv$label_ptbr = list(
   "Number of connections per day" = "N\u00famero de conex\u00f5es por dia",
   "Total number of connection" = "N\u00famero total de conex\u00f5es",
   "You can\'t remove yourself!" = "Voc\u00ea n\u00e3o pode se remover!",
-  "User:" = "Usu\u00e1rio:",
-  "Period:" = "Per\u00edodo:",
+  "User:" = "Usu\u00e1rio :",
+  "Period:" = "Per\u00edodo :",
   "Last week" = "Semana passada",
   "Last month" = "M\u00eas passado",
   "All period" = "Todo per\u00edodo",
@@ -180,13 +188,14 @@ pkgEnv$label_ptbr = list(
   "Reset password" = "Resetar a senha",
   "Temporary password:" = "Senha tempor\u00e1ria",
   "Password succesfully reset!" = "Senha resetada com sucesso!",
-  "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo"
+  "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo",
+  "Language"  = "L\u00edngua"
 )
 
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
 language <- R6::R6Class(
-  classname = "language",
+  classname = "shinymanager_language",
   public = list(
     initialize = function() {
       invisible(self)
@@ -220,7 +229,7 @@ language <- R6::R6Class(
   ),
   private = list(
     language = "en",
-    language_registered = c("en", "fr", "pt-BR"),
+    language_registered = c("English" = "en", "Fran\u00e7ais" = "fr", "Portuguese" = "pt-BR"),
     labels = pkgEnv$label_en,
     DT_lan = list(
       fr = list(
@@ -329,18 +338,18 @@ set_labels <- function(language, ...) {
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
-  
+
   current_labels <- switch (language,
                    "en" = pkgEnv$label_en,
                    "fr" = pkgEnv$label_fr,
                    "pt-BR" = pkgEnv$label_ptbr
   )
-  
+
   udpate_labels <- modifyList(
     x = current_labels,
     val = lapply(args, I)
   )
-  
+
   if(language %in% "en"){
     pkgEnv$label_en <- udpate_labels
   } else if(language %in% "fr"){
@@ -360,7 +369,7 @@ get_labels <- function(language = "en") {
     warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
   }
-  
+
   switch (language,
           "en" = pkgEnv$label_en,
           "fr" = pkgEnv$label_fr,

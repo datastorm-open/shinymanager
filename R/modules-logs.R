@@ -14,7 +14,7 @@ logs_ui <- function(id, lan = NULL) {
   tagList(
     fluidRow(
       column(
-        width = 8, offset = 2,
+        width = 10, offset = 1,
 
         fluidRow(
           column(
@@ -121,6 +121,15 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     logs_rv$logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
 
     isolate({
+      ctrl_log <- isolate({logs_rv$logs})
+      # treat old bad admin log
+      if(any(duplicated(ctrl_log$token))){
+        ctrl_log$date_days <- substring(ctrl_log$server_connected, 1, 10)
+        ctrl_log <- ctrl_log[!duplicated(ctrl_log[, c("user", "token", "date_days")]), ]
+        ctrl_log$date_days <- NULL
+        logs_rv$logs <- ctrl_log
+      }
+      
       if("status" %in% colnames(isolate({logs_rv$logs}))){
         logs_rv$logs <- logs_rv$logs[logs_rv$logs$status %in% "Success", ]
       }
@@ -267,9 +276,16 @@ logs <- function(input, output, session, sqlite_path, passphrase,
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
       on.exit(dbDisconnect(conn))
       logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      # treat old bad admin log
+      if(any(duplicated(logs$token))){
+        logs$date_days <- substring(logs$server_connected, 1, 10)
+        logs <- logs[!duplicated(logs[, c("user", "token", "date_days")]), ]
+        logs$date_days <- NULL
+      }
       logs$token <- NULL
       users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
       users$password <- NULL
+      users$is_hashed_password <- NULL
       if(all(is.na(users$start))) users$start <- NULL
       if(all(is.na(users$expire))) users$expire <- NULL
       logs <- merge(logs, users, by = "user", all.x = TRUE, sort = FALSE)

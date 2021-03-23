@@ -11,6 +11,7 @@
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
 #' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
+#' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
 #'  to know in which step user is : authentication, application, admin or password.
@@ -25,7 +26,13 @@
 #' @name secure-app
 #'
 #' @example examples/secure_app.R
-secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = NULL, language = "en") {
+secure_app <- function(ui,
+                       ...,
+                       enable_admin = FALSE,
+                       head_auth = NULL,
+                       theme = NULL,
+                       language = "en",
+                       fab_position = "bottom-right") {
   if (!language %in% c("en", "fr", "pt-BR")) {
     warning("Only supported language for the now are: en, fr, pt-BR", call. = FALSE)
     language <- "en"
@@ -69,16 +76,15 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
           header = tagList(
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
             fab_button(
+              position = fab_position,
               actionButton(
                 inputId = ".shinymanager_logout",
-                label = NULL,
-                tooltip = lan$get("Logout"),
+                label = lan$get("Logout"),
                 icon = icon("sign-out")
               ),
               actionButton(
                 inputId = ".shinymanager_app",
-                label = NULL,
-                tooltip = lan$get("Go to application"),
+                label = lan$get("Go to application"),
                 icon = icon("share")
               )
             ),
@@ -99,16 +105,15 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
       } else {
         if (isTRUE(enable_admin) && .tok$is_admin(token) && !is.null(.tok$get_sqlite_path())) {
           menu <- fab_button(
+            position = fab_position,
             actionButton(
               inputId = ".shinymanager_logout",
-              label = NULL,
-              tooltip = lan$get("Logout"),
+              label = lan$get("Logout"),
               icon = icon("sign-out")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
-              label = NULL,
-              tooltip = lan$get("Administrator mode"),
+              label = lan$get("Administrator mode"),
               icon = icon("cogs")
             )
           )
@@ -117,10 +122,10 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
             warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
           }
           menu <- fab_button(
+            position = fab_position,
             actionButton(
               inputId = ".shinymanager_logout",
-              label = NULL,
-              tooltip = lan$get("Logout"),
+              label = lan$get("Logout"),
               icon = icon("sign-out")
             )
           )
@@ -164,7 +169,8 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #' @param check_credentials Function passed to \code{\link{auth_server}}.
 #' @param timeout Timeout session (minutes) before logout if sleeping. Defaut to 15. 0 to disable.
 #' @param inputs_list \code{list}. If database credentials, you can configure inputs for editing users information. See Details.
-#' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}.
+#' @param max_users \code{integer}. If not NULL, maximum of users in sql credentials.
+#' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}
 #' @param keep_token Logical, keep the token used to authenticate in the URL, it allow to refresh the
 #'  application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.
 #' @param session Shiny session.
@@ -194,15 +200,21 @@ secure_app <- function(ui, ..., enable_admin = FALSE, head_auth = NULL, theme = 
 #'  updateQueryString observe getDefaultReactiveDomain isolate invalidateLater
 #'
 #' @rdname secure-app
-secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
-                          fileEncoding = "", keep_token = FALSE,
+secure_server <- function(check_credentials,
+                          timeout = 15,
+                          inputs_list = NULL,
+                          max_users = NULL,
+                          fileEncoding = "",
+                          keep_token = FALSE,
                           session = shiny::getDefaultReactiveDomain()) {
+
   token_start <- isolate(getToken(session = session))
   if (isTRUE(keep_token)) {
     .tok$reset_count(token_start)
   } else {
     isolate(resetQueryString(session = session))
   }
+
 
   lan <- reactiveVal(use_language())
   observe({
@@ -239,6 +251,7 @@ secure_server <- function(check_credentials, timeout = 15, inputs_list = NULL,
       sqlite_path = path_sqlite,
       passphrase = .tok$get_passphrase(),
       inputs_list = inputs_list,
+      max_users = max_users,
       lan = lan
     )
     callModule(

@@ -37,7 +37,7 @@ The credentials \code{data.frame} can have the following columns:
 # Credentials data
 credentials <- data.frame(
   user = c("shiny", "shinymanager"),
-  password = c("azerty", "12345"),
+  password = c("azerty", "12345"), # password will automatically be hashed
   stringsAsFactors = FALSE
 )
 

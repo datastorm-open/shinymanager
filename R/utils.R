@@ -82,7 +82,11 @@ update_pwd <- function(user, pwd) {
       if(!"character" %in% class(users$password)){
         users$password <- as.character(users$password)
       }
+      if(!"is_hashed_password" %in% colnames(users)){
+        users$is_hashed_password <- FALSE
+      }
       users$password[ind_user] <- pwd
+      users$is_hashed_password[ind_user] <- FALSE
       write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       force_chg_pwd(user, FALSE)
     }, silent = TRUE)
@@ -112,16 +116,25 @@ save_logs <- function(token) {
           logs$status <- character(0)
         }
       }
-      logs <- rbind(logs, data.frame(
-        user = user,
-        server_connected = as.character(Sys.time()),
-        token = token,
-        logout = NA_character_,
-        app = get_appname(),
-        status = "Success",
-        stringsAsFactors = FALSE
-      ))
-      write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+      
+      # check if current admin user
+      date_time <- as.character(Sys.time())
+      date_day <- substring(date_time, 1, 10)
+      logs_day <- substring(logs$server_connected, 1, 10)
+      already_user_token <- any(logs$user %in% user & logs_day %in% date_day & logs$token %in% token)
+     
+      if(!already_user_token){
+        logs <- rbind(logs, data.frame(
+          user = user,
+          server_connected = date_time,
+          token = token,
+          logout = NA_character_,
+          app = get_appname(),
+          status = "Success",
+          stringsAsFactors = FALSE
+        ))
+        write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+      }
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
       warning(paste(

@@ -1,4 +1,12 @@
-# shinymanager 1.0.215
+# shinymanager 1.0.310
+
+* Add full language label using `choose_language`
+* (#66) fix ``quanteda`` bad interaction 
+* (#71) fix logs count for admin user
+* (#26) : restrict number of users
+* (#84) : new FAB button with a position argument
+
+# shinymanager 1.0.300
 
 * Add ``autofocus`` on username input.
 * Fix some (strange) bug with ``input$shinymanager_where``
@@ -8,6 +16,7 @@
 * add user info in downloaded log file
 * add `set_labels()` for customize labels
 * Fix simultaneous admin session
+* (#37) hashing password using `scrypt`
 
 # shinymanager 1.0.200
 

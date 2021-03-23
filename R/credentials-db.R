@@ -25,6 +25,7 @@
 #'
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable
 #' @importFrom RSQLite SQLite
+#' @importFrom scrypt hashPassword
 #'
 #' @seealso \code{\link{read_db_decrypt}}
 #'
@@ -34,7 +35,7 @@
 #' # Credentials data
 #' credentials <- data.frame(
 #'   user = c("shiny", "shinymanager"),
-#'   password = c("azerty", "12345"),
+#'   password = c("azerty", "12345"), # password will automatically be hashed
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -73,6 +74,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   conn <- dbConnect(SQLite(), dbname = sqlite_path)
   on.exit(dbDisconnect(conn))
   credentials_data[] <- lapply(credentials_data, as.character)
+
   write_db_encrypt(
     conn = conn,
     name = "credentials",
@@ -191,6 +193,19 @@ write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NUL
     conn <- dbConnect(RSQLite::SQLite(), dbname = conn)
     on.exit(dbDisconnect(conn))
   }
+
+  if(name == "credentials" && "password" %in% colnames(value)){
+    if(!"is_hashed_password" %in% colnames(value)){
+      value$is_hashed_password <- FALSE
+    }
+    to_hash <- which(!as.logical(value$is_hashed_password))
+    if(length(to_hash) > 0){
+      # store hashed password
+      value$password[to_hash] <- sapply(value$password[to_hash], function(x) scrypt::hashPassword(x))
+      value$is_hashed_password[to_hash] <- TRUE
+    }
+  }
+
   if (!is.null(passphrase)) {
     passphrase <- as.character(passphrase)
     passphrase <- charToRaw(passphrase)
