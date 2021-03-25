@@ -25,5 +25,5 @@ test_that("other language", {
   expect_is(l_all, "list")
   expect_true(length(l_all) > 0)
   
-  expect_error(lan_fr$set_language("es"))
+  expect_error(lan_fr$set_language("bad"))
 })

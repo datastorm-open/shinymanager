@@ -25,14 +25,19 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           # value <- Sys.Date()
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("start")), value = value, width = "100%")
+        # warning on shiny if setting to NA / NULL
+        suppressWarnings({
+          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("start")), value = value, width = "100%")
+        })
       } else if (x %in% "expire") {
         value <- data_user[[x]]
         if (is.null(value)) {
           # value <- Sys.Date() + 60
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("expire")), value = value, width = "100%")
+        suppressWarnings({
+          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("expire")), value = value, width = "100%")
+        })
       } else if (identical(x, "password")) {
         NULL
       } else if (identical(x, "is_hashed_password")) {
