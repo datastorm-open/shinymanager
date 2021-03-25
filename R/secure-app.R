@@ -48,11 +48,11 @@ secure_app <- function(ui,
 
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
-    token <- query$token
+    token <- gsub('\"', "", query$token)
     admin <- query$admin
     language <- query$language
     if(!is.null(language)){
-      lan <- use_language(language)
+      lan <- use_language(gsub('\"', "", language))
     }
     if (.tok$is_valid(token)) {
       is_forced_chg_pwd <- is_force_chg_pwd(token = token)
@@ -208,6 +208,12 @@ secure_server <- function(check_credentials,
                           keep_token = FALSE,
                           session = shiny::getDefaultReactiveDomain()) {
 
+  session$setBookmarkExclude(c(session$getBookmarkExclude(),
+                               "shinymanager_language", 
+                               ".shinymanager_timeout", 
+                               ".shinymanager_logout", 
+                               "shinymanager_where"))
+  
   token_start <- isolate(getToken(session = session))
   if (isTRUE(keep_token)) {
     .tok$reset_count(token_start)
@@ -288,14 +294,14 @@ secure_server <- function(check_credentials,
 
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
-    updateQueryString(queryString = sprintf("?token=%s&admin=true&language=%s", token, lan()$get_language()), session = session, mode = "replace")
+    updateQueryString(queryString = sprintf("?token=\"%s\"&admin=true&language=\"%s\"", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
 
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
-    updateQueryString(queryString = sprintf("?token=%s&language=%s", token, lan()$get_language()), session = session, mode = "replace")
+    updateQueryString(queryString = sprintf("?token=\"%s\"&language=\"%s\"", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)

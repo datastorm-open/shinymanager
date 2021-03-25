@@ -47,14 +47,22 @@ clearQueryString <- function(session = getDefaultReactiveDomain()) {
 #' @importFrom shiny getQueryString getDefaultReactiveDomain
 getToken <- function(session = getDefaultReactiveDomain()) {
   query <- getQueryString(session = session)
-  query$token
+  if(!is.null(query$token)){
+    gsub('\"', "", query$token)
+  } else {
+    NULL
+  }
 }
 
 # Retrieve language from the query string
 #' @importFrom shiny getQueryString getDefaultReactiveDomain
 getLanguage <- function(session = getDefaultReactiveDomain()) {
   query <- getQueryString(session = session)
-  query$language
+  if(!is.null(query$language)){
+    gsub('\"', "", query$language)
+  } else {
+    NULL
+  }
 }
 
 # Remove the token from the query string
@@ -67,6 +75,7 @@ resetQueryString <- function(session = getDefaultReactiveDomain()) {
     clearQueryString(session = session)
   } else {
     query <- paste(names(query), query, sep = "=", collapse="&")
+    query <- gsub("_inputs_=", "_inputs_", query, fixed = T) # shiny bookmark
     updateQueryString(queryString = paste0("?", query), mode = "replace", session = session)
   }
 }
@@ -75,9 +84,10 @@ resetQueryString <- function(session = getDefaultReactiveDomain()) {
 #' @importFrom shiny updateQueryString getQueryString getDefaultReactiveDomain
 addAuthToQuery <- function(session = getDefaultReactiveDomain(), token, language ) {
   query <- getQueryString(session = session)
-  query$token <- token
-  query$language <- language
+  query$token <- paste0('"', token, '"') # shiny bookmark
+  query$language <- paste0('"', language, '"') # shiny bookmark
   query <- paste(names(query), query, sep = "=", collapse="&")
+  query <- gsub("_inputs_=", "_inputs_", query, fixed = T) # shiny bookmark
   updateQueryString(queryString = paste0("?", query), mode = "replace", session = session)
 }
 
