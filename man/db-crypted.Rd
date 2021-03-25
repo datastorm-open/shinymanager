@@ -35,6 +35,7 @@ write_db_encrypt(conn, value = head(iris), name = "iris", passphrase = "supersec
 # read
 read_db_decrypt(conn = conn, name = "iris", passphrase = "supersecret")
 
+
 # with wrong passphrase
 \dontrun{
 read_db_decrypt(conn = conn, name = "iris", passphrase = "forgotten")
@@ -85,6 +86,8 @@ write_db_encrypt(
   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 )
 }
+
+DBI::dbDisconnect(conn)
 
 }
 \seealso{
