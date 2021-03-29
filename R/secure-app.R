@@ -11,6 +11,7 @@
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
 #' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
+#' @param fab show or hide FAB button.
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
@@ -32,6 +33,7 @@ secure_app <- function(ui,
                        head_auth = NULL,
                        theme = NULL,
                        language = "en",
+                       fab = TRUE,
                        fab_position = "bottom-right") {
   if (!language %in% c("en", "fr", "pt-BR", "es")) {
     warning("Only supported language for the now are: en, fr, pt-BR, es", call. = FALSE)
@@ -134,6 +136,7 @@ secure_app <- function(ui,
         if (is.function(ui)) {
           ui <- ui(request)
         }
+        if (!fab) menu <- NULL
         tagList(
           ui, menu, shinymanager_where("application"),
           shinymanager_language(lan$get_language()),

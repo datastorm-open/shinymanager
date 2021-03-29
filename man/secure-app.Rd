@@ -13,6 +13,7 @@ secure_app(
   head_auth = NULL,
   theme = NULL,
   language = "en",
+  fab = TRUE,
   fab_position = "bottom-right"
 )
 
@@ -42,6 +43,8 @@ you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
 \item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR".}
+
+\item{fab}{show or hide FAB button.}
 
 \item{fab_position}{Position for the FAB button, see \code{\link{fab_button}} for options.}
 
