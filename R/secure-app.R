@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "de".
 #' @param fab show or hide FAB button.
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
@@ -35,8 +35,8 @@ secure_app <- function(ui,
                        language = "en",
                        fab = TRUE,
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de", call. = FALSE)
     language <- "en"
   }
 
