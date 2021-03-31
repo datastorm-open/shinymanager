@@ -17,7 +17,7 @@
 #'
 #' @example examples/fab_button.R
 fab_button <- function(...,
-                       position = c("bottom-right", "top-right", "bottom-left", "top-left"),
+                       position = c("none", "bottom-right", "top-right", "bottom-left", "top-left"),
                        animation = c("slidein", "slidein-spring", "fountain", "zoomin"),
                        toggle = c("hover", "click"),
                        inputId = NULL,
@@ -34,6 +34,7 @@ fab_button <- function(...,
   toggle <- match.arg(toggle)
   animation <- match.arg(animation)
   position <- match.arg(position)
+  if (position == "none") return()
   position <- switch(
     position,
     "bottom-right" = "br",

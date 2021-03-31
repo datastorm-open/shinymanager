@@ -6,7 +6,7 @@
 \usage{
 fab_button(
   ...,
-  position = c("bottom-right", "top-right", "bottom-left", "top-left"),
+  position = c("none", "bottom-right", "top-right", "bottom-left", "top-left"),
   animation = c("slidein", "slidein-spring", "fountain", "zoomin"),
   toggle = c("hover", "click"),
   inputId = NULL,
