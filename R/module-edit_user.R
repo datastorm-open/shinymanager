@@ -72,7 +72,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           if (!"selected" %in% fun_args) {
             list_args$selected <- NULL
           } else {
-            if(!is.null(username)){
+            if (!is.null(username)){
               if (list_args$multiple && is.character(data_user[[x]])) {
                 list_args$selected <- unlist(strsplit(data_user[[x]], ";"))
               } else {
@@ -92,7 +92,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
             list_args$width <- "100%"
           }
 
-          tryCatch(do.call(fun, list_args), error = function(e){
+          tryCatch(do.call(fun, list_args), error = function(e) {
             warning("Error building custom input for column '", x,
                     "'. (fun : '", fun, "'). Verify 'inputs_list' argument.", call. = FALSE)
             textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")

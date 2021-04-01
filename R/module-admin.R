@@ -237,6 +237,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       selection = "none",
       style = "bootstrap",
       options = list(
+        scrollY = if (nrow(pwds) > 10) "500px",
+        lengthChange = FALSE,
+        paging = FALSE,
         language = lan()$get_DT(),
         drawCallback = JS("function() {Shiny.bindAll(this.api().table().node());}"),
         # initComplete = JS(
@@ -412,6 +415,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   observeEvent(input$edited_mult_user, {
     users <- users()
     newval <- value_mult_edited$user
+    newval$user <- newval$admin <- NULL
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     res_edit <- try({
