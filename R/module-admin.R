@@ -179,9 +179,13 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user)
+    names_lan <- sapply(names(users), function(x) lan()$get(x))
+    change <- as.logical(users$admin)
+    users[change, "admin"] <- lan()$get("Yes")
+    users[!change, "admin"] <- lan()$get("No")
     datatable(
       data = users,
-      colnames = make_title(names(users)),
+      colnames = make_title(names_lan),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
@@ -229,9 +233,16 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
     pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("undo"), status = "warning", lan = lan())
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user)
+    names_lan <- sapply(names(pwds), function(x) lan()$get(x))
+    change <- as.logical(pwds$must_change)
+    pwds[change, "must_change"] <- lan()$get("Yes")
+    pwds[!change, "must_change"] <- lan()$get("No")
+    change <- as.logical(pwds$have_changed)
+    pwds[change,"have_changed"] <- lan()$get("Yes")
+    pwds[!change,"have_changed"] <- lan()$get("No")
     datatable(
       data = pwds,
-      colnames = make_title(names(pwds)),
+      colnames = make_title(names_lan),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
@@ -328,7 +339,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   observeEvent(input$edit_user, {
     users <- users()
     showModal(modalDialog(
-      title = "Edit user",
+      title = lan()$get("Edit user"),
       edit_user_ui(ns("edit_user"), credentials = users, username = input$edit_user, inputs_list = inputs_list, lan = lan()),
       tags$div(id = ns("placeholder-edituser-exist")),
       footer = tagList(

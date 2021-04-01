@@ -22,8 +22,8 @@ logs_ui <- function(id, lan = NULL) {
             selectInput(
               inputId = ns("user"),
               label = lan$get("User:"),
-              choices = "All users",
-              selected = "All users",
+              choices = lan$get("All users"),
+              selected = lan$get("All users"),
               multiple = TRUE,
               width = "100%"
             )
@@ -139,8 +139,8 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     updateSelectInput(
       session = session,
       inputId = "user",
-      choices = c("All users", as.character(logs_rv$users$user)),
-      selected = "All users"
+      choices = c(lan()$get("All users"), as.character(logs_rv$users$user)),
+      selected = lan()$get("All users")
     )
 
     app_choices <- unique(unique(logs_rv$logs$app), get_appname())
@@ -166,7 +166,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     logs <- isolate(logs_rv$logs)
     logs$date <- as.Date(substr(logs$server_connected, 1, 10))
     logs <- logs[logs$date >= input$overview_period[1] & logs$date <= input$overview_period[2], ]
-    if (!"All users" %in% input$user) {
+    if (!lan()$get("All users") %in% input$user) {
       logs <- logs[logs$user %in% input$user, ]
     }
     if (length(input$app) > 0 && !"All applications" %in% input$app) {
@@ -189,7 +189,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
       bb_barchart(data = nb_log, rotated = TRUE) %>%
       bb_bar_color_manual(list(Freq = "#4582ec")) %>%
       bb_y_grid(show = TRUE) %>%
-      bb_data(names = list(Freq = "Nb logged")) %>%
+      bb_data(names = list(Freq = lan()$get("Nb logged"))) %>%
       bb_legend(show = FALSE) %>%
       bb_x_axis(tick = list(width = 10000)) %>%
       bb_labs(
@@ -221,13 +221,12 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     )
     nb_log_day$Freq[is.na(nb_log_day$Freq)] <- 0
 
-
     billboarder() %>%
       bb_linechart(data = nb_log_day, type = "area-step") %>%
       bb_colors_manual(list(Freq = "#4582ec")) %>%
-      bb_x_axis(type = "timeseries", tick = list(fit = FALSE), max = max(nb_log_day$day) + 1) %>%
+      bb_x_axis(type = "timeseries", tick = list(fit = FALSE)) %>%
       bb_y_grid(show = TRUE) %>%
-      bb_data(names = list(Freq = "Nb logged")) %>%
+      bb_data(names = list(Freq = lan()$get("Nb logged"))) %>%
       bb_legend(show = FALSE) %>%
       bb_labs(
         # title = "Number of connection by user",

@@ -1,3 +1,12 @@
+# shinymanager 1.0.320
+
+* (#84) : new FAB button with a position argument
+* (#81) : keep request query string. Thanks @erikor 
+* (#24) : secure_server() : added keep_token arg 
+* (#54) add spanish. Thanks @EAMI91 
+* (#54) add spanish. Thanks @EAMI91 
+* (#39) : fix use shiny bookmarking
+
 # shinymanager 1.0.310
 
 * Add full language label using `choose_language`

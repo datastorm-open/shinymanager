@@ -72,6 +72,7 @@
 #'
 check_credentials <- function(db, passphrase = NULL) {
   if (is.data.frame(db)) {
+    .tok$set_sqlite_path(NULL)
     function(user, password) {
       check_credentials_df(user, password, credentials_df = db)
     }

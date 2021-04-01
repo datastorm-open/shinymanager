@@ -137,6 +137,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #' # read
 #' read_db_decrypt(conn = conn, name = "iris", passphrase = "supersecret")
 #'
+#' 
 #' # with wrong passphrase
 #' \dontrun{
 #' read_db_decrypt(conn = conn, name = "iris", passphrase = "forgotten")
@@ -187,6 +188,8 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
 #'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #' }
+#' 
+#' DBI::dbDisconnect(conn)
 #'
 write_db_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
   if (is.character(conn)) {

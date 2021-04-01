@@ -28,16 +28,21 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           # value <- Sys.Date()
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+        suppressWarnings({
+          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("start")), value = value, width = "100%")
+        })
       } else if (identical(x, "expire")) {
         value <- unique(data_user[[x]])
         if (is.null(value) || length(value) > 1) {
           # value <- Sys.Date() + 60
           value <- NA
         }
-        dateInput(inputId = ns(x), label = R.utils::capitalize(x), value = value, width = "100%")
+        suppressWarnings({
+          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("expire")), value = value, width = "100%")
+        })
       } else if (identical(x, "user") && length(username) > 1) {
         NULL # MULTIPLE USERS: dont modify user name
+
       } else if (identical(x, "password")) {
         NULL
       } else if (identical(x, "is_hashed_password")) {
@@ -48,7 +53,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
         } else {
           checkboxInput(
             inputId = ns(x),
-            label = R.utils::capitalize(x),
+            label = R.utils::capitalize(lan$get("admin")),
             value = isTRUE(all(as.logical(data_user[[x]])))
           )
         }
@@ -95,7 +100,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           tryCatch(do.call(fun, list_args), error = function(e) {
             warning("Error building custom input for column '", x,
                     "'. (fun : '", fun, "'). Verify 'inputs_list' argument.", call. = FALSE)
-            textInput(inputId = ns(x), label = R.utils::capitalize(x), value = data_user[[x]], width = "100%")
+            textInput(inputId = ns(x), label = R.utils::capitalize(lan$get(x)), value = data_user[[x]], width = "100%")
           })
 
         } else {
@@ -105,7 +110,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           }
           textInput(
             inputId = ns(x),
-            label = R.utils::capitalize(x),
+            label = R.utils::capitalize(lan$get(x)),
             value = value,
             width = "100%"
           )
@@ -114,10 +119,10 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     }
   )
 
-  if(is.null(username)){
+  if (is.null(username)) {
     input_list[[length(input_list) + 1]] <- textInput(
       inputId = ns("password"),
-      label = "Password",
+      label = lan$get("Password"),
       value = generate_pwd(),
       width = "100%"
     )
