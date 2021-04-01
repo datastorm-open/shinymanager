@@ -509,7 +509,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       if(!"is_hashed_password" %in% colnames(users)){
         users$is_hashed_password <- FALSE
       }
-      newuser <- newuser[, colnames(users)]
+      newuser[setdiff(colnames(users), colnames(newuser))] <- NA
+      newuser <- newuser[colnames(users)]
       users <- rbind(users, newuser)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
       resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
