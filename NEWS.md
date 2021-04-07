@@ -4,7 +4,7 @@
 * (#81) : keep request query string. Thanks @erikor 
 * (#24) : secure_server() : added keep_token arg 
 * (#54) add spanish. Thanks @EAMI91 
-* (#54) add spanish. Thanks @EAMI91 
+* (#98) add german. Thanks @indubio
 * (#39) : fix use shiny bookmarking
 
 # shinymanager 1.0.310
