@@ -11,7 +11,7 @@ set_labels(language, ...)
 get_labels(language = "en")
 }
 \arguments{
-\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR".}
+\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "de".}
 
 \item{...}{A named list with labels to replace.}
 }
