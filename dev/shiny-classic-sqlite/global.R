@@ -16,7 +16,7 @@ credentials <- data.frame(
 )
 
 # if (!file.exists("credentials.sqlite")) {
-  create_db(credentials_data = credentials, sqlite_path = "credentials.sqlite", passphrase = "supersecret")
+  # create_db(credentials_data = credentials, sqlite_path = "dev/shiny-classic-sqlite/credentials.sqlite", passphrase = "supersecret")
 # }
 
 #conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = "dev/shiny-classic-sqlite/credentials.sqlite")
