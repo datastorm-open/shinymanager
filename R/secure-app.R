@@ -211,6 +211,7 @@ secure_server <- function(check_credentials,
   session$setBookmarkExclude(c(session$getBookmarkExclude(),
                                "shinymanager_language", 
                                ".shinymanager_timeout", 
+                               ".shinymanager_admin",
                                ".shinymanager_logout", 
                                "shinymanager_where"))
   
