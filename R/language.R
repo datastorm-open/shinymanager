@@ -51,6 +51,7 @@ pkgEnv$label_en = list(
   "Home" = "Home",
   "Select all shown users" = "Select all shown users",
   "Remove selected users" = "Remove selected users",
+  "Edit selected users" = "Edit selected users",
   "Force selected users to change password" = "Force selected users to change password",
   "Users" = "Users",
   "Passwords" = "Passwords",
@@ -79,7 +80,8 @@ pkgEnv$label_en = list(
   "Select" = "Select",
   "Logs" = "Logs",
   "All users" = "All users",
-  "Nb logged" = "Nb logged"
+  "Nb logged" = "Nb logged",
+  "Permitted null values" = "Permitted null values"
 )
 
 pkgEnv$label_fr = list(
@@ -133,6 +135,7 @@ pkgEnv$label_fr = list(
   "Home" = "Accueil",
   "Select all shown users" = "S\u00e9lectionner tous les utilisateurs affich\u00e9s",
   "Remove selected users" = "Supprimer les utilisateurs s\u00e9lectionn\u00e9s",
+  "Edit selected users" = "Editer les utilisateurs s\u00e9lectionn\u00e9s",
   "Force selected users to change password" = "Forcer les utilisateurs s\u00e9l\u00e9ctionn\u00e9s \u00e0 changer de mot de passe",
   "Users" = "Utilisateurs",
   "Passwords" = "Mots de passe",
@@ -160,7 +163,8 @@ pkgEnv$label_fr = list(
   "Select" = "S\u00e9lectionner",
   "Logs" = "Logs",
   "All users" = "Tous les utilisateurs",
-  "Nb logged" = "Connexions"
+  "Nb logged" = "Connexions",
+  "Permitted null values" = "Valeurs nulles autoris\u00e9es"
 )
 
 pkgEnv$label_ptbr = list(
@@ -214,6 +218,7 @@ pkgEnv$label_ptbr = list(
   "Home" = "In\u00edcio",
   "Select all shown users" = "Selecionar todos os usu\u00e1rios mostrados",
   "Remove selected users" = "Remover usu\u00e1rios selecionados",
+  "Edit selected users" = "Modificar usu\u00e1rios selecionados",
   "Force selected users to change password" = "For\u00e7ar usu\u00e1rio selecionado a mudar a senha",
   "Users" = "Usu\u00e1rios",
   "Passwords" = "Senhas",
@@ -241,7 +246,8 @@ pkgEnv$label_ptbr = list(
   "Select" = "Selecionar",
   "Logs" = "Conex\u00f5es",
   "All users" = "All usu\u00e1rio",
-  "Nb logged" = "Conex\u00f5es"
+  "Nb logged" = "Conex\u00f5es",
+  "Permitted null values" = "Valores nulos autorizados"
 )
 
 pkgEnv$label_es = list(
@@ -322,7 +328,8 @@ pkgEnv$label_es = list(
   "Select" = "Seleccionar",
   "Logs" = "Registros",
   "All users" = "Todos los usuarios",
-  "Nb logged" = "Conexiones"
+  "Nb logged" = "Conexiones",
+  "Permitted null values" = "Valores nulos permitidos"
 )
 
 pkgEnv$label_de = list(
