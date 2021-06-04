@@ -119,6 +119,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     }
   )
 
+  # add new user
   if (is.null(username)) {
     input_list[[length(input_list) + 1]] <- textInput(
       inputId = ns("password"),
@@ -131,7 +132,16 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
       label = lan$get("Ask to change password"),
       value = TRUE
     )
+  } else  if (length(username) == 1) {
+    # add checkbox to authorized NULL value
+    input_list[[length(input_list) + 1]] <- checkboxInput(
+      inputId = ns("_sm_enabled_null"),
+      label = lan$get("Permitted null values"),
+      value = TRUE,
+      width = "100%"
+    )
   }
+  
   tagList(
     input_list
   )
@@ -159,6 +169,11 @@ edit_user <- function(input, output, session) {
 #' @importFrom utils modifyList
 #' @importFrom shiny isTruthy
 update_user <- function(df, value, username) {
+
+  check_isTruthy <- TRUE
+  if("_sm_enabled_null" %in% names(value)){
+    check_isTruthy <- !as.logical(value$`_sm_enabled_null`)
+  }
   value <- value[intersect(names(value), names(df))]
   users_order <- factor(df$user, levels = unique(df$user))
   df <- split(df, f = users_order)
@@ -166,7 +181,9 @@ update_user <- function(df, value, username) {
   value <- lapply(value, function(x) {
     ifelse(length(x) == 0 | (length(x) == 1 && is.na(x)), NA_character_, paste(x, collapse = ";"))
   })
-  value <- value[vapply(value, isTruthy, logical(1))]
+  if(check_isTruthy) {
+    value <- value[vapply(value, isTruthy, logical(1))]
+  }
   new <-  modifyList(x = user, val = value)
   df[[username]] <- as.data.frame(new, stringsAsFactors = FALSE)
   do.call(rbind, c(df, list(make.row.names = FALSE)))

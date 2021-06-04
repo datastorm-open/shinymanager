@@ -80,7 +80,8 @@ pkgEnv$label_en = list(
   "Select" = "Select",
   "Logs" = "Logs",
   "All users" = "All users",
-  "Nb logged" = "Nb logged"
+  "Nb logged" = "Nb logged",
+  "Permitted null values" = "Permitted null values"
 )
 
 pkgEnv$label_fr = list(
@@ -162,7 +163,8 @@ pkgEnv$label_fr = list(
   "Select" = "S\u00e9lectionner",
   "Logs" = "Logs",
   "All users" = "Tous les utilisateurs",
-  "Nb logged" = "Connexions"
+  "Nb logged" = "Connexions",
+  "Permitted null values" = "Valeurs nulles autoris\u00e9es"
 )
 
 pkgEnv$label_ptbr = list(
@@ -244,7 +246,8 @@ pkgEnv$label_ptbr = list(
   "Select" = "Selecionar",
   "Logs" = "Conex\u00f5es",
   "All users" = "All usu\u00e1rio",
-  "Nb logged" = "Conex\u00f5es"
+  "Nb logged" = "Conex\u00f5es",
+  "Permitted null values" = "Valores nulos autorizados"
 )
 
 pkgEnv$label_es = list(
@@ -325,7 +328,8 @@ pkgEnv$label_es = list(
   "Select" = "Seleccionar",
   "Logs" = "Registros",
   "All users" = "Todos los usuarios",
-  "Nb logged" = "Conexiones"
+  "Nb logged" = "Conexiones",
+  "Permitted null values" = "Valores nulos permitidos"
 )
 
 v_language_registered = c("en", "fr", "pt-BR", "es")
