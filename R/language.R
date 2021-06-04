@@ -81,7 +81,7 @@ pkgEnv$label_en = list(
   "Logs" = "Logs",
   "All users" = "All users",
   "Nb logged" = "Nb logged",
-  "Permitted null values" = "Permitted null values"
+  "Allowed null values" = "Allowed null values"
 )
 
 pkgEnv$label_fr = list(
@@ -164,7 +164,7 @@ pkgEnv$label_fr = list(
   "Logs" = "Logs",
   "All users" = "Tous les utilisateurs",
   "Nb logged" = "Connexions",
-  "Permitted null values" = "Valeurs nulles autoris\u00e9es"
+  "Allowed null values" = "Valeurs nulles autoris\u00e9es"
 )
 
 pkgEnv$label_ptbr = list(
@@ -247,7 +247,7 @@ pkgEnv$label_ptbr = list(
   "Logs" = "Conex\u00f5es",
   "All users" = "All usu\u00e1rio",
   "Nb logged" = "Conex\u00f5es",
-  "Permitted null values" = "Valores nulos autorizados"
+  "Allowed null values" = "Valores nulos autorizados"
 )
 
 pkgEnv$label_es = list(
@@ -301,6 +301,7 @@ pkgEnv$label_es = list(
   "Home" = "Inicio",
   "Select all shown users" = "Seleccionar todos los usuarios mostrados",
   "Remove selected users" = "Remover los usuarios seleccionados",
+  "Edit selected users" = "Editar los usuarios seleccionados",
   "Force selected users to change password" = "Forzar a los usuarios seleccionados que cambien la contrase\u00f1a",
   "Users" = "Usuarios",
   "Passwords" = "Contrase\u00f1as",
@@ -329,7 +330,7 @@ pkgEnv$label_es = list(
   "Logs" = "Registros",
   "All users" = "Todos los usuarios",
   "Nb logged" = "Conexiones",
-  "Permitted null values" = "Valores nulos permitidos"
+  "Allowed null values" = "Valores nulos permitidos"
 )
 
 pkgEnv$label_de = list(
@@ -383,6 +384,7 @@ pkgEnv$label_de = list(
   "Home" = "Anfang",
   "Select all shown users" = "Alle angezeigten Benutzer ausw\u00e4hlen",
   "Remove selected users" = "Ausgew\u00e4hlte Benutzer l\u00f6schen",
+  "Edit selected users" = "Ausgew\u00e4hlte Benutzer bearbeiten",
   "Force selected users to change password" = "F\u00fcr ausgew\u00e4hlte Benutzer Passwort\u00e4nderung erzwingen",
   "Users" = "Benutzer",
   "Passwords" = "Passw\u00f6rter",
@@ -410,7 +412,8 @@ pkgEnv$label_de = list(
   "Select" = "Ausw\u00e4hlen",
   "Logs" = "Protokolle",
   "All users" = "Alle Benutzer",
-  "Nb logged" = "Verbindungen"
+  "Nb logged" = "Verbindungen",
+  "Allowed null values" = "Nullwerte erlaubt"
 )
 
 v_language_registered = c("en", "fr", "pt-BR", "es", "de")
@@ -579,6 +582,21 @@ language <- R6::R6Class(
 )
 
 
+#' @title Use {shinymanager} labels
+#'
+#' @description See all labels registered with \code{get_labels()},
+#'  then set custom text with \code{set_labels()}.
+#'
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de".
+#'
+#' @return A language object
+#' @export
+#'
+#'
+#' @examples
+#'
+#' use_language(lan = "fr)
+#' 
 use_language <- function(lan = "en") {
   lang <- language$new()
   lang$set_language(lan)
@@ -590,7 +608,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "de".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.

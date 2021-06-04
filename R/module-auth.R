@@ -155,7 +155,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'  
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
-#' @param lan An langauge object. Should not be used directly.
+#' @param lan A language object. See  \code{\link{use_language}}
 #' 
 #' @export
 #'
@@ -180,11 +180,12 @@ auth_server <- function(input, output, session,
     paste0("#", ns(x))
   }
   
+  
   if(!is.reactive(lan)){
     if(is.null(lan)){
-      lan <- reactive(use_language())
+      lan <- reactiveVal(use_language())
     } else {
-      lan <- reactive(lan)
+      lan <- reactiveVal(lan)
     }
   }
   

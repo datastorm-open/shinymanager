@@ -136,7 +136,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     # add checkbox to authorized NULL value
     input_list[[length(input_list) + 1]] <- checkboxInput(
       inputId = ns("_sm_enabled_null"),
-      label = lan$get("Permitted null values"),
+      label = lan$get("Allowed null values"),
       value = TRUE,
       width = "100%"
     )

@@ -42,7 +42,7 @@ Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 \item{choose_language}{\code{logical/character}. Add language selection on top ? TRUE for all supported languages
 or a vector of possibilities like \code{c("fr", "en")}. If enabled, \code{input$shinymanager_language} is created}
 
-\item{lan}{An langauge object. Should not be used directly.}
+\item{lan}{A language object. See  \code{\link{use_language}}}
 
 \item{...}{: Used for old version compatibility.}
 
@@ -125,7 +125,8 @@ if (interactive()) {
       background  = "linear-gradient(rgba(0, 0, 255, 0.5),
                        rgba(255, 255, 0, 0.5)),
                        url('https://www.r-project.org/logo/Rlogo.png');", 
-      choose_language = TRUE
+      # set language ?
+      lan = use_language("fr")
     ),
     
     # result of authentication

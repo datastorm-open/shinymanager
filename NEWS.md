@@ -6,6 +6,7 @@
 * (#54) add spanish. Thanks @EAMI91 
 * (#98) add german. Thanks @indubio
 * (#39) : fix use shiny bookmarking
+* Admin mode: new edit multiple users
 
 # shinymanager 1.0.310
 

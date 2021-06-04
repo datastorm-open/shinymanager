@@ -51,7 +51,8 @@ if (interactive()) {
       background  = "linear-gradient(rgba(0, 0, 255, 0.5),
                        rgba(255, 255, 0, 0.5)),
                        url('https://www.r-project.org/logo/Rlogo.png');", 
-      choose_language = TRUE
+      # set language ?
+      lan = use_language("fr")
     ),
     
     # result of authentication
