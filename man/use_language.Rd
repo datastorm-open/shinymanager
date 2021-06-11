@@ -7,7 +7,7 @@
 use_language(lan = "en")
 }
 \arguments{
-\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de".}
+\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".}
 }
 \value{
 A language object
@@ -15,4 +15,9 @@ A language object
 \description{
 See all labels registered with \code{get_labels()},
  then set custom text with \code{set_labels()}.
+}
+\examples{
+
+use_language(lan = "fr")
+
 }
