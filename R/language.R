@@ -66,7 +66,6 @@ pkgEnv$label_en = list(
   "Yes" = "Yes",
   "No" = "No",
   "Password" = "Password",
-  "Edit user" = "Edit user",
   "start" = "start",
   "expire" = "expire",
   "admin" = "Admin",
@@ -715,7 +714,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -750,21 +749,21 @@ set_labels <- function(language, ...) {
                    "pl" = pkgEnv$label_pl
   )
 
-  udpate_labels <- modifyList(
+  update_labels <- modifyList(
     x = current_labels,
     val = lapply(args, I)
   )
 
   if(language %in% "en"){
-    pkgEnv$label_en <- udpate_labels
+    pkgEnv$label_en <- update_labels
   } else if(language %in% "fr"){
-    pkgEnv$label_fr <- udpate_labels
+    pkgEnv$label_fr <- update_labels
   } else if(language %in% "pt-BR"){
-    pkgEnv$label_ptbr <- udpate_labels
+    pkgEnv$label_ptbr <- update_labels
   } else if(language %in% "es"){
-    pkgEnv$label_es <- udpate_labels
+    pkgEnv$label_es <- update_labels
   } else if(language %in% "de"){
-    pkgEnv$label_de <- udpate_labels
+    pkgEnv$label_de <- update_labels
   } else if(language %in% "pl"){
     pkgEnv$label_pl <- update_labels
   }

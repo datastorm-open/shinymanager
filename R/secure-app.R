@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "de", "pl".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
