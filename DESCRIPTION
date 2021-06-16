@@ -11,7 +11,6 @@ Description: Simple and secure authentification mechanism for single 'Shiny' app
 License: GPL-3
 URL: https://github.com/datastorm-open/shinymanager
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
 Imports: 
     R6,
