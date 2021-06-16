@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/datastorm-open/shinymanager/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,22 +132,25 @@
     <p>Secure a Shiny application and manage authentication</p>
     </div>
 
-    <pre class="usage"><span class='fu'>secure_app</span>(
-  <span class='no'>ui</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>enable_admin</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>head_auth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>theme</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>language</span> <span class='kw'>=</span> <span class='st'>"en"</span>
-)
+    <pre class="usage"><span class='fu'>secure_app</span><span class='op'>(</span>
+  <span class='va'>ui</span>,
+  <span class='va'>...</span>,
+  enable_admin <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  head_auth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  theme <span class='op'>=</span> <span class='cn'>NULL</span>,
+  language <span class='op'>=</span> <span class='st'>"en"</span>,
+  fab_position <span class='op'>=</span> <span class='st'>"bottom-right"</span>
+<span class='op'>)</span>
 
-<span class='fu'>secure_server</span>(
-  <span class='no'>check_credentials</span>,
-  <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>15</span>,
-  <span class='kw'>inputs_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fileEncoding</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>session</span> <span class='kw'>=</span> <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>()
-)</pre>
+<span class='fu'>secure_server</span><span class='op'>(</span>
+  <span class='va'>check_credentials</span>,
+  timeout <span class='op'>=</span> <span class='fl'>15</span>,
+  inputs_list <span class='op'>=</span> <span class='cn'>NULL</span>,
+  max_users <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fileEncoding <span class='op'>=</span> <span class='st'>""</span>,
+  keep_token <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,7 +181,11 @@ It will affect the authentication panel and the admin page.</p></td>
     </tr>
     <tr>
       <th>language</th>
-      <td><p>Language to use for labels, supported values are : "en", "fr", "pt-BR".</p></td>
+      <td><p>Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".</p></td>
+    </tr>
+    <tr>
+      <th>fab_position</th>
+      <td><p>Position for the FAB button, see <code><a href='fab_button.html'>fab_button</a></code> for options.</p></td>
     </tr>
     <tr>
       <th>check_credentials</th>
@@ -193,8 +200,17 @@ It will affect the authentication panel and the admin page.</p></td>
       <td><p><code>list</code>. If database credentials, you can configure inputs for editing users information. See Details.</p></td>
     </tr>
     <tr>
+      <th>max_users</th>
+      <td><p><code>integer</code>. If not NULL, maximum of users in sql credentials.</p></td>
+    </tr>
+    <tr>
       <th>fileEncoding</th>
       <td><p>character string: Encoding of logs downloaded file. See <code><a href='https://rdrr.io/r/utils/write.table.html'>write.table</a></code></p></td>
+    </tr>
+    <tr>
+      <th>keep_token</th>
+      <td><p>Logical, keep the token used to authenticate in the URL, it allow to refresh the
+application in the browser, but careful the token can be shared between users ! Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>session</th>
@@ -207,17 +223,17 @@ It will affect the authentication panel and the admin page.</p></td>
     <p>A <code>reactiveValues</code> containing informations about the user connected.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If database credentials, you can configure inputs with <code>inputs_list</code> for editing users information 
-from the admin console. <code>start</code>, <code>expire</code>, <code>admin</code> and <code>password</code> are not configurable. 
+    <p>If database credentials, you can configure inputs with <code>inputs_list</code> for editing users information
+from the admin console. <code>start</code>, <code>expire</code>, <code>admin</code> and <code>password</code> are not configurable.
 The others columns are rendering by defaut using a <code>textInput</code>. You can modify this using <code>inputs_list</code>.
 <code>inputs_list</code> must be a named list. Each name must be a column name, and then we must have the function
- shiny to call <code>fun</code> and the arguments <code>args</code> like this : 
+ shiny to call <code>fun</code> and the arguments <code>args</code> like this :
  <code><a href='https://rdrr.io/r/base/list.html'>
  list(group = list(
-     fun = "selectInput", 
+     fun = "selectInput",
      args = list(
-         choices = c("all", "restricted"), 
-         multiple = TRUE, 
+         choices = c("all", "restricted"),
+         multiple = TRUE,
          selected = c("all", "restricted")
       )
      )
@@ -229,25 +245,25 @@ The others columns are rendering by defaut using a <code>textInput</code>. You c
  to know in which step user is : authentication, application, admin or password.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
   <span class='co'># define some credentials</span>
-  <span class='no'>credentials</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-    <span class='kw'>user</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"shiny"</span>, <span class='st'>"shinymanager"</span>),
-    <span class='kw'>password</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"azerty"</span>, <span class='st'>"12345"</span>),
-    <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-  )
+  <span class='va'>credentials</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    user <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"shiny"</span>, <span class='st'>"shinymanager"</span><span class='op'>)</span>,
+    password <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"azerty"</span>, <span class='st'>"12345"</span><span class='op'>)</span>,
+    stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
+  <span class='op'>)</span>
 
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>shiny</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>shinymanager</span>)
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/datastorm-open/shinymanager'>shinymanager</a></span><span class='op'>)</span>
 
-  <span class='no'>ui</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html'>fluidPage</a></span>(
-    <span class='no'>tags</span>$<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reexports.html'>h2</a></span>(<span class='st'>"My secure application"</span>),
-    <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/textOutput.html'>verbatimTextOutput</a></span>(<span class='st'>"auth_output"</span>)
-  )
+  <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+    <span class='va'>tags</span><span class='op'>$</span><span class='fu'>h2</span><span class='op'>(</span><span class='st'>"My secure application"</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"auth_output"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
   <span class='co'># Wrap your UI with secure_app</span>
-  <span class='no'>ui</span> <span class='kw'>&lt;-</span> <span class='fu'>secure_app</span>(<span class='no'>ui</span>, <span class='kw'>choose_language</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'>secure_app</span><span class='op'>(</span><span class='va'>ui</span>, choose_language <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
   <span class='co'># change auth ui background ?</span>
   <span class='co'># ui &lt;- secure_app(ui,</span>
@@ -255,30 +271,31 @@ The others columns are rendering by defaut using a <code>textInput</code>. You c
   <span class='co'>#                  rgba(255, 255, 0, 0.5)),</span>
   <span class='co'>#                  url('https://www.r-project.org/logo/Rlogo.png')  no-repeat center fixed;")</span>
 
-  <span class='no'>server</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>input</span>, <span class='no'>output</span>, <span class='no'>session</span>) {
+  <span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
 
     <span class='co'># call the server part</span>
     <span class='co'># check_credentials returns a function to authenticate users</span>
-    <span class='no'>res_auth</span> <span class='kw'>&lt;-</span> <span class='fu'>secure_server</span>(
-      <span class='kw'>check_credentials</span> <span class='kw'>=</span> <span class='fu'><a href='check_credentials.html'>check_credentials</a></span>(<span class='no'>credentials</span>)
-    )
+    <span class='va'>res_auth</span> <span class='op'>&lt;-</span> <span class='fu'>secure_server</span><span class='op'>(</span>
+      check_credentials <span class='op'>=</span> <span class='fu'><a href='check_credentials.html'>check_credentials</a></span><span class='op'>(</span><span class='va'>credentials</span><span class='op'>)</span>
+    <span class='op'>)</span>
 
-    <span class='no'>output</span>$<span class='no'>auth_output</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html'>renderPrint</a></span>({
-      <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reactiveValuesToList.html'>reactiveValuesToList</a></span>(<span class='no'>res_auth</span>)
-    })
+    <span class='va'>output</span><span class='op'>$</span><span class='va'>auth_output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderPrint</a></span><span class='op'>(</span><span class='op'>{</span>
+      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveValuesToList.html'>reactiveValuesToList</a></span><span class='op'>(</span><span class='va'>res_auth</span><span class='op'>)</span>
+    <span class='op'>}</span><span class='op'>)</span>
 
-    <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/observe.html'>observe</a></span>({
-      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>input</span>$<span class='no'>shinymanager_where</span>)
-      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>input</span>$<span class='no'>shinymanager_language</span>)
-    })
-
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observe.html'>observe</a></span><span class='op'>(</span><span class='op'>{</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>shinymanager_where</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>shinymanager_language</span><span class='op'>)</span>
+    <span class='op'>}</span><span class='op'>)</span>
+    
     <span class='co'># your classic server logic</span>
 
-  }
+  <span class='op'>}</span>
 
-  <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html'>shinyApp</a></span>(<span class='no'>ui</span>, <span class='no'>server</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
 
-}</div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -294,7 +311,7 @@ The others columns are rendering by defaut using a <code>textInput</code>. You c
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

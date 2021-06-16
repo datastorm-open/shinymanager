@@ -1,4 +1,4 @@
-# shinymanager 1.0.320
+# shinymanager 1.0.400
 
 * (#84) : new FAB button with a position argument
 * (#81) : keep request query string. Thanks @erikor 
@@ -8,9 +8,6 @@
 * (#106) add polish. Thanks @StatisMike
 * (#39) : fix use shiny bookmarking
 * Admin mode: new edit multiple users
-
-# shinymanager 1.0.310
-
 * Add full language label using `choose_language`
 * (#66) fix ``quanteda`` bad interaction 
 * (#71) fix logs count for admin user

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/datastorm-open/shinymanager/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,9 +132,9 @@
     <p>Read / Write crypted table from / to a SQLite database</p>
     </div>
 
-    <pre class="usage"><span class='fu'>write_db_encrypt</span>(<span class='no'>conn</span>, <span class='no'>value</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"credentials"</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>write_db_encrypt</span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>value</span>, name <span class='op'>=</span> <span class='st'>"credentials"</span>, passphrase <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>read_db_decrypt</span>(<span class='no'>conn</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"credentials"</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>read_db_decrypt</span><span class='op'>(</span><span class='va'>conn</span>, name <span class='op'>=</span> <span class='st'>"credentials"</span>, passphrase <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,69 +166,76 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># connect to database</span>
-<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>":memory:"</span>)
+<span class='va'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RSQLite</span><span class='fu'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span><span class='op'>(</span><span class='op'>)</span>, dbname <span class='op'>=</span> <span class='st'>":memory:"</span><span class='op'>)</span>
 
 <span class='co'># write to database</span>
-<span class='fu'>write_db_encrypt</span>(<span class='no'>conn</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>iris</span>), <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='st'>"supersecret"</span>)
+<span class='fu'>write_db_encrypt</span><span class='op'>(</span><span class='va'>conn</span>, value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>, name <span class='op'>=</span> <span class='st'>"iris"</span>, passphrase <span class='op'>=</span> <span class='st'>"supersecret"</span><span class='op'>)</span>
 
 <span class='co'># read</span>
-<span class='fu'>read_db_decrypt</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='no'>conn</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='st'>"supersecret"</span>)</div><div class='output co'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+<span class='fu'>read_db_decrypt</span><span class='op'>(</span>conn <span class='op'>=</span> <span class='va'>conn</span>, name <span class='op'>=</span> <span class='st'>"iris"</span>, passphrase <span class='op'>=</span> <span class='st'>"supersecret"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 #&gt; 1          5.1         3.5          1.4         0.2  setosa
 #&gt; 2          4.9         3.0          1.4         0.2  setosa
 #&gt; 3          4.7         3.2          1.3         0.2  setosa
 #&gt; 4          4.6         3.1          1.5         0.2  setosa
 #&gt; 5          5.0         3.6          1.4         0.2  setosa
 #&gt; 6          5.4         3.9          1.7         0.4  setosa</div><div class='input'>
+
 <span class='co'># with wrong passphrase</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>read_db_decrypt</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='no'>conn</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='st'>"forgotten"</span>)
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>read_db_decrypt</span><span class='op'>(</span>conn <span class='op'>=</span> <span class='va'>conn</span>, name <span class='op'>=</span> <span class='st'>"iris"</span>, passphrase <span class='op'>=</span> <span class='st'>"forgotten"</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'># with DBI method you'll get a crypted blob</span>
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='no'>conn</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris"</span>)</div><div class='output co'>#&gt;         value         iv
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span>conn <span class='op'>=</span> <span class='va'>conn</span>, name <span class='op'>=</span> <span class='st'>"iris"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;         value         iv
 #&gt; 1 blob[624 B] blob[16 B]</div><div class='input'>
 <span class='co'># add some users to database</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"path/to/database.sqlite"</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RSQLite</span><span class='fu'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span><span class='op'>(</span><span class='op'>)</span>, dbname <span class='op'>=</span> <span class='st'>"path/to/database.sqlite"</span><span class='op'>)</span>
 
 <span class='co'># update "credentials" table</span>
-<span class='no'>current_user</span> <span class='kw'>&lt;-</span> <span class='fu'>read_db_decrypt</span>(
-  <span class='no'>conn</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"credentials"</span>,
-  <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='fu'>key_get</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
-)
+<span class='va'>current_user</span> <span class='op'>&lt;-</span> <span class='fu'>read_db_decrypt</span><span class='op'>(</span>
+  <span class='va'>conn</span>,
+  name <span class='op'>=</span> <span class='st'>"credentials"</span>,
+  passphrase <span class='op'>=</span> <span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='no'>add_user</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"new"</span>, <span class='kw'>password</span> <span class='kw'>=</span> <span class='st'>"pwdToChange"</span>,
-                      <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>expire</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>admin</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>add_user</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>user <span class='op'>=</span> <span class='st'>"new"</span>, password <span class='op'>=</span> <span class='st'>"pwdToChange"</span>,
+                      start <span class='op'>=</span> <span class='cn'>NA</span>, expire <span class='op'>=</span> <span class='cn'>NA</span>, admin <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='no'>new_users</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind.data.frame</a></span>(<span class='no'>current_user</span>, <span class='no'>add_user</span>)
+<span class='va'>new_users</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind.data.frame</a></span><span class='op'>(</span><span class='va'>current_user</span>, <span class='va'>add_user</span><span class='op'>)</span>
 
-<span class='fu'>write_db_encrypt</span>(
-  <span class='no'>conn</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>new_users</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"credentials"</span>,
-  <span class='fu'>key_get</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
-)
+<span class='fu'>write_db_encrypt</span><span class='op'>(</span>
+  <span class='va'>conn</span>,
+  value <span class='op'>=</span> <span class='va'>new_users</span>,
+  name <span class='op'>=</span> <span class='st'>"credentials"</span>,
+  <span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># update "pwd_mngt" table</span>
-<span class='no'>pwd_mngt</span> <span class='kw'>&lt;-</span> <span class='fu'>read_db_decrypt</span>(
-  <span class='no'>conn</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"pwd_mngt"</span>,
-  <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='fu'>key_get</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
-)
+<span class='va'>pwd_mngt</span> <span class='op'>&lt;-</span> <span class='fu'>read_db_decrypt</span><span class='op'>(</span>
+  <span class='va'>conn</span>,
+  name <span class='op'>=</span> <span class='st'>"pwd_mngt"</span>,
+  passphrase <span class='op'>=</span> <span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='no'>pwd_mngt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind.data.frame</a></span>(
-  <span class='no'>pwd_mngt</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"new"</span>, <span class='kw'>must_change</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>have_changed</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>date_change</span> <span class='kw'>=</span> <span class='st'>""</span>)
-)
+<span class='va'>pwd_mngt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind.data.frame</a></span><span class='op'>(</span>
+  <span class='va'>pwd_mngt</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>user <span class='op'>=</span> <span class='st'>"new"</span>, must_change <span class='op'>=</span> <span class='cn'>T</span>, have_changed <span class='op'>=</span> <span class='cn'>F</span>, date_change <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>write_db_encrypt</span>(
-  <span class='no'>conn</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>pwd_mngt</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"pwd_mngt"</span>,
-  <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='fu'>key_get</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
-)
-}</div></pre>
+<span class='fu'>write_db_encrypt</span><span class='op'>(</span>
+  <span class='va'>conn</span>,
+  value <span class='op'>=</span> <span class='va'>pwd_mngt</span>,
+  name <span class='op'>=</span> <span class='st'>"pwd_mngt"</span>,
+  passphrase <span class='op'>=</span> <span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -244,7 +251,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

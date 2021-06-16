@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Create a FAB button — fab_button" />
-<meta property="og:description" content="Create a fixed button in bottom right corner with additional button(s) in it" />
+<meta property="og:description" content="Create a fixed button in page corner with additional button(s) in it" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/datastorm-open/shinymanager/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,87 +129,101 @@
     </div>
 
     <div class="ref-description">
-    <p>Create a fixed button in bottom right corner with additional button(s) in it</p>
+    <p>Create a fixed button in page corner with additional button(s) in it</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fab_button</span>(<span class='no'>...</span>, <span class='kw'>inputId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icon</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>status</span> <span class='kw'>=</span> <span class='st'>"default"</span>)</pre>
+    <pre class="usage"><span class='fu'>fab_button</span><span class='op'>(</span>
+  <span class='va'>...</span>,
+  position <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bottom-right"</span>, <span class='st'>"top-right"</span>, <span class='st'>"bottom-left"</span>, <span class='st'>"top-left"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  animation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"slidein"</span>, <span class='st'>"slidein-spring"</span>, <span class='st'>"fountain"</span>, <span class='st'>"zoomin"</span><span class='op'>)</span>,
+  toggle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"hover"</span>, <span class='st'>"click"</span><span class='op'>)</span>,
+  inputId <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>HTML tags 'a' or 'button' or <code>actionButton</code> (with <code>NULL</code> labels).</p></td>
+      <td><p><code>actionButton</code>s to be used as floating buttons.</p></td>
+    </tr>
+    <tr>
+      <th>position</th>
+      <td><p>Position for the button.</p></td>
+    </tr>
+    <tr>
+      <th>animation</th>
+      <td><p>Animation when displaying floating buttons.</p></td>
+    </tr>
+    <tr>
+      <th>toggle</th>
+      <td><p>Display floating buttons when main button is clicked or hovered.</p></td>
     </tr>
     <tr>
       <th>inputId</th>
       <td><p>Id for the FAB button (act like an <code>actionButton</code>).</p></td>
     </tr>
     <tr>
-      <th>icon</th>
-      <td><p>An <code>icon</code> for the main button.</p></td>
-    </tr>
-    <tr>
-      <th>status</th>
-      <td><p>Bootstra^p status to apply to the main button.</p></td>
+      <th>label</th>
+      <td><p>Label for main button.</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>shiny</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>shinymanager</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/datastorm-open/shinymanager'>shinymanager</a></span><span class='op'>)</span>
 
-  <span class='no'>ui</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html'>fluidPage</a></span>(
+<span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
 
-    <span class='no'>tags</span>$<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reexports.html'>h1</a></span>(<span class='st'>"FAB button"</span>),
+  <span class='va'>tags</span><span class='op'>$</span><span class='fu'>h1</span><span class='op'>(</span><span class='st'>"FAB button"</span><span class='op'>)</span>,
 
-    <span class='no'>tags</span>$<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reexports.html'>p</a></span>(<span class='st'>"FAB button:"</span>),
-    <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/textOutput.html'>verbatimTextOutput</a></span>(<span class='kw'>outputId</span> <span class='kw'>=</span> <span class='st'>"res_fab"</span>),
+  <span class='va'>tags</span><span class='op'>$</span><span class='fu'>p</span><span class='op'>(</span><span class='st'>"FAB button:"</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span>outputId <span class='op'>=</span> <span class='st'>"res_fab"</span><span class='op'>)</span>,
 
-    <span class='no'>tags</span>$<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reexports.html'>p</a></span>(<span class='st'>"Logout button:"</span>),
-    <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/textOutput.html'>verbatimTextOutput</a></span>(<span class='kw'>outputId</span> <span class='kw'>=</span> <span class='st'>"res_logout"</span>),
+  <span class='va'>tags</span><span class='op'>$</span><span class='fu'>p</span><span class='op'>(</span><span class='st'>"Logout button:"</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span>outputId <span class='op'>=</span> <span class='st'>"res_logout"</span><span class='op'>)</span>,
 
-    <span class='no'>tags</span>$<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/reexports.html'>p</a></span>(<span class='st'>"Info button:"</span>),
-    <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/textOutput.html'>verbatimTextOutput</a></span>(<span class='kw'>outputId</span> <span class='kw'>=</span> <span class='st'>"res_info"</span>),
+  <span class='va'>tags</span><span class='op'>$</span><span class='fu'>p</span><span class='op'>(</span><span class='st'>"Info button:"</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span>outputId <span class='op'>=</span> <span class='st'>"res_info"</span><span class='op'>)</span>,
 
-    <span class='fu'>fab_button</span>(
-      <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/actionButton.html'>actionButton</a></span>(
-        <span class='kw'>inputId</span> <span class='kw'>=</span> <span class='st'>"logout"</span>,
-        <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-        <span class='kw'>tooltip</span> <span class='kw'>=</span> <span class='st'>"Logout"</span>,
-        <span class='kw'>icon</span> <span class='kw'>=</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/icon.html'>icon</a></span>(<span class='st'>"sign-out"</span>)
-      ),
-      <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/actionButton.html'>actionButton</a></span>(
-        <span class='kw'>inputId</span> <span class='kw'>=</span> <span class='st'>"info"</span>,
-        <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-        <span class='kw'>tooltip</span> <span class='kw'>=</span> <span class='st'>"Information"</span>,
-        <span class='kw'>icon</span> <span class='kw'>=</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/icon.html'>icon</a></span>(<span class='st'>"info"</span>)
-      ),
-      <span class='kw'>inputId</span> <span class='kw'>=</span> <span class='st'>"fab"</span>
-    )
+  <span class='fu'>fab_button</span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/actionButton.html'>actionButton</a></span><span class='op'>(</span>
+      inputId <span class='op'>=</span> <span class='st'>"logout"</span>,
+      label <span class='op'>=</span> <span class='st'>"Logout"</span>,
+      icon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/icon.html'>icon</a></span><span class='op'>(</span><span class='st'>"sign-out"</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/actionButton.html'>actionButton</a></span><span class='op'>(</span>
+      inputId <span class='op'>=</span> <span class='st'>"info"</span>,
+      label <span class='op'>=</span> <span class='st'>"Information"</span>,
+      icon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/icon.html'>icon</a></span><span class='op'>(</span><span class='st'>"info"</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    inputId <span class='op'>=</span> <span class='st'>"fab"</span>
+  <span class='op'>)</span>
 
-  )
+<span class='op'>)</span>
 
-  <span class='no'>server</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>input</span>, <span class='no'>output</span>, <span class='no'>session</span>) {
+<span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
 
-    <span class='no'>output</span>$<span class='no'>res_fab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html'>renderPrint</a></span>({
-      <span class='no'>input</span>$<span class='no'>fab</span>
-    })
+  <span class='va'>output</span><span class='op'>$</span><span class='va'>res_fab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderPrint</a></span><span class='op'>(</span><span class='op'>{</span>
+    <span class='va'>input</span><span class='op'>$</span><span class='va'>fab</span>
+  <span class='op'>}</span><span class='op'>)</span>
 
-    <span class='no'>output</span>$<span class='no'>res_logout</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html'>renderPrint</a></span>({
-      <span class='no'>input</span>$<span class='no'>logout</span>
-    })
+  <span class='va'>output</span><span class='op'>$</span><span class='va'>res_logout</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderPrint</a></span><span class='op'>(</span><span class='op'>{</span>
+    <span class='va'>input</span><span class='op'>$</span><span class='va'>logout</span>
+  <span class='op'>}</span><span class='op'>)</span>
 
-    <span class='no'>output</span>$<span class='no'>res_info</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html'>renderPrint</a></span>({
-      <span class='no'>input</span>$<span class='no'>info</span>
-    })
+  <span class='va'>output</span><span class='op'>$</span><span class='va'>res_info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderPrint</a></span><span class='op'>(</span><span class='op'>{</span>
+    <span class='va'>input</span><span class='op'>$</span><span class='va'>info</span>
+  <span class='op'>}</span><span class='op'>)</span>
 
-  }
+<span class='op'>}</span>
 
-  <span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html'>shinyApp</a></span>(<span class='no'>ui</span>, <span class='no'>server</span>)
-}</div></pre>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,7 +239,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

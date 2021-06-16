@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -67,7 +67,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/datastorm-open/shinymanager/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -105,31 +105,34 @@
 <li>user: <code>shinymanager</code> / password: <code>shinymanager</code> (Admin)</li>
 </ul>
 <p>Online documentation : <a href="https://datastorm-open.github.io/shinymanager/" class="uri">https://datastorm-open.github.io/shinymanager/</a></p>
-<div id="news-on-shinymanager-10300" class="section level3">
+<div id="news-on-shinymanager-10400" class="section level3">
 <h3 class="hasAnchor">
-<a href="#news-on-shinymanager-10300" class="anchor"></a>News on shinymanager 1.0.300</h3>
+<a href="#news-on-shinymanager-10400" class="anchor"></a>News on shinymanager 1.0.400</h3>
 <ul>
-<li>Add <code>autofocus</code> on username input.</li>
-<li>Fix some (strange) bug with <code>input$shinymanager_where</code>
+<li>(#84) : new FAB button with a position argument</li>
+<li>(#81) : keep request query string. Thanks @erikor</li>
+<li>(#24) : secure_server() : added keep_token arg</li>
+<li>(#54) add spanish. Thanks @EAMI91</li>
+<li>(#98) add german. Thanks @indubio</li>
+<li>(#106) add polish. Thanks @StatisMike</li>
+<li>(#39) : fix use shiny bookmarking</li>
+<li>Admin mode: new edit multiple users</li>
+<li>Add full language label using <code>choose_language</code>
 </li>
-<li>Fix <code>inputs_list</code> with some shiny version</li>
-<li>
-<code><a href="reference/module-authentication.html">auth_ui()</a></code> now accept a <code>choose_language</code> arguments.</li>
-<li>Rename <code>br</code> language into <code>pt-BR</code> (iso code)</li>
-<li>add user info in downloaded log file</li>
-<li>add <code><a href="reference/custom-labels.html">set_labels()</a></code> for customize labels</li>
-<li>Fix simultaneous admin session</li>
-<li>(#37) hashing password using <code>scrypt</code>
-</li>
+<li>(#66) fix <code>quanteda</code> bad interaction</li>
+<li>(#71) fix logs count for admin user</li>
+<li>(#26) : restrict number of users</li>
 </ul>
 </div>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
 <p>Install from CRAN with :</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"shinymanager"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"shinymanager"</span><span class="op">)</span></code></pre></div>
 <p>Or install development version from GitHub :</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"datastorm-open/shinymanager"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"datastorm-open/shinymanager"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
@@ -142,47 +145,48 @@
 <code><a href="reference/secure-app.html">secure_server()</a></code> &amp; <code><a href="reference/check_credentials.html">check_credentials()</a></code>
 </li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># define some credentials</span>
-<span class="no">credentials</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="kw">user</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"shiny"</span>, <span class="st">"shinymanager"</span>), <span class="co"># mandatory</span>
-  <span class="kw">password</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"azerty"</span>, <span class="st">"12345"</span>), <span class="co"># mandatory</span>
-  <span class="kw">start</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2019-04-15"</span>), <span class="co"># optinal (all others)</span>
-  <span class="kw">expire</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>, <span class="st">"2019-12-31"</span>),
-  <span class="kw">admin</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">FALSE</span>, <span class="fl">TRUE</span>),
-  <span class="kw">comment</span> <span class="kw">=</span> <span class="st">"Simple and secure authentification mechanism 
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># define some credentials</span>
+<span class="va">credentials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"shinymanager"</span><span class="op">)</span>, <span class="co"># mandatory</span>
+  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"azerty"</span>, <span class="st">"12345"</span><span class="op">)</span>, <span class="co"># mandatory</span>
+  start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2019-04-15"</span><span class="op">)</span>, <span class="co"># optinal (all others)</span>
+  expire <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"2019-12-31"</span><span class="op">)</span>,
+  admin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
+  comment <span class="op">=</span> <span class="st">"Simple and secure authentification mechanism 
   for single ‘Shiny’ applications."</span>,
-  <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)
+  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">shiny</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">shinymanager</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/datastorm-open/shinymanager">shinymanager</a></span><span class="op">)</span>
 
-<span class="no">ui</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span>(
-  <span class="no">tags</span>$<span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reexports.html">h2</a></span>(<span class="st">"My secure application"</span>),
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">verbatimTextOutput</a></span>(<span class="st">"auth_output"</span>)
-)
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html">fluidPage</a></span><span class="op">(</span>
+  <span class="va">tags</span><span class="op">$</span><span class="fu">h2</span><span class="op">(</span><span class="st">"My secure application"</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"auth_output"</span><span class="op">)</span>
+<span class="op">)</span>
 
 <span class="co"># Wrap your UI with secure_app</span>
-<span class="no">ui</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_app</a></span>(<span class="no">ui</span>)
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_app</a></span><span class="op">(</span><span class="va">ui</span><span class="op">)</span>
 
 
-<span class="no">server</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">input</span>, <span class="no">output</span>, <span class="no">session</span>) {
-
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+  
   <span class="co"># call the server part</span>
   <span class="co"># check_credentials returns a function to authenticate users</span>
-  <span class="no">res_auth</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_server</a></span>(
-    <span class="kw">check_credentials</span> <span class="kw">=</span> <span class="fu"><a href="reference/check_credentials.html">check_credentials</a></span>(<span class="no">credentials</span>)
-  )
-
-  <span class="no">output</span>$<span class="no">auth_output</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderPrint</a></span>({
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactiveValuesToList.html">reactiveValuesToList</a></span>(<span class="no">res_auth</span>)
-  })
-
+  <span class="va">res_auth</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_server</a></span><span class="op">(</span>
+    check_credentials <span class="op">=</span> <span class="fu"><a href="reference/check_credentials.html">check_credentials</a></span><span class="op">(</span><span class="va">credentials</span><span class="op">)</span>
+  <span class="op">)</span>
+  
+  <span class="va">output</span><span class="op">$</span><span class="va">auth_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html">renderPrint</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValuesToList.html">reactiveValuesToList</a></span><span class="op">(</span><span class="va">res_auth</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span>
+  
   <span class="co"># your classic server logic</span>
+  
+<span class="op">}</span>
 
-}
-
-<span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp</a></span>(<span class="no">ui</span>, <span class="no">server</span>)</pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></code></pre></div>
 <p>Starting page of the application will be :</p>
 <p><img src="reference/figures/shinymanager-login.png"></p>
 <p>Once logged, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application :</p>
@@ -195,49 +199,50 @@
 <ul>
 <li><code><a href="reference/create_db.html">create_db()</a></code></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="co"># Init DB using credentials data</span>
-<span class="no">credentials</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="kw">user</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"shiny"</span>, <span class="st">"shinymanager"</span>),
-  <span class="kw">password</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"azerty"</span>, <span class="st">"12345"</span>),
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Init DB using credentials data</span>
+<span class="va">credentials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"shinymanager"</span><span class="op">)</span>,
+  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"azerty"</span>, <span class="st">"12345"</span><span class="op">)</span>,
   <span class="co"># password will automatically be hashed</span>
-  <span class="kw">admin</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">FALSE</span>, <span class="fl">TRUE</span>),
-  <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)
+  admin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
 
 <span class="co"># you can use keyring package to set database key</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">keyring</span>)
-<span class="fu">key_set</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">keyring</span><span class="op">)</span>
+<span class="fu">key_set</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
 
 <span class="co"># Init the database</span>
-<span class="fu"><a href="reference/create_db.html">create_db</a></span>(
-  <span class="kw">credentials_data</span> <span class="kw">=</span> <span class="no">credentials</span>,
-  <span class="kw">sqlite_path</span> <span class="kw">=</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span>
-  <span class="kw">passphrase</span> <span class="kw">=</span> <span class="fu">key_get</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+<span class="fu"><a href="reference/create_db.html">create_db</a></span><span class="op">(</span>
+  credentials_data <span class="op">=</span> <span class="va">credentials</span>,
+  sqlite_path <span class="op">=</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span>
+  passphrase <span class="op">=</span> <span class="fu">key_get</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
   <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
-)
+<span class="op">)</span>
 
 <span class="co"># Wrap your UI with secure_app, enabled admin mode or not</span>
-<span class="no">ui</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_app</a></span>(<span class="no">ui</span>, <span class="kw">enable_admin</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_app</a></span><span class="op">(</span><span class="va">ui</span>, enable_admin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 
-<span class="no">server</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">input</span>, <span class="no">output</span>, <span class="no">session</span>) {
-
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+  
   <span class="co"># check_credentials directly on sqlite db</span>
-  <span class="no">res_auth</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_server</a></span>(
-    <span class="kw">check_credentials</span> <span class="kw">=</span> <span class="fu"><a href="reference/check_credentials.html">check_credentials</a></span>(
+  <span class="va">res_auth</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/secure-app.html">secure_server</a></span><span class="op">(</span>
+    check_credentials <span class="op">=</span> <span class="fu"><a href="reference/check_credentials.html">check_credentials</a></span><span class="op">(</span>
         <span class="st">"path/to/database.sqlite"</span>,
-        <span class="kw">passphrase</span> <span class="kw">=</span> <span class="fu">key_get</span>(<span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span>)
+        passphrase <span class="op">=</span> <span class="fu">key_get</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
         <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
-    )
-  )
-
-  <span class="no">output</span>$<span class="no">auth_output</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderPrint</a></span>({
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactiveValuesToList.html">reactiveValuesToList</a></span>(<span class="no">res_auth</span>)
-  })
-
+    <span class="op">)</span>
+  <span class="op">)</span>
+  
+  <span class="va">output</span><span class="op">$</span><span class="va">auth_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html">renderPrint</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValuesToList.html">reactiveValuesToList</a></span><span class="op">(</span><span class="va">res_auth</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span>
+  
   <span class="co"># your classic server logic</span>
-  <span class="no">...</span>
-}</pre></div>
+  <span class="va">...</span>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="admin-mode" class="section level3">
 <h3 class="hasAnchor">
@@ -254,18 +259,23 @@
 <h3 class="hasAnchor">
 <a href="#shiny-input" class="anchor"></a>shiny input</h3>
 <p>Two inputs are created :</p>
-<pre><code>observe({
+<pre><code><a href="https://rdrr.io/pkg/shiny/man/observe.html">observe({
     print(input$shinymanager_where)
     print(input$shinymanager_language)
-})</code></pre>
+})</a></code></pre>
 </div>
 <div id="customization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#customization" class="anchor"></a>Customization</h3>
 <p>You can customize the module (css, image, language, …).</p>
-<pre><code>?secure_app
+<pre><code><a href="reference/secure-app.html">?secure_app
 ?auth_ui
-?set_labels</code></pre>
+?set_labels</a></code></pre>
+</div>
+<div id="flexdasboard" class="section level3">
+<h3 class="hasAnchor">
+<a href="#flexdasboard" class="anchor"></a>Flexdasboard</h3>
+<p>It’s possible to use <code>shinymanager</code> authentification on <code>flexdashboard</code> (but not admin console at moment). You can find information on <a href="https://github.com/datastorm-open/shinymanager/issues/51">this discussion</a>. But it’s not a really secure way because user can overpass the authentification using developper console… Prefer use <code>shiny</code> application with <code>secure_app</code> function.</p>
 </div>
 <div id="troubleshooting" class="section level3">
 <h3 class="hasAnchor">
@@ -348,7 +358,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

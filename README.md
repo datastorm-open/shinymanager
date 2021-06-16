@@ -20,17 +20,20 @@ You can authenticate with:
 
 Online documentation : https://datastorm-open.github.io/shinymanager/
 
-### News on shinymanager 1.0.300
+### News on shinymanager 1.0.400
 
-* Add ``autofocus`` on username input.
-* Fix some (strange) bug with ``input$shinymanager_where``
-* Fix `inputs_list` with some shiny version
-* `auth_ui()` now accept a `choose_language` arguments.
-* Rename `br` language into `pt-BR` (iso code)
-* add user info in downloaded log file
-* add `set_labels()` for customize labels
-* Fix simultaneous admin session
-* (#37) hashing password using `scrypt`
+* (#84) : new FAB button with a position argument
+* (#81) : keep request query string. Thanks @erikor 
+* (#24) : secure_server() : added keep_token arg 
+* (#54) add spanish. Thanks @EAMI91 
+* (#98) add german. Thanks @indubio
+* (#106) add polish. Thanks @StatisMike
+* (#39) : fix use shiny bookmarking
+* Admin mode: new edit multiple users
+* Add full language label using `choose_language`
+* (#66) fix ``quanteda`` bad interaction 
+* (#71) fix logs count for admin user
+* (#26) : restrict number of users
 
 ### Installation
 

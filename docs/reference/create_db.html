@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.300</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/datastorm-open/shinymanager/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@
     <p>Create a SQLite database with credentials data protected by a password.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_db</span>(<span class='no'>credentials_data</span>, <span class='no'>sqlite_path</span>, <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>create_db</span><span class='op'>(</span><span class='va'>credentials_data</span>, <span class='va'>sqlite_path</span>, passphrase <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,27 +171,28 @@
     <div class='dont-index'><p><code><a href='db-crypted.html'>read_db_decrypt</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'># Credentials data</span>
-<span class='no'>credentials</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>user</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"shiny"</span>, <span class='st'>"shinymanager"</span>),
-  <span class='kw'>password</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"azerty"</span>, <span class='st'>"12345"</span>), <span class='co'># password will automatically be hashed</span>
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='va'>credentials</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  user <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"shiny"</span>, <span class='st'>"shinymanager"</span><span class='op'>)</span>,
+  password <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"azerty"</span>, <span class='st'>"12345"</span><span class='op'>)</span>, <span class='co'># password will automatically be hashed</span>
+  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
 <span class='co'># you can use keyring package to set database key</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>keyring</span>)
-<span class='fu'>key_set</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>keyring</span><span class='op'>)</span>
+<span class='fu'>key_set</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
 
 <span class='co'># Create the database</span>
-<span class='fu'>create_db</span>(
-  <span class='kw'>credentials_data</span> <span class='kw'>=</span> <span class='no'>credentials</span>,
-  <span class='kw'>sqlite_path</span> <span class='kw'>=</span> <span class='st'>"path/to/database.sqlite"</span>, <span class='co'># will be created</span>
-  <span class='kw'>passphrase</span> <span class='kw'>=</span> <span class='fu'>key_get</span>(<span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span>)
-)
+<span class='fu'>create_db</span><span class='op'>(</span>
+  credentials_data <span class='op'>=</span> <span class='va'>credentials</span>,
+  sqlite_path <span class='op'>=</span> <span class='st'>"path/to/database.sqlite"</span>, <span class='co'># will be created</span>
+  passphrase <span class='op'>=</span> <span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"R-shinymanager-key"</span>, <span class='st'>"obiwankenobi"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-}</div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -207,7 +208,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
