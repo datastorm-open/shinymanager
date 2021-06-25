@@ -1,6 +1,6 @@
 require(shiny)
 require(shinymanager)
-
+# require(markdown) # rsconnect
 
 # Initialisation de la base via un data.frame
 credentials <- data.frame(
