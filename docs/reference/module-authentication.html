@@ -198,11 +198,11 @@ or a vector of possibilities like <code><a href='https://rdrr.io/r/base/c.html'>
       <th>check_credentials</th>
       <td><p>Function with two arguments (<code>user</code>,
 the username provided by the user and <code>password</code>, his/her password).
-Must return a <code>list</code> with at least 4 slots :</p><ul>
+Must return a <code>list</code> with at least 2 (or 4 in case of sqlite) slots :</p><ul>
 <li><p><strong>result</strong> : logical, result of authentication.</p></li>
-<li><p><strong>expired</strong> : logical, is user has expired ? Always <code>FALSE</code> if <code>db</code> doesn't have a <code>expire</code> column.</p></li>
-<li><p><strong>authorized</strong> : logical, is user can access to his app ? Always <code>TRUE</code> if <code>db</code> doesn't have a <code>applications</code> column.</p></li>
-<li><p><strong>user_info</strong> : the line in <code>db</code> corresponding to the user.</p></li>
+<li><p><strong>user_info</strong> : <code>list</code>. What you want about user ! (sqlite : the line in <code>db</code> corresponding to the user).</p></li>
+<li><p><strong>expired</strong> : logical, is user has expired ? Always <code>FALSE</code> if <code>db</code> doesn't have a <code>expire</code> column. Optional.</p></li>
+<li><p><strong>authorized</strong> : logical, is user can access to his app ? Always <code>TRUE</code> if <code>db</code> doesn't have a <code>applications</code> column. Optional.</p></li>
 </ul></td>
     </tr>
     <tr>

@@ -85,7 +85,7 @@
   <div class="contents col-md-9">
 <div id="shinymanager-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#shinymanager-" class="anchor"></a>shinymanager <img src="reference/figures/shinymanager.png" width="200" align="right">
+<a href="#shinymanager-" class="anchor"></a>shinymanager <img src="../inst/demo_app/www/figures/shinymanager.png" width="200" align="right">
 </h1></div>
 
 <blockquote>
@@ -188,9 +188,9 @@
 
 <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></code></pre></div>
 <p>Starting page of the application will be :</p>
-<p><img src="reference/figures/shinymanager-login.png"></p>
+<p><img src="../inst/demo_app/www/figures/shinymanager-login.png"></p>
 <p>Once logged, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application :</p>
-<p><img src="reference/figures/shinymanager-info-nav.png"></p>
+<p><img src="../inst/demo_app/www/figures/shinymanager-info-nav.png"></p>
 </div>
 <div id="secure-database" class="section level3">
 <h3 class="hasAnchor">
@@ -253,7 +253,88 @@
 <li>ask the user to change his password</li>
 <li>see logs about application usage</li>
 </ul>
-<p><img src="reference/figures/shinymanager-pwd.png"><img src="reference/figures/shinymanager-admin.png"><img src="reference/figures/shinymanager-logs.png"></p>
+<p><img src="../inst/demo_app/www/figures/shinymanager-pwd.png"><img src="../inst/demo_app/www/figures/shinymanager-admin.png"><img src="../inst/demo_app/www/figures/shinymanager-logs.png"></p>
+</div>
+<div id="use-your-own-function-" class="section level3">
+<h3 class="hasAnchor">
+<a href="#use-your-own-function-" class="anchor"></a>Use your own function ?</h3>
+<p>You can also use your own authentification function with <code>check_credentials</code>, for example doiing a control to your intern database. <code>check_credentials</code> must be a function with two arguments <code>user</code> &amp; <code>password</code>, returning a least with at least <code>result</code> (<code>TRUE</code> to authorize acces, or <code>FALSE</code>) and <code>user_info</code> (all you want to retrieve from the user in the app) :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RPostgreSQL)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinymanager)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>dbname <span class="ot">=</span> <span class="st">"*****"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>host <span class="ot">=</span> <span class="st">"localhost"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>port <span class="ot">=</span> <span class="er">*****</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>user <span class="ot">=</span> <span class="st">"*****"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>password <span class="ot">=</span> <span class="st">"******"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu">dbDriver</span>(<span class="st">"PostgreSQL"</span>), <span class="at">dbname =</span> dbname , <span class="at">host =</span> host, <span class="at">port =</span> port ,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">user =</span> user, <span class="at">password =</span> password )</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbWriteTable</span>(con, <span class="st">"my_table"</span>, <span class="fu">data.frame</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">user =</span> <span class="fu">c</span>(<span class="st">"test"</span>),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="fu">c</span>(<span class="st">"123"</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># or a config .yml file or others arguments</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>my_custom_check_creds <span class="ot">&lt;-</span> <span class="cf">function</span>(dbname, host, port, db_user, db_password) {</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a> <span class="co"># finally one function of user and password</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(user, password) {</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu">dbDriver</span>(<span class="st">"PostgreSQL"</span>), <span class="at">dbname =</span> dbname, </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                     <span class="at">host =</span> host, <span class="at">port =</span> port,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>                     <span class="at">user =</span> db_user, <span class="at">password =</span> db_password)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">on.exit</span>(<span class="fu">dbDisconnect</span>(con))</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    req <span class="ot">&lt;-</span> <span class="fu">glue_sql</span>(<span class="st">"SELECT * FROM my_table WHERE </span><span class="sc">\"</span><span class="st">user</span><span class="sc">\"</span><span class="st"> = ({user}) AND </span><span class="sc">\"</span><span class="st">password</span><span class="sc">\"</span><span class="st"> = ({password})"</span>, </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">user =</span> user, <span class="at">password =</span> password, <span class="at">.con =</span> con</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    req <span class="ot">&lt;-</span> <span class="fu">dbSendQuery</span>(con, req)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">dbFetch</span>(req)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">nrow</span>(res) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="at">result =</span> <span class="cn">TRUE</span>, <span class="at">user_info =</span> <span class="fu">list</span>(<span class="at">user =</span> user, <span class="at">something =</span> <span class="dv">123</span>))</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="at">result =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  tags<span class="sc">$</span><span class="fu">h2</span>(<span class="st">"My secure application"</span>),</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">verbatimTextOutput</span>(<span class="st">"auth_output"</span>)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">secure_app</span>(ui)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>  res_auth <span class="ot">&lt;-</span> <span class="fu">secure_server</span>(</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">check_credentials =</span> <span class="fu">my_custom_check_creds</span>(</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>      <span class="at">dbname =</span> <span class="st">"******"</span>,</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">host =</span> <span class="st">"*****"</span>,</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">port =</span> <span class="sc">**</span><span class="er">**</span>,</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">db_user =</span> <span class="st">"*****"</span>,</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">db_password =</span> <span class="st">"*******"</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>  )  </span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  auth_output <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">reactiveValuesToList</span>(res_auth)</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># access info</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observe</span>({</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">auth_output</span>())</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(ui, server)</span></code></pre></div>
 </div>
 <div id="shiny-input" class="section level3">
 <h3 class="hasAnchor">
@@ -271,10 +352,17 @@
 <pre><code><a href="reference/secure-app.html">?secure_app
 ?auth_ui
 ?set_labels</a></code></pre>
+<p><img src="../inst/demo_app/www/figures/custom.png"></p>
 </div>
 <div id="flexdasboard" class="section level3">
 <h3 class="hasAnchor">
 <a href="#flexdasboard" class="anchor"></a>Flexdasboard</h3>
+<p>It’s possible to use <code>shinymanager</code> authentification on <code>flexdashboard</code> (but not admin console at moment). You can find information on <a href="https://github.com/datastorm-open/shinymanager/issues/51">this discussion</a>. But it’s not a really secure way because user can overpass the authentification using developper console… Prefer use <code>shiny</code> application with <code>secure_app</code> function.</p>
+</div>
+<div id="shinyappsio" class="section level3">
+<h3 class="hasAnchor">
+<a href="#shinyappsio" class="anchor"></a>shinyapps.io</h3>
+<p>There’s no persistent data storage on <code>shinyapps.io</code>, you can read more here : <a href="https://docs.rstudio.com/shinyapps.io/Storage.html" class="uri">https://docs.rstudio.com/shinyapps.io/Storage.html</a>. So your <strong>sqlite</strong> database is lost when the instance is closed, and the one you’ve pushed when deploying the application will be used. You have to use external database.</p>
 <p>It’s possible to use <code>shinymanager</code> authentification on <code>flexdashboard</code> (but not admin console at moment). You can find information on <a href="https://github.com/datastorm-open/shinymanager/issues/51">this discussion</a>. But it’s not a really secure way because user can overpass the authentification using developper console… Prefer use <code>shiny</code> application with <code>secure_app</code> function.</p>
 </div>
 <div id="troubleshooting" class="section level3">
