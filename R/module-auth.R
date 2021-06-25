@@ -146,12 +146,12 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @param input,output,session Standard Shiny server arguments.
 #' @param check_credentials Function with two arguments (\code{user},
 #'  the username provided by the user and \code{password}, his/her password).
-#'  Must return a \code{list} with at least 4 slots :
+#'  Must return a \code{list} with at least 2 (or 4 in case of sqlite) slots :
 #'  \itemize{
 #'   \item \strong{result} : logical, result of authentication.
-#'   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column.
-#'   \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column.
-#'   \item \strong{user_info} : the line in \code{db} corresponding to the user.
+#'   \item \strong{user_info} : \code{list}. What you want about user ! (sqlite : the line in \code{db} corresponding to the user).
+#'   \item \strong{expired} : logical, is user has expired ? Always \code{FALSE} if \code{db} doesn't have a \code{expire} column. Optional.
+#'   \item \strong{authorized} : logical, is user can access to his app ? Always \code{TRUE} if \code{db} doesn't have a \code{applications} column. Optional.
 #'  }
 #'  
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
