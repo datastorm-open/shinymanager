@@ -1,4 +1,4 @@
-# shinymanager <img src="inst/demo_app/www/figures/shinymanager.png" width=200 align="right" />
+# shinymanager <img src="man/figures/shinymanager.png" width=200 align="right" />
 
 [![Travis build status](https://travis-ci.org/datastorm-open/shinymanager.svg?branch=master)](https://travis-ci.org/datastorm-open/shinymanager)
 [![version](http://www.r-pkg.org/badges/version/shinymanager)](https://CRAN.R-project.org/package=shinymanager)
@@ -103,12 +103,12 @@ shinyApp(ui, server)
 
 Starting page of the application will be :
 
-![](inst/demo_app/www/figures/shinymanager-login.png)
+![](man/figures/shinymanager-login.png)
 
 
 Once logged, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application :
 
-![](inst/demo_app/www/figures/shinymanager-info-nav.png)
+![](man/figures/shinymanager-info-nav.png)
 
 ### Secure database
 
@@ -170,9 +170,9 @@ Using SQL database protected, an admin mode is available to manage access to the
  * ask the user to change his password
  * see logs about application usage
 
-![](inst/demo_app/www/figures/shinymanager-pwd.png)
-![](inst/demo_app/www/figures/shinymanager-admin.png)
-![](inst/demo_app/www/figures/shinymanager-logs.png)
+![](man/figures/shinymanager-pwd.png)
+![](man/figures/shinymanager-admin.png)
+![](man/figures/shinymanager-logs.png)
 
 ### Use your own function ?
 
@@ -278,7 +278,7 @@ You can customize the module (css, image, language, ...).
 ?set_labels
 ````
 
-![](inst/demo_app/www/figures/custom.png)
+![](man/figures/custom.png)
 
 ### Flexdasboard
 
