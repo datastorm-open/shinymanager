@@ -34,7 +34,7 @@ devtools::install_github("datastorm-open/shinymanager")
 
 Une application de démonstration est disponible 
 
-- directement dans le package : 
+- directement dans le package : (version github uniquement pour le moment)
 
 ``` r
 shiny::runApp(system.file("demo_app", package = "shinymanager"))
