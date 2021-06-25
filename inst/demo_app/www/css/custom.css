@@ -1,0 +1,144 @@
+.selectize-control.multi .selectize-input:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 17px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: #333333 transparent transparent transparent;
+}
+
+.ds_app_footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  /*background-color: #CC0000;
+    border-color: #AA0000;*/
+    background-color: #430838;
+    border-color: #0dc6ff;
+    border-radius: 0;
+  /*background-image: url('../img/bp_background.png');*/
+    color: white;
+  text-align: center;
+  z-index: 99999;
+}
+
+
+img[alt="img"] {
+  width:  90%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}
+
+.modal.fade.in {
+  z-index: 100000 !important;
+}
+
+.navbar-default {
+  /*background-color: #CC0000;
+    border-color: #AA0000;
+    border-radius: 0;
+  background-image: url('../img/bp_background.png');*/
+    background-color: #430838;
+    z-index: 99999;
+  display: inline-block;
+}
+
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  display: inline-block;
+  color: #FFF;
+    padding-top:20px !important;
+  padding-bottom:20px !important;
+  font-size: 1.6em !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+  display: inline-block;
+  color:#FFF;
+    opacity:.5;
+  font-weight:500;
+  padding-top:20px !important;
+  padding-bottom:20px !important;
+  font-size: 1.35em !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+  display: inline-block;
+  text-decoration:none;
+  color:#FFF;
+    opacity:1
+}
+
+.navbar-default .navbar-nav > li > a:focus {
+  background-color: #430838;
+    border-bottom:5px solid #e6e6e6;
+  display: inline-block;
+  color:#FFF;
+    opacity:1
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  background-color: #430838;
+    border-bottom:5px solid #e6e6e6;
+  color:#FFF;
+    opacity:1
+}
+
+.navbar-default .navbar-text {
+  color: #FFF;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #AA0000;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #AA0000;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+
+
+.ribbon {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100000;
+  margin-left: 0cm;
+  margin-top: 0.1cm;
+  display: block;
+  height: 65px;
+  text-decoration: none;
+  overflow-x: hidden;
+}
+
+body,p,html{
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color: #430838;
+    /*font-weight: bold*/
+}
+
+a{
+  color: black;
+}
+a:hover {
+  color: #e6e6e6;
+}
