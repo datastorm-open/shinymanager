@@ -384,6 +384,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   # Write in database edited values for the user
   observeEvent(input$edited_user, {
     users <- users()
+    pwds <- pwds()
     newval <- value_edited$user
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
@@ -391,6 +392,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     res_edit <- try({
       users <- update_user(users, newval, input$edit_user)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+      if(!is.null(newval$user) && newval$user != input$edit_user){
+        pwds$user[pwds$user %in% input$edit_user] <- newval$user
+      }
+      write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_edit, "try-error")) {
       showNotification(ui = lan()$get("Fail to update user"), type = "error")

@@ -1,3 +1,7 @@
+# shinymanager 1.0.405
+
+* (#112) : fix bug changing user name. Thanks @StatisMike
+
 # shinymanager 1.0.400
 
 * (#84) : new FAB button with a position argument
