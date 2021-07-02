@@ -9,6 +9,6 @@
 ^examples$
 ^_pkgdown\.yml$
 ^pkgdown$
-^\.sqlite$
+^.*\.sqlite$
 inst/demo_app/rsconnect
 examples/demo/rsconnect
