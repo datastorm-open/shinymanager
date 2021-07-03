@@ -3,7 +3,7 @@
 #' @importFrom DT DTOutput
 #' @importFrom htmltools tags singleton tagList
 #' @importFrom shiny NS fluidRow column actionButton icon
-admin_ui <- function(id, lan = NULL) {
+admin_ui <- function(id, lan = NULL, download) {
   
   ns <- NS(id)
   
@@ -87,14 +87,16 @@ admin_ui <- function(id, lan = NULL) {
           icon = icon("key")
         ),
         
-        tags$br(),tags$br(), tags$br(), tags$hr(),
-        
-        downloadButton(
-          outputId = ns("download_sql_database"),
-          label = lan$get("Download SQL database"),
-          class = "btn-primary center-block",
-          icon = icon("download")
-        ),
+        if("users" %in% download){
+          
+          list(tags$br(),tags$br(), tags$br(), tags$hr(),
+               
+               downloadButton(
+                 outputId = ns("download_sql_database"),
+                 label = lan$get("Download SQL database"),
+                 class = "btn-primary center-block",
+                 icon = icon("download")
+               ))},
         
         tags$br(),tags$br()
         

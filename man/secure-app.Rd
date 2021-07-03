@@ -13,6 +13,7 @@ secure_app(
   head_auth = NULL,
   theme = NULL,
   language = "en",
+  download = c("users", "logs"),
   fab_position = "bottom-right"
 )
 
@@ -42,6 +43,9 @@ you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
 \item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".}
+
+\item{download}{Character vector specifying which databases admin user is allowed to download.
+Defaults to c("users", "logs"). For disabling both, specify NULL.}
 
 \item{fab_position}{Position for the FAB button, see \code{\link{fab_button}} for options.}
 
