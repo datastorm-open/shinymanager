@@ -3,7 +3,7 @@
 #' @importFrom billboarder billboarderOutput
 #' @importFrom shiny NS fluidRow column icon selectInput dateRangeInput downloadButton downloadHandler conditionalPanel
 #' @importFrom htmltools tagList tags
-logs_ui <- function(id, lan = NULL) {
+logs_ui <- function(id, lan = NULL, download) {
 
   ns <- NS(id)
 
@@ -84,14 +84,16 @@ logs_ui <- function(id, lan = NULL) {
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
-        tags$br(), tags$br(),
-
-        downloadButton(
-          outputId = ns("download_logs"),
-          label = lan$get("Download logs database"),
-          class = "btn-primary center-block",
-          icon = icon("download")
-        ),
+        if("logs" %in% download){
+          list(tags$br(), tags$br(),
+               
+               downloadButton(
+                 outputId = ns("download_logs"),
+                 label = lan$get("Download logs database"),
+                 class = "btn-primary center-block",
+                 icon = icon("download")
+               ))
+        },
 
         tags$br()
       )
