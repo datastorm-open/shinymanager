@@ -3,7 +3,7 @@
 #' @importFrom billboarder billboarderOutput
 #' @importFrom shiny NS fluidRow column icon selectInput dateRangeInput downloadButton downloadHandler conditionalPanel
 #' @importFrom htmltools tagList tags
-logs_ui <- function(id, lan = NULL, download) {
+logs_ui <- function(id, lan = NULL) {
 
   ns <- NS(id)
 
@@ -84,7 +84,7 @@ logs_ui <- function(id, lan = NULL, download) {
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
-        if("logs" %in% download){
+        if("logs" %in% get_download()){
           list(tags$br(), tags$br(),
                
                downloadButton(
@@ -270,10 +270,12 @@ logs <- function(input, output, session, sqlite_path, passphrase,
   })
 
   output$download_logs <- downloadHandler(
+
     filename = function() {
       paste('shinymanager-logs-', Sys.Date(), '.csv', sep = '')
     },
     content = function(con) {
+      req("logs" %in% get_download())
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
       on.exit(dbDisconnect(conn))
       logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)

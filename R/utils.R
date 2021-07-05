@@ -11,6 +11,10 @@ get_appname <- function() {
   getOption("shinymanager.application", default = basename(getwd()))
 }
 
+get_download <- function(){
+  getOption("shinymanager.download", default = c("db", "logs"))
+}
+
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
   args <- list(...)

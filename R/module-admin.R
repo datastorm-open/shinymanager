@@ -3,7 +3,7 @@
 #' @importFrom DT DTOutput
 #' @importFrom htmltools tags singleton tagList
 #' @importFrom shiny NS fluidRow column actionButton icon
-admin_ui <- function(id, lan = NULL, download) {
+admin_ui <- function(id, lan = NULL) {
   
   ns <- NS(id)
   
@@ -87,7 +87,7 @@ admin_ui <- function(id, lan = NULL, download) {
           icon = icon("key")
         ),
         
-        if("users" %in% download){
+        if("db" %in% get_download()){
           
           list(tags$br(),tags$br(), tags$br(), tags$hr(),
                
@@ -641,6 +641,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       paste('shinymanager-sql-', Sys.Date(), '.sqlite', sep = '')
     },
     content = function(con) {
+      req("db" %in% get_download())
       file.copy(sqlite_path, con)
     }
   )

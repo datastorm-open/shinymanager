@@ -13,7 +13,6 @@ secure_app(
   head_auth = NULL,
   theme = NULL,
   language = "en",
-  download = c("users", "logs"),
   fab_position = "bottom-right"
 )
 
@@ -43,9 +42,6 @@ you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
 \item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".}
-
-\item{download}{Character vector specifying which databases admin user is allowed to download.
-Defaults to c("users", "logs"). For disabling both, specify NULL.}
 
 \item{fab_position}{Position for the FAB button, see \code{\link{fab_button}} for options.}
 
@@ -87,6 +83,13 @@ The others columns are rendering by defaut using a \code{textInput}. You can mod
      )
 )
 }
+
+You can specify if you want to allow downloading users database and logs from within
+the admin panel by invoking \code{options("shinymanager.download")}. It defaults
+to \code{c("db", "logs")}, that allows downloading both. You can specify 
+\code{options("shinymanager.download" = "db"} if you want allow admin to download only
+users database, \code{options("shinymanager.download" = "logs")} to allow logs download
+or \code{options("shinymanager.download" = "")} to disable both.
 }
 \note{
 A special input value will be accessible server-side with \code{input$shinymanager_where}

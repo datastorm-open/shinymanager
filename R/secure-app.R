@@ -11,8 +11,6 @@
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
 #' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
-#' @param download Character vector specifying which databases admin user is allowed to download.
-#' Defaults to c("users", "logs"). For disabling both, specify NULL.
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
@@ -34,7 +32,6 @@ secure_app <- function(ui,
                        head_auth = NULL,
                        theme = NULL,
                        language = "en",
-                       download = c("users", "logs"),
                        fab_position = "bottom-right") {
   if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl")) {
     warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl", call. = FALSE)
@@ -96,12 +93,12 @@ secure_app <- function(ui,
           tabPanel(
             title = tagList(icon("home"), lan$get("Home")),
             value = "home",
-            admin_ui("admin", lan, download),
+            admin_ui("admin", lan),
             shinymanager_language(lan$get_language())
           ),
           tabPanel(
             title = lan$get("Logs"),
-            logs_ui("logs", lan, download),
+            logs_ui("logs", lan),
             shinymanager_language(lan$get_language())
           )
         )
@@ -196,6 +193,13 @@ secure_app <- function(ui,
 #'      )
 #' )
 #' }
+#' 
+#' You can specify if you want to allow downloading users database and logs from within
+#' the admin panel by invoking \code{options("shinymanager.download")}. It defaults
+#' to \code{c("db", "logs")}, that allows downloading both. You can specify 
+#' \code{options("shinymanager.download" = "db"} if you want allow admin to download only
+#' users database, \code{options("shinymanager.download" = "logs")} to allow logs download
+#' or \code{options("shinymanager.download" = "")} to disable both.  
 #'
 #' @export
 #'
