@@ -1,6 +1,7 @@
 # shinymanager 1.0.405
 
 * (#112) : fix bug changing user name. Thanks @StatisMike
+* fix DT checkbox (rm/add user)
 
 # shinymanager 1.0.400
 

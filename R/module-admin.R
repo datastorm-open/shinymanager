@@ -124,7 +124,6 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   users <- reactiveVal(NULL)
   
   observe({
-    unbindDT(ns("table_users"))
     update_read_db$x
     db <- try({
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -149,7 +148,6 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   pwds <- reactiveVal(NULL)
   
   observe({
-    unbindDT(ns("table_pwds"))
     update_read_db$x
     db <- try({
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -174,11 +172,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   # displaying users table
   output$table_users <- renderDT({
     req(users())
+    
+    unbindDT(ns("table_users"))
+    
     users <- users()
     users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
     users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
     users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
-    users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user)
+    users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user, session = session)
     names_lan <- sapply(names(users), function(x) lan()$get(x))
     change <- as.logical(users$admin)
     users[change, "admin"] <- lan()$get("Yes")
@@ -229,10 +230,13 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
   # displaying password management table
   output$table_pwds <- renderDT({
     req(pwds())
+    
+    unbindDT(ns("table_pwds"))
+    
     pwds <- pwds()
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
     pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("undo"), status = "warning", lan = lan())
-    pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user)
+    pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user, session = session)
     names_lan <- sapply(names(pwds), function(x) lan()$get(x))
     change <- as.logical(pwds$must_change)
     pwds[change, "must_change"] <- lan()$get("Yes")
