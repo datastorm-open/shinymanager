@@ -498,8 +498,91 @@ pkgEnv$label_pl = list(
   "Allowed null values" = "Dozwolone warto\u015Bci zerowe"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski")
+pkgEnv$label_ja = list(
+  "Please authenticate" = "認証してください",
+  "Username:" = "ユーザー名 :",
+  "Password:" = "パスワード :",
+  "Login" = "ログイン",
+  "Username or password are incorrect" = "ユーザー名またはパスワードが正しくありません",
+  "Your account has expired" = "アカウントの有効期限が切れています",
+  "Please change your password" = "パスワードを変更してください",
+  "New password:" = "新しいパスワード :",
+  "Confirm password:" = "パスワードの確認 :",
+  "Update new password" = "パスワードの更新",
+  "Password successfully updated! Please re-login" = "パスワードは更新されました。再度ログインしてください",
+  "The two passwords are different" = "パスワードが一致しません",
+  "Failed to update password" = "パスワードの更新に失敗しました",
+  "Logout" = "ログアウト",
+  "Go to application" = "アプリケーションへ戻る",
+  "Administrator mode" = "管理者モード",
+  "Add a user" = "ユーザーを追加する",
+  "Too many users" = "ユーザーが多すぎます",
+  "Maximum number of users : %s" = "ユーザーの最大数 : %s",
+  "Failed to update user" = "ユーザーの更新に失敗しました",
+  "User successfully updated" = "ユーザーの更新に成功しました",
+  "Cancel" = "キャンセル",
+  "Confirm new user" = "新規ユーザーの確認",
+  "Confirm change" = "変更の確認",
+  "Are you sure to remove user(s): %s from the database ?" = "本当にユーザー: %s をデータベースから削除してもよろしいですか？",
+  "Delete user(s)" = "ユーザーを削除する",
+  "Delete user" = "ユーザーの削除",
+  "Edit user" = "ユーザーの編集",
+  "User already exist!" = "ユーザーはすでに存在しています",
+  "Dismiss" = "解散",
+  "New user %s succesfully created!" = "新しいユーザー %s の作成に成功しました",
+  "Ask to change password" = "パスワードの変更を要求する",
+  "Confirm" = "確認",
+  "Ask %s to change password on next connection?" = "次の接続時に %s にパスワードの変更を要求しますか？",
+  "Change saved!" = "変更が保存されました",
+  "Failed to update the database" = "データベースの更新に失敗しました",
+  "Password does not respect safety requirements" = "パスワードが安全要件を満たしていません",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "パスワードは、少なくとも数字1つ、小文字1つ、大文字1つを含み、長さは6文字以上でなければなりません。",
+  "Number of connections per user" = "1ユーザーあたりの接続数",
+  "Number of connections per day" = "1日あたりの接続数",
+  "Total number of connection" = "総接続数",
+  "You can\'t remove yourself!" = "自分自身を削除することはできません",
+  "User:" = "ユーザー :",
+  "Period:" = "期間 :",
+  "Last week" = "先週",
+  "Last month" = "先月",
+  "All period" = "全期間",
+  "Home" = "ホーム",
+  "Select all shown users" = "表示されているすべてのユーザーを選択する",
+  "Remove selected users" = "選択したユーザーを削除する",
+  "Edit selected users" = "選択したユーザーを編集する",
+  "Force selected users to change password" = "選択したユーザーにパスワードの変更を強制する",
+  "Users" = "ユーザー",
+  "Passwords" = "パスワード",
+  "Download logs database" = "ログデータベースのダウンロード",
+  "Download SQL database" = "SQLデータベースのダウンロード",
+  "Reset password for %s?" = "%s のパスワードをリセットしますか？",
+  "Reset password" = "パスワードのリセット",
+  "Temporary password:" = "一時的なパスワード:",
+  "Password succesfully reset!" = "パスワードのリセットに成功しました",
+  "You are not authorized for this application" = "このアプリケーションの利用をあなたは許可されていません",
+  "Language"  = "言語", 
+  "Yes" = "はい",
+  "No" = "いいえ",
+  "Password" = "パスワード",
+  "start" = "開始",
+  "expire" = "期限",
+  "admin" = "アドミン",
+  "user" = "ユーザー",
+  "Edit" = "編集",
+  "Remove" = "削除する",
+  "must_change" = "変更は必須です",
+  "have_changed" = "変更されました",
+  "date_change" = "日付",
+  "Change password" = "パスワードの変更",
+  "Select" = "選択",
+  "Logs" = "ログ",
+  "All users" = "全ユーザー",
+  "Nb logged" = "Nbログ",
+  "Allowed null values" = "ヌル値は許容されています"
+)
+
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "日本語")
 
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
@@ -520,7 +603,8 @@ language <- R6::R6Class(
                                   "pt-BR" = pkgEnv$label_ptbr, 
                                   "es" = pkgEnv$label_es,
                                   "de" = pkgEnv$label_de,
-                                  "pl" = pkgEnv$label_pl
+                                  "pl" = pkgEnv$label_pl,
+                                  "ja" = pkgEnv$label_ja
       )
     },
     get = function(label) {
@@ -681,7 +765,30 @@ language <- R6::R6Class(
           sSortAscending = ": aktywuj aby sortowa\u0107 wzrastaj\u0105co",
           sSortDescending = ": aktywuj aby sortowa\u0107 zst\u0119puj\u0105co"
         )
-      )
+      ),
+      ja = list(
+        sEmptyTable = "テーブルにデータが存在しません",
+        sInfo = " _START_ から _END_ までの _TOTAL_ 件のエントリーを表示しています",
+        sInfoEmpty = " 0 から 0 までの 0 件のエントリーを表示しています",
+        sInfoFiltered = "(_MAX_ 件のエントリーから抽出されました)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "_MENU_ エントリーを表示",
+        sLoadingRecords = "読み込み中...",
+        sProcessing = "処理中...",
+        sSearch = "検索:",
+        sZeroRecords = "結果に一致するレコードは見つかりませんでした",
+        oPaginate = list(
+          sFirst = "最初",
+          sLast = "最後",
+          sNext = "次",
+          sPrevious = "前"
+        ),
+        oAria = list(
+          sSortAscending = ": アクティブにして列を昇順に並べる",
+          sSortDescending = ": アクティブにして列を降順に並べる"
+        )
+      ),
     ),
     length = function() base::length(private$labels)
   )
@@ -732,8 +839,8 @@ use_language <- function(lan = "en") {
 #'   "Password:" = "Enter your password:"
 #' )
 set_labels <- function(language, ...) {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
@@ -746,7 +853,8 @@ set_labels <- function(language, ...) {
                    "pt-BR" = pkgEnv$label_ptbr,
                    "es" = pkgEnv$label_es,
                    "de" = pkgEnv$label_de,
-                   "pl" = pkgEnv$label_pl
+                   "pl" = pkgEnv$label_pl,
+                   "ja" = pkgEnv$label_ja
   )
 
   update_labels <- modifyList(
@@ -766,6 +874,8 @@ set_labels <- function(language, ...) {
     pkgEnv$label_de <- update_labels
   } else if(language %in% "pl"){
     pkgEnv$label_pl <- update_labels
+  } else if(language %in% "ja"){
+    pkgEnv$label_ja <- update_labels
   }
 
   invisible(TRUE)
@@ -775,8 +885,8 @@ set_labels <- function(language, ...) {
 #'
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja", call. = FALSE)
     language <- "en"
   }
 
@@ -786,7 +896,8 @@ get_labels <- function(language = "en") {
           "pt-BR" = pkgEnv$label_ptbr,
           "es" = pkgEnv$label_es,
           "de" = pkgEnv$label_de,
-          "pl" = pkgEnv$label_pl
+          "pl" = pkgEnv$label_pl,
+          "ja" = pkgEnv$label_ja
   )
 }
 

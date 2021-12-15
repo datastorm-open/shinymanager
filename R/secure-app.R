@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja", call. = FALSE)
     language <- "en"
   }
 
