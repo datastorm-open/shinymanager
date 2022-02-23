@@ -227,6 +227,8 @@ check_locked_account <- function(user, pwd_failure_limit) {
         } else {
           FALSE
         }
+      } else {
+        FALSE
       }
     }, silent = TRUE)
     if (inherits(res_lock, "try-error")) res_lock <- FALSE
