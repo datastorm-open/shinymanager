@@ -87,14 +87,16 @@ admin_ui <- function(id, lan = NULL) {
           icon = icon("key")
         ),
         
-        tags$br(),tags$br(), tags$br(), tags$hr(),
-        
-        downloadButton(
-          outputId = ns("download_sql_database"),
-          label = lan$get("Download SQL database"),
-          class = "btn-primary center-block",
-          icon = icon("download")
-        ),
+        if("db" %in% get_download()){
+          
+          list(tags$br(),tags$br(), tags$br(), tags$hr(),
+               
+               downloadButton(
+                 outputId = ns("download_sql_database"),
+                 label = lan$get("Download SQL database"),
+                 class = "btn-primary center-block",
+                 icon = icon("download")
+               ))},
         
         tags$br(),tags$br()
         
@@ -643,6 +645,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       paste('shinymanager-sql-', Sys.Date(), '.sqlite', sep = '')
     },
     content = function(con) {
+      req("db" %in% get_download())
       file.copy(sqlite_path, con)
     }
   )
