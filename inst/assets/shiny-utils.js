@@ -18,3 +18,7 @@ Shiny.addCustomMessageHandler('unbindDT', function(data) {
       Shiny.unbindAll(table.DataTable().table().node());
   }
 });
+
+Shiny.addCustomMessageHandler('rmInputSM', function(data) {
+  Shiny.onInputChange(data.id, 'null')
+});

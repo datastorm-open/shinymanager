@@ -122,8 +122,23 @@ input_btns <- function(inputId, users, tooltip, icon, status = "primary", lan = 
 }
 
 
-input_checkbox_ui <- function(id, users, checked = FALSE) {
+remove_input <- function(id, session){
+  shiny::removeUI(paste0("#", id), immediate = TRUE)
+  session$sendCustomMessage(
+    type = "rmInputSM",
+    message = list(id = id)
+  )
+}
+
+input_checkbox_ui <- function(id, users, session, checked = FALSE) {
   ns <- NS(id)
+  inputs <- isolate({names(session$input)})
+  rm_inputs <- inputs[grepl(paste0("^", gsub("^(admin-)", "", ns("check_"))), inputs)]
+  if(length(rm_inputs) > 0){
+    for(i in rm_inputs){
+      remove_input(paste0("admin-", i), session)
+    }
+  }
   tag <- lapply(
     X = users,
     FUN = function(x) {

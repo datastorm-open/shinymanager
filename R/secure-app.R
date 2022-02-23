@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja", call. = FALSE)
     language <- "en"
   }
 
@@ -80,7 +80,7 @@ secure_app <- function(ui,
               actionButton(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
-                icon = icon("sign-out")
+                icon = icon("sign-out-alt")
               ),
               actionButton(
                 inputId = ".shinymanager_app",
@@ -109,7 +109,7 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out")
+              icon = icon("sign-out-alt")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
@@ -126,7 +126,7 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out")
+              icon = icon("sign-out-alt")
             )
           )
         }
@@ -173,6 +173,9 @@ secure_app <- function(ui,
 #' @param fileEncoding 	character string: Encoding of logs downloaded file. See \code{\link{write.table}}
 #' @param keep_token Logical, keep the token used to authenticate in the URL, it allow to refresh the
 #'  application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.
+#' @param validate_pwd A \code{function} to validate the password enter by the user.
+#'  Default is to check for the password to have at least one number, one lowercase,
+#'  one uppercase and be of length 6 at least.
 #' @param session Shiny session.
 #'
 #' @details
@@ -213,6 +216,7 @@ secure_server <- function(check_credentials,
                           max_users = NULL,
                           fileEncoding = "",
                           keep_token = FALSE,
+                          validate_pwd = NULL,
                           session = shiny::getDefaultReactiveDomain()) {
 
   session$setBookmarkExclude(c(session$getBookmarkExclude(),
@@ -251,6 +255,7 @@ secure_server <- function(check_credentials,
     id = "password",
     user = reactiveValues(user = .tok$get(token_start)$user),
     update_pwd = update_pwd,
+    validate_pwd = validate_pwd,
     use_token = TRUE,
     lan = lan
   )

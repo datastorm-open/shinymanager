@@ -141,7 +141,7 @@ $number-of-child-buttons: 4 !default;
   margin: $border-distance;
   position: fixed;
   white-space: nowrap;
-  z-index: 30;
+  z-index: 1040;
   // this padding is really needed  only if the element is an <ul>
   // otherwise it can probably be ditched.
   padding-left: 0;
