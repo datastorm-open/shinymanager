@@ -64,6 +64,19 @@ admin_ui <- function(id, lan = NULL) {
         
         tags$br(),
         
+        if("users" %in% get_download()){
+          list(
+            tags$br(),tags$br(), tags$br(),
+            
+            downloadButton(
+              outputId = ns("download_users_database"),
+              label = lan$get("Download Users file"),
+              class = "btn-primary center-block",
+              icon = icon("download")
+            )
+          )
+        },
+        
         tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
         
@@ -88,15 +101,17 @@ admin_ui <- function(id, lan = NULL) {
         ),
         
         if("db" %in% get_download()){
-          
-          list(tags$br(),tags$br(), tags$br(), tags$hr(),
-               
-               downloadButton(
-                 outputId = ns("download_sql_database"),
-                 label = lan$get("Download SQL database"),
-                 class = "btn-primary center-block",
-                 icon = icon("download")
-               ))},
+          list(
+            tags$br(),tags$br(), tags$br(), tags$hr(),
+            
+            downloadButton(
+              outputId = ns("download_sql_database"),
+              label = lan$get("Download SQL database"),
+              class = "btn-primary center-block",
+              icon = icon("download")
+            )
+          )
+        },
         
         tags$br(),tags$br()
         
@@ -647,6 +662,22 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     content = function(con) {
       req("db" %in% get_download())
       file.copy(sqlite_path, con)
+    }
+  )
+  
+  # download user file
+  output$download_users_database <- downloadHandler(
+    filename = function() {
+      paste('shinymanager-users-', Sys.Date(), '.csv', sep = '')
+    },
+    content = function(con) {
+      req("users" %in% get_download())
+      conn <- dbConnect(SQLite(), dbname = sqlite_path)
+      on.exit(dbDisconnect(conn))
+      users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      users$password <- NULL
+      users$is_hashed_password <- NULL
+      write.table(users, con, sep = ";", row.names = FALSE, na = '')
     }
   )
 }

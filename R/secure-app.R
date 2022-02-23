@@ -197,12 +197,12 @@ secure_app <- function(ui,
 #' )
 #' }
 #' 
-#' You can specify if you want to allow downloading users database and logs from within
+#' You can specify if you want to allow downloading users file,  sqlite database and logs from within
 #' the admin panel by invoking \code{options("shinymanager.download")}. It defaults
-#' to \code{c("db", "logs")}, that allows downloading both. You can specify 
+#' to \code{c("db", "logs", "users")}, that allows downloading all. You can specify 
 #' \code{options("shinymanager.download" = "db"} if you want allow admin to download only
-#' users database, \code{options("shinymanager.download" = "logs")} to allow logs download
-#' or \code{options("shinymanager.download" = "")} to disable both.  
+#' sqlite database, \code{options("shinymanager.download" = "logs")} to allow logs download
+#' or \code{options("shinymanager.download" = "")} to disable all.  
 #'
 #' @export
 #'

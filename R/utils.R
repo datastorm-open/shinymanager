@@ -12,7 +12,7 @@ get_appname <- function() {
 }
 
 get_download <- function(){
-  getOption("shinymanager.download", default = c("db", "logs"))
+  getOption("shinymanager.download", default = c("db", "logs", "users"))
 }
 
 get_args <- function(..., fun) {

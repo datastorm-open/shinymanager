@@ -23,6 +23,7 @@ secure_server(
   max_users = NULL,
   fileEncoding = "",
   keep_token = FALSE,
+  validate_pwd = NULL,
   session = shiny::getDefaultReactiveDomain()
 )
 }
@@ -58,6 +59,10 @@ It will affect the authentication panel and the admin page.}
 \item{keep_token}{Logical, keep the token used to authenticate in the URL, it allow to refresh the
 application in the browser, but careful the token can be shared between users ! Default to \code{FALSE}.}
 
+\item{validate_pwd}{A \code{function} to validate the password enter by the user.
+Default is to check for the password to have at least one number, one lowercase,
+one uppercase and be of length 6 at least.}
+
 \item{session}{Shiny session.}
 }
 \value{
@@ -84,12 +89,12 @@ The others columns are rendering by defaut using a \code{textInput}. You can mod
 )
 }
 
-You can specify if you want to allow downloading users database and logs from within
+You can specify if you want to allow downloading users file,  sqlite database and logs from within
 the admin panel by invoking \code{options("shinymanager.download")}. It defaults
-to \code{c("db", "logs")}, that allows downloading both. You can specify 
+to \code{c("db", "logs", "users")}, that allows downloading all. You can specify 
 \code{options("shinymanager.download" = "db"} if you want allow admin to download only
-users database, \code{options("shinymanager.download" = "logs")} to allow logs download
-or \code{options("shinymanager.download" = "")} to disable both.
+sqlite database, \code{options("shinymanager.download" = "logs")} to allow logs download
+or \code{options("shinymanager.download" = "")} to disable all.
 }
 \note{
 A special input value will be accessible server-side with \code{input$shinymanager_where}

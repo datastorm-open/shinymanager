@@ -4,7 +4,10 @@
 * fix DT checkbox (rm/add user)
 * Changed fab button z-index to make it appear above sidebar in shinydashboard/bs4Dash (fix [#123](https://github.com/datastorm-open/shinymanager/issues/123))
 * can pass validate_pwd_ to secure_server
-
+* (#129) add japanese. Thanks @ironwest 
+* (#113) disable download db & logs. Thanks @StatisMike
+* (#130) update somes icons. Thanks @ismirsehregal
+* add download user file
 
 # shinymanager 1.0.400
 
