@@ -208,6 +208,11 @@ secure_app <- function(ui,
 #' to \code{Inf}. You can specify for example
 #' \code{options("shinymanager.pwd_validity" = 90)} if you want to force user changing password each 90 days.
 #' 
+#' Using \code{options("shinymanager.pwd_failure_limit")}, you can set password failure limit. It defaults
+#' to \code{Inf}. You can specify for example
+#' \code{options("shinymanager.pwd_failure_limit" = 5)} if you want to lock user account after 5 wrong password.
+#' 
+#' 
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString

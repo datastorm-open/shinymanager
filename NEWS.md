@@ -1,4 +1,4 @@
-# shinymanager 1.0.405
+# shinymanager 1.0.410
 
 * (#112) : fix bug changing user name. Thanks @StatisMike
 * fix DT checkbox (rm/add user)
@@ -9,6 +9,7 @@
 * (#130) update somes icons. Thanks @ismirsehregal
 * add download user file
 * add options for validity pwd & update check same / old pwd
+* add options for locked account
 
 # shinymanager 1.0.400
 

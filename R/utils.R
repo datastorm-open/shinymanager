@@ -19,6 +19,11 @@ get_pwd_validity <- function(){
   getOption("shinymanager.pwd_validity", default = Inf)
 }
 
+get_pwd_failure_limit <- function(){
+  getOption("shinymanager.pwd_failure_limit", default = Inf)
+}
+
+
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
   args <- list(...)
@@ -75,8 +80,16 @@ force_chg_pwd <- function(user, change = TRUE) {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     resetpwd <- read_db_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
+    if(nrow(resetpwd) > 0){
+      if(!"n_wrong_pwd" %in% colnames(resetpwd)){
+        resetpwd$n_wrong_pwd <- 0
+      }
+    }
+    
     ind_user <- resetpwd$user %in% user
     resetpwd$must_change[ind_user] <- change
+    resetpwd$n_wrong_pwd[ind_user] <- 0
+    
     if (!isTRUE(change)) {
       resetpwd$have_changed[ind_user] <- TRUE
       resetpwd$date_change[ind_user] <- as.character(Sys.Date())
@@ -177,6 +190,18 @@ save_logs <- function(token) {
           stringsAsFactors = FALSE
         ))
         write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+        
+        # update pwd_management
+        pwd_mngt <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+        if(nrow(pwd_mngt) > 0){
+          if(!"n_wrong_pwd" %in% colnames(pwd_mngt)){
+            pwd_mngt$n_wrong_pwd <- 0
+          } else {
+            pwd_mngt$n_wrong_pwd[pwd_mngt$user %in% user] <- 0
+          }
+          write_db_encrypt(conn = conn, value = pwd_mngt, name = "pwd_mngt", passphrase = passphrase)
+        }
+        
       }
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
@@ -184,6 +209,30 @@ save_logs <- function(token) {
         "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
       ), call. = FALSE)
     }
+  }
+}
+
+check_locked_account <- function(user, pwd_failure_limit) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_lock <- try({
+      pwd_mngt <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+      if(nrow(pwd_mngt) > 0 && "n_wrong_pwd" %in% colnames(pwd_mngt)){
+        ind_user <- which(pwd_mngt$user %in% user)
+        if(length(ind_user) > 0){
+          pwd_mngt$n_wrong_pwd[ind_user] >= pwd_failure_limit
+        } else {
+          FALSE
+        }
+      }
+    }, silent = TRUE)
+    if (inherits(res_lock, "try-error")) res_lock <- FALSE
+    return(res_lock)
+  } else {
+    return(FALSE)
   }
 }
 
@@ -213,6 +262,21 @@ save_logs_failed <- function(user, status = "Failed") {
         stringsAsFactors = FALSE
       ))
       write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+      
+      if(status %in% "Wrong pwd"){
+        # update pwd_management
+        pwd_mngt <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+        if(nrow(pwd_mngt) > 0){
+          if(!"n_wrong_pwd" %in% colnames(pwd_mngt)){
+            pwd_mngt$n_wrong_pwd <- 0
+          } 
+          
+          ind_user <- which(pwd_mngt$user %in% user)
+          pwd_mngt$n_wrong_pwd[ind_user] <- pwd_mngt$n_wrong_pwd[ind_user] + 1
+          write_db_encrypt(conn = conn, value = pwd_mngt, name = "pwd_mngt", passphrase = passphrase)
+        }
+      }
+      
     }, silent = TRUE)
     
     if (inherits(res_logs, "try-error")) {

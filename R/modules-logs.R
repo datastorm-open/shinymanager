@@ -282,8 +282,10 @@ logs <- function(input, output, session, sqlite_path, passphrase,
       # treat old bad admin log
       if(any(duplicated(logs$token))){
         logs$date_days <- substring(logs$server_connected, 1, 10)
-        logs <- logs[!duplicated(logs[, c("user", "token", "date_days")]), ]
+        logs$ind_dup <- duplicated(logs[, c("user", "token", "date_days")])
+        logs <- logs[is.na(logs$token) | (!is.na(logs$token) & !logs$ind_dup), ]
         logs$date_days <- NULL
+        logs$ind_dup <- NULL
       }
       logs$token <- NULL
       users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)

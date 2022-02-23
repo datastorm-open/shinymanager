@@ -251,6 +251,11 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     unbindDT(ns("table_pwds"))
     
     pwds <- pwds()
+    
+    if("n_wrong_pwd" %in% colnames(pwds)){
+      pwds$n_wrong_pwd <- NULL
+    }
+    
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
     pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("undo"), status = "warning", lan = lan())
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user, session = session)

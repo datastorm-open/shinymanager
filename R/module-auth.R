@@ -230,7 +230,15 @@ auth_server <- function(input, output, session,
   observeEvent(input$go_auth, {
     removeUI(selector = jns("msg_auth"))
     res_auth <- check_credentials(input$user_id, input$user_pwd)
-    if (isTRUE(res_auth$result)) {
+    
+    # locked account ?
+    locked <- FALSE
+    pwd_failure_limit <- as.numeric(get_pwd_failure_limit())
+    if(length(pwd_failure_limit) > 0 && !is.na(pwd_failure_limit) && !is.infinite(pwd_failure_limit)){
+      locked <- check_locked_account(input$user_id, pwd_failure_limit)
+    }
+    
+    if (isTRUE(res_auth$result) & !locked) {
       removeUI(selector = jns("auth-mod"))
       authentication$result <- TRUE
       authentication$user <- input$user_id
@@ -244,6 +252,18 @@ auth_server <- function(input, output, session,
         addAuthToQuery(session, token, lan()$get_language())
         session$reload()
       }
+      
+    } else if (isTRUE(res_auth$result) & locked) {
+      
+      save_logs_failed(input$user_id, status = "Locked Account")
+      
+      insertUI(
+        selector = jns("result_auth"),
+        ui = tags$div(
+          id = ns("msg_auth"), class = "alert alert-danger",
+          icon("exclamation-triangle"), lan()$get("Your account is locked")
+        )
+      )
       
     } else {
       if (is.null(res_auth$user_info)) {
@@ -275,14 +295,26 @@ auth_server <- function(input, output, session,
             )
           )
         } else {
+          
           save_logs_failed(input$user_id, status = "Wrong pwd")
-          insertUI(
-            selector = jns("result_auth"),
-            ui = tags$div(
-              id = ns("msg_auth"), class = "alert alert-danger",
-              icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
+          
+          if(!locked){
+            insertUI(
+              selector = jns("result_auth"),
+              ui = tags$div(
+                id = ns("msg_auth"), class = "alert alert-danger",
+                icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
+              )
             )
-          )
+          } else {
+            insertUI(
+              selector = jns("result_auth"),
+              ui = tags$div(
+                id = ns("msg_auth"), class = "alert alert-danger",
+                icon("exclamation-triangle"), lan()$get("Your account is locked")
+              )
+            )
+          }
         }
       }
     }
