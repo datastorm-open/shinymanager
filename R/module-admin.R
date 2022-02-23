@@ -52,14 +52,14 @@ admin_ui <- function(id, lan = NULL) {
           label = lan$get("Edit selected users"),
           class = "btn-primary pull-right disabled",
           style = "margin-left: 5px",
-          icon = icon("pencil-square-o")
+          icon = icon("edit")
         ),
         
         actionButton(
           inputId = ns("remove_selected_users"),
           label = lan$get("Remove selected users"),
           class = "btn-danger pull-right disabled",
-          icon = icon("trash-o")
+          icon = icon("trash-alt")
         ),
         
         tags$br(),
@@ -177,8 +177,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
     
     users <- users()
     users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
-    users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pencil-square-o"), status = "primary", lan = lan())
-    users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-o"), status = "danger", lan = lan())
+    users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("edit"), status = "primary", lan = lan())
+    users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-alt"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user, session = session)
     names_lan <- sapply(names(users), function(x) lan()$get(x))
     change <- as.logical(users$admin)

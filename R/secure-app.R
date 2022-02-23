@@ -80,7 +80,7 @@ secure_app <- function(ui,
               actionButton(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
-                icon = icon("sign-out")
+                icon = icon("sign-out-alt")
               ),
               actionButton(
                 inputId = ".shinymanager_app",
@@ -109,7 +109,7 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out")
+              icon = icon("sign-out-alt")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
@@ -126,7 +126,7 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out")
+              icon = icon("sign-out-alt")
             )
           )
         }

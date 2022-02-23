@@ -54,7 +54,7 @@ fab_button <- function(...,
           `data-mfb-label` = label,
           class = "mfb-component__button--main action-button",
           icon("plus", class = "mfb-component__main-icon--resting"),
-          icon("close", class = "mfb-component__main-icon--active")
+          icon("times", class = "mfb-component__main-icon--active")
         ),
         tags$ul(
           class = "mfb-component__list",
