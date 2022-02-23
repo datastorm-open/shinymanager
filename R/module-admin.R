@@ -560,11 +560,15 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
       users <- rbind(users, newuser)
       write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
       resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+      if(!"n_wrong_pwd" %in% colnames(resetpwd)){
+        resetpwd$n_wrong_pwd <- 0
+      }
       resetpwd <- rbind(resetpwd, data.frame(
         user = newuser$user,
         must_change = must_change,
         have_changed = as.character(FALSE),
         date_change = as.character(Sys.Date()),
+        n_wrong_pwd = 0,
         stringsAsFactors = FALSE
       ))
       write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)

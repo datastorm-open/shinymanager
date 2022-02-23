@@ -60,7 +60,7 @@ is_force_chg_pwd <- function(token) {
       pwd_validity <- as.numeric(get_pwd_validity())
       if(length(pwd_validity) > 0 && !is.na(pwd_validity)){
         user_date <- as.Date(resetpwd$date_change[ind_user])
-        if(!is.na(user_date)){
+        if(length(user_date) > 0 && !is.na(user_date)){
           res <- as.numeric(difftime(Sys.Date(), user_date, units = "days")) > pwd_validity
         }
       }
