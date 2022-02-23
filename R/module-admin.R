@@ -559,7 +559,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, lan,
         user = newuser$user,
         must_change = must_change,
         have_changed = as.character(FALSE),
-        date_change = character(1),
+        date_change = as.character(Sys.Date()),
         stringsAsFactors = FALSE
       ))
       write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)

@@ -204,6 +204,10 @@ secure_app <- function(ui,
 #' sqlite database, \code{options("shinymanager.download" = "logs")} to allow logs download
 #' or \code{options("shinymanager.download" = "")} to disable all.  
 #'
+#' Using \code{options("shinymanager.pwd_validity")}, you can set password validity period. It defaults
+#' to \code{Inf}. You can specify for example
+#' \code{options("shinymanager.pwd_validity" = 90)} if you want to force user changing password each 90 days.
+#' 
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString

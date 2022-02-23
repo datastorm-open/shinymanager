@@ -15,6 +15,10 @@ get_download <- function(){
   getOption("shinymanager.download", default = c("db", "logs", "users"))
 }
 
+get_pwd_validity <- function(){
+  getOption("shinymanager.pwd_validity", default = Inf)
+}
+
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
   args <- list(...)
@@ -44,7 +48,19 @@ is_force_chg_pwd <- function(token) {
     on.exit(dbDisconnect(conn))
     resetpwd <- read_db_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     ind_user <- resetpwd$user %in% user_info$user
-    identical(resetpwd$must_change[ind_user], "TRUE")
+    # first check must change
+    res <- identical(resetpwd$must_change[ind_user], "TRUE")
+    # then pwd_validity
+    if(!res){
+      pwd_validity <- as.numeric(get_pwd_validity())
+      if(length(pwd_validity) > 0 && !is.na(pwd_validity)){
+        user_date <- as.Date(resetpwd$date_change[ind_user])
+        if(!is.na(user_date)){
+          res <- as.numeric(difftime(Sys.Date(), user_date, units = "days")) > pwd_validity
+        }
+      }
+    }
+    return(res)
   } else {
     return(FALSE)
   }
@@ -80,9 +96,6 @@ update_pwd <- function(user, pwd) {
     res_pwd <- try({
       users <- read_db_decrypt(conn, name = "credentials", passphrase = passphrase)
       ind_user <- users$user %in% user
-      if (identical(users$password[ind_user], pwd)) {
-        return(list(result = FALSE))
-      }
       if(!"character" %in% class(users$password)){
         users$password <- as.character(users$password)
       }
@@ -97,6 +110,32 @@ update_pwd <- function(user, pwd) {
     return(list(result = !inherits(res_pwd, "try-error")))
   } else {
     return(list(result = FALSE))
+  }
+}
+
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RSQLite SQLite
+check_new_pwd <- function(user, pwd) {
+  sqlite_path <- .tok$get_sqlite_path()
+  passphrase <- .tok$get_passphrase()
+  if (!is.null(sqlite_path)) {
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    res_pwd <- try({
+      users <- read_db_decrypt(conn, name = "credentials", passphrase = passphrase)
+      ind_user <- users$user %in% user
+      if("is_hashed_password" %in% colnames(users)){
+        if(users$is_hashed_password[ind_user]){
+          return(!scrypt::verifyPassword(users$password[ind_user], pwd))
+        }
+      } else {
+        return(!identical(users$password[ind_user], pwd))
+      }
+    }, silent = TRUE)
+    if("try-error" %in% class(res_pwd)) res_pwd <- TRUE
+    return(res_pwd)
+  } else {
+    return(TRUE)
   }
 }
 

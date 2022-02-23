@@ -8,6 +8,7 @@
 * (#113) disable download db & logs. Thanks @StatisMike
 * (#130) update somes icons. Thanks @ismirsehregal
 * add download user file
+* add options for validity pwd & update check same / old pwd
 
 # shinymanager 1.0.400
 

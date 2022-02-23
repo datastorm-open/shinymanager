@@ -88,7 +88,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
       user = credentials_data$user,
       must_change = as.character(FALSE),
       have_changed = as.character(FALSE),
-      date_change = character(length(credentials_data$user)),
+      date_change = as.character(Sys.Date()),
       stringsAsFactors = FALSE
     ),
     passphrase = passphrase
