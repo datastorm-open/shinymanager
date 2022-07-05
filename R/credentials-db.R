@@ -71,7 +71,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   default_col <- c("user", "password", "start", "expire", "admin")
   credentials_data <- credentials_data[, c(default_col,
                                            setdiff(colnames(credentials_data), default_col))]
-  conn <- dbConnect(SQLite(), dbname = sqlite_path)
+  conn <- dbConnect(SQLite(), dbname = sqlite_path, flags = "SQLITE_RW")
   on.exit(dbDisconnect(conn))
   credentials_data[] <- lapply(credentials_data, as.character)
 
