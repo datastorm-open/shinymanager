@@ -261,7 +261,7 @@ auth_server <- function(input, output, session,
         selector = jns("result_auth"),
         ui = tags$div(
           id = ns("msg_auth"), class = "alert alert-danger",
-          icon("exclamation-triangle"), lan()$get("Your account is locked")
+          icon("triangle-exclamation"), lan()$get("Your account is locked")
         )
       )
       
@@ -272,7 +272,7 @@ auth_server <- function(input, output, session,
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
+            icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
           )
         )
       } else if (isTRUE(res_auth$expired)) {
@@ -281,7 +281,7 @@ auth_server <- function(input, output, session,
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("exclamation-triangle"), lan()$get("Your account has expired")
+            icon("triangle-exclamation"), lan()$get("Your account has expired")
           )
         )
       } else {
@@ -291,7 +291,7 @@ auth_server <- function(input, output, session,
             selector = jns("result_auth"),
             ui = tags$div(
               id = ns("msg_auth"), class = "alert alert-danger",
-              icon("exclamation-triangle"), lan()$get("You are not authorized for this application")
+              icon("triangle-exclamation"), lan()$get("You are not authorized for this application")
             )
           )
         } else {
@@ -303,7 +303,7 @@ auth_server <- function(input, output, session,
               selector = jns("result_auth"),
               ui = tags$div(
                 id = ns("msg_auth"), class = "alert alert-danger",
-                icon("exclamation-triangle"), lan()$get("Username or password are incorrect")
+                icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
               )
             )
           } else {
@@ -311,7 +311,7 @@ auth_server <- function(input, output, session,
               selector = jns("result_auth"),
               ui = tags$div(
                 id = ns("msg_auth"), class = "alert alert-danger",
-                icon("exclamation-triangle"), lan()$get("Your account is locked")
+                icon("triangle-exclamation"), lan()$get("Your account is locked")
               )
             )
           }
