@@ -80,7 +80,7 @@ logs_ui <- function(id, lan = NULL) {
 
         tags$br(),
 
-        tags$h3(icon("calendar"), lan$get("Number of connections per day"), class = "text-primary"),
+        tags$h3(icon("calendar-days"), lan$get("Number of connections per day"), class = "text-primary"),
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
