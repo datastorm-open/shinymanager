@@ -91,7 +91,7 @@ secure_app <- function(ui,
             shinymanager_where("admin")
           ),
           tabPanel(
-            title = tagList(icon("home"), lan$get("Home")),
+            title = tagList(icon("house"), lan$get("Home")),
             value = "home",
             admin_ui("admin", lan),
             shinymanager_language(lan$get_language())
