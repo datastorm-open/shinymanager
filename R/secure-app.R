@@ -76,7 +76,7 @@ secure_app <- function(ui,
           header = tagList(
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
             fab_button(
-              position = fab_position,
+              position = "bottom-left",
               actionButton(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
