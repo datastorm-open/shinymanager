@@ -6,9 +6,9 @@
 #' @param credentials_data A \code{data.frame} with information about users, \code{user} and \code{password} are required.
 #' @param sqlite_path Path to the SQLite database.
 #' @param passphrase A password to protect the data inside the database.
-#' @param flags \code{SQLITE_RWC:} open the database in read/write mode and create the database file if it does not already exist; 
-#' \code{SQLITE_RW:} open the database in read/write mode. Raise an error if the file does not already exist; 
-#' \code{SQLITE_RO:} open the database in read only mode. Raise an error if the file does not already exist
+#' @param flags \code{RSQLite::SQLITE_RWC:} open the database in read/write mode and create the database file if it does not already exist; 
+#' \code{RSQLite::SQLITE_RW:} open the database in read/write mode. Raise an error if the file does not already exist; 
+#' \code{RSQLite::SQLITE_RO:} open the database in read only mode. Raise an error if the file does not already exist
 #' 
 #' @export
 #'
@@ -54,7 +54,7 @@
 #' )
 #'
 #' }
-create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = "SQLITE_RWC") {
+create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = RSQLite::SQLITE_RWC) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
   }
