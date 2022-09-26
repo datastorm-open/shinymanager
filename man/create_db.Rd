@@ -4,7 +4,12 @@
 \alias{create_db}
 \title{Create credentials database}
 \usage{
-create_db(credentials_data, sqlite_path, passphrase = NULL)
+create_db(
+  credentials_data,
+  sqlite_path,
+  passphrase = NULL,
+  flags = RSQLite::SQLITE_RWC
+)
 }
 \arguments{
 \item{credentials_data}{A \code{data.frame} with information about users, \code{user} and \code{password} are required.}
@@ -12,6 +17,10 @@ create_db(credentials_data, sqlite_path, passphrase = NULL)
 \item{sqlite_path}{Path to the SQLite database.}
 
 \item{passphrase}{A password to protect the data inside the database.}
+
+\item{flags}{\code{RSQLite::SQLITE_RWC:} open the database in read/write mode and create the database file if it does not already exist; 
+\code{RSQLite::SQLITE_RW:} open the database in read/write mode. Raise an error if the file does not already exist; 
+\code{RSQLite::SQLITE_RO:} open the database in read only mode. Raise an error if the file does not already exist}
 }
 \description{
 Create a SQLite database with credentials data protected by a password.

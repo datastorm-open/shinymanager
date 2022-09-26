@@ -91,10 +91,10 @@ The others columns are rendering by defaut using a \code{textInput}. You can mod
 
 You can specify if you want to allow downloading users file,  sqlite database and logs from within
 the admin panel by invoking \code{options("shinymanager.download")}. It defaults
-to \code{c("db", "logs", "users")}, that allows downloading all. You can specify 
+to \code{c("db", "logs", "users")}, that allows downloading all. You can specify
 \code{options("shinymanager.download" = "db"} if you want allow admin to download only
 sqlite database, \code{options("shinymanager.download" = "logs")} to allow logs download
-or \code{options("shinymanager.download" = "")} to disable all.  
+or \code{options("shinymanager.download" = "")} to disable all.
 
 Using \code{options("shinymanager.pwd_validity")}, you can set password validity period. It defaults
 to \code{Inf}. You can specify for example
