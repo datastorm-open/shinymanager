@@ -2,7 +2,7 @@ Package: shinymanager
 Title: Authentication Management for 'Shiny' Applications
 Version: 1.0.410
 Authors@R: c(
-    person("Benoit", "Thieurmel", email = "benoit.thieurmel@datastorm.fr", role = c("aut", "cre")),
+    person("Benoit", "Thieurmel", email = "bthieurmel@gmail.com", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut"))
     )
 Description: Simple and secure authentification mechanism for single 'Shiny' applications.
