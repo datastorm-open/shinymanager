@@ -6,7 +6,10 @@
 #' @param credentials_data A \code{data.frame} with information about users, \code{user} and \code{password} are required.
 #' @param sqlite_path Path to the SQLite database.
 #' @param passphrase A password to protect the data inside the database.
-#'
+#' @param flags \code{SQLITE_RWC:} open the database in read/write mode and create the database file if it does not already exist; 
+#' \code{SQLITE_RW:} open the database in read/write mode. Raise an error if the file does not already exist; 
+#' \code{SQLITE_RO:} open the database in read only mode. Raise an error if the file does not already exist
+#' 
 #' @export
 #'
 #' @details The credentials \code{data.frame} can have the following columns:
@@ -51,7 +54,7 @@
 #' )
 #'
 #' }
-create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
+create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = "SQLITE_RWC") {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
   }
@@ -71,7 +74,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL) {
   default_col <- c("user", "password", "start", "expire", "admin")
   credentials_data <- credentials_data[, c(default_col,
                                            setdiff(colnames(credentials_data), default_col))]
-  conn <- dbConnect(SQLite(), dbname = sqlite_path)
+  conn <- dbConnect(SQLite(), dbname = sqlite_path, flags = flags)
   on.exit(dbDisconnect(conn))
   credentials_data[] <- lapply(credentials_data, as.character)
 
