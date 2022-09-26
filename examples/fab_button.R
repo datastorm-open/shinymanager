@@ -18,7 +18,7 @@ ui <- fluidPage(
     actionButton(
       inputId = "logout",
       label = "Logout",
-      icon = icon("sign-out")
+      icon = icon("arrow-right-from-bracket")
     ),
     actionButton(
       inputId = "info",
