@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
     language <- "en"
   }
 
@@ -51,7 +51,7 @@ secure_app <- function(ui,
     token <- gsub('\"', "", query$token)
     admin <- query$admin
     language <- query$language
-    if(!is.null(language)){
+    if (!is.null(language)) {
       lan <- use_language(gsub('\"', "", language))
     }
     if (.tok$is_valid(token)) {
@@ -144,11 +144,11 @@ secure_app <- function(ui,
       args <- get_args(..., fun = auth_ui)
       # patch / message changing tag_img & tag_div
       deprecated <- list(...)
-      if("tag_img" %in% names(deprecated)){
+      if ("tag_img" %in% names(deprecated)) {
         args$tags_top <- deprecated$tag_img
         warning("'tag_img' (auth_ui, secure_app) is now deprecated. Please use 'tags_top'", call. = FALSE)
       }
-      if("tag_div" %in% names(deprecated)){
+      if ("tag_div" %in% names(deprecated)) {
         args$tags_bottom <- deprecated$tag_div
         warning("'tag_div' (auth_ui, secure_app) is now deprecated. Please use 'tags_bottom'", call. = FALSE)
       }
@@ -246,7 +246,7 @@ secure_server <- function(check_credentials,
   lan <- reactiveVal(use_language())
   observe({
     lang <- getLanguage(session = session)
-    if(!is.null(lang)) {
+    if (!is.null(lang)) {
       lan(use_language(lang))
     }
   })
@@ -300,11 +300,11 @@ secure_server <- function(check_credentials,
       user_info <- .tok$get(token)
       for (i in names(user_info)) {
         value <- user_info[[i]]
-        if(i %in% "applications"){
+        if (i %in% "applications") {
           value <- strsplit(x = as.character(value), split = ";")
           value <- unlist(x = value, use.names = FALSE)
-        } else if(!is.null(inputs_list)){
-          if(i %in% names(inputs_list) && !is.null(inputs_list[[i]]$args$multiple) && inputs_list[[i]]$args$multiple){
+        } else if (!is.null(inputs_list)) {
+          if (i %in% names(inputs_list) && !is.null(inputs_list[[i]]$args$multiple) && inputs_list[[i]]$args$multiple) {
             value <- strsplit(x = as.character(value), split = ";")
             value <- unlist(x = value, use.names = FALSE)
           }
@@ -344,7 +344,7 @@ secure_server <- function(check_credentials,
       token <- getToken(session = session)
       if (!is.null(token)) {
         valid_timeout <- .tok$is_valid_timeout(token, update = TRUE)
-        if(!valid_timeout){
+        if (!valid_timeout) {
           .tok$remove(token)
           clearQueryString(session = session)
           session$reload()
