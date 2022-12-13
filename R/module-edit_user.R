@@ -78,7 +78,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
             list_args$selected <- NULL
           } else {
             if (!is.null(username)){
-              if (list_args$multiple && is.character(data_user[[x]])) {
+              if (isTRUE(list_args$multiple) && is.character(data_user[[x]])) {
                 list_args$selected <- unlist(strsplit(data_user[[x]], ";"))
               } else {
                 list_args$selected <- data_user[[x]]
@@ -141,7 +141,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
       width = "100%"
     )
   }
-  
+
   tagList(
     input_list
   )
