@@ -24,8 +24,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     FUN = function(x) {
       if (identical(x, "start")) {
         value <- unique(data_user[[x]])
-        if (is.null(value) || length(value) > 1) {
-          # value <- Sys.Date()
+        if (is.null(value) || length(value) != 1) {
           value <- NA
         }
         suppressWarnings({
@@ -33,7 +32,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
         })
       } else if (identical(x, "expire")) {
         value <- unique(data_user[[x]])
-        if (is.null(value) || length(value) > 1) {
+        if (is.null(value) || length(value) != 1) {
           # value <- Sys.Date() + 60
           value <- NA
         }
