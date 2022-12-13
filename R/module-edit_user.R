@@ -28,7 +28,13 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           value <- NA
         }
         suppressWarnings({
-          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("start")), value = value, width = "100%")
+          dateInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(lan$get("start")),
+            value = value,
+            language = lan$get_dateInput(),
+            width = "100%"
+          )
         })
       } else if (identical(x, "expire")) {
         value <- unique(data_user[[x]])
@@ -37,7 +43,13 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           value <- NA
         }
         suppressWarnings({
-          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("expire")), value = value, width = "100%")
+          dateInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(lan$get("expire")),
+            value = value,
+            language = lan$get_dateInput(),
+            width = "100%"
+          )
         })
       } else if (identical(x, "user") && length(username) > 1) {
         NULL # MULTIPLE USERS: dont modify user name
