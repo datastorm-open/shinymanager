@@ -54,7 +54,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           checkboxInput(
             inputId = ns(x),
             label = R.utils::capitalize(lan$get("admin")),
-            value = isTRUE(all(as.logical(data_user[[x]])))
+            value = isTRUE(all(as.logical(data_user[[x]]))) & length(data_user[[x]])
           )
         }
       } else {
