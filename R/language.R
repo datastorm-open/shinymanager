@@ -688,8 +688,96 @@ pkgEnv$label_el = list(
   "Allowed null values" = "\u0395\u03c0\u03b9\u03c4\u03c1\u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03bc\u03b7\u03b4\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 (null) \u03c4\u03b9\u03bc\u03ad\u03c2"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac")
+
+pkgEnv$label_id = list(
+  "Please authenticate" = "Masuk",
+  "Username:" = "Nama akun :",
+  "Password:" = "Kata sandi :",
+  "Login" = "Masuk",
+  "Username or password are incorrect" = "Nama akun atau kata sandi salah",
+  "Your account has expired" = "Akun Anda telah kadaluarsa",
+  "Your account is locked" = "Akun Anda terkunci",
+  "Please change your password" = "Harap ganti kata sandi Anda",
+  "New password cannot be the same as old" = "Kata sandi baru tidak boleh sama dengan kata sandi lama",
+  "New password:" = "Kata sandi baru :",
+  "Confirm password:" = "Konfirmasi kata sandi :",
+  "Update new password" = "Perbaharui kata sandi",
+  "Password successfully updated! Please re-login" = "Kata sandi telah berhasil diubah! Harap masuk kembali.",
+  "The two passwords are different" = "Dua kata sandi yang diberikan tidak sama",
+  "Failed to update password" = "Gagal memperbarui kata sandi",
+  "Logout" = "Keluar",
+  "Go to application" = "Menuju applikasi",
+  "Administrator mode" = "Mode administrator",
+  "Add a user" = "Tambahkan akun",
+  "Too many users" = "Jumlah akun terlalu banyak",
+  "Maximum number of users : %s" = "Batasan jumlah akun : %s",
+  "Failed to update user" = "Gagal memperbarui akun",
+  "User successfully updated" = "Akun berhasil diperbaharui",
+  "Cancel" = "Batalkan",
+  "Confirm new user" = "Konfirmasi akun baru",
+  "Confirm change" = "Konfirmasi perubahan",
+  "Are you sure to remove user(s): %s from the database ?" = "Apakah Anda yakin ingin menghapus akun: %s dari basis data ?",
+  "Delete user(s)" = "Hapus akun",
+  "Delete user" = "Hapus akun",
+  "Edit user" = "Perbarui akun",
+  "User already exist!" = "Akun sudah ada!",
+  "Dismiss" = "Batalkan",
+  "New user %s succesfully created!" = "Akun baru %s berhasil ditambahkan!",
+  "Ask to change password" = "Minta untuk mengganti kata sandi",
+  "Confirm" = "Konfirmasi",
+  "Ask %s to change password on next connection?" = "Minta %s untuk mengganti kata sandi pada koneksi berikutnya?",
+  "Change saved!" = "Perubahan behasil disimpan!",
+  "Failed to update the database" = "Gagal memperbarui basis data",
+  "Password does not respect safety requirements" = "Kata sandi yang diberikan tidak memenuhi rekomendasi keamanan",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Kata sandi harus mengandung minimal satu angka, satu huruf kecil, satu huruf besar, dan terdiri atas minimal 6 karakter.",
+  "Number of connections per user" = "Jumlah koneksi per akun",
+  "Number of connections per day" = "Jumlah koneksi per hari",
+  "Total number of connection" = "Total jumlah koneksi",
+  "You can\'t remove yourself!" = "Anda tidak dapat menghapus diri sendiri!",
+  "User:" = "Akun :",
+  "Period:" = "Periode :",
+  "Last week" = "Pekan sebelumnya",
+  "Last month" = "Bulan sebelumnya",
+  "All period" = "Seluruh periode",
+  "Home" = "Beranda",
+  "Select all shown users" = "Pilih semua akun yang ditampilkan",
+  "Remove selected users" = "Hapus akun terpilih",
+  "Edit selected users" = "Perbarui akun terpilih",
+  "Force selected users to change password" = "Paksa akun terpilih untuk mengubah kata sandi",
+  "Users" = "Akun",
+  "Passwords" = "Kata sandi",
+  "Download logs database" = "Unduh catatan histori basis data",
+  "Download SQL database" = "Unduh basis data SQL",
+  "Download Users file" = "Unduh berkas akun",
+  "Reset password for %s?" = "Atur ulang kata sandi untuk %s?",
+  "Reset password" = "Atur ulang kata sandi",
+  "Temporary password:" = "Kata sandi sementara:",
+  "Password succesfully reset!" = "Kata sandi berhasil diperbarui!",
+  "You are not authorized for this application" = "Anda tidak memiliki akses untuk aplikasi ini",
+  "Language"  = "Bahasa",
+  "Yes" = "Ya",
+  "No" = "Tidak",
+  "Password" = "Kata sandi",
+  "start" = "mulai",
+  "expire" = "berakhir",
+  "admin" = "Admin",
+  "user" = "Akun",
+  "Edit" = "Ubah",
+  "Remove" = "Hapus",
+  "must_change" = "Harus Diubah",
+  "have_changed" = "Telah Diubah",
+  "date_change" = "Tanggal",
+  "Change password" = "Ganti kata sandi",
+  "Select" = "Pilih",
+  "Logs" = "Catatan histori",
+  "All users" = "Semua akun",
+  "Nb logged" = "Jumlah akses masuk",
+  "Allowed null values" = "Nilai kosong diperbolehkan"
+)
+
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian")
+
 
 
 #' @importFrom R6 R6Class
@@ -705,7 +793,7 @@ language <- R6::R6Class(
         stop("Unsupported language !", call. = FALSE)
       }
       private$language <- lan
-      private$labels <-   switch (lan,
+      private$labels <-   switch(lan,
                                   "en" = pkgEnv$label_en,
                                   "fr" = pkgEnv$label_fr,
                                   "pt-BR" = pkgEnv$label_ptbr,
@@ -713,12 +801,13 @@ language <- R6::R6Class(
                                   "de" = pkgEnv$label_de,
                                   "pl" = pkgEnv$label_pl,
                                   "ja" = pkgEnv$label_ja,
-                                  "el" = pkgEnv$label_el
+                                  "el" = pkgEnv$label_el,
+                                  "id" = pkgEnv$label_id
       )
     },
     get = function(label) {
       value <- private$labels[[label]]
-      if(is.null(value)){
+      if (is.null(value)) {
         label
       } else {
         value
@@ -752,7 +841,8 @@ language <- R6::R6Class(
       "de" = "de",
       "pl" = "pl",
       "ja" = "ja",
-      "el" = "el"
+      "el" = "el", 
+      "id" = "id"
     ),
     DT_lan = list(
       fr = list(
@@ -933,6 +1023,29 @@ language <- R6::R6Class(
           sSortAscending = ": \u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7 \u03b3\u03b9\u03b1 \u03b1\u03cd\u03be\u03bf\u03c5\u03c3\u03b1 \u03c4\u03b1\u03be\u03b9\u03bd\u03cc\u03bc\u03b7\u03c3\u03b7 \u03c3\u03c4\u03b7\u03bb\u03ce\u03bd",
           sSortDescending = ": \u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3h \u03b3\u03b9\u03b1 \u03c6\u03b8\u03af\u03bd\u03bf\u03c5\u03c3\u03b1 \u03c4\u03b1\u03be\u03b9\u03bd\u03cc\u03bc\u03b7\u03c3\u03b7 \u03c3\u03c4\u03b7\u03bb\u03ce\u03bd"
         )
+      ),
+      id = list(
+        sEmptyTable = "Tidak ada data tersedia pada tabel ini",
+        sInfo = "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        sInfoEmpty = "Menampilkan 0 sampai 0 dari 0 entri",
+        sInfoFiltered = "(disaring dari _MAX_ entri keseluruhan)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Menampilkan entri _MENU_",
+        sLoadingRecords = "Sedang memuat...",
+        sProcessing = "Sedang memproses...",
+        sSearch = "Cari:",
+        sZeroRecords = "Tidak ditemukan data yang sesuai",
+        oPaginate = list(
+          sFirst = "Pertama",
+          sLast = "Sebelumnya",
+          sNext = "Selanjutnya",
+          sPrevious = "Terakhir"
+        ),
+        oAria = list(
+          sSortAscending = ": aktifkan untuk mengurutkan kolom secara naik",
+          sSortDescending = ": aktifkan untuk mengurutkan kolom secara turun"
+        )
       )
     ),
     length = function() base::length(private$labels)
@@ -945,7 +1058,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
 #'
 #' @return A language object
 #' @export
@@ -966,7 +1079,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -984,15 +1097,15 @@ use_language <- function(lan = "en") {
 #'   "Password:" = "Enter your password:"
 #' )
 set_labels <- function(language, ...) {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
 
-  current_labels <- switch (language,
+  current_labels <- switch(language,
                    "en" = pkgEnv$label_en,
                    "fr" = pkgEnv$label_fr,
                    "pt-BR" = pkgEnv$label_ptbr,
@@ -1000,7 +1113,8 @@ set_labels <- function(language, ...) {
                    "de" = pkgEnv$label_de,
                    "pl" = pkgEnv$label_pl,
                    "ja" = pkgEnv$label_ja,
-                   "el" = pkgEnv$label_el
+                   "el" = pkgEnv$label_el,
+                   "id" = pkgEnv$label_id
   )
 
   update_labels <- modifyList(
@@ -1008,22 +1122,24 @@ set_labels <- function(language, ...) {
     val = lapply(args, I)
   )
 
-  if(language %in% "en"){
+  if (language %in% "en") {
     pkgEnv$label_en <- update_labels
-  } else if(language %in% "fr"){
+  } else if (language %in% "fr") {
     pkgEnv$label_fr <- update_labels
-  } else if(language %in% "pt-BR"){
+  } else if (language %in% "pt-BR") {
     pkgEnv$label_ptbr <- update_labels
-  } else if(language %in% "es"){
+  } else if (language %in% "es") {
     pkgEnv$label_es <- update_labels
-  } else if(language %in% "de"){
+  } else if (language %in% "de") {
     pkgEnv$label_de <- update_labels
-  } else if(language %in% "pl"){
+  } else if (language %in% "pl") {
     pkgEnv$label_pl <- update_labels
-  } else if(language %in% "ja"){
+  } else if (language %in% "ja") {
     pkgEnv$label_ja <- update_labels
-  } else if(language %in% "el"){
+  } else if (language %in% "el") {
     pkgEnv$label_el <- update_labels
+  } else if (language %in% "id") {
+    pkgEnv$label_id <- update_labels
   }
 
   invisible(TRUE)
@@ -1033,12 +1149,12 @@ set_labels <- function(language, ...) {
 #'
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
     language <- "en"
   }
 
-  switch (language,
+  switch(language,
           "en" = pkgEnv$label_en,
           "fr" = pkgEnv$label_fr,
           "pt-BR" = pkgEnv$label_ptbr,
@@ -1046,7 +1162,8 @@ get_labels <- function(language = "en") {
           "de" = pkgEnv$label_de,
           "pl" = pkgEnv$label_pl,
           "ja" = pkgEnv$label_ja,
-          "el" = pkgEnv$label_el
+          "el" = pkgEnv$label_el,
+          "id" = pkgEnv$label_id
   )
 }
 
