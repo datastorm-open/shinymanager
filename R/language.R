@@ -688,7 +688,7 @@ pkgEnv$label_el = list(
   "Allowed null values" = "\u0395\u03c0\u03b9\u03c4\u03c1\u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03bc\u03b7\u03b4\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 (null) \u03c4\u03b9\u03bc\u03ad\u03c2"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "el")
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el")
 names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac")
 
 
@@ -730,6 +730,9 @@ language <- R6::R6Class(
     get_DT = function() {
       private$DT_lan[[private$language]]
     },
+    get_dateInput = function() {
+      private$dateInput_lan[[private$language]]
+    },
     get_language_registered = function() {
       private$language_registered
     },
@@ -741,6 +744,16 @@ language <- R6::R6Class(
     language = "en",
     language_registered = v_language_registered,
     labels = pkgEnv$label_en,
+    dateInput_lan = list(
+      "en" = "en",
+      "fr" = "fr",
+      "pt-BR" = "pt-BR",
+      "es" = "es",
+      "de" = "de",
+      "pl" = "pl",
+      "ja" = "ja",
+      "el" = "el"
+    ),
     DT_lan = list(
       fr = list(
         sProcessing = "Traitement en cours...", sSearch = "Rechercher&nbsp;:",
