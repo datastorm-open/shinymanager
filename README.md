@@ -162,6 +162,57 @@ server <- function(input, output, session) {
 }
 ```
 
+### PostgreSQL database
+
+```
+library(RPostgres)
+library(shiny)
+library(shinymanager)
+library(DBI)
+
+conn <- DBI::dbConnect(RPostgres::Postgres(),
+                       host   = "localhost",
+                       dbname = "postgres_db",
+                       user = "postgres_user",
+                       password = "postgres_user",
+                       port = 5432)
+
+# credentials <- data.frame(
+#   user = c("shiny", "admin"),
+#   password = c("shiny", "admin"),
+#   start = c(NA, NA),
+#   expire = c(NA, NA),
+#   admin = c(FALSE, TRUE),
+#   stringsAsFactors = FALSE)
+
+## Write SQL tables
+create_sql_tables(conn,
+                  credentials_data = credentials,
+                  passphrase = NULL
+)
+
+ui <- fluidPage(
+  h2("My secure application"),
+  verbatimTextOutput("auth_output")
+)
+
+ui <- secure_app(ui, enable_admin = TRUE)
+
+
+server <- function(input, output, session) {
+  
+  res_auth <- secure_server(
+    check_credentials = check_credentials_sql(conn, passphrase = NULL)
+  )
+  
+  output$auth_output <- renderPrint({ reactiveValuesToList(res_auth) })
+  
+}
+
+shinyApp(ui, server)
+
+```
+
 ### Admin mode
 
 Using SQL database protected, an admin mode is available to manage access to the application, features included are
