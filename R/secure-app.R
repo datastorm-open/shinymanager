@@ -272,23 +272,45 @@ secure_server <- function(check_credentials,
   .tok$set_timeout(timeout)
   
   path_sqlite <- .tok$get_sqlite_path()
+  if (!is.null(path_sqlite)) {
+    callModule(
+      module = admin_sqlite,
+      id = "admin",
+      sqlite_path = path_sqlite,
+      passphrase = .tok$get_passphrase(),
+      inputs_list = inputs_list,
+      max_users = max_users,
+      lan = lan
+    )
+    callModule(
+      module = logs_sqlite,
+      id = "logs",
+      sqlite_path = path_sqlite,
+      passphrase = .tok$get_passphrase(),
+      fileEncoding = fileEncoding,
+      lan = lan
+    )
+  }
   
-  callModule(
-    module = admin,
-    id = "admin",
-    passphrase = .tok$get_passphrase(),
-    inputs_list = inputs_list,
-    max_users = max_users,
-    lan = lan
-  )
-  
-  callModule(
-    module = logs,
-    id = "logs",
-    passphrase = .tok$get_passphrase(),
-    fileEncoding = fileEncoding,
-    lan = lan
-  )
+  ## Condition for SQL connection
+  if (class(conn)=="PqConnection") { 
+    callModule(
+      module = admin_sql,
+      id = "admin",
+      passphrase = .tok$get_passphrase(),
+      inputs_list = inputs_list,
+      max_users = max_users,
+      lan = lan
+    )
+    
+    callModule(
+      module = logs_sql,
+      id = "logs",
+      passphrase = .tok$get_passphrase(),
+      fileEncoding = fileEncoding,
+      lan = lan
+    )
+  }
   
   user_info_rv <- reactiveValues()
   
