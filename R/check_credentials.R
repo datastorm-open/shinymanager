@@ -85,9 +85,11 @@ check_credentials <- function(db, passphrase = NULL) {
   }
 }
 
-
+## Check credentials from data.frame
 check_credentials_df <- function(user, password, credentials_df) {
+  
   credentials_df <- as.data.frame(credentials_df)
+  
   if (!user %in% credentials_df$user) {
     return(list(
       result = FALSE,
@@ -96,8 +98,10 @@ check_credentials_df <- function(user, password, credentials_df) {
       user_info = NULL
     ))
   }
+  
   user_info <- credentials_df[credentials_df$user == user, setdiff(names(credentials_df), c("password", "is_hashed_password")), drop = FALSE]
   pwd <- credentials_df$password[credentials_df$user == user]
+  
   if("is_hashed_password" %in% colnames(credentials_df)){
     is_hashed_pwd <- credentials_df$is_hashed_password[credentials_df$user == user]
   } else {
@@ -159,6 +163,7 @@ check_credentials_df <- function(user, password, credentials_df) {
   return(auth)
 }
 
+## Check credentials from SQLite
 check_credentials_sqlite <- function(sqlite_path, passphrase) {
   conn <- dbConnect(SQLite(), dbname = sqlite_path)
   on.exit(dbDisconnect(conn))
@@ -172,5 +177,17 @@ check_credentials_sqlite <- function(sqlite_path, passphrase) {
   }
 }
 
+## Check credentials from Postgres
+check_credentials_sql <- function(conn, passphrase = NULL) {
+  
+  db <- read_sql_decrypt(
+    conn = conn,
+    name = "credentials",
+    passphrase = passphrase
+  )
+  function(user, password) {
+    check_credentials_df(user, password, credentials_df = db)
+  }
+}
 
 
