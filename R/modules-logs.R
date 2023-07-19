@@ -84,17 +84,6 @@ logs_ui <- function(id, lan = NULL) {
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
-        if("logs" %in% get_download()){
-          list(tags$br(), tags$br(),
-               
-               downloadButton(
-                 outputId = ns("download_logs"),
-                 label = lan$get("Download logs database"),
-                 class = "btn-primary center-block",
-                 icon = icon("download")
-               ))
-        },
-
         tags$br()
       )
     )
@@ -106,7 +95,7 @@ logs_ui <- function(id, lan = NULL) {
 #'  bb_x_axis bb_zoom %>% bb_bar_color_manual
 #' @importFrom shiny reactiveValues observe req updateSelectInput updateDateRangeInput reactiveVal outputOptions
 #' @importFrom utils write.table
-logs <- function(input, output, session, sqlite_path, passphrase, 
+logs <- function(input, output, session, passphrase, 
                  fileEncoding = "", lan = NULL) {
 
   ns <- session$ns
@@ -118,9 +107,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
   print_app_input <- reactiveVal(FALSE)
 
   observe({
-    conn <- dbConnect(SQLite(), dbname = sqlite_path)
-    on.exit(dbDisconnect(conn))
-    logs_rv$logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+    logs_rv$logs <- read_sql_decrypt(conn = conn, name = "logs", passphrase = passphrase)
 
     isolate({
       ctrl_log <- isolate({logs_rv$logs})
@@ -137,7 +124,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
       }
     })
 
-    logs_rv$users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+    logs_rv$users <- read_sql_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
     updateSelectInput(
       session = session,
       inputId = "user",
@@ -276,9 +263,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
     },
     content = function(con) {
       req("logs" %in% get_download())
-      conn <- dbConnect(SQLite(), dbname = sqlite_path)
-      on.exit(dbDisconnect(conn))
-      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+      logs <- read_sql_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       # treat old bad admin log
       if(any(duplicated(logs$token))){
         logs$date_days <- substring(logs$server_connected, 1, 10)
@@ -288,7 +273,7 @@ logs <- function(input, output, session, sqlite_path, passphrase,
         logs$ind_dup <- NULL
       }
       logs$token <- NULL
-      users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      users <- read_sql_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
       users$password <- NULL
       users$is_hashed_password <- NULL
       if(all(is.na(users$start))) users$start <- NULL

@@ -282,13 +282,13 @@ secure_server <- function(check_credentials,
     lan = lan
   )
   
-  # callModule(
-  #   module = logs,
-  #   id = "logs",
-  #   passphrase = .tok$get_passphrase(),
-  #   fileEncoding = fileEncoding,
-  #   lan = lan
-  # )
+  callModule(
+    module = logs,
+    id = "logs",
+    passphrase = .tok$get_passphrase(),
+    fileEncoding = fileEncoding,
+    lan = lan
+  )
   
   user_info_rv <- reactiveValues()
   
