@@ -293,6 +293,7 @@ secure_server <- function(check_credentials,
   }
   
   ## Condition for SQL connection
+  if(!exists("conn")) { conn = NULL }
   if (class(conn)=="PqConnection") { 
     callModule(
       module = admin_sql,
