@@ -10,4 +10,5 @@ Meta
 examples/demo/rsconnect
 docs
 inst/demo_app/rsconnect
-z_postgres_test_app.R
+z_test_app_postgres.R
+z_test_app_sqlite.R
