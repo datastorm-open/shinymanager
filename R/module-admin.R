@@ -64,19 +64,6 @@ admin_ui <- function(id, lan = NULL) {
         
         tags$br(),
         
-        if("users" %in% get_download()){
-          list(
-            tags$br(),tags$br(), tags$br(),
-            
-            downloadButton(
-              outputId = ns("download_users_database"),
-              label = lan$get("Download Users file"),
-              class = "btn-primary center-block",
-              icon = icon("download")
-            )
-          )
-        },
-        
         tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
         
@@ -100,19 +87,6 @@ admin_ui <- function(id, lan = NULL) {
           icon = icon("key")
         ),
         
-        if("db" %in% get_download()){
-          list(
-            tags$br(),tags$br(), tags$br(), tags$hr(),
-            
-            downloadButton(
-              outputId = ns("download_sql_database"),
-              label = lan$get("Download SQL database"),
-              class = "btn-primary center-block",
-              icon = icon("download")
-            )
-          )
-        },
-        
         tags$br(),tags$br()
         
       )
@@ -125,7 +99,7 @@ admin_ui <- function(id, lan = NULL) {
 #'  removeUI insertUI reactiveValues showNotification callModule req updateCheckboxInput
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
-admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
+admin <- function(input, output, session, passphrase, lan,
                   inputs_list = NULL, max_users = NULL) {
   
   ns <- session$ns
@@ -143,7 +117,7 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
   observe({
     update_read_db$x
     db <- try({
-      read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      read_sql_decrypt(conn, name = "credentials", passphrase = passphrase)
     }, silent = TRUE)
     if (inherits(db, "try-error")) {
       showModal(modalDialog("An error occurs when connecting or reading the database."))
@@ -159,7 +133,7 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
   observe({
     update_read_db$x
     db <- try({
-      read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+      read_sql_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     }, silent = TRUE)
     if (inherits(db, "try-error")) {
       showModal(modalDialog("An error occurs when connecting or reading the database."))
@@ -311,8 +285,8 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
     users <- users[!users$user %in% to_delete, , drop = FALSE]
     pwds <- pwds()
     pwds <- pwds[!pwds$user %in% to_delete, , drop = FALSE]
-    write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
-    write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
+    write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
+    write_sql_encrypt(conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     update_read_db$x <- Sys.time()
   })
   
@@ -400,11 +374,11 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
     
     res_edit <- try({
       users <- update_user(users, newval, input$edit_user)
-      write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+      write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       if(!is.null(newval$user) && newval$user != input$edit_user){
         pwds$user[pwds$user %in% input$edit_user] <- newval$user
       }
-      write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
+      write_sql_encrypt(conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_edit, "try-error")) {
       showNotification(ui = lan()$get("Fail to update user"), type = "error")
@@ -445,7 +419,7 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
       for (user in r_selected_users()) {
         users <- update_user(users, newval, user)
       }
-      write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
+      write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_edit, "try-error")) {
       showNotification(ui = lan()$get("Fail to update user"), type = "error")
@@ -533,8 +507,8 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
       newuser[setdiff(colnames(users), colnames(newuser))] <- NA
       newuser <- newuser[colnames(users)]
       users <- rbind(users, newuser)
-      write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
-      resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
+      write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
+      resetpwd <- read_sql_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
       if(!"n_wrong_pwd" %in% colnames(resetpwd)){
         resetpwd$n_wrong_pwd <- 0
       }
@@ -546,7 +520,7 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
         n_wrong_pwd = 0,
         stringsAsFactors = FALSE
       ))
-      write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
+      write_sql_encrypt(conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
     }, silent = FALSE)
     if (inherits(res_add, "try-error")) {
       showNotification(ui = lan()$get("Failed to update user"), type = "error")
@@ -596,7 +570,7 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
     } else {
       users$is_hashed_password[users$user %in% input$reset_pwd] <- FALSE
     }
-    write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
+    write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
     res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
     if (inherits(res_chg, "try-error")) {
       showNotification(ui = lan()$get("Failed to update user"), type = "error")
@@ -631,8 +605,8 @@ admin <- function(input, output, session, sqlite_path = NULL, passphrase, lan,
     users <- users[!users$user %in% input$remove_user, , drop = FALSE]
     pwds <- pwds()
     pwds <- pwds[!pwds$user %in% input$remove_user, , drop = FALSE]
-    write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
-    write_db_encrypt(conn = conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
+    write_sql_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
+    write_sql_encrypt(conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     update_read_db$x <- Sys.time()
   })
 }

@@ -276,7 +276,6 @@ secure_server <- function(check_credentials,
   callModule(
     module = admin,
     id = "admin",
-    sqlite_path = path_sqlite,
     passphrase = .tok$get_passphrase(),
     inputs_list = inputs_list,
     max_users = max_users,
@@ -286,7 +285,6 @@ secure_server <- function(check_credentials,
   # callModule(
   #   module = logs,
   #   id = "logs",
-  #   sqlite_path = path_sqlite,
   #   passphrase = .tok$get_passphrase(),
   #   fileEncoding = fileEncoding,
   #   lan = lan
