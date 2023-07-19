@@ -37,7 +37,7 @@ secure_app <- function(ui,
     warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
     language <- "en"
   }
-
+  
   lan <- use_language(language)
   ui <- force(ui)
   enable_admin <- force(enable_admin)
@@ -45,7 +45,7 @@ secure_app <- function(ui,
   if (is.null(theme)) {
     theme <- "shinymanager/css/readable.min.css"
   }
-
+  
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
     token <- gsub('\"', "", query$token)
@@ -227,22 +227,22 @@ secure_server <- function(check_credentials,
                           keep_token = FALSE,
                           validate_pwd = NULL,
                           session = shiny::getDefaultReactiveDomain()) {
-
+  
   session$setBookmarkExclude(c(session$getBookmarkExclude(),
                                "shinymanager_language",
                                ".shinymanager_timeout",
                                ".shinymanager_admin",
                                ".shinymanager_logout",
                                "shinymanager_where"))
-
+  
   token_start <- isolate(getToken(session = session))
   if (isTRUE(keep_token)) {
     .tok$reset_count(token_start)
   } else {
     isolate(resetQueryString(session = session))
   }
-
-
+  
+  
   lan <- reactiveVal(use_language())
   observe({
     lang <- getLanguage(session = session)
@@ -250,7 +250,7 @@ secure_server <- function(check_credentials,
       lan(use_language(lang))
     }
   })
-
+  
   callModule(
     module = auth_server,
     id = "auth",
@@ -258,7 +258,7 @@ secure_server <- function(check_credentials,
     use_token = TRUE,
     lan = lan
   )
-
+  
   callModule(
     module = pwd_server,
     id = "password",
@@ -268,32 +268,32 @@ secure_server <- function(check_credentials,
     use_token = TRUE,
     lan = lan
   )
-
+  
   .tok$set_timeout(timeout)
-
+  
   path_sqlite <- .tok$get_sqlite_path()
-  if (!is.null(path_sqlite)) {
-    callModule(
-      module = admin,
-      id = "admin",
-      sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase(),
-      inputs_list = inputs_list,
-      max_users = max_users,
-      lan = lan
-    )
-    callModule(
-      module = logs,
-      id = "logs",
-      sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase(),
-      fileEncoding = fileEncoding,
-      lan = lan
-    )
-  }
-
+  
+  callModule(
+    module = admin,
+    id = "admin",
+    sqlite_path = path_sqlite,
+    passphrase = .tok$get_passphrase(),
+    inputs_list = inputs_list,
+    max_users = max_users,
+    lan = lan
+  )
+  
+  # callModule(
+  #   module = logs,
+  #   id = "logs",
+  #   sqlite_path = path_sqlite,
+  #   passphrase = .tok$get_passphrase(),
+  #   fileEncoding = fileEncoding,
+  #   lan = lan
+  # )
+  
   user_info_rv <- reactiveValues()
-
+  
   observe({
     token <- getToken(session = session)
     if (!is.null(token)) {
@@ -313,21 +313,21 @@ secure_server <- function(check_credentials,
       }
     }
   })
-
+  
   observeEvent(session$input$.shinymanager_admin, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=\"%s\"&admin=true&language=\"%s\"", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-
+  
   observeEvent(session$input$.shinymanager_app, {
     token <- getToken(session = session)
     updateQueryString(queryString = sprintf("?token=\"%s\"&language=\"%s\"", token, lan()$get_language()), session = session, mode = "replace")
     .tok$reset_count(token)
     session$reload()
   }, ignoreInit = TRUE)
-
+  
   observeEvent(session$input$.shinymanager_logout, {
     token <- getToken(session = session)
     logout_logs(token)
@@ -335,11 +335,11 @@ secure_server <- function(check_credentials,
     clearQueryString(session = session)
     session$reload()
   }, ignoreInit = TRUE)
-
-
-
+  
+  
+  
   if (timeout > 0) {
-
+    
     observeEvent(session$input$.shinymanager_timeout, {
       token <- getToken(session = session)
       if (!is.null(token)) {
@@ -351,7 +351,7 @@ secure_server <- function(check_credentials,
         }
       }
     })
-
+    
     observe({
       invalidateLater(30000, session)
       token <- getToken(session = session)
@@ -364,9 +364,9 @@ secure_server <- function(check_credentials,
         }
       }
     })
-
+    
   }
-
+  
   return(user_info_rv)
 }
 
