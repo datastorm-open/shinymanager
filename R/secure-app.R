@@ -69,7 +69,7 @@ secure_app <- function(ui,
         )
         return(pwd_ui)
       }
-      if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true") & !is.null(.tok$get_sqlite_path())) {
+      if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true")) {
         navbarPage(
           title = "Admin",
           theme = theme,
@@ -103,7 +103,7 @@ secure_app <- function(ui,
           )
         )
       } else {
-        if (isTRUE(enable_admin) && .tok$is_admin(token) && !is.null(.tok$get_sqlite_path())) {
+        if (isTRUE(enable_admin) && .tok$is_admin(token)) {
           menu <- fab_button(
             position = fab_position,
             actionButton(
@@ -118,7 +118,7 @@ secure_app <- function(ui,
             )
           )
         } else {
-          if (isTRUE(enable_admin) && .tok$is_admin(token) && is.null(.tok$get_sqlite_path())) {
+          if (isTRUE(enable_admin) && .tok$is_admin(token)) {
             warning("Admin mode is only available when using a SQLite database!", call. = FALSE)
           }
           menu <- fab_button(
