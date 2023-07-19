@@ -251,6 +251,118 @@ read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
   return(out)
 }
 
+# Functions modified for PostgreSQL --------------------------------------------
+
+## Create credentials tables in Postgres database
+create_sql_tables <- function(conn, credentials_data, passphrase = NULL) {
+  if (!all(c("user", "password") %in% names(credentials_data))) {
+    stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
+  }
+  if(any(duplicated(credentials_data$user))){
+    stop("Duplicated users in credentials_data", call. = FALSE)
+  }
+  if(!"admin" %in% names(credentials_data)){
+    credentials_data$admin <- FALSE
+  }
+  if(!"start" %in% names(credentials_data)){
+    credentials_data$start <- NA
+  }
+  if(!"expire" %in% names(credentials_data)){
+    credentials_data$expire <- NA
+  }
+  
+  default_col <- c("user", "password", "start", "expire", "admin")
+  credentials_data <- credentials_data[, c(default_col, setdiff(colnames(credentials_data), default_col))]
+  
+  credentials_data[] <- lapply(credentials_data, as.character)
+  
+  write_sql_encrypt(
+    conn = conn,
+    name = "credentials",
+    value = credentials_data,
+    passphrase = passphrase
+  )
+  
+  message("1. credentials table have been successfully created...")
+  
+  write_sql_encrypt(
+    conn = conn,
+    name = "pwd_mngt",
+    value = data.frame(
+      user = credentials_data$user,
+      must_change = as.character(FALSE),
+      have_changed = as.character(FALSE),
+      date_change = as.character(Sys.Date()),
+      n_wrong_pwd = 0,
+      stringsAsFactors = FALSE
+    ),
+    passphrase = passphrase
+  )
+  
+  message("2. pwd_mngt table have been successfully created...")
+  
+  write_sql_encrypt(
+    conn = conn,
+    name = "logs",
+    value = data.frame(
+      user = character(0),
+      server_connected = character(0),
+      token = character(0),
+      logout = character(0),
+      app = character(0),
+      stringsAsFactors = FALSE
+    ),
+    passphrase = passphrase
+  )
+  
+  message("3. logs table have been successfully created...")
+}
+
+## Write crypted table to a Postgres database
+write_sql_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
+  
+  if(name == "credentials" && "password" %in% colnames(value)){
+    if(!"is_hashed_password" %in% colnames(value)){
+      value$is_hashed_password <- FALSE
+    }
+    to_hash <- which(!as.logical(value$is_hashed_password))
+    if(length(to_hash) > 0){
+      # store hashed password
+      value$password[to_hash] <- sapply(value$password[to_hash], function(x) scrypt::hashPassword(x))
+      value$is_hashed_password[to_hash] <- TRUE
+    }
+  }
+  
+  if (!is.null(passphrase)) {
+    passphrase <- as.character(passphrase)
+    passphrase <- charToRaw(passphrase)
+    key <- sha256(passphrase)
+    value_serialized <- serialize(value, NULL)
+    value_encrypted <- aes_cbc_encrypt(data = value_serialized, key = key)
+    value <- data.frame(value = I(list(value_encrypted)), iv = I(list(attr(value_encrypted, "iv"))))
+  }
+  # Write table in Postgres database
+  dbWriteTable(conn = conn, name = name, value = value, overwrite = TRUE)
+  
+}
+
+## Read crypted table from a Postgres database
+read_sql_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
+  
+  out <- dbReadTable(conn = conn, name = name)
+  
+  if (!is.null(passphrase)) {
+    passphrase <- as.character(passphrase)
+    passphrase <- charToRaw(passphrase)
+    key <- sha256(passphrase)
+    value <- out$value[[1]]
+    attr(value, "iv") <- out$iv[[1]]
+    out <- aes_cbc_decrypt(value, key = key)
+    out <- unserialize(out)
+  }
+  return(out)
+}
+
 
 
 
