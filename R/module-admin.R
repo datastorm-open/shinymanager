@@ -62,6 +62,21 @@ admin_ui <- function(id, lan = NULL) {
         
         tags$br(),
         
+        path_sqlite <- .tok$get_sqlite_path(),
+        
+        if("users" %in% get_download() && !is.null(path_sqlite)){
+          list(
+            tags$br(),tags$br(), tags$br(),
+            
+            downloadButton(
+              outputId = ns("download_users_database"),
+              label = lan$get("Download Users file"),
+              class = "btn-primary center-block",
+              icon = icon("download")
+            )
+          )
+        },
+        
         tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
         
@@ -85,7 +100,20 @@ admin_ui <- function(id, lan = NULL) {
           icon = icon("key")
         ),
         
-        tags$br(),tags$br()
+        if("db" %in% get_download() && !is.null(path_sqlite)){
+          list(
+            tags$br(),tags$br(), tags$br(), tags$hr(),
+            
+            downloadButton(
+              outputId = ns("download_sql_database"),
+              label = lan$get("Download SQL database"),
+              class = "btn-primary center-block",
+              icon = icon("download")
+            )
+          )
+        },
+        
+        tags$br(),tags$br(),
         
       )
     )
@@ -100,7 +128,7 @@ admin_ui <- function(id, lan = NULL) {
 #' @importFrom DBI dbConnect
 #' @importFrom RSQLite SQLite
 admin_sql <- function(input, output, session, passphrase, lan,
-                  inputs_list = NULL, max_users = NULL) {
+                      inputs_list = NULL, max_users = NULL) {
   
   ns <- session$ns
   jns <- function(x) {
@@ -609,6 +637,31 @@ admin_sql <- function(input, output, session, passphrase, lan,
     write_sql_encrypt(conn, value = pwds, name = "pwd_mngt", passphrase = passphrase)
     update_read_db$x <- Sys.time()
   })
+  
+  # download SQL Database
+  output$download_sql_database <- downloadHandler(
+    filename = function() {
+      paste('shinymanager-sql-', Sys.Date(), '.sqlite', sep = '')
+    },
+    content = function(con) {
+      req("db" %in% get_download())
+      file.copy(sqlite_path, con)
+    })
+  
+  # download user file
+  output$download_users_database <- downloadHandler(
+    filename = function() {
+      paste('shinymanager-users-', Sys.Date(), '.csv', sep = '')
+    },
+    content = function(con) {
+      req("users" %in% get_download())
+      conn <- dbConnect(SQLite(), dbname = sqlite_path)
+      on.exit(dbDisconnect(conn))
+      users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      users$password <- NULL
+      users$is_hashed_password <- NULL
+      write.table(users, con, sep = ";", row.names = FALSE, na = '')
+    })
 }
 
 

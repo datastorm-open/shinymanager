@@ -83,6 +83,18 @@ logs_ui <- function(id, lan = NULL) {
         tags$h3(icon("calendar-days"), lan$get("Number of connections per day"), class = "text-primary"),
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
+        
+        path_sqlite <- .tok$get_sqlite_path(),
+        if("logs" %in% get_download() && !is.null(path_sqlite)){
+          list(tags$br(), tags$br(),
+               
+               downloadButton(
+                 outputId = ns("download_logs"),
+                 label = lan$get("Download logs database"),
+                 class = "btn-primary center-block",
+                 icon = icon("download")
+               ))
+        },
 
         tags$br()
       )
