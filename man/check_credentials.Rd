@@ -4,12 +4,14 @@
 \alias{check_credentials}
 \title{Check credentials}
 \usage{
-check_credentials(db, passphrase = NULL)
+check_credentials(db, passphrase = NULL, sql = FALSE)
 }
 \arguments{
 \item{db}{A \code{data.frame} with credentials data or path to SQLite database created with \code{\link{create_db}}.}
 
 \item{passphrase}{Passphrase to decrypt the SQLite database.}
+
+\item{sql}{TRUE for SQL based databases i.e PostgreSQL.}
 }
 \value{
 Return a \code{function} with two arguments: \code{user} and \code{password}
@@ -69,9 +71,18 @@ check_credentials(credentials)("fannyyy", "azerty")
 
 \dontrun{
 
-## With a SQLite database:
-
+# With a SQLite database:
 check_credentials("credentials.sqlite", passphrase = "supersecret")
+
+# With PostgreSQL database
+conn <- DBI::dbConnect(RPostgres::Postgres(),
+                       host   = "host",
+                       dbname = "db_name",
+                       user = "user",
+                       password = "pw",
+                       port = 5432)
+
+check_credentials(conn, passphrase = "supersecret", sql = TRUE)
 
 }
 

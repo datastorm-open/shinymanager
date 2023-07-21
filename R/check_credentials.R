@@ -2,8 +2,8 @@
 #' Check credentials
 #'
 #' @param db A \code{data.frame} with credentials data or path to SQLite database created with \code{\link{create_db}}.
-#' @param passphrase TRUE for SQL based databases i.e PostgreSQL.
-#' @param sql Passphrase to decrypt the SQLite database.
+#' @param passphrase Passphrase to decrypt the SQLite database.
+#' @param sql TRUE for SQL based databases i.e PostgreSQL.
 #'
 #' @return Return a \code{function} with two arguments: \code{user} and \code{password}
 #' to be used in \code{\link{module-authentication}}. The authentication function returns
@@ -63,12 +63,17 @@
 #' 
 #' \dontrun{
 #'
-#' ## With a SQLite database:
-#'
+#' # With a SQLite database:
 #' check_credentials("credentials.sqlite", passphrase = "supersecret")
-#'
-#' ## With a PostgreSQL database:
-#'
+#' 
+#' # With PostgreSQL database
+#' conn <- DBI::dbConnect(RPostgres::Postgres(),
+#'                        host   = "host",
+#'                        dbname = "db_name",
+#'                        user = "user",
+#'                        password = "pw",
+#'                        port = 5432)
+#' 
 #' check_credentials(conn, passphrase = "supersecret", sql = TRUE)
 #'
 #' }

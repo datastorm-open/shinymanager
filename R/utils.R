@@ -66,7 +66,7 @@ is_force_chg_pwd <- function(token) {
       }
     }
     return(res)
-  } else if (class(conn)=="PqConnection") { 
+  } else if (inherits(conn, "PqConnection")) { 
     ## Condition for SQL connection
     resetpwd <- read_sql_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     ind_user <- resetpwd$user %in% user_info$user
@@ -115,7 +115,7 @@ force_chg_pwd <- function(user, change = TRUE) {
   }
   
   ## Condition for SQL connection
-  if (class(conn)=="PqConnection") {
+  if (inherits(conn, "PqConnection")) {
     resetpwd <- read_sql_decrypt(conn, name = "pwd_mngt", passphrase = passphrase)
     if(nrow(resetpwd) > 0){
       if(!"n_wrong_pwd" %in% colnames(resetpwd)){
@@ -158,7 +158,7 @@ update_pwd <- function(user, pwd) {
       force_chg_pwd(user, FALSE)
     }, silent = TRUE)
     return(list(result = !inherits(res_pwd, "try-error")))
-  } else if (class(conn)=="PqConnection") { 
+  } else if (inherits(conn, "PqConnection")) { 
     ## Condition for SQL connection
     res_pwd <- try({
       users <- read_sql_decrypt(conn, name = "credentials", passphrase = passphrase)
@@ -201,7 +201,7 @@ check_new_pwd <- function(user, pwd) {
     }, silent = TRUE)
     if("try-error" %in% class(res_pwd)) res_pwd <- TRUE
     return(res_pwd)
-  } else if (class(conn)=="PqConnection") { 
+  } else if (inherits(conn, "PqConnection")) { 
     ## Condition for SQL connection
     res_pwd <- try({
       users <- read_sql_decrypt(conn, name = "credentials", passphrase = passphrase)
@@ -282,7 +282,7 @@ save_logs <- function(token) {
   } 
   
   ## Condition for SQL connection
-  if (class(conn)=="PqConnection") { 
+  if (inherits(conn, "PqConnection")) { 
     res_logs <- try({
       logs <- read_sql_decrypt(conn, name = "logs", passphrase = passphrase)
       # patch for old logs database
@@ -354,7 +354,7 @@ check_locked_account <- function(user, pwd_failure_limit) {
     }, silent = TRUE)
     if (inherits(res_lock, "try-error")) res_lock <- FALSE
     return(res_lock)
-  } else if (class(conn)=="PqConnection") { 
+  } else if (inherits(conn, "PqConnection")) { 
     ## Condition for SQL connection
     res_lock <- try({
       pwd_mngt <- read_sql_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
@@ -427,7 +427,7 @@ save_logs_failed <- function(user, status = "Failed") {
   }
   
   ## Condition for SQL connection
-  if (class(conn)=="PqConnection") { 
+  if (inherits(conn, "PqConnection")) { 
     res_logs <- try({
       logs <- read_sql_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       # patch for old logs database
@@ -494,7 +494,7 @@ logout_logs <- function(token) {
   }
   
   ## Condition for SQL connection
-  if (class(conn)=="PqConnection") { 
+  if (inherits(conn, "PqConnection")) { 
     res_logs <- try({
       logs <- read_sql_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       logs$logout[logs$token  %in% token] <- as.character(Sys.time())

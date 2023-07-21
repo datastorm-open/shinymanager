@@ -253,9 +253,40 @@ read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
 
 # Functions modified for PostgreSQL --------------------------------------------
 
-## Create credentials tables in Postgres database
+#' Create credentials tables in PostgreSQL database
+#'
+#' @param conn SQL database connection
+#' @param credentials_data credentials data.frame
+#' @param passphrase option passphrase for database encryption
+#' 
+#' @return A data.frame
+#' 
 #' @export
-#' @name create_sql_tables
+#' @examples
+#' \dontrun{
+#'
+#' # PostgreSQL Connection
+#' conn <- DBI::dbConnect(RPostgres::Postgres(),
+#'                        host   = "host",
+#'                        dbname = "db_name",
+#'                        user = "user",
+#'                        password = "pw",
+#'                        port = 5432)
+#' 
+#' # Credentials data.frame
+#' credentials <- data.frame(user = c("shiny", "admin"),
+#'                           password = c("shiny", "admin"),
+#'                           start = c(NA, NA),
+#'                           expire = c(NA, NA),
+#'                           admin = c(FALSE, TRUE),
+#'                           stringsAsFactors = FALSE)
+#'
+#' # Write SQL tables
+#' create_sql_tables(conn,
+#'                   credentials_data = credentials,
+#'                   passphrase = NULL)
+#'
+#' }
 
 create_sql_tables <- function(conn, credentials_data, passphrase = NULL) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
@@ -321,9 +352,20 @@ create_sql_tables <- function(conn, credentials_data, passphrase = NULL) {
   message("3. logs table have been successfully created...")
 }
 
-## Write crypted table to a Postgres database
+#' Write encrypted table to a Postgres database
+#'
+#' @param conn SQL database connection
+#' @param value data.frame to write as SQL table
+#' @param name SQL table name
+#' @param passphrase option passphrase for database encryption
+#' 
+#' @return A data.frame
+#' 
 #' @export
-#' @name write_sql_encrypt
+#' 
+#' @importFrom DBI dbWriteTable
+#' @importFrom openssl sha256 aes_cbc_decrypt
+#' @import RPostgres
 
 write_sql_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
   
@@ -352,9 +394,19 @@ write_sql_encrypt <- function(conn, value, name = "credentials", passphrase = NU
   
 }
 
-#' Read crypted table from a Postgres database
+#' Read decrypted table from a Postgres database
+#'
+#' @param conn SQL database connection
+#' @param name SQL table name
+#' @param passphrase option passphrase for database encryption
+#' 
+#' @return A data.frame
+#' 
 #' @export
-#' @name read_sql_decrypt
+#' 
+#' @importFrom DBI dbReadTable
+#' @importFrom openssl sha256 aes_cbc_decrypt
+#' @import RPostgres
 
 read_sql_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
   
