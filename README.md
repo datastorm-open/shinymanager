@@ -202,7 +202,7 @@ ui <- secure_app(ui, enable_admin = TRUE)
 server <- function(input, output, session) {
   
   res_auth <- secure_server(
-    check_credentials = check_credentials_sql(conn, passphrase = NULL)
+    check_credentials = check_credentials(conn, passphrase = NULL, sql = TRUE)
   )
   
   output$auth_output <- renderPrint({ reactiveValuesToList(res_auth) })
