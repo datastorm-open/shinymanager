@@ -534,6 +534,6 @@ validate_pwd <- function(pwd) {
   ))
 }
 
-
+utils::globalVariables(c("conn", "sqlite_path"))
 
 
