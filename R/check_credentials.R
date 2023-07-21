@@ -2,7 +2,8 @@
 #' Check credentials
 #'
 #' @param db A \code{data.frame} with credentials data or path to SQLite database created with \code{\link{create_db}}.
-#' @param passphrase Passphrase to decrypt the SQLite database.
+#' @param passphrase TRUE for SQL based databases i.e PostgreSQL.
+#' @param sql Passphrase to decrypt the SQLite database.
 #'
 #' @return Return a \code{function} with two arguments: \code{user} and \code{password}
 #' to be used in \code{\link{module-authentication}}. The authentication function returns
@@ -66,16 +67,23 @@
 #'
 #' check_credentials("credentials.sqlite", passphrase = "supersecret")
 #'
+#' ## With a PostgreSQL database:
+#'
+#' check_credentials(conn, passphrase = "supersecret", sql = TRUE)
+#'
 #' }
 #' 
 #' @importFrom scrypt verifyPassword
 #'
-check_credentials <- function(db, passphrase = NULL) {
+check_credentials <- function(db, passphrase = NULL, sql = FALSE) {
   if (is.data.frame(db)) {
     .tok$set_sqlite_path(NULL)
     function(user, password) {
       check_credentials_df(user, password, credentials_df = db)
     }
+  } else if (sql==TRUE && exists("conn")) {
+    .tok$set_passphrase(passphrase)
+    check_credentials_sql(conn, passphrase)
   } else if (is_sqlite(db)) {
     .tok$set_sqlite_path(db)
     .tok$set_passphrase(passphrase)

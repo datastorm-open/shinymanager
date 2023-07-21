@@ -254,6 +254,9 @@ read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
 # Functions modified for PostgreSQL --------------------------------------------
 
 ## Create credentials tables in Postgres database
+#' @export
+#' @name create_sql_tables
+
 create_sql_tables <- function(conn, credentials_data, passphrase = NULL) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
@@ -319,6 +322,9 @@ create_sql_tables <- function(conn, credentials_data, passphrase = NULL) {
 }
 
 ## Write crypted table to a Postgres database
+#' @export
+#' @name write_sql_encrypt
+
 write_sql_encrypt <- function(conn, value, name = "credentials", passphrase = NULL) {
   
   if(name == "credentials" && "password" %in% colnames(value)){
@@ -346,7 +352,10 @@ write_sql_encrypt <- function(conn, value, name = "credentials", passphrase = NU
   
 }
 
-## Read crypted table from a Postgres database
+#' Read crypted table from a Postgres database
+#' @export
+#' @name read_sql_decrypt
+
 read_sql_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
   
   out <- dbReadTable(conn = conn, name = name)
@@ -362,9 +371,5 @@ read_sql_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
   }
   return(out)
 }
-
-
-
-
 
 

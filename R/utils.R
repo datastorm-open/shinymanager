@@ -499,6 +499,7 @@ logout_logs <- function(token) {
       logs <- read_sql_decrypt(conn = conn, name = "logs", passphrase = passphrase)
       logs$logout[logs$token  %in% token] <- as.character(Sys.time())
       write_sql_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
+      #on.exit(dbDisconnect(conn))
     }, silent = TRUE)
     if (inherits(res_logs, "try-error")) {
       warning(paste(
