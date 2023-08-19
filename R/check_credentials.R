@@ -69,12 +69,13 @@
 #' }
 #' 
 #' @importFrom scrypt verifyPassword
+#' @importFrom stringr str_trim
 #'
 check_credentials <- function(db, passphrase = NULL) {
   if (is.data.frame(db)) {
     .tok$set_sqlite_path(NULL)
     function(user, password) {
-      check_credentials_df(user, password, credentials_df = db)
+      check_credentials_df(user, password, app, credentials_df = db)
     }
   } else if (is_sqlite(db)) {
     .tok$set_sqlite_path(db)
@@ -86,7 +87,7 @@ check_credentials <- function(db, passphrase = NULL) {
 }
 
 
-check_credentials_df <- function(user, password, credentials_df) {
+check_credentials_df <- function(user, password, app, credentials_df) {
   credentials_df <- as.data.frame(credentials_df)
   if (!user %in% credentials_df$user) {
     return(list(
@@ -156,6 +157,15 @@ check_credentials_df <- function(user, password, credentials_df) {
       user_info = user_info
     )
   }
+  ##############add##########
+  appname = app
+  applist <- str_trim(unlist(strsplit(credentials_df$app[credentials_df$user == user],split = ',')))
+  if(appname %in% applist) {
+    
+  }else{
+    auth$result <- FALSE
+  }
+  ###########################
   return(auth)
 }
 
@@ -167,8 +177,8 @@ check_credentials_sqlite <- function(sqlite_path, passphrase) {
     name = "credentials",
     passphrase = passphrase
   )
-  function(user, password) {
-    check_credentials_df(user, password, credentials_df = db)
+  function(user, password,app) {
+    check_credentials_df(user, password, app, credentials_df = db)
   }
 }
 

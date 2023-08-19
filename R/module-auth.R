@@ -26,7 +26,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                     choose_language = NULL, lan = NULL, ...) {
 
   ns <- NS(id)
-
+  
   if(is.null(lan)){
     lan <- use_language()
   }
@@ -173,8 +173,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #' @importFrom stats setNames
 auth_server <- function(input, output, session,
                         check_credentials,
-                        use_token = FALSE, lan = NULL) {
-
+                        use_token = FALSE, lan = NULL,app) {
+  user_app = app
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
@@ -229,7 +229,7 @@ auth_server <- function(input, output, session,
 
   observeEvent(input$go_auth, {
     removeUI(selector = jns("msg_auth"))
-    res_auth <- check_credentials(input$user_id, input$user_pwd)
+    res_auth <- check_credentials(input$user_id, input$user_pwd, user_app)
 
     # locked account ?
     locked <- FALSE
@@ -242,6 +242,7 @@ auth_server <- function(input, output, session,
       removeUI(selector = jns("auth-mod"))
       authentication$result <- TRUE
       authentication$user <- input$user_id
+      authentication$app <- user_app
       authentication$user_info <- res_auth$user_info
       # token <- generate_token(input$user_id)
       token <- .tok$generate(input$user_id)
@@ -311,7 +312,7 @@ auth_server <- function(input, output, session,
               selector = jns("result_auth"),
               ui = tags$div(
                 id = ns("msg_auth"), class = "alert alert-danger",
-                icon("triangle-exclamation"), lan()$get("Your account is locked")
+                icon("triangle-exclamation"), lan()$get("Your account is locked or app not correct")
               )
             )
           }

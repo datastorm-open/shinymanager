@@ -55,8 +55,8 @@
 #'
 #' }
 create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = RSQLite::SQLITE_RWC) {
-  if (!all(c("user", "password") %in% names(credentials_data))) {
-    stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)
+  if (!all(c("user", "password", "app") %in% names(credentials_data))) {
+    stop("credentials_data must contains columns: 'user', 'password','app'", call. = FALSE)
   }
   if(any(duplicated(credentials_data$user))){
     stop("Duplicated users in credentials_data", call. = FALSE)
@@ -71,7 +71,7 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = 
     credentials_data$expire <- NA
   }
 
-  default_col <- c("user", "password", "start", "expire", "admin")
+  default_col <- c("user", "password", "app", "start", "expire", "admin")
   credentials_data <- credentials_data[, c(default_col,
                                            setdiff(colnames(credentials_data), default_col))]
   conn <- dbConnect(SQLite(), dbname = sqlite_path, flags = flags)
