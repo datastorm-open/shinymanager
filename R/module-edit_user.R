@@ -24,21 +24,32 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     FUN = function(x) {
       if (identical(x, "start")) {
         value <- unique(data_user[[x]])
-        if (is.null(value) || length(value) > 1) {
-          # value <- Sys.Date()
+        if (is.null(value) || length(value) != 1) {
           value <- NA
         }
         suppressWarnings({
-          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("start")), value = value, width = "100%")
+          dateInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(lan$get("start")),
+            value = value,
+            language = lan$get_dateInput(),
+            width = "100%"
+          )
         })
       } else if (identical(x, "expire")) {
         value <- unique(data_user[[x]])
-        if (is.null(value) || length(value) > 1) {
+        if (is.null(value) || length(value) != 1) {
           # value <- Sys.Date() + 60
           value <- NA
         }
         suppressWarnings({
-          dateInput(inputId = ns(x), label = R.utils::capitalize(lan$get("expire")), value = value, width = "100%")
+          dateInput(
+            inputId = ns(x),
+            label = R.utils::capitalize(lan$get("expire")),
+            value = value,
+            language = lan$get_dateInput(),
+            width = "100%"
+          )
         })
       } else if (identical(x, "user") && length(username) > 1) {
         NULL # MULTIPLE USERS: dont modify user name
@@ -54,7 +65,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
           checkboxInput(
             inputId = ns(x),
             label = R.utils::capitalize(lan$get("admin")),
-            value = isTRUE(all(as.logical(data_user[[x]])))
+            value = isTRUE(all(as.logical(data_user[[x]]))) & length(data_user[[x]])
           )
         }
       } else {
@@ -78,7 +89,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
             list_args$selected <- NULL
           } else {
             if (!is.null(username)){
-              if (list_args$multiple && is.character(data_user[[x]])) {
+              if (isTRUE(list_args$multiple) && is.character(data_user[[x]])) {
                 list_args$selected <- unlist(strsplit(data_user[[x]], ";"))
               } else {
                 list_args$selected <- data_user[[x]]
@@ -141,7 +152,7 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
       width = "100%"
     )
   }
-  
+
   tagList(
     input_list
   )

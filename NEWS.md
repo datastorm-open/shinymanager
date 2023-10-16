@@ -10,6 +10,8 @@
 * add download user file
 * add options for validity pwd & update check same / old pwd
 * add options for locked account
+* (#144) Switch to Font Awesome 6 icon names. Thanks @ismirsehregal
+* (#143) add Greek language. Thanks @lefkiospaikousis 
 
 # shinymanager 1.0.400
 

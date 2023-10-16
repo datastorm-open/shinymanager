@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl".
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
     language <- "en"
   }
 
@@ -51,7 +51,7 @@ secure_app <- function(ui,
     token <- gsub('\"', "", query$token)
     admin <- query$admin
     language <- query$language
-    if(!is.null(language)){
+    if (!is.null(language)) {
       lan <- use_language(gsub('\"', "", language))
     }
     if (.tok$is_valid(token)) {
@@ -80,7 +80,7 @@ secure_app <- function(ui,
               actionButton(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
-                icon = icon("sign-out-alt")
+                icon = icon("right-from-bracket")
               ),
               actionButton(
                 inputId = ".shinymanager_app",
@@ -91,7 +91,7 @@ secure_app <- function(ui,
             shinymanager_where("admin")
           ),
           tabPanel(
-            title = tagList(icon("home"), lan$get("Home")),
+            title = tagList(icon("house"), lan$get("Home")),
             value = "home",
             admin_ui("admin", lan),
             shinymanager_language(lan$get_language())
@@ -109,12 +109,12 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out-alt")
+              icon = icon("right-from-bracket")
             ),
             actionButton(
               inputId = ".shinymanager_admin",
               label = lan$get("Administrator mode"),
-              icon = icon("cogs")
+              icon = icon("gears")
             )
           )
         } else {
@@ -126,7 +126,7 @@ secure_app <- function(ui,
             actionButton(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("sign-out-alt")
+              icon = icon("right-from-bracket")
             )
           )
         }
@@ -144,11 +144,11 @@ secure_app <- function(ui,
       args <- get_args(..., fun = auth_ui)
       # patch / message changing tag_img & tag_div
       deprecated <- list(...)
-      if("tag_img" %in% names(deprecated)){
+      if ("tag_img" %in% names(deprecated)) {
         args$tags_top <- deprecated$tag_img
         warning("'tag_img' (auth_ui, secure_app) is now deprecated. Please use 'tags_top'", call. = FALSE)
       }
-      if("tag_div" %in% names(deprecated)){
+      if ("tag_div" %in% names(deprecated)) {
         args$tags_bottom <- deprecated$tag_div
         warning("'tag_div' (auth_ui, secure_app) is now deprecated. Please use 'tags_bottom'", call. = FALSE)
       }
@@ -196,23 +196,23 @@ secure_app <- function(ui,
 #'      )
 #' )
 #' }
-#' 
+#'
 #' You can specify if you want to allow downloading users file,  sqlite database and logs from within
 #' the admin panel by invoking \code{options("shinymanager.download")}. It defaults
-#' to \code{c("db", "logs", "users")}, that allows downloading all. You can specify 
+#' to \code{c("db", "logs", "users")}, that allows downloading all. You can specify
 #' \code{options("shinymanager.download" = "db"} if you want allow admin to download only
 #' sqlite database, \code{options("shinymanager.download" = "logs")} to allow logs download
-#' or \code{options("shinymanager.download" = "")} to disable all.  
+#' or \code{options("shinymanager.download" = "")} to disable all.
 #'
 #' Using \code{options("shinymanager.pwd_validity")}, you can set password validity period. It defaults
 #' to \code{Inf}. You can specify for example
 #' \code{options("shinymanager.pwd_validity" = 90)} if you want to force user changing password each 90 days.
-#' 
+#'
 #' Using \code{options("shinymanager.pwd_failure_limit")}, you can set password failure limit. It defaults
 #' to \code{Inf}. You can specify for example
 #' \code{options("shinymanager.pwd_failure_limit" = 5)} if you want to lock user account after 5 wrong password.
-#' 
-#' 
+#'
+#'
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString
@@ -229,12 +229,12 @@ secure_server <- function(check_credentials,
                           session = shiny::getDefaultReactiveDomain()) {
 
   session$setBookmarkExclude(c(session$getBookmarkExclude(),
-                               "shinymanager_language", 
-                               ".shinymanager_timeout", 
+                               "shinymanager_language",
+                               ".shinymanager_timeout",
                                ".shinymanager_admin",
-                               ".shinymanager_logout", 
+                               ".shinymanager_logout",
                                "shinymanager_where"))
-  
+
   token_start <- isolate(getToken(session = session))
   if (isTRUE(keep_token)) {
     .tok$reset_count(token_start)
@@ -246,7 +246,7 @@ secure_server <- function(check_credentials,
   lan <- reactiveVal(use_language())
   observe({
     lang <- getLanguage(session = session)
-    if(!is.null(lang)) {
+    if (!is.null(lang)) {
       lan(use_language(lang))
     }
   })
@@ -300,11 +300,11 @@ secure_server <- function(check_credentials,
       user_info <- .tok$get(token)
       for (i in names(user_info)) {
         value <- user_info[[i]]
-        if(i %in% "applications"){
+        if (i %in% "applications") {
           value <- strsplit(x = as.character(value), split = ";")
           value <- unlist(x = value, use.names = FALSE)
-        } else if(!is.null(inputs_list)){
-          if(i %in% names(inputs_list) && !is.null(inputs_list[[i]]$args$multiple) && inputs_list[[i]]$args$multiple){
+        } else if (!is.null(inputs_list)) {
+          if (i %in% names(inputs_list) && !is.null(inputs_list[[i]]$args$multiple) && inputs_list[[i]]$args$multiple) {
             value <- strsplit(x = as.character(value), split = ";")
             value <- unlist(x = value, use.names = FALSE)
           }
@@ -344,7 +344,7 @@ secure_server <- function(check_credentials,
       token <- getToken(session = session)
       if (!is.null(token)) {
         valid_timeout <- .tok$is_valid_timeout(token, update = TRUE)
-        if(!valid_timeout){
+        if (!valid_timeout) {
           .tok$remove(token)
           clearQueryString(session = session)
           session$reload()

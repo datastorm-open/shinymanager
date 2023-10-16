@@ -288,8 +288,6 @@ It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but
 
 There's no persistent data storage on ``shinyapps.io``, you can read more here : https://docs.rstudio.com/shinyapps.io/Storage.html. So your **sqlite** database is lost when the instance is closed, and the one you've pushed when deploying the application will be used. You have to use external database.
 
-It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but not admin console at moment). You can find information on [this discussion](https://github.com/datastorm-open/shinymanager/issues/51). But it's not a really secure way because user can overpass the authentification using developper console... Prefer use  ``shiny`` application with ``secure_app`` function.
-
 ### Troubleshooting
 
 The application works fine without ``shinymanager`` but not you have trouble using ``shinymanager``. 

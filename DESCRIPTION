@@ -2,7 +2,7 @@ Package: shinymanager
 Title: Authentication Management for 'Shiny' Applications
 Version: 1.0.410
 Authors@R: c(
-    person("Benoit", "Thieurmel", email = "benoit.thieurmel@datastorm.fr", role = c("aut", "cre")),
+    person("Benoit", "Thieurmel", email = "bthieurmel@gmail.com", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut"))
     )
 Description: Simple and secure authentification mechanism for single 'Shiny' applications.
@@ -11,7 +11,7 @@ Description: Simple and secure authentification mechanism for single 'Shiny' app
 License: GPL-3
 URL: https://github.com/datastorm-open/shinymanager
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Imports: 
     R6,
     shiny,

@@ -688,8 +688,182 @@ pkgEnv$label_ja = list(
   "Allowed null values" = "\u30cc\u30eb\u5024\u306f\u8a31\u5bb9\u3055\u308c\u3066\u3044\u307e\u3059"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "cn")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "中文")
+pkgEnv$label_el = list(
+  "Please authenticate" = "\u03a0\u03b1\u03c1\u03b1\u03ba\u03b1\u03bb\u03ce \u03b5\u03c0\u03b1\u03bb\u03b7\u03b8\u03b5\u03cd\u03c3\u03c4\u03b5",
+  "Username:" = "\u038c\u03bd\u03bf\u03bc\u03b1 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7 :",
+  "Password:" = "\u039a\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 :",
+  "Login" = "\u0395\u03af\u03c3\u03bf\u03b4\u03bf\u03c2",
+  "Username or password are incorrect" = "\u03a4\u03bf \u03cc\u03bd\u03bf\u03bc\u03b1 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7 \u03ae \u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b5\u03af\u03bd\u03b1\u03b9 \u03bb\u03ac\u03b8\u03bf\u03c2",
+  "Your account has expired" = "\u039f \u03bb\u03bf\u03b3\u03b1\u03c1\u03b9\u03b1\u03c3\u03bc\u03cc\u03c2 \u03c3\u03b1\u03c2 \u03ad\u03c7\u03b5\u03b9 \u03bb\u03ae\u03be\u03b5\u03b9",
+  "Your account is locked" = "\u039f \u03bb\u03bf\u03b3\u03b1\u03c1\u03b9\u03b1\u03c3\u03bc\u03cc\u03c2 \u03c3\u03b1\u03c2 \u03ad\u03c7\u03b5\u03b9 \u03ba\u03bb\u03b5\u03b9\u03b4\u03ce\u03c3\u03b5\u03b9",
+  "Please change your password" = "\u03a0\u03b1\u03c1\u03b1\u03ba\u03b1\u03bb\u03ce \u03b1\u03bb\u03bb\u03ac\u03be\u03c4\u03b5 \u03c4\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03c3\u03b1\u03c2",
+  "New password cannot be the same as old" = "\u039f \u03bd\u03ad\u03bf\u03c2 \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b4\u03b5\u03bd \u03bc\u03c0\u03bf\u03c1\u03b5\u03af \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03bf \u03b9\u03b4\u03b9\u03bf\u03c2 \u03bc\u03b5 \u03c4\u03bf\u03bd \u03c0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03bf",
+  "New password:" = "\u039d\u03ad\u03bf\u03c2 \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 :",
+  "Confirm password:" = "\u0395\u03c0\u03b9\u03b2\u03b5\u03b2\u03b1\u03b9\u03ce\u03c3\u03c4\u03b5 \u03c4\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 :",
+  "Update new password" = "\u0391\u03bd\u03b1\u03bd\u03b5\u03ce\u03c3\u03c4\u03b5 \u03c4\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Password successfully updated! Please re-login" = "\u039f \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03ad\u03c7\u03b5\u03b9 \u03b1\u03bd\u03b1\u03bd\u03b5\u03c9\u03b8\u03b5\u03af \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03ce\u03c2! \u03a0\u03b1\u03c1\u03b1\u03ba\u03b1\u03bb\u03ce \u03c0\u03c1\u03bf\u03c7\u03c9\u03c1\u03ae\u03c3\u03c4\u03b5 \u03b3\u03b9\u03b1 '\u0395\u03af\u03c3\u03bf\u03b4\u03bf'",
+  "The two passwords are different" = "\u039f\u03b9 \u03b4\u03cd\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03af \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b4\u03b5\u03bd \u03c4\u03b1\u03b9\u03c1\u03b9\u03ac\u03b6\u03bf\u03c5\u03bd",
+  "Failed to update password" = "\u0391\u03c0\u03bf\u03c4\u03c5\u03c7\u03af\u03b1 \u03b1\u03bd\u03b1\u03bd\u03ad\u03c9\u03c3\u03b7\u03c2 \u03c4\u03bf\u03c5 \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Logout" = "\u0388\u03be\u03bf\u03b4\u03bf\u03c2",
+  "Go to application" = "\u03a0\u03c1\u03bf\u03c7\u03ce\u03c1\u03b7\u03c3\u03b5 \u03c3\u03c4\u03bf application",
+  "Administrator mode" = "\u039b\u03b5\u03b9\u03c4\u03bf\u03c5\u03c1\u03b3\u03af\u03b1 \u03b4\u03b9\u03b1\u03c7\u03b5\u03b9\u03c1\u03b9\u03c3\u03c4\u03ae",
+  "Add a user" = "\u03a0\u03c1\u03cc\u03c3\u03b8\u03b5\u03c3\u03b5 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "Too many users" = "\u03a0\u03ac\u03c1\u03b1 \u03c0\u03bf\u03bb\u03bb\u03bf\u03af \u03c7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2",
+  "Maximum number of users : %s" = "\u039c\u03ad\u03b3\u03b9\u03c3\u03c4\u03bf\u03c2 \u03b1\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2 \u03c7\u03c1\u03b7\u03c3\u03c4\u03ce\u03bd : %s",
+  "Failed to update user" = "\u0391\u03c0\u03bf\u03c4\u03c5\u03c7\u03af\u03b1 \u03b1\u03bd\u03b1\u03bd\u03ad\u03c9\u03c3\u03b7\u03c2 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "User successfully updated" = "\u039f \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 \u03b1\u03bd\u03b1\u03bd\u03b5\u03ce\u03b8\u03b7\u03ba\u03b5 \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03ce\u03c2",
+  "Cancel" = "\u0386\u03ba\u03c5\u03c1\u03bf",
+  "Confirm new user" = "\u0395\u03c0\u03b9\u03b2\u03b5\u03b2\u03b1\u03b9\u03ce\u03c3\u03c4\u03b5 \u03c4\u03bf \u03bd\u03ad\u03bf \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "Confirm change" = "\u0395\u03c0\u03b9\u03b2\u03b5\u03b2\u03b1\u03b9\u03ce\u03c3\u03c4\u03b5 \u03c4\u03b7\u03bd \u03b1\u03bb\u03bb\u03b1\u03b3\u03ae",
+  "Are you sure to remove user(s): %s from the database ?" = "\u0395\u03af\u03c3\u03c4\u03b5 \u03c3\u03af\u03b3\u03bf\u03c5\u03c1\u03bf\u03c2/\u03b7 \u03cc\u03c4\u03b9 \u03b8\u03ad\u03bb\u03b5\u03c4\u03b5 \u03bd\u03b1 \u03b1\u03c6\u03b1\u03b9\u03c1\u03ad\u03c3\u03c4\u03b5 \u03c4\u03bf/\u03c4\u03bf\u03c5\u03c2 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7/\u03c4\u03b5\u03c2: %s  \u03b1\u03c0\u03cc \u03c4\u03b7 \u03b2\u03ac\u03c3\u03b7 ?",
+  "Delete user(s)" = "\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7/\u03c4\u03c9\u03bd",
+  "Delete user" = "\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "Edit user" = "\u03a4\u03c1\u03bf\u03c0\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "User already exist!" = "\u039f \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 \u03c5\u03c0\u03ac\u03c1\u03c7\u03b5\u03b9 \u03ae\u03b4\u03b7!",
+  "Dismiss" = "\u0394\u03b9\u03ce\u03be\u03b5 \u03bc\u03b5",
+  "New user %s succesfully created!" = "\u039f \u03bd\u03ad\u03bf\u03c2 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2/\u03b5\u03c2 %s \u03b4\u03b7\u03bc\u03b9\u03bf\u03c5\u03c1\u03b3\u03ae\u03b8\u03b7\u03ba\u03b5 \u03bc\u03b5 \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1!",
+  "Ask to change password" = "\u0396\u03ae\u03c4\u03b7\u03c3\u03b5 \u03bd\u03b1 \u03b1\u03bb\u03bb\u03ac\u03be\u03b5\u03b9 \u03c4\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Confirm" = "\u0395\u03c0\u03b9\u03b2\u03b5\u03b2\u03b1\u03af\u03c9\u03c3\u03b7",
+  "Ask %s to change password on next connection?" = "\u039d\u03b1 \u03b6\u03b7\u03c4\u03b7\u03b8\u03b5\u03af \u03b1\u03c0\u03cc \u03c4\u03bf\u03c5\u03c2 %s \u03bd\u03b1 \u03b1\u03bb\u03bb\u03ac\u03be\u03bf\u03c5\u03bd \u03c4\u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03c4\u03bf\u03c5\u03c2 \u03ba\u03b1\u03c4\u03ac \u03c4\u03b7\u03bd \u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b7 \u03c3\u03cd\u03bd\u03b4\u03b5\u03c3\u03b7 \u03c4\u03bf\u03c5\u03c2?",
+  "Change saved!" = "\u039f\u03b9 \u03b1\u03bb\u03bb\u03b1\u03b3\u03ad\u03c2 \u03b1\u03c0\u03bf\u03b8\u03b7\u03ba\u03b5\u03cd\u03c4\u03b7\u03ba\u03b1\u03bd!",
+  "Failed to update the database" = "\u0391\u03c0\u03bf\u03c4\u03c5\u03c7\u03af\u03b1 \u03b1\u03bd\u03b1\u03bd\u03ad\u03c9\u03c3\u03b7\u03c2 \u03c4\u03b7\u03c2 \u03b2\u03ac\u03c3\u03b7\u03c2 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
+  "Password does not respect safety requirements" = "\u039f \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b4\u03b5\u03bd \u03c4\u03b7\u03c1\u03b5\u03af \u03c4\u03b9\u03c2 \u03b1\u03c0\u03b1\u03b9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2 \u03b1\u03c3\u03c6\u03b1\u03bb\u03b5\u03af\u03b1\u03c2",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "\u039f \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03c0\u03b5\u03c1\u03b9\u03ad\u03c7\u03b5\u03b9 \u03c4\u03bf\u03c5\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf\u03bd \u03ad\u03bd\u03b1\u03bd \u03b1\u03c1\u03b9\u03b8\u03bc\u03cc, \u03ad\u03bd\u03b1 \u03c0\u03b5\u03b6\u03cc, \u03ad\u03bd\u03b1 \u03ba\u03b5\u03c6\u03b1\u03bb\u03b1\u03af\u03bf \u03ba\u03b1\u03b9 \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03ad\u03c7\u03b5\u03b9 \u03bc\u03ae\u03ba\u03bf\u03c2 \u03c4\u03bf\u03c5\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf\u03bd 6.",
+  "Number of connections per user" = "\u0391\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2 \u03c3\u03c5\u03bd\u03b4\u03ad\u03c3\u03b5\u03c9\u03bd \u03b1\u03bd\u03ac \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+  "Number of connections per day" = "\u0391\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2 \u03c3\u03c5\u03bd\u03b4\u03ad\u03c3\u03b5\u03c9\u03bd \u03b1\u03bd\u03ac \u03b7\u03bc\u03ad\u03c1\u03b1",
+  "Total number of connection" = "\u03a3\u03c5\u03bd\u03bf\u03bb\u03b9\u03ba\u03cc\u03c2 \u03b1\u03c1\u03b9\u03b8\u03bc\u03cc\u03c2 \u03c3\u03cd\u03bd\u03b4\u03ad\u03c3\u03b5\u03c9\u03bd",
+  "You can't remove yourself!" = "\u0394\u03b5\u03bd \u03bc\u03c0\u03bf\u03c1\u03b5\u03af\u03c4\u03b5 \u03bd\u03b1 \u03b1\u03c6\u03b1\u03b9\u03c1\u03ad\u03c3\u03b5\u03c4\u03b5 \u03c4\u03bf\u03bd \u03b5\u03b1\u03c5\u03c4\u03cc \u03c3\u03b1\u03c2!",
+  "User:" = "\u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 :",
+  "Period:" = "\u03a0\u03b5\u03c1\u03af\u03b4\u03bf\u03c2 :",
+  "Last week" = "\u03a4\u03b7\u03bd \u03c0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03b7 \u03b5\u03b2\u03b4\u03bf\u03bc\u03ac\u03b4\u03b1",
+  "Last month" = "\u03a4\u03bf\u03bd \u03c0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03bf \u03bc\u03ae\u03bd\u03b1",
+  "All period" = "\u038c\u03bb\u03b7 \u03b7 \u03c0\u03b5\u03c1\u03af\u03bf\u03b4\u03bf\u03c2",
+  "Home" = "\u0391\u03c1\u03c7\u03b9\u03ba\u03ae",
+  "Select all shown users" = "\u0395\u03c0\u03b9\u03bb\u03ad\u03be\u03c4\u03b5 \u03cc\u03bb\u03bf\u03c5\u03c2 \u03c4\u03bf\u03c5\u03c2 \u03b5\u03bc\u03c6\u03b1\u03bd\u03b9\u03b6\u03cc\u03bc\u03b5\u03bd\u03bf\u03c5\u03c2 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2",
+  "Remove selected users" = "\u039a\u03b1\u03c4\u03ac\u03c1\u03b3\u03b7\u03c3\u03b7 \u03b5\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03c9\u03bd \u03c7\u03c1\u03b7\u03c3\u03c4\u03ce\u03bd",
+  "Edit selected users" = "\u0395\u03c0\u03b5\u03be\u03b5\u03c1\u03b3\u03b1\u03c3\u03af\u03b1 \u03b5\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03c9\u03bd \u03c7\u03c1\u03b7\u03c3\u03c4\u03ce\u03bd",
+  "Force selected users to change password" = "\u0391\u03bd\u03b1\u03b3\u03ba\u03ac\u03c3\u03c4\u03b5 \u03c4\u03bf\u03c5\u03c2 \u03b5\u03c0\u03b9\u03bb\u03b5\u03b3\u03bc\u03ad\u03bd\u03bf\u03c5\u03c2 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2 \u03bd\u03b1 \u03b1\u03bb\u03bb\u03ac\u03be\u03bf\u03c5\u03bd \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Users" = "\u03a7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2",
+  "Passwords" = "\u039a\u03c9\u03b4\u03b9\u03ba\u03bf\u03af \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Download logs database" = "\u039b\u03ae\u03c8\u03b7 \u03b2\u03ac\u03c3\u03b7\u03c2 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd \u03b1\u03c1\u03c7\u03b5\u03af\u03c9\u03bd \u03ba\u03b1\u03c4\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae\u03c2 (logs)",
+  "Download SQL database" = "\u039b\u03ae\u03c8\u03b7 \u03b2\u03ac\u03c3\u03b7\u03c2 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd SQL",
+  "Download Users file" = "\u039b\u03ae\u03c8\u03b7 \u03b1\u03c1\u03c7\u03b5\u03af\u03bf\u03c5 \u03a7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2",
+  "Reset password for %s?" = "\u0395\u03c0\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b3\u03b9\u03b1 %s?",
+  "Reset password" = "\u0395\u03c0\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Temporary password:" = "\u03a0\u03c1\u03bf\u03c3\u03c9\u03c1\u03b9\u03bd\u03cc\u03c2 \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2:",
+  "Password succesfully reset!" = "\u039f \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03b5\u03c0\u03b1\u03bd\u03b1\u03c6\u03ad\u03c1\u03b8\u03b7\u03ba\u03b5 \u03bc\u03b5 \u03b5\u03c0\u03b9\u03c4\u03c5\u03c7\u03af\u03b1!",
+  "You are not authorized for this application" = "\u0394\u03b5\u03bd \u03b5\u03af\u03c3\u03c4\u03b5 \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03bf\u03c4\u03b7\u03bc\u03ad\u03bd\u03bf\u03b9 \u03b3\u03b9\u03b1 \u03b1\u03c5\u03c4\u03ae\u03bd \u03c4\u03b7\u03bd \u03b5\u03c6\u03b1\u03c1\u03bc\u03bf\u03b3\u03ae",
+  "Language"  = "\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",
+  "Yes" = "\u039d\u03b1\u03b9",
+  "No" = "\u038c\u03c7\u03b9",
+  "Password" = "\u039a\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "start" = "\u03b1\u03c1\u03c7\u03ae",
+  "expire" = "\u03bb\u03ae\u03be\u03b7",
+  "admin" = "\u0394\u03b9\u03b1\u03c7\u03b5\u03b9\u03c1\u03b9\u03c3\u03c4\u03ae\u03c2",
+  "user" = "\u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2",
+  "Edit" = "\u03a4\u03c1\u03bf\u03c0\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7",
+  "Remove" = "\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae",
+  "must_change" = "\u03a0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b1\u03bb\u03bb\u03ac\u03be\u03b5\u03b9",
+  "have_changed" = "\u0395\u03c7\u03b5\u03b9 \u03b1\u03bb\u03bb\u03ac\u03be\u03b5\u03b9",
+  "date_change" = "\u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1",
+  "Change password" = "\u0391\u03bb\u03bb\u03b1\u03b3\u03ae \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2",
+  "Select" = "\u0395\u03c0\u03b9\u03bb\u03ad\u03be\u03c4\u03b5",
+  "Logs" = "\u0391\u03c1\u03c7\u03b5\u03af\u03b1 \u03ba\u03b1\u03c4\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae\u03c2 (Logs)",
+  "All users" = "\u038c\u03bb\u03bf\u03b9 \u03bf\u03b9 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b5\u03c2",
+  "Nb logged" = "\u03a3\u03b7\u03bc. \u03ba\u03b1\u03c4\u03b1\u03b3\u03c1\u03ac\u03c6\u03b7\u03ba\u03b5",
+  "Allowed null values" = "\u0395\u03c0\u03b9\u03c4\u03c1\u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03bc\u03b7\u03b4\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 (null) \u03c4\u03b9\u03bc\u03ad\u03c2"
+)
+
+
+pkgEnv$label_id = list(
+  "Please authenticate" = "Masuk",
+  "Username:" = "Nama akun :",
+  "Password:" = "Kata sandi :",
+  "Login" = "Masuk",
+  "Username or password are incorrect" = "Nama akun atau kata sandi salah",
+  "Your account has expired" = "Akun Anda telah kadaluarsa",
+  "Your account is locked" = "Akun Anda terkunci",
+  "Please change your password" = "Harap ganti kata sandi Anda",
+  "New password cannot be the same as old" = "Kata sandi baru tidak boleh sama dengan kata sandi lama",
+  "New password:" = "Kata sandi baru :",
+  "Confirm password:" = "Konfirmasi kata sandi :",
+  "Update new password" = "Perbaharui kata sandi",
+  "Password successfully updated! Please re-login" = "Kata sandi telah berhasil diubah! Harap masuk kembali.",
+  "The two passwords are different" = "Dua kata sandi yang diberikan tidak sama",
+  "Failed to update password" = "Gagal memperbarui kata sandi",
+  "Logout" = "Keluar",
+  "Go to application" = "Menuju applikasi",
+  "Administrator mode" = "Mode administrator",
+  "Add a user" = "Tambahkan akun",
+  "Too many users" = "Jumlah akun terlalu banyak",
+  "Maximum number of users : %s" = "Batasan jumlah akun : %s",
+  "Failed to update user" = "Gagal memperbarui akun",
+  "User successfully updated" = "Akun berhasil diperbaharui",
+  "Cancel" = "Batalkan",
+  "Confirm new user" = "Konfirmasi akun baru",
+  "Confirm change" = "Konfirmasi perubahan",
+  "Are you sure to remove user(s): %s from the database ?" = "Apakah Anda yakin ingin menghapus akun: %s dari basis data ?",
+  "Delete user(s)" = "Hapus akun",
+  "Delete user" = "Hapus akun",
+  "Edit user" = "Perbarui akun",
+  "User already exist!" = "Akun sudah ada!",
+  "Dismiss" = "Batalkan",
+  "New user %s succesfully created!" = "Akun baru %s berhasil ditambahkan!",
+  "Ask to change password" = "Minta untuk mengganti kata sandi",
+  "Confirm" = "Konfirmasi",
+  "Ask %s to change password on next connection?" = "Minta %s untuk mengganti kata sandi pada koneksi berikutnya?",
+  "Change saved!" = "Perubahan behasil disimpan!",
+  "Failed to update the database" = "Gagal memperbarui basis data",
+  "Password does not respect safety requirements" = "Kata sandi yang diberikan tidak memenuhi rekomendasi keamanan",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Kata sandi harus mengandung minimal satu angka, satu huruf kecil, satu huruf besar, dan terdiri atas minimal 6 karakter.",
+  "Number of connections per user" = "Jumlah koneksi per akun",
+  "Number of connections per day" = "Jumlah koneksi per hari",
+  "Total number of connection" = "Total jumlah koneksi",
+  "You can\'t remove yourself!" = "Anda tidak dapat menghapus diri sendiri!",
+  "User:" = "Akun :",
+  "Period:" = "Periode :",
+  "Last week" = "Pekan sebelumnya",
+  "Last month" = "Bulan sebelumnya",
+  "All period" = "Seluruh periode",
+  "Home" = "Beranda",
+  "Select all shown users" = "Pilih semua akun yang ditampilkan",
+  "Remove selected users" = "Hapus akun terpilih",
+  "Edit selected users" = "Perbarui akun terpilih",
+  "Force selected users to change password" = "Paksa akun terpilih untuk mengubah kata sandi",
+  "Users" = "Akun",
+  "Passwords" = "Kata sandi",
+  "Download logs database" = "Unduh catatan histori basis data",
+  "Download SQL database" = "Unduh basis data SQL",
+  "Download Users file" = "Unduh berkas akun",
+  "Reset password for %s?" = "Atur ulang kata sandi untuk %s?",
+  "Reset password" = "Atur ulang kata sandi",
+  "Temporary password:" = "Kata sandi sementara:",
+  "Password succesfully reset!" = "Kata sandi berhasil diperbarui!",
+  "You are not authorized for this application" = "Anda tidak memiliki akses untuk aplikasi ini",
+  "Language"  = "Bahasa",
+  "Yes" = "Ya",
+  "No" = "Tidak",
+  "Password" = "Kata sandi",
+  "start" = "mulai",
+  "expire" = "berakhir",
+  "admin" = "Admin",
+  "user" = "Akun",
+  "Edit" = "Ubah",
+  "Remove" = "Hapus",
+  "must_change" = "Harus Diubah",
+  "have_changed" = "Telah Diubah",
+  "date_change" = "Tanggal",
+  "Change password" = "Ganti kata sandi",
+  "Select" = "Pilih",
+  "Logs" = "Catatan histori",
+  "All users" = "Semua akun",
+  "Nb logged" = "Jumlah akses masuk",
+  "Allowed null values" = "Nilai kosong diperbolehkan"
+)
+
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "中文")
+
 
 #' @importFrom R6 R6Class
 #' @importFrom utils modifyList
@@ -704,7 +878,7 @@ language <- R6::R6Class(
         stop("Unsupported language !", call. = FALSE)
       }
       private$language <- lan
-      private$labels <-   switch (lan,
+      private$labels <-   switch(lan,
                                   "en" = pkgEnv$label_en,
                                   "fr" = pkgEnv$label_fr,
                                   "pt-BR" = pkgEnv$label_ptbr,
@@ -712,12 +886,14 @@ language <- R6::R6Class(
                                   "de" = pkgEnv$label_de,
                                   "pl" = pkgEnv$label_pl,
                                   "ja" = pkgEnv$label_ja,
+                                  "el" = pkgEnv$label_el,
+                                  "id" = pkgEnv$label_id,
                                   "cn" = pkgEnv$label_cn
       )
     },
     get = function(label) {
       value <- private$labels[[label]]
-      if(is.null(value)){
+      if (is.null(value)) {
         label
       } else {
         value
@@ -728,6 +904,9 @@ language <- R6::R6Class(
     },
     get_DT = function() {
       private$DT_lan[[private$language]]
+    },
+    get_dateInput = function() {
+      private$dateInput_lan[[private$language]]
     },
     get_language_registered = function() {
       private$language_registered
@@ -740,6 +919,18 @@ language <- R6::R6Class(
     language = "en",
     language_registered = v_language_registered,
     labels = pkgEnv$label_en,
+    dateInput_lan = list(
+      "en" = "en",
+      "fr" = "fr",
+      "pt-BR" = "pt-BR",
+      "es" = "es",
+      "de" = "de",
+      "pl" = "pl",
+      "ja" = "ja",
+      "el" = "el", 
+      "id" = "id", 
+      "cn" = "cn"
+    ),
     DT_lan = list(
       fr = list(
         sProcessing = "Traitement en cours...", sSearch = "Rechercher&nbsp;:",
@@ -898,43 +1089,72 @@ language <- R6::R6Class(
         )
       ),
       cn = list(
-        # sEmptyTable = "No data available in table",
         sEmptyTable = "表格中没有有效数据",
-        # sInfo = "Showing _START_ to _END_ of _TOTAL_ entries",
         sInfo = "显示第 _START_ 到第 _END_ 项结果，共 _TOTAL_ 项",
-        # sInfoEmpty = "Showing 0 to 0 of 0 entries",
         sInfoEmpty = "显示第 0 到第 0 项结果，共 0 项",
-        # sInfoFiltered = "(filtered from _MAX_ total entries)",
         sInfoFiltered = "(从 _MAX_ 条结果中过滤)",
-        # sInfoPostFix = "",
         sInfoPostFix = "",
-        # sInfoThousands = ",",
         sInfoThousands = ",",
-        # sLengthMenu = "Show _MENU_ entries",
         sLengthMenu = "显示 _MENU_ 项结果",
-        # sLoadingRecords = "Loading...",
         sLoadingRecords = "加载中...",
-        # sProcessing = "Processing...",
         sProcessing = "处理中...",
-        # sSearch = "Search:",
         sSearch = "搜索:",
-        # sZeroRecords = "No matching records found",
         sZeroRecords = "没有找到匹配的记录",
         oPaginate = list(
-          # sFirst = "First",
-          # sLast = "Last",
-          # sNext = "Next",
-          # sPrevious = "Previous"
           sFirst = "首页",
           sLast = "末页",
           sNext = "下一页",
           sPrevious = "上一页"
         ),
         oAria = list(
-          # sSortAscending = ": activate to sort column ascending",
-          # sSortDescending = ": activate to sort column descending"
           sSortAscending = ": 升序排列",
           sSortDescending = ": 降序排列"
+        )
+      ),
+      el = list(
+        sEmptyTable = "\u0394\u03b5\u03bd \u03c5\u03c0\u03b1\u03c1\u03c7\u03bf\u03c5\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b1 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03b1 \u03c3\u03c4\u03bf \u03c0\u03af\u03bd\u03b1\u03ba\u03b1",
+        sInfo = "\u0395\u03bc\u03c6\u03b1\u03bd\u03af\u03b6\u03bf\u03bd\u03c4\u03b1\u03b9 _START_ \u03ad\u03c9\u03c2 _END_ \u03b1\u03c0\u03cc _TOTAL_ \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2",
+        sInfoEmpty = "\u0395\u03bc\u03c6\u03b1\u03bd\u03af\u03b6\u03bf\u03bd\u03c4\u03b9 0 \u03b1\u03c0\u03cc 0 \u03ad\u03c9\u03c2 0 \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2",
+        sInfoFiltered = "(\u03c6\u03b9\u03bb\u03c4\u03c1\u03b1\u03c1\u03af\u03c3\u03c4\u03b7\u03ba\u03b5 \u03b1\u03c0\u03cc _MAX_ \u03c3\u03c5\u03bd\u03bf\u03bb\u03b9\u03ba\u03ad\u03c2 \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 _MENU_ \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+        sLoadingRecords = "\u03a6\u03cc\u03c1\u03c4\u03c9\u03c3\u03b7...",
+        sProcessing = "\u0395\u03c0\u03b5\u03be\u03b5\u03c1\u03b3\u03b1\u03c3\u03af\u03b1...",
+        sSearch = "\u0391\u03bd\u03b1\u03b6\u03ae\u03c4\u03b7\u03c3\u03b7:",
+        sZeroRecords = "\u0394\u03b5\u03bd \u03b2\u03c1\u03ad\u03b8\u03b7\u03ba\u03b1\u03bd \u03b1\u03bd\u03c4\u03af\u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03c2 \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2",
+        oPaginate = list(
+          sFirst = "\u03a0\u03c1\u03ce\u03c4\u03b7",
+          sLast = "\u03a4\u03b5\u03bb\u03b5\u03c5\u03c4\u03b1\u03af\u03b1",
+          sNext = "\u0395\u03c0\u03cc\u03bc\u03b5\u03bd\u03b7",
+          sPrevious = "\u03a0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03b7"
+        ),
+        oAria = list(
+          sSortAscending = ": \u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7 \u03b3\u03b9\u03b1 \u03b1\u03cd\u03be\u03bf\u03c5\u03c3\u03b1 \u03c4\u03b1\u03be\u03b9\u03bd\u03cc\u03bc\u03b7\u03c3\u03b7 \u03c3\u03c4\u03b7\u03bb\u03ce\u03bd",
+          sSortDescending = ": \u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3h \u03b3\u03b9\u03b1 \u03c6\u03b8\u03af\u03bd\u03bf\u03c5\u03c3\u03b1 \u03c4\u03b1\u03be\u03b9\u03bd\u03cc\u03bc\u03b7\u03c3\u03b7 \u03c3\u03c4\u03b7\u03bb\u03ce\u03bd"
+        )
+      ),
+      id = list(
+        sEmptyTable = "Tidak ada data tersedia pada tabel ini",
+        sInfo = "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        sInfoEmpty = "Menampilkan 0 sampai 0 dari 0 entri",
+        sInfoFiltered = "(disaring dari _MAX_ entri keseluruhan)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Menampilkan entri _MENU_",
+        sLoadingRecords = "Sedang memuat...",
+        sProcessing = "Sedang memproses...",
+        sSearch = "Cari:",
+        sZeroRecords = "Tidak ditemukan data yang sesuai",
+        oPaginate = list(
+          sFirst = "Pertama",
+          sLast = "Sebelumnya",
+          sNext = "Selanjutnya",
+          sPrevious = "Terakhir"
+        ),
+        oAria = list(
+          sSortAscending = ": aktifkan untuk mengurutkan kolom secara naik",
+          sSortDescending = ": aktifkan untuk mengurutkan kolom secara turun"
         )
       )
     ),
@@ -948,7 +1168,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "cn".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
 #'
 #' @return A language object
 #' @export
@@ -969,7 +1189,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "cn".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -987,15 +1207,16 @@ use_language <- function(lan = "en") {
 #'   "Password:" = "Enter your password:"
 #' )
 set_labels <- function(language, ...) {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "cn")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, cn", call. = FALSE)
+  
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
 
-  current_labels <- switch (language,
+  current_labels <- switch(language,
                    "en" = pkgEnv$label_en,
                    "fr" = pkgEnv$label_fr,
                    "pt-BR" = pkgEnv$label_ptbr,
@@ -1003,6 +1224,8 @@ set_labels <- function(language, ...) {
                    "de" = pkgEnv$label_de,
                    "pl" = pkgEnv$label_pl,
                    "ja" = pkgEnv$label_ja,
+                   "el" = pkgEnv$label_el,
+                   "id" = pkgEnv$label_id,
                    "cn" = pkgEnv$label_cn
   )
 
@@ -1011,22 +1234,26 @@ set_labels <- function(language, ...) {
     val = lapply(args, I)
   )
 
-  if(language %in% "en"){
+  if (language %in% "en") {
     pkgEnv$label_en <- update_labels
-  } else if(language %in% "fr"){
+  } else if (language %in% "fr") {
     pkgEnv$label_fr <- update_labels
-  } else if(language %in% "pt-BR"){
+  } else if (language %in% "pt-BR") {
     pkgEnv$label_ptbr <- update_labels
-  } else if(language %in% "es"){
+  } else if (language %in% "es") {
     pkgEnv$label_es <- update_labels
-  } else if(language %in% "de"){
+  } else if (language %in% "de") {
     pkgEnv$label_de <- update_labels
-  } else if(language %in% "pl"){
+  } else if (language %in% "pl") {
     pkgEnv$label_pl <- update_labels
-  } else if(language %in% "ja"){
+  } else if (language %in% "ja") {
     pkgEnv$label_ja <- update_labels
   } else if(language %in% "cn"){
     pkgEnv$label_cn <- update_labels
+  } else if (language %in% "el") {
+    pkgEnv$label_el <- update_labels
+  } else if (language %in% "id") {
+    pkgEnv$label_id <- update_labels
   }
 
   invisible(TRUE)
@@ -1036,12 +1263,13 @@ set_labels <- function(language, ...) {
 #'
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "cn")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, cn", call. = FALSE)
+
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
     language <- "en"
   }
 
-  switch (language,
+  switch(language,
           "en" = pkgEnv$label_en,
           "fr" = pkgEnv$label_fr,
           "pt-BR" = pkgEnv$label_ptbr,
@@ -1049,9 +1277,8 @@ get_labels <- function(language = "en") {
           "de" = pkgEnv$label_de,
           "pl" = pkgEnv$label_pl,
           "ja" = pkgEnv$label_ja,
-          "cn" = pkgEnv$label_cn
+          "cn" = pkgEnv$label_cn,
+          "el" = pkgEnv$label_el,
+          "id" = pkgEnv$label_id
   )
 }
-
-
-
