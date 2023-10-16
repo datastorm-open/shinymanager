@@ -861,7 +861,7 @@ pkgEnv$label_id = list(
   "Allowed null values" = "Nilai kosong diperbolehkan"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")
 names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "中文")
 
 
@@ -888,7 +888,7 @@ language <- R6::R6Class(
                                   "ja" = pkgEnv$label_ja,
                                   "el" = pkgEnv$label_el,
                                   "id" = pkgEnv$label_id,
-                                  "cn" = pkgEnv$label_cn
+                                  "zh-CN" = pkgEnv$label_cn
       )
     },
     get = function(label) {
@@ -929,7 +929,7 @@ language <- R6::R6Class(
       "ja" = "ja",
       "el" = "el", 
       "id" = "id", 
-      "cn" = "cn"
+      "zh-CN" = "zh-CN"
     ),
     DT_lan = list(
       fr = list(
@@ -1168,7 +1168,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN".
 #'
 #' @return A language object
 #' @export
@@ -1189,7 +1189,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -1208,8 +1208,8 @@ use_language <- function(lan = "en") {
 #' )
 set_labels <- function(language, ...) {
   
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
@@ -1226,7 +1226,7 @@ set_labels <- function(language, ...) {
                    "ja" = pkgEnv$label_ja,
                    "el" = pkgEnv$label_el,
                    "id" = pkgEnv$label_id,
-                   "cn" = pkgEnv$label_cn
+                   "zh-CN" = pkgEnv$label_cn
   )
 
   update_labels <- modifyList(
@@ -1248,7 +1248,7 @@ set_labels <- function(language, ...) {
     pkgEnv$label_pl <- update_labels
   } else if (language %in% "ja") {
     pkgEnv$label_ja <- update_labels
-  } else if(language %in% "cn"){
+  } else if(language %in% "zh-CN"){
     pkgEnv$label_cn <- update_labels
   } else if (language %in% "el") {
     pkgEnv$label_el <- update_labels
@@ -1264,8 +1264,8 @@ set_labels <- function(language, ...) {
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
 
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN", call. = FALSE)
     language <- "en"
   }
 
@@ -1277,7 +1277,7 @@ get_labels <- function(language = "en") {
           "de" = pkgEnv$label_de,
           "pl" = pkgEnv$label_pl,
           "ja" = pkgEnv$label_ja,
-          "cn" = pkgEnv$label_cn,
+          "zh-CN" = pkgEnv$label_cn,
           "el" = pkgEnv$label_el,
           "id" = pkgEnv$label_id
   )

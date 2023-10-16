@@ -42,7 +42,7 @@ of the authentication page (for custom CSS for example).}
 you can use themes provided by \code{shinythemes}.
 It will affect the authentication panel and the admin page.}
 
-\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".}
+\item{language}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN".}
 
 \item{fab_position}{Position for the FAB button, see \code{\link{fab_button}} for options.}
 
