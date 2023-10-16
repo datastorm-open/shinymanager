@@ -1,5 +1,91 @@
 pkgEnv <- new.env()
 
+pkgEnv$label_cn = list(
+  "Please authenticate" = "请验证",
+  "Username:" = "用户名 :",
+  "Password:" = "密码 :",
+  "Login" = "登录",
+  "Username or password are incorrect" = "用户名或密码错误",
+  "Your account has expired" = "您的账户已过期",
+  "Your account is locked" = "您的账户已锁定",
+  "Please change your password" = "请更改您的密码",
+  "New password cannot be the same as old" = "新密码不能与旧密码相同",
+  "New password:" = "新密码 :",
+  "Confirm password:" = "确认密码 :",
+  "Update new password" = "更新新密码",
+  "Password successfully updated! Please re-login" = "密码更新成功！请重新登录",
+  "The two passwords are different" = "两个密码不同",
+  "Failed to update password" = "密码更新失败",
+  "Logout" = "注销",
+  "Go to application" = "进入应用",
+  "Administrator mode" = "管理员模式",
+  "Add a user" = "添加用户",
+  "Too many users" = "用户太多",
+  "Maximum number of users : %s" = "最大用户数 : %s",
+  "Failed to update user" = "用户更新失败",
+  "User successfully updated" = "用户更新成功",
+  "Cancel" = "取消",
+  "Confirm new user" = "确认新用户",
+  "Confirm change" = "确认更改",
+  "Are you sure to remove user(s): %s from the database ?" = "您确定要从数据库中删除用户 %s 吗？",
+  "Delete user(s)" = "删除用户",
+  "Delete user" = "删除用户",
+  "Edit user" = "编辑用户",
+  "User already exist!" = "用户已存在！",
+  "Dismiss" = "忽略",
+  "New user %s succesfully created!" = "新用户 %s 创建成功！",
+  "Ask to change password" = "要求更改密码",
+  "Confirm" = "确认",
+  "Ask %s to change password on next connection?" = "要求 %s 在下次连接时更改密码？",
+  "Change saved!" = "更改已保存！",
+  "Failed to update the database" = "数据库更新失败",
+  "Password does not respect safety requirements" = "密码不符合安全要求",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "密码必须包含至少一个数字、一个小写字母、一个大写字母，并且长度至少为 6。",
+  "Number of connections per user" = "每个用户的连接数",
+  "Number of connections per day" = "每天的连接数",
+  "Total number of connection" = "连接总数",
+  "You can\'t remove yourself!" = "您不能删除自己！",
+  "User:" = "用户 :",
+  "Period:" = "时期 :",
+  "Last week" = "上周",
+  "Last month" = "上个月",
+  "All period" = "所有时期",
+  "Home" = "主页",
+  "Select all shown users" = "选择所有显示的用户",
+  "Remove selected users" = "删除选定的用户",
+  "Edit selected users" = "编辑选定的用户",
+  "Force selected users to change password" = "强制选定的用户更改密码",
+  "Users" = "用户",
+  "Passwords" = "密码",
+  "Download logs database" = "下载日志数据库",
+  "Download SQL database" = "下载 SQL 数据库",
+  "Download Users file" = "下载用户文件",
+  "Reset password for %s?" = "重置 %s 的密码？",
+  "Reset password" = "重置密码",
+  "Temporary password:" = "临时密码 :",
+  "Password succesfully reset!" = "密码重置成功！",
+  "You are not authorized for this application" = "您未被授权使用此应用程序",
+  "Language"  = "语言",
+  "Yes" = "是",
+  "No" = "否",
+  "Password" = "密码",
+  "start" = "开始",
+  "expire" = "到期",
+  "admin" = "管理员",
+  "user" = "用户",
+  "Edit" = "编辑",
+  "Remove" = "删除",
+  "must_change" = "必须更改",
+  "have_changed" = "已更改",
+  "date_change" = "日期",
+  "Change password" = "更改密码",
+  "Select" = "选择",
+  "Logs" = "日志",
+  "All users" = "所有用户",
+  "Nb logged" = "已登录",
+  "Allowed null values" = "允许空值"
+)
+
 pkgEnv$label_en = list(
   "Please authenticate" = "Please authenticate",
   "Username:" = "Username :",
@@ -775,9 +861,8 @@ pkgEnv$label_id = list(
   "Allowed null values" = "Nilai kosong diperbolehkan"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian")
-
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "中文")
 
 
 #' @importFrom R6 R6Class
@@ -802,7 +887,8 @@ language <- R6::R6Class(
                                   "pl" = pkgEnv$label_pl,
                                   "ja" = pkgEnv$label_ja,
                                   "el" = pkgEnv$label_el,
-                                  "id" = pkgEnv$label_id
+                                  "id" = pkgEnv$label_id,
+                                  "cn" = pkgEnv$label_cn
       )
     },
     get = function(label) {
@@ -842,7 +928,8 @@ language <- R6::R6Class(
       "pl" = "pl",
       "ja" = "ja",
       "el" = "el", 
-      "id" = "id"
+      "id" = "id", 
+      "cn" = "cn"
     ),
     DT_lan = list(
       fr = list(
@@ -1001,6 +1088,29 @@ language <- R6::R6Class(
           sSortDescending = ": \u30a2\u30af\u30c6\u30a3\u30d6\u306b\u3057\u3066\u5217\u3092\u964d\u9806\u306b\u4e26\u3079\u308b"
         )
       ),
+      cn = list(
+        sEmptyTable = "表格中没有有效数据",
+        sInfo = "显示第 _START_ 到第 _END_ 项结果，共 _TOTAL_ 项",
+        sInfoEmpty = "显示第 0 到第 0 项结果，共 0 项",
+        sInfoFiltered = "(从 _MAX_ 条结果中过滤)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "显示 _MENU_ 项结果",
+        sLoadingRecords = "加载中...",
+        sProcessing = "处理中...",
+        sSearch = "搜索:",
+        sZeroRecords = "没有找到匹配的记录",
+        oPaginate = list(
+          sFirst = "首页",
+          sLast = "末页",
+          sNext = "下一页",
+          sPrevious = "上一页"
+        ),
+        oAria = list(
+          sSortAscending = ": 升序排列",
+          sSortDescending = ": 降序排列"
+        )
+      ),
       el = list(
         sEmptyTable = "\u0394\u03b5\u03bd \u03c5\u03c0\u03b1\u03c1\u03c7\u03bf\u03c5\u03bd \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b1 \u03b4\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03b1 \u03c3\u03c4\u03bf \u03c0\u03af\u03bd\u03b1\u03ba\u03b1",
         sInfo = "\u0395\u03bc\u03c6\u03b1\u03bd\u03af\u03b6\u03bf\u03bd\u03c4\u03b1\u03b9 _START_ \u03ad\u03c9\u03c2 _END_ \u03b1\u03c0\u03cc _TOTAL_ \u03ba\u03b1\u03c4\u03b1\u03c7\u03c9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2",
@@ -1058,7 +1168,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
 #'
 #' @return A language object
 #' @export
@@ -1079,7 +1189,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn".
 #' @param ... A named list with labels to replace.
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -1097,8 +1207,9 @@ use_language <- function(lan = "en") {
 #'   "Password:" = "Enter your password:"
 #' )
 set_labels <- function(language, ...) {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
+  
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
   }
   args <- list(...)
   if (!all(nzchar(names(args)))) {
@@ -1114,7 +1225,8 @@ set_labels <- function(language, ...) {
                    "pl" = pkgEnv$label_pl,
                    "ja" = pkgEnv$label_ja,
                    "el" = pkgEnv$label_el,
-                   "id" = pkgEnv$label_id
+                   "id" = pkgEnv$label_id,
+                   "cn" = pkgEnv$label_cn
   )
 
   update_labels <- modifyList(
@@ -1136,6 +1248,8 @@ set_labels <- function(language, ...) {
     pkgEnv$label_pl <- update_labels
   } else if (language %in% "ja") {
     pkgEnv$label_ja <- update_labels
+  } else if(language %in% "cn"){
+    pkgEnv$label_cn <- update_labels
   } else if (language %in% "el") {
     pkgEnv$label_el <- update_labels
   } else if (language %in% "id") {
@@ -1149,8 +1263,9 @@ set_labels <- function(language, ...) {
 #'
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id", call. = FALSE)
+
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "cn")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, cn", call. = FALSE)
     language <- "en"
   }
 
@@ -1162,10 +1277,8 @@ get_labels <- function(language = "en") {
           "de" = pkgEnv$label_de,
           "pl" = pkgEnv$label_pl,
           "ja" = pkgEnv$label_ja,
+          "cn" = pkgEnv$label_cn,
           "el" = pkgEnv$label_el,
           "id" = pkgEnv$label_id
   )
 }
-
-
-
