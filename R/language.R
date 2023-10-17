@@ -862,7 +862,7 @@ pkgEnv$label_id = list(
 )
 
 v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "中文")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "\u4e2d\u6587")
 
 
 #' @importFrom R6 R6Class
@@ -1089,26 +1089,26 @@ language <- R6::R6Class(
         )
       ),
       cn = list(
-        sEmptyTable = "表格中没有有效数据",
-        sInfo = "显示第 _START_ 到第 _END_ 项结果，共 _TOTAL_ 项",
-        sInfoEmpty = "显示第 0 到第 0 项结果，共 0 项",
-        sInfoFiltered = "(从 _MAX_ 条结果中过滤)",
+        sEmptyTable = "\u8868\u683c\u4e2d\u6ca1\u6709\u6709\u6548\u6570\u636e",
+        sInfo = "\u663e\u793a\u7b2c _START_ \u5230\u7b2c _END_ \u9879\u7ed3\u679c\uff0c\u5171 _TOTAL_ \u9879",
+        sInfoEmpty = "\u663e\u793a\u7b2c 0 \u5230\u7b2c 0 \u9879\u7ed3\u679c\uff0c\u5171 0 \u9879",
+        sInfoFiltered = "(\u4ece _MAX_ \u6761\u7ed3\u679c\u4e2d\u8fc7\u6ee4)",
         sInfoPostFix = "",
         sInfoThousands = ",",
-        sLengthMenu = "显示 _MENU_ 项结果",
-        sLoadingRecords = "加载中...",
-        sProcessing = "处理中...",
-        sSearch = "搜索:",
-        sZeroRecords = "没有找到匹配的记录",
+        sLengthMenu = "\u663e\u793a _MENU_ \u9879\u7ed3\u679c",
+        sLoadingRecords = "\u52a0\u8f7d\u4e2d...",
+        sProcessing = "\u5904\u7406\u4e2d...",
+        sSearch = "\u641c\u7d22\uff1a",
+        sZeroRecords = "\u6ca1\u6709\u627e\u5230\u5339\u914d\u7684\u8bb0\u5f55",
         oPaginate = list(
-          sFirst = "首页",
-          sLast = "末页",
-          sNext = "下一页",
-          sPrevious = "上一页"
+          sFirst = "\u9996\u9875",
+          sLast = "\u672b\u9875",
+          sNext = "\u4e0b\u4e00\u9875",
+          sPrevious = "\u4e0a\u4e00\u9875"
         ),
         oAria = list(
-          sSortAscending = ": 升序排列",
-          sSortDescending = ": 降序排列"
+          sSortAscending = "\uff1a\u5347\u5e8f\u6392\u5217",
+          sSortDescending = "\uff1a\u964d\u5e8f\u6392\u5217"
         )
       ),
       el = list(
