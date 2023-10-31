@@ -75,6 +75,13 @@
     get_sqlite_path = function() {
       private$sqlite_path
     },
+    set_sql_config_db = function(config) {
+      private$sql_config_db <- config
+      invisible(private$sql_config_db)
+    },
+    get_sql_config_db = function() {
+      private$sql_config_db 
+    },
     set_passphrase = function(passphrase) {
       private$passphrase <- passphrase
       invisible()
@@ -96,6 +103,7 @@
     tokens_user = list(),
     sqlite_path = NULL,
     passphrase = NULL,
+    sql_config_db = NULL,
     timeout = 0,
     length = function() base::length(private$tokens)
   )

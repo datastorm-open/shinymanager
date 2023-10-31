@@ -1,7 +1,9 @@
 
 #' Check credentials
 #'
-#' @param db A \code{data.frame} with credentials data or path to SQLite database created with \code{\link{create_db}}.
+#' @param db A \code{data.frame} with credentials data, a  path to SQLite database created with \code{\link{create_db}} 
+#' or a .yaml configuration path of SQL Database created with \code{\link{create_sql_db}}.
+#' 
 #' @param passphrase Passphrase to decrypt the SQLite database.
 #'
 #' @return Return a \code{function} with two arguments: \code{user} and \code{password}
@@ -20,9 +22,9 @@
 #'   \item \strong{user (mandatory)} : the user's name.
 #'   \item \strong{password (mandatory)} : the user's password.
 #'   \item \strong{admin (optional)} : logical, is user have admin right ? If so,
-#'    user can access the admin mode (only available using a SQLite database)
-#'   \item \strong{start (optional)} : the date from which the user will have access to the application
-#'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+#'    user can access the admin mode (only available using a SQLite database). Initialize to FALSE if missing. 
+#'   \item \strong{start (optional)} : the date from which the user will have access to the application. Initialize to NA if missing. 
+#'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application. Initialize to NA if missing. 
 #'   \item \strong{applications (optional)} : the name of the applications to which the user is authorized,
 #'    separated by a semicolon. The name of the application corresponds to the name of the directory,
 #'    or can be declared using : \code{options("shinymanager.application" = "my-app")}
@@ -63,16 +65,22 @@
 #' \dontrun{
 #'
 #' ## With a SQLite database:
-#'
 #' check_credentials("credentials.sqlite", passphrase = "supersecret")
 #'
+#'
+#' ## With a SQL database:
+#' check_credentials("config_db.yml")
+#' 
 #' }
 #' 
 #' @importFrom scrypt verifyPassword
 #'
+#' @seealso \code{\link{create_db}}, \code{\link{create_sql_db}}, \code{\link{check_credentials}}
+#' 
 check_credentials <- function(db, passphrase = NULL) {
   if (is.data.frame(db)) {
     .tok$set_sqlite_path(NULL)
+    .tok$set_sql_config_db(NULL)
     function(user, password) {
       check_credentials_df(user, password, credentials_df = db)
     }
@@ -80,8 +88,17 @@ check_credentials <- function(db, passphrase = NULL) {
     .tok$set_sqlite_path(db)
     .tok$set_passphrase(passphrase)
     check_credentials_sqlite(sqlite_path = db, passphrase = passphrase)
+  } else if (is_yaml(db)) {
+    config_db <- tryCatch({
+      yaml::yaml.load_file(db, eval.expr = TRUE)
+    }, error = function(e) stop("Error reading 'config_path' SQL DB configuration :", e$message))
+    verify_sql_config(config_db)
+    
+    .tok$set_sqlite_path(NULL)
+    .tok$set_sql_config_db(config_db)
+    check_credentials_sql(config_db = config_db)
   } else {
-    stop("'db' must be a data.frame or a path to a SQLite database", call. = FALSE)
+    stop("'db' must be a data.frame, a path to a SQLite database or a .yml file for other SQL Database", call. = FALSE)
   }
 }
 
@@ -173,4 +190,14 @@ check_credentials_sqlite <- function(sqlite_path, passphrase) {
 }
 
 
-
+check_credentials_sql <- function(config_db){
+  function(user, password) {
+    conn <- connect_sql_db(config_db)
+    on.exit(disconnect_sql_db(conn))
+    tablename <- config_db$tables$credentials$tablename
+    request <- glue_sql(config_db$tables$credentials$select, .con = conn)
+    db <- dbGetQuery(conn, request)
+    if(nrow(db) > 0) db$is_hashed_password <- T
+    check_credentials_df(user, password, credentials_df = db)
+  }
+}

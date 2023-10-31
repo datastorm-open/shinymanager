@@ -199,3 +199,36 @@ update_user <- function(df, value, username) {
   df[[username]] <- as.data.frame(new, stringsAsFactors = FALSE)
   do.call(rbind, c(df, list(make.row.names = FALSE)))
 }
+
+update_user_sql <- function(config_db, list_value, username) {
+  
+  conn <- connect_sql_db(config_db)
+  on.exit(disconnect_sql_db(conn))
+  
+  col_names <- dbListFields(conn, config_db$tables$credentials$tablename) 
+  
+  check_isTruthy <- TRUE
+  if("_sm_enabled_null" %in% names(list_value)){
+    check_isTruthy <- !as.logical(list_value$`_sm_enabled_null`)
+  }
+  list_value <- list_value[intersect(names(list_value), col_names)]
+
+  list_value <- lapply(list_value, function(x) {
+    ifelse(length(x) == 0 | (length(x) == 1 && is.na(x)), NA_character_, paste(x, collapse = ";"))
+  })
+  if(check_isTruthy) {
+    list_value <- list_value[vapply(list_value, isTruthy, logical(1))]
+  }
+
+  if(length(list_value) > 0){
+    udpate_users <- username
+    for(i in 1:length(list_value)){
+      name <- names(list_value)[i]
+      value <- list_value[[i]]
+      tablename <- config_db$tables$credentials$tablename
+      request <- glue_sql(config_db$tables$credentials$update, .con = conn)
+      dbExecute(conn, request)
+    }
+  }
+
+}

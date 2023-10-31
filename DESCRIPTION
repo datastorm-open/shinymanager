@@ -1,13 +1,13 @@
 Package: shinymanager
 Title: Authentication Management for 'Shiny' Applications
-Version: 1.0.410
+Version: 1.0.500
 Authors@R: c(
     person("Benoit", "Thieurmel", email = "bthieurmel@gmail.com", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut"))
     )
 Description: Simple and secure authentification mechanism for single 'Shiny' applications.
-    Credentials are stored in an encrypted 'SQLite' database. Source code of main application
-    is protected until authentication is successful.
+    Credentials can be stored in an encrypted 'SQLite' database or on your own SQL Database (Postgres, MySQL, ...). 
+    Source code of main application is protected until authentication is successful.
 License: GPL-3
 URL: https://github.com/datastorm-open/shinymanager
 Encoding: UTF-8
@@ -22,10 +22,13 @@ Imports:
     openssl,
     R.utils,
     billboarder,
-    scrypt
+    scrypt,
+    yaml,
+    glue
 Suggests: 
     keyring,
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    RPostgres
 VignetteBuilder: knitr
