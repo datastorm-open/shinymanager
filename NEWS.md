@@ -1,3 +1,9 @@
+# shinymanager 1.0.5
+
+* (#154) add indonesian. Thanks @aswansyahputra 
+* (#178) add chinese. Thanks @wtbxsjy
+* FEAT : SQL features (not only sqlite but Postgres, MySQL, ...)
+
 # shinymanager 1.0.410
 
 * (#112) : fix bug changing user name. Thanks @StatisMike

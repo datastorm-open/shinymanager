@@ -12,3 +12,7 @@
 ^.*\.sqlite$
 inst/demo_app/rsconnect
 examples/demo/rsconnect
+
+
+inst/sql_config/qf_pg_template.yml
+test_db.R

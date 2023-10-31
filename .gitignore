@@ -10,3 +10,6 @@ Meta
 examples/demo/rsconnect
 docs
 inst/demo_app/rsconnect
+
+qf_pg_template.yml
+test_db.R

@@ -93,7 +93,7 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary", lan = NULL) {
 #'  Default is to check for the password to have at least one number, one lowercase,
 #'  one uppercase and be of length 6 at least.
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
-#' @param lan An langauge object. Should not be used directly.
+#' @param lan An language object. Should not be used directly.
 #' 
 #' @export
 #'

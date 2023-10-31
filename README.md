@@ -6,8 +6,7 @@
 [![cran checks](https://cranchecks.info/badges/worst/shinymanager)](https://cranchecks.info/pkgs/shinymanager)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials are stored in an encrypted 'SQLite' database. Password are hashed using 'scrypt'  R package. Source code of main application is protected until authentication is successful.
-
+> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials can be stored in an encrypted 'SQLite' database or on your own SQL Database (Postgres, MySQL, ...). Source code of main application is protected until authentication is successful.
 
 Live demo:
 
@@ -20,20 +19,99 @@ You can authenticate with:
 
 Online documentation : https://datastorm-open.github.io/shinymanager/
 
-### News on shinymanager 1.0.400
+### Available language
 
-* (#84) : new FAB button with a position argument
-* (#81) : keep request query string. Thanks @erikor 
-* (#24) : secure_server() : added keep_token arg 
-* (#54) add spanish. Thanks @EAMI91 
-* (#98) add german. Thanks @indubio
-* (#106) add polish. Thanks @StatisMike
-* (#39) : fix use shiny bookmarking
-* Admin mode: new edit multiple users
-* Add full language label using `choose_language`
-* (#66) fix ``quanteda`` bad interaction 
-* (#71) fix logs count for admin user
-* (#26) : restrict number of users
+- English
+- Français
+- Portuguese
+- Español
+- Deutsch
+- Polski
+- Japanese
+- Chinese
+- Indonesian
+- Greek
+
+### Password validity period
+
+Using ``options("shinymanager.pwd_validity")``, you can set password validity period. It defaults to ``Inf``. You can specify for example ``options("shinymanager.pwd_validity" = 90)`` if you want to force user changing password each 90 days.
+
+### Failure limit
+
+Using ``options("shinymanager.pwd_failure_limit")``, you can set password failure limit. It defaults to Inf. You can specify for example ``options("shinymanager.pwd_failure_limit" = 5)`` if you want to lock user account after 5 wrong password.
+
+
+### Cross-application
+
+Adding optional ``applications`` column in *credentials* db : the name of the applications to which the user is authorized, separated by a semicolon. The name of the application corresponds to the name of the directory, or can be declared using : options("shinymanager.application" = "my-app")
+
+### Custom password rules
+
+````
+# your own rules
+validate_pwd_custom <- function(pwd) {
+  all(vapply(
+    X = c("[0-9]+", "[a-z]+", "[A-Z]+", "[[:punct:]]+", ".{8,}"),
+    FUN = grepl, x = pwd, FUN.VALUE = logical(1)
+  ))
+}
+
+
+# server.R
+server <- function(input, output, session) {
+    
+    auth_out <- secure_server(validate_pwd = validate_pwd_custom, ...)
+    
+    # your classic server logic
+    
+}
+    
+````
+
+
+### Relevant R documentation
+
+````
+require(shinymanager)
+
+# Init and using sqlite database
+?create_db
+
+# Init and using SQL database
+?create_sql_db
+
+
+# shiny integration
+?secure_app
+?auth_ui # ui definition
+
+
+# change labels / language
+ ?set_labels
+
+````
+
+
+### News on shinymanager 1.0.500
+
+* (#154) add indonesian. Thanks @aswansyahputra 
+* (#178) add chinese. Thanks @wtbxsjy
+* FEAT : SQL features (not only sqlite but Postgres, MySQL, ...)
+
+### News on shinymanager 1.0.410
+
+* (#112) : fix bug changing user name. Thanks @StatisMike
+* fix DT checkbox (rm/add user)
+* Changed fab button z-index to make it appear above sidebar in shinydashboard/bs4Dash (fix [#123](https://github.com/datastorm-open/shinymanager/issues/123))
+* can pass validate_pwd_ to secure_server
+* (#129) add japanese. Thanks @ironwest 
+* (#113) disable download db & logs. Thanks @StatisMike
+* (#130) update somes icons. Thanks @ismirsehregal
+* add download user file
+* add options for validity pwd & update check same / old pwd
+* add options for locked account
+* (#144) Switch to Font Awesome 6 icon names. Thanks @ismirsehregal
+* (#143) add Greek language. Thanks @lefkiospaikousis
 
 ### Installation
 
@@ -58,7 +136,7 @@ Secure your Shiny app to control who can access it :
 - ``secure_server()`` & ``check_credentials()``
 
 ```r
-# define some credentials
+# define some basic credentials (on data.frame)
 credentials <- data.frame(
   user = c("shiny", "shinymanager"), # mandatory
   password = c("azerty", "12345"), # mandatory
@@ -110,11 +188,11 @@ Once logged, the application will be launched and a button added to navigate bet
 
 ![](man/figures/shinymanager-info-nav.png)
 
-### Secure database
+### Secure Sqlite database
 
-Store your credentials data in SQL database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt` : 
+Store your credentials data in Sqlite database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt` : 
 
-- ``create_db()``
+- ``?create_db``
 
 ```r
 # Init DB using credentials data
@@ -162,9 +240,62 @@ server <- function(input, output, session) {
 }
 ```
 
+### Use your own SQL database
+
+Store your credentials data in your SQL database using the ``DBI`` interface (and always password hashing using `scrypt`) : 
+
+- ``?create_sql_db``
+
+```r
+library(shiny)
+library(shinymanager)
+
+#### init the SQL Database
+# first edit the .yml configuration file
+system.file("sql_config/pg_template.yml", package = "shinymanager")
+
+
+# Init Credentials data
+credentials <- data.frame(
+  user = c("shiny", "shinymanager"),
+  password = c("azerty", "12345"), # password will automatically be hashed
+  stringsAsFactors = FALSE
+)
+
+# Create SQL database
+create_db_sql(
+  credentials_data = credentials,
+  config_path = "path/to/your_sql_configuration.yml"
+)
+
+### Use in shiny
+ui <- fluidPage(
+  tags$h2("My secure application"),
+  verbatimTextOutput("auth_output")
+)
+
+# Wrap your UI with secure_app
+ui <- secure_app(ui, choose_language = TRUE)
+
+
+server <- function(input, output, session) {
+
+ # call the server part
+ # check_credentials returns a function to authenticate users
+ res_auth <- secure_server(
+   check_credentials = check_credentials(db = "path/to/your_sql_configuration.yml")
+ )
+
+ # your classic server logic
+
+}
+
+shinyApp(ui, server)
+```
+
 ### Admin mode
 
-Using SQL database protected, an admin mode is available to manage access to the application, features included are
+Using SQL/Sqlite database protected, an admin mode is available to manage access to the application, features included are
 
  * manage users account : add, modify and delete users
  * ask the user to change his password

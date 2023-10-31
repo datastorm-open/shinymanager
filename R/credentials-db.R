@@ -1,4 +1,3 @@
-
 #' @title Create credentials database
 #'
 #' @description Create a SQLite database with credentials data protected by a password.
@@ -17,9 +16,9 @@
 #'   \item \strong{user (mandatory)} : the user's name.
 #'   \item \strong{password (mandatory)} : the user's password.
 #'   \item \strong{admin (optional)} : logical, is user have admin right ? If so,
-#'    user can access the admin mode (only available using a SQLite database)
-#'   \item \strong{start (optional)} : the date from which the user will have access to the application
-#'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application
+#'    user can access the admin mode (only available using a SQLite database). Initialize to FALSE if missing. 
+#'   \item \strong{start (optional)} : the date from which the user will have access to the application. Initialize to NA if missing. 
+#'   \item \strong{expire (optional)} : the date from which the user will no longer have access to the application. Initialize to NA if missing. 
 #'   \item \strong{applications (optional)} : the name of the applications to which the user is authorized,
 #'    separated by a semicolon. The name of the application corresponds to the name of the directory,
 #'    or can be declared using : \code{options("shinymanager.application" = "my-app")}
@@ -30,11 +29,14 @@
 #' @importFrom RSQLite SQLite
 #' @importFrom scrypt hashPassword
 #'
-#' @seealso \code{\link{read_db_decrypt}}
 #'
 #' @examples
 #' \dontrun{
 #'
+#' library(shiny)
+#' library(shinymanager)
+#' 
+#' #### init the Sqlite Database
 #' # Credentials data
 #' credentials <- data.frame(
 #'   user = c("shiny", "shinymanager"),
@@ -49,11 +51,51 @@
 #' # Create the database
 #' create_db(
 #'   credentials_data = credentials,
-#'   sqlite_path = "path/to/database.sqlite", # will be created
-#'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+#'   sqlite_path = "/path/to/database.sqlite", # will be created
+#'    passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+#'    # passphrase = "secret"  # or just a word, without keyring
 #' )
 #'
+#' ### Use in shiny
+#' ui <- fluidPage(
+#'   tags$h2("My secure application"),
+#'   verbatimTextOutput("auth_output")
+#' )
+#' 
+#' # Wrap your UI with secure_app
+#' ui <- secure_app(ui, choose_language = TRUE)
+#' 
+#'
+#'server <- function(input, output, session) {
+#'  
+#'  # call the server part
+#'  # check_credentials returns a function to authenticate users
+#'  res_auth <- secure_server(
+#'    check_credentials = check_credentials(
+#'        db = "/path/to/database.sqlite", 
+#'        passphrase = key_get("R-shinymanager-key", "obiwankenobi")
+#'    )
+#'  )
+#'  
+#'  output$auth_output <- renderPrint({
+#'    reactiveValuesToList(res_auth)
+#'  })
+#'  
+#'  observe({
+#'    print(input$shinymanager_where)
+#'    print(input$shinymanager_language)
+#'  })
+#'  
+#'  # your classic server logic
+#'  
 #' }
+#'
+#' shinyApp(ui, server)
+#'
+#'}
+#' 
+#' @seealso \code{\link{create_db}}, \code{\link{create_sql_db}}, \code{\link{check_credentials}}, \code{\link{read_db_decrypt}}
+#' 
 create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = RSQLite::SQLITE_RWC) {
   if (!all(c("user", "password") %in% names(credentials_data))) {
     stop("credentials_data must contains columns: 'user', 'password'", call. = FALSE)

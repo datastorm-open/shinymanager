@@ -28,7 +28,7 @@ pwd_server(
 Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 \code{"warning"}, \code{"danger"}.}
 
-\item{lan}{An langauge object. Should not be used directly.}
+\item{lan}{An language object. Should not be used directly.}
 
 \item{input, output, session}{Standard Shiny server arguments.}
 
