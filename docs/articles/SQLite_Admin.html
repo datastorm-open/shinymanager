@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinymanager</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.400</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.500</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/datastorm-open/shinymanager/">
+  <a href="https://github.com/datastorm-open/shinymanager/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -79,133 +75,147 @@
 
       
 
-      </header><script src="SQLite_Admin_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>shinymanager : SQLite Admin</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/datastorm-open/shinymanager/blob/master/vignettes/SQLite_Admin.Rmd"><code>vignettes/SQLite_Admin.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/datastorm-open/shinymanager/blob/HEAD/vignettes/SQLite_Admin.Rmd" class="external-link"><code>vignettes/SQLite_Admin.Rmd</code></a></small>
       <div class="hidden name"><code>SQLite_Admin.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Using SQL database protected (<code><a href="../reference/create_db.html">create_db()</a></code>), an admin mode is available to manage access to the application, features included are</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Using SQL database protected (<code><a href="../reference/create_db.html">create_db()</a></code>), an admin
+mode is available to manage access to the application, features included
+are</p>
 <ul>
 <li>manage users account : add, modify and delete users</li>
 <li>ask the user to change his password</li>
 <li>see logs about application usage</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Credentials data</span>
-<span class="va">credentials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"shinymanager"</span><span class="op">)</span>,
-  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"azerty"</span>, <span class="st">"12345"</span><span class="op">)</span>,
-  <span class="co"># password will automatically be hashed</span>
-  admin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># you can use keyring package to set database key</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">keyring</span><span class="op">)</span>
-<span class="fu">key_set</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
-
-<span class="co"># Init the database</span>
-<span class="fu"><a href="../reference/create_db.html">create_db</a></span><span class="op">(</span>
-  credentials_data <span class="op">=</span> <span class="va">credentials</span>,
-  sqlite_path <span class="op">=</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span>
-  passphrase <span class="op">=</span> <span class="fu">key_get</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
-  <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
-<span class="op">)</span>
-
-<span class="co"># Wrap your UI with secure_app, enabled admin mode or not</span>
-<span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_app</a></span><span class="op">(</span><span class="va">ui</span>, enable_admin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-
-<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
-  
-  <span class="co"># check_credentials directly on sqlite db</span>
-  <span class="va">res_auth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_server</a></span><span class="op">(</span>
-    check_credentials <span class="op">=</span> <span class="fu"><a href="../reference/check_credentials.html">check_credentials</a></span><span class="op">(</span>
-        <span class="st">"path/to/database.sqlite"</span>,
-        passphrase <span class="op">=</span> <span class="fu">key_get</span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span>
-        <span class="co"># passphrase = "passphrase_wihtout_keyring"</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-  
-  <span class="va">output</span><span class="op">$</span><span class="va">auth_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html">renderPrint</a></span><span class="op">(</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValuesToList.html">reactiveValuesToList</a></span><span class="op">(</span><span class="va">res_auth</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
-  
-  <span class="co"># your classic server logic</span>
-  <span class="va">...</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Credentials data</span></span>
+<span><span class="va">credentials</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"shinymanager"</span><span class="op">)</span>,</span>
+<span>  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"azerty"</span>, <span class="st">"12345"</span><span class="op">)</span>,</span>
+<span>  <span class="co"># password will automatically be hashed</span></span>
+<span>  admin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># you can use keyring package to set database key</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-lib.github.io/keyring/index.html" class="external-link">keyring</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/keyring/man/key_get.html" class="external-link">key_set</a></span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Init the database</span></span>
+<span><span class="fu"><a href="../reference/create_db.html">create_db</a></span><span class="op">(</span></span>
+<span>  credentials_data <span class="op">=</span> <span class="va">credentials</span>,</span>
+<span>  sqlite_path <span class="op">=</span> <span class="st">"path/to/database.sqlite"</span>, <span class="co"># will be created</span></span>
+<span>  passphrase <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keyring/man/key_get.html" class="external-link">key_get</a></span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span></span>
+<span>  <span class="co"># passphrase = "passphrase_wihtout_keyring"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Wrap your UI with secure_app, enabled admin mode or not</span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_app</a></span><span class="op">(</span><span class="va">ui</span>, enable_admin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># check_credentials directly on sqlite db</span></span>
+<span>  <span class="va">res_auth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/secure-app.html">secure_server</a></span><span class="op">(</span></span>
+<span>    check_credentials <span class="op">=</span> <span class="fu"><a href="../reference/check_credentials.html">check_credentials</a></span><span class="op">(</span></span>
+<span>        <span class="st">"path/to/database.sqlite"</span>,</span>
+<span>        passphrase <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keyring/man/key_get.html" class="external-link">key_get</a></span><span class="op">(</span><span class="st">"R-shinymanager-key"</span>, <span class="st">"obiwankenobi"</span><span class="op">)</span></span>
+<span>        <span class="co"># passphrase = "passphrase_wihtout_keyring"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">auth_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValuesToList.html" class="external-link">reactiveValuesToList</a></span><span class="op">(</span><span class="va">res_auth</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># your classic server logic</span></span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Starting page of the application will be :</p>
-<p><img src="../man/figures/shinymanager-login.png" style="width:100.0%"></p>
-<p>Once logged, the application will be launched and a button added to navigate between the app and the admin panel (if user is authorized to access it), and to logout from the application :</p>
-<p><img src="../man/figures/shinymanager-info-nav.png" style="width:100.0%"></p>
+<p><img src="../reference/figures/shinymanager-login.png" style="width:100.0%"></p>
+<p>Once logged, the application will be launched and a button added to
+navigate between the app and the admin panel (if user is authorized to
+access it), and to logout from the application :</p>
+<p><img src="../reference/figures/shinymanager-info-nav.png" style="width:100.0%"></p>
 </div>
-<div id="admin-mode" class="section level2">
-<h2 class="hasAnchor">
-<a href="#admin-mode" class="anchor"></a>Admin mode</h2>
-<p><img src="../man/figures/shinymanager-admin.png" style="width:100.0%"></p>
-<div id="manage-users" class="section level3">
-<h3 class="hasAnchor">
-<a href="#manage-users" class="anchor"></a>Manage users</h3>
+<div class="section level2">
+<h2 id="admin-mode">Admin mode<a class="anchor" aria-label="anchor" href="#admin-mode"></a>
+</h2>
+<p><img src="../reference/figures/shinymanager-admin.png" style="width:100.0%"></p>
+<div class="section level3">
+<h3 id="manage-users">Manage users<a class="anchor" aria-label="anchor" href="#manage-users"></a>
+</h3>
 <p>The first table lists all current users :</p>
-<p><img src="../man/figures/user_table.png" style="width:100.0%"></p>
+<p><img src="../reference/figures/user_table.png" style="width:100.0%"></p>
 <p>A user is defined (at least) by the following information :</p>
 <ul>
 <li>
 <strong>User</strong> : username</li>
 <li>
-<strong>Start</strong> &amp; <strong>Expire</strong> : optional dates of validity. If missing, access is not restricted to a specific period</li>
+<strong>Start</strong> &amp; <strong>Expire</strong> : optional
+dates of validity. If missing, access is not restricted to a specific
+period</li>
 <li>
-<strong>Admin</strong> : user as administrator ? (<code>TRUE</code> / <code>FALSE</code>)</li>
+<strong>Admin</strong> : user as administrator ? (<code>TRUE</code>
+/ <code>FALSE</code>)</li>
 </ul>
-<div id="add-user" class="section level4">
-<h4 class="hasAnchor">
-<a href="#add-user" class="anchor"></a>Add user</h4>
-<p><img src="../man/figures/add_user.png" style="width:100.0%"></p>
-<p>Using <strong>Add user</strong> button. So you can edit user information in the modal box :</p>
-<p><img src="../man/figures/popup.png" style="width:50.0%"></p>
+<div class="section level4">
+<h4 id="add-user">Add user<a class="anchor" aria-label="anchor" href="#add-user"></a>
+</h4>
+<p><img src="../reference/figures/add_user.png" style="width:100.0%"></p>
+<p>Using <strong>Add user</strong> button. So you can edit user
+information in the modal box :</p>
+<p><img src="../reference/figures/popup.png" style="width:50.0%"></p>
 <p>Notes :</p>
 <ul>
 <li>
 <strong>User</strong> : Canno’t create existing user</li>
 <li>
-<strong>Start &amp; Expire</strong> : Keep empty for no restriction</li>
+<strong>Start &amp; Expire</strong> : Keep empty for no
+restriction</li>
 <li>
-<strong>Password</strong> : By defaut, a temporary password is generated. But you can put your own password and disable asking user to change it on first connexion.</li>
+<strong>Password</strong> : By defaut, a temporary password is
+generated. But you can put your own password and disable asking user to
+change it on first connexion.</li>
 </ul>
-<p><img src="../man/figures/shinymanager-pwd.png" style="width:100.0%"></p>
+<p><img src="../reference/figures/shinymanager-pwd.png" style="width:100.0%"></p>
 <p>Finally, the creation is effective clicking on validation button.</p>
 </div>
 </div>
-<div id="edit-current-user" class="section level3">
-<h3 class="hasAnchor">
-<a href="#edit-current-user" class="anchor"></a>Edit current user</h3>
-<p>It’s possible to edit user information clicking on the blue <code>button</code> on the table.</p>
-<div id="remove-a-user" class="section level4">
-<h4 class="hasAnchor">
-<a href="#remove-a-user" class="anchor"></a>Remove a user</h4>
+<div class="section level3">
+<h3 id="edit-current-user">Edit current user<a class="anchor" aria-label="anchor" href="#edit-current-user"></a>
+</h3>
+<p>It’s possible to edit user information clicking on the blue
+<code>button</code> on the table.</p>
+<div class="section level4">
+<h4 id="remove-a-user">Remove a user<a class="anchor" aria-label="anchor" href="#remove-a-user"></a>
+</h4>
 <p>You can remove one user using red <code>button</code> on table.</p>
 </div>
-<div id="password-management" class="section level4">
-<h4 class="hasAnchor">
-<a href="#password-management" class="anchor"></a>Password management</h4>
+<div class="section level4">
+<h4 id="password-management">Password management<a class="anchor" aria-label="anchor" href="#password-management"></a>
+</h4>
 <p>The second table allows password management :</p>
-<p><img src="../man/figures/password_table.png" style="width:100.0%"></p>
+<p><img src="../reference/figures/password_table.png" style="width:100.0%"></p>
 <ul>
 <li>
-<strong>Change password button :</strong> Ask user to change password on next connexion</li>
+<strong>Change password button :</strong> Ask user to change
+password on next connexion</li>
 <li>
-<strong>Reset password button :</strong> If needed, a nex temporary password is generated. You have to give it to the user.</li>
+<strong>Reset password button :</strong> If needed, a nex temporary
+password is generated. You have to give it to the user.</li>
 </ul>
 <p>Moreover, by defaut, the module uses some security rules :</p>
 <ul>
@@ -215,19 +225,21 @@
 <p>Additive information :</p>
 <ul>
 <li>
-<strong>Must change</strong> : The user have to change his password</li>
+<strong>Must change</strong> : The user have to change his
+password</li>
 <li>
-<strong>Have changed</strong> : The user already changed his password</li>
+<strong>Have changed</strong> : The user already changed his
+password</li>
 <li>
 <strong>Date change</strong> : Password updated date</li>
 </ul>
 </div>
 </div>
-<div id="logs" class="section level3">
-<h3 class="hasAnchor">
-<a href="#logs" class="anchor"></a>Logs</h3>
+<div class="section level3">
+<h3 id="logs">Logs<a class="anchor" aria-label="anchor" href="#logs"></a>
+</h3>
 <p>You can visualize and download connexion logs on the second tab.</p>
-<p><img src="../man/figures/shinymanager-logs.png" style="width:100.0%"></p>
+<p><img src="../reference/figures/shinymanager-logs.png" style="width:100.0%"></p>
 </div>
 </div>
   </div>
@@ -243,11 +255,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Benoit Thieurmel, Victor Perrier.</p>
+  <p></p>
+<p>Developed by Benoit Thieurmel, Victor Perrier.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -255,6 +269,8 @@
 
   
 
+
+  
 
   </body>
 </html>

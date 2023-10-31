@@ -14,8 +14,9 @@ Live demo:
 * On shinyapps.io : https://dreamrs.shinyapps.io/shinymanager-demo/
 
 You can authenticate with:
- * user: `shiny` / password: `shiny`
- * user: `shinymanager` / password: `shinymanager` (Admin)
+
+* user: `shiny` / password: `shiny`
+* user: `shinymanager` / password: `shinymanager` (Admin)
 
 Online documentation : https://datastorm-open.github.io/shinymanager/
 
