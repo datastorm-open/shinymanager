@@ -60,10 +60,9 @@ custom_access_keys <- function(requested_data){
 #' @param description description
 #'
 #' @export
-custom_add_secret <- function(name, new_secret, description) {
+custom_add_secret <- function(name, new_secret, description, key) {
   
   # encrypt new secret
-  key <- key()
   path_to_user_db <- "../../base-data/database/shiny_users.sqlite"
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
   master_key_query <- "SELECT encrypted_master_key FROM credentials WHERE user = 'produkt'"
