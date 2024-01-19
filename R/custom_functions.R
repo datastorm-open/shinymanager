@@ -72,6 +72,7 @@ custom_add_secret <- function(name, new_secret, description, key) {
   encrypted_data <- safer::encrypt_string(new_secret, key = master_key)
   
   # store new secret in database
+  path_to_user_db <- "../../base-data/database/keys_database.sqlite"
   put_query <- paste0("INSERT INTO keys_database (name, encrypted_data, description) VALUES ('", name, "', '", encrypted_data, "', '", description, "')")
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
   DBI::dbExecute(db, put_query)
