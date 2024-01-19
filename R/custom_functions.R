@@ -114,7 +114,7 @@ custom_show_secrets <- function() {
 custom_delete_secret <- function(secret) {
   
   path_to_keys_db <- "../../base-data/database/keys_database.sqlite"
-  put_query <- paste0("DELETE FROM keys_database WHERE name = ", secret)
+  put_query <- paste0("DELETE FROM keys_database WHERE name = '", secret, "'")
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
   DBI::dbExecute(db, put_query)
   DBI::dbDisconnect(db)
