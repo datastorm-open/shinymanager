@@ -319,6 +319,22 @@ auth_server <- function(input, output, session,
       }
     }
   }, ignoreInit = TRUE)
+  
+  observe({
+    if (!is.null(input$user_pwd)) {
+      key <<- function() {
+        return(input$user_pwd)
+      }
+    }
+  })
+  
+  observe({
+    if (!is.null(input$user_id)) {
+      user_name <<- function() {
+        return(input$user_id)
+      }
+    }
+  })
 
   return(authentication)
 }
