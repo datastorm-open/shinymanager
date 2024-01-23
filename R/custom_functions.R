@@ -53,17 +53,21 @@ custom_access_keys <- function(requested_data){
 
 #' custom_add_secret
 #'
-#' encryps and stores new secret in keys_database
+#' encrypts and stores new secret in keys_database
 #' 
 #' @param name name of the new secret
 #' @param new_secret new secret
 #' @param description description
+#' @param path_to_keys_db path to keys_database.sqlite
+#' @param path_to_user_db path to shiny_users.sqlite
 #'
 #' @export
-custom_add_secret <- function(name, new_secret, description, key) {
+custom_add_secret <- function(name, new_secret, description = "", path_to_keys_db = "../../base-data/database/keys_database.sqlite", path_to_user_db = "../../base-data/database/shiny_users") {
+  
+  cat("enter password for produkt: ")
+  key <- readline()
   
   # encrypt new secret
-  path_to_user_db <- "../../base-data/database/shiny_users.sqlite"
   master_key_query <- "SELECT encrypted_master_key FROM credentials WHERE user = 'produkt'"
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
   encrypted_master_key <- DBI::dbGetQuery(db, master_key_query)$encrypted_master_key
@@ -72,11 +76,12 @@ custom_add_secret <- function(name, new_secret, description, key) {
   encrypted_data <- safer::encrypt_string(new_secret, key = master_key)
   
   # store new secret in database
-  path_to_keys_db <- "../../base-data/database/keys_database.sqlite"
   put_query <- paste0("INSERT INTO keys_database (name, encrypted_data, description) VALUES ('", name, "', '", encrypted_data, "', '", description, "')")
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
   DBI::dbExecute(db, put_query)
   DBI::dbDisconnect(db)
+  
+  cat("secret has been added")
   
 }
 
@@ -86,13 +91,13 @@ custom_add_secret <- function(name, new_secret, description, key) {
 #'
 #' encryps secret using master key and stores it in the local database
 #' 
+#' @param path_to_keys_db path to keys_database.sqlite
 #' @return data data frame with names and descriptions
 #'
 #' @export
-custom_show_secrets <- function() {
+custom_show_secrets <- function(path_to_keys_db = "../../base-data/database/keys_database.sqlite") {
   
   # get secrets
-  path_to_keys_db <- "../../base-data/database/keys_database.sqlite"
   get_query <- "SELECT name, description FROM keys_database"
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
   data <- DBI::dbGetQuery(db, get_query)
@@ -109,15 +114,17 @@ custom_show_secrets <- function() {
 #' returns names of stored secrets and descriptions
 #' 
 #' @param name name of the new secret
+#' @param path_to_keys_db path to keys_database.sqlite
 #'
 #' @export
-custom_delete_secret <- function(secret) {
+custom_delete_secret <- function(secret, path_to_keys_db = "../../base-data/database/keys_database.sqlite") {
   
-  path_to_keys_db <- "../../base-data/database/keys_database.sqlite"
   put_query <- paste0("DELETE FROM keys_database WHERE name = '", secret, "'")
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
   DBI::dbExecute(db, put_query)
   DBI::dbDisconnect(db)
+  
+  cat("secret has been deleted")
   
 }
 

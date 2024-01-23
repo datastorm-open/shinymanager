@@ -4,7 +4,12 @@
 \alias{custom_show_secrets}
 \title{custom_show_secrets}
 \usage{
-custom_show_secrets()
+custom_show_secrets(
+  path_to_keys_db = "../../base-data/database/keys_database.sqlite"
+)
+}
+\arguments{
+\item{path_to_keys_db}{path to keys_database.sqlite}
 }
 \value{
 data data frame with names and descriptions

@@ -4,7 +4,13 @@
 \alias{custom_add_secret}
 \title{custom_add_secret}
 \usage{
-custom_add_secret(name, new_secret, description)
+custom_add_secret(
+  name,
+  new_secret,
+  description = "",
+  path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+  path_to_user_db = "../../base-data/database/shiny_users"
+)
 }
 \arguments{
 \item{name}{name of the new secret}
@@ -12,7 +18,11 @@ custom_add_secret(name, new_secret, description)
 \item{new_secret}{new secret}
 
 \item{description}{description}
+
+\item{path_to_keys_db}{path to keys_database.sqlite}
+
+\item{path_to_user_db}{path to shiny_users.sqlite}
 }
 \description{
-encryps and stores new secret in keys_database
+encrypts and stores new secret in keys_database
 }

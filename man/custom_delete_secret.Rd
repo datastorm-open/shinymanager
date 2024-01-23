@@ -4,9 +4,14 @@
 \alias{custom_delete_secret}
 \title{custom_delete_secret}
 \usage{
-custom_delete_secret(secret)
+custom_delete_secret(
+  secret,
+  path_to_keys_db = "../../base-data/database/keys_database.sqlite"
+)
 }
 \arguments{
+\item{path_to_keys_db}{path to keys_database.sqlite}
+
 \item{name}{name of the new secret}
 }
 \description{
