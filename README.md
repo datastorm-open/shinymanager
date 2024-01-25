@@ -308,7 +308,7 @@ Using SQL/Sqlite database protected, an admin mode is available to manage access
 
 ### Use your own function ?
 
-You can also use your own authentification function with ``check_credentials``, for example doiing a control to your intern database. ``check_credentials`` must be a function  with two arguments ``user`` & ``password``, returning a least with at least ``result`` (``TRUE`` to authorize acces, or ``FALSE``) and ``user_info`` (all you want to retrieve from the user in the app) :
+You can also use your own authentification function with ``check_credentials``, for example to trigger a verification using your internal database. ``check_credentials`` must be a function  with two arguments ``user`` & ``password``, returning a list with at least ``result`` (``TRUE`` to authorize acces, or ``FALSE``) and ``user_info`` (all you want to retrieve from the user in the app):
 
 ````R
 require(RPostgreSQL)
