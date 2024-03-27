@@ -9,6 +9,7 @@ observe({
     }
   }
 })
+```
 
 The package works with two databases: keys_database.sqlite and shiny_users.sqlite, both located in base-data/database. In keys_database, sensitive data is stored encrypted with a master key. In shiny_users, users are created, with the master key encrypted for each user using their password and stored in the database.
 
