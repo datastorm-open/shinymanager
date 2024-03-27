@@ -1,6 +1,6 @@
 #' custom_access_keys
 #'
-#' decryps master key using users password
+#' decryps master key using users password and then uses master key to decrypt the requested data
 #' 
 #' @param requested_data name of the sensible data you want to access
 #' @param encrypted_master_key master_key decrypted with users password
