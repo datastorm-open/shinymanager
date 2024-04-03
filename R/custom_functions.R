@@ -62,7 +62,7 @@ custom_access_keys <- function(requested_data){
 #' @param path_to_user_db path to shiny_users.sqlite
 #'
 #' @export
-custom_add_secret <- function(name, new_secret, description = "", path_to_keys_db = "../../base-data/database/keys_database.sqlite", path_to_user_db = "../../base-data/database/shiny_users") {
+custom_add_secret <- function(name, new_secret, description = "", path_to_keys_db = "../../base-data/database/keys_database.sqlite", path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   
   cat("enter password for produkt: ")
   key <- readline()

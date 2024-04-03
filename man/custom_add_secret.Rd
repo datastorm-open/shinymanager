@@ -9,7 +9,7 @@ custom_add_secret(
   new_secret,
   description = "",
   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
-  path_to_user_db = "../../base-data/database/shiny_users"
+  path_to_user_db = "../../base-data/database/shiny_users.sqlite"
 )
 }
 \arguments{
