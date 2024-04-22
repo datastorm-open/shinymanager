@@ -129,7 +129,7 @@ custom_delete_secret <- function(secret, path_to_keys_db = "../../base-data/data
 
 #' custom_decrypt_data
 #'
-#' returns a dataframe with the decrypted content. 
+#' returns a dataframe with the decrypted content. The decryption key has to be passed down within a function.
 #' 
 #' @param decryption_key the secret to decrypt the data with
 #' @param encrypted_df encrypted data frames
@@ -140,7 +140,7 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
   encrypted_df %>% 
     safer::decrypt_object(decryption_key)
 
-  }
+}
 
 
 

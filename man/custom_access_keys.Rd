@@ -7,15 +7,15 @@
 custom_access_keys(requested_data)
 }
 \arguments{
-\item{requested_data}{name of the sensible data you want to access}
+\item{requested_data}{name of the key you want to access}
 
 \item{encrypted_master_key}{master_key decrypted with users password}
 
 \item{key}{users password}
 }
 \value{
-encrypted data
+decryption key for a data set
 }
 \description{
-decryps master key using users password
+decryps master key using users password and then uses master key to decrypt the requested data
 }
