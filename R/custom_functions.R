@@ -2,10 +2,10 @@
 #'
 #' decryps master key using users password and then uses master key to decrypt the requested data
 #' 
-#' @param requested_data name of the sensible data you want to access
+#' @param requested_data name of the key you want to access
 #' @param encrypted_master_key master_key decrypted with users password
 #' @param key users password
-#' @return encrypted data
+#' @return decryption key for a data set
 #'
 #' @export
 custom_access_keys <- function(requested_data){
@@ -35,10 +35,8 @@ custom_access_keys <- function(requested_data){
     data <- DBI::dbGetQuery(db, paste("SELECT encrypted_data FROM keys_database WHERE name =", shQuote(requested_data)))
     DBI::dbDisconnect(db)
     
-    # decrypt data with master_key
-    decrypted_data <- safer::decrypt_string(data$encrypted_data[1], key = master_key)
-    
-    return(decrypted_data)
+    # decrypt data with master_key and return the secret
+    safer::decrypt_string(data$encrypted_data[1], key = master_key)
     
   } else {
     
@@ -127,5 +125,22 @@ custom_delete_secret <- function(secret, path_to_keys_db = "../../base-data/data
   cat("secret has been deleted")
   
 }
+
+
+#' custom_decrypt_data
+#'
+#' returns a dataframe with the decrypted content. 
+#' 
+#' @param decryption_key the secret to decrypt the data with
+#' @param encrypted_df encrypted data frames
+#'
+#' @export
+custom_decrypt_data <- function(decryption_key, encrypted_df) {
+  
+  encrypted_df %>% 
+    safer::decrypt_object(decryption_key)
+
+  }
+
 
 
