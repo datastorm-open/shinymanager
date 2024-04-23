@@ -48,7 +48,7 @@ credentials <- data.frame(
 )
 
 # Create SQL database
-create_db_sql(
+create_sql_db(
   credentials_data = credentials,
   config_path = "path/to/your_sql_configuration.yml"
 )

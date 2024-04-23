@@ -1,3 +1,10 @@
+# shinymanager 1.0.510
+
+* Improve global performance
+* (#188) FEAT : disable write logs and see logs
+* (#182 & #187) FIX quicky bind entre on auth
+* FEAT/FIX : SQL features (not only sqlite but Postgres, MySQL, ...)
+
 # shinymanager 1.0.5
 
 * (#154) add indonesian. Thanks @aswansyahputra 

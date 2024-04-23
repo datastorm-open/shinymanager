@@ -280,7 +280,7 @@ read_db_decrypt <- function(conn, name = "credentials", passphrase = NULL) {
     conn <- dbConnect(RSQLite::SQLite(), dbname = conn)
     on.exit(dbDisconnect(conn))
   }
-  out <- dbReadTable(conn = conn, name = name)
+  out <- db_read_table_sql(conn, name)
   if (!is.null(passphrase)) {
     passphrase <- as.character(passphrase)
     passphrase <- charToRaw(passphrase)

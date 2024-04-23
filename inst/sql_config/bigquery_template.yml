@@ -1,0 +1,60 @@
+# needed R packages for DB connection. Use comma separation for multiple dependencies like [package1, package2]
+r_packages: [bigrquery]
+
+# connection usong DBI Interface
+# Possible to use !expr Sys.getenv("NAME_ENV_VAR")
+# all args to be passed to DBI::dbConnect
+connect:
+  drv: !expr bigrquery::bigquery()
+  project: project_name
+  dataset: "dataset" 
+  use_legacy_sql: FALSE
+
+tables:
+  credentials:
+    tablename: credentials                    # if you want to change tablename
+    # user, password, start, expire, admin = mandatory with this name
+    # after you can add optionnal custom columns next, getting back in server.R and admin interface
+    init: CREATE TABLE {`tablename`} (
+            user STRING, 
+            password  STRING,
+            start  DATE,                   
+            expire DATE,                   
+            admin BOOL
+        )
+    # Keep same {glue_name*}, update request only if needed.   
+    select: SELECT * FROM {`tablename`} WHERE user IN ({user*})
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE user IN ({udpate_users*})
+    delete: DELETE FROM {`tablename`} WHERE user IN ({del_users*})
+  pwd_mngt:
+    tablename: pwd_mngt                       # if you want to change tablename
+    # user, must_change, have_changed, date_change, n_wrong_pwd = mandatory with this name
+    #  No additionnal columns here
+    init: CREATE TABLE {`tablename`} (
+            user STRING, 
+            must_change  BOOL,           
+            have_changed  BOOL,        
+            date_change DATE, 
+            n_wrong_pwd INT64
+          )
+    # Keep same {glue_name*}, update request only if needed.  
+    select: SELECT * FROM {`tablename`} WHERE user IN ({user*})
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE user IN ({udpate_users*})
+    delete: DELETE FROM {`tablename`} WHERE user IN ({del_users*})
+  logs:
+    tablename: logs                           # if you want to change tablename
+    #  all = mandatory with this name
+    #  No additionnal columns here
+    init: CREATE TABLE {`tablename`} (
+            id STRING DEFAULT GENERATE_UUID(),
+            user  STRING,             
+            server_connected TIMESTAMP, 
+            token STRING,          
+            logout TIMESTAMP,          
+            status STRING,          
+            app STRING               
+          )
+    # Keep same {glue_name*}, update request only if needed. 
+    check_token : SELECT * FROM {`tablename`} WHERE token IN ({token*})
+    select: SELECT * FROM {`tablename`} WHERE user IN ({user*}) AND server_connected >= {`date_h_begin`}  AND server_connected <= {`date_h_end`}
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE token IN ({token*})

@@ -1,9 +1,13 @@
 # needed R packages for DB connection. Use comma separation for multiple dependencies like [package1, package2]
 r_packages: [RPostgres]
 
+# optional. Default to false = connect one time per session. True = connect/disconnect each request
+connect_every_request: false 
+
 # connection usong DBI Interface
 # Possible to use !expr Sys.getenv("NAME_ENV_VAR")
-# all args to be passed to DBI::dbConnect
+# all args to be passed to DBI::dbConnect by default
+# use fun: "connect_function_name" to use other connected functino
 connect:
   drv: !expr RPostgres::Postgres()
   host: "your-hostname.com"
@@ -11,6 +15,10 @@ connect:
   port: 5432
   user: "username"
   password: "*********"
+
+# optional / Default
+# disconnect:
+#   fun: "dbDisconnect"
 
 tables:
   credentials:

@@ -203,9 +203,9 @@ update_user <- function(df, value, username) {
 update_user_sql <- function(config_db, list_value, username) {
   
   conn <- connect_sql_db(config_db)
-  on.exit(disconnect_sql_db(conn))
+  on.exit(disconnect_sql_db(conn, config_db))
   
-  col_names <- dbListFields(conn, config_db$tables$credentials$tablename) 
+  col_names <- db_list_fields_sql(conn, config_db$tables$credentials$tablename) 
   
   check_isTruthy <- TRUE
   if("_sm_enabled_null" %in% names(list_value)){
@@ -225,7 +225,10 @@ update_user_sql <- function(config_db, list_value, username) {
     for(i in 1:length(list_value)){
       name <- names(list_value)[i]
       value <- list_value[[i]]
-      tablename <- config_db$tables$credentials$tablename
+      if(any(c("start", "expire") %in% name) && is.na(value)){
+        value <- as.Date(NA)
+      }
+      tablename <- SQL(config_db$tables$credentials$tablename)
       request <- glue_sql(config_db$tables$credentials$update, .con = conn)
       dbExecute(conn, request)
     }

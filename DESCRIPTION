@@ -1,6 +1,6 @@
 Package: shinymanager
 Title: Authentication Management for 'Shiny' Applications
-Version: 1.0.500
+Version: 1.0.510
 Authors@R: c(
     person("Benoit", "Thieurmel", email = "bthieurmel@gmail.com", role = c("aut", "cre")),
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut"))
@@ -30,5 +30,6 @@ Suggests:
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
-    RPostgres
+    RPostgres,
+    sparklyr
 VignetteBuilder: knitr
