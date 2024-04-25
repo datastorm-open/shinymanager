@@ -228,9 +228,26 @@ update_user_sql <- function(config_db, list_value, username) {
       if(any(c("start", "expire") %in% name) && is.na(value)){
         value <- as.Date(NA)
       }
-      tablename <- SQL(config_db$tables$credentials$tablename)
-      request <- glue_sql(config_db$tables$credentials$update, .con = conn)
-      dbExecute(conn, request)
+
+      if("admin" %in% name){
+        write_logical <- try({
+          tablename <- SQL(config_db$tables$credentials$tablename)
+          request <- glue_sql(config_db$tables$credentials$update, .con = conn)
+          dbExecute(conn, request)
+        }, silent = TRUE)
+        
+        if("try-error" %in% class(write_logical)){
+          value <- as.integer(as.logical(value))
+          tablename <- SQL(config_db$tables$credentials$tablename)
+          request <- glue_sql(config_db$tables$credentials$update, .con = conn)
+          dbExecute(conn, request)
+        }
+      } else {
+        tablename <- SQL(config_db$tables$credentials$tablename)
+        request <- glue_sql(config_db$tables$credentials$update, .con = conn)
+        dbExecute(conn, request)
+      }
+
     }
   }
 

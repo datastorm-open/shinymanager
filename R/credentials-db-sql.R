@@ -167,6 +167,15 @@ write_sql_db <- function(config_db, value, name = "credentials") {
     value$password <- sapply(value$password, function(x) scrypt::hashPassword(x))
   }
   
+  if("MariaDBConnection" %in% class(conn)){
+    is_logical <- sapply(value, function(x) "logical" %in% class(x) || all(x %in% c("TRUE", "FALSE")))
+    if(any(is_logical)){
+      for(i in which(is_logical)){
+        value[[i]] <- as.integer(as.logical(value[[i]]))
+      }
+    }
+  }
+  
   if(!"spark_connection" %in% class(conn)){
     dbAppendTable(conn = conn, name = name, value = value)
   } else {
