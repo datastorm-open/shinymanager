@@ -257,7 +257,7 @@ connect_sql_db <- function(config_db, force_connect = FALSE){
   if(((length(config_db$connect_every_request) == 0) | (length(config_db$connect_every_request) > 0 &&  !config_db$connect_every_request && exists("con", envir = shinymanager_con))) && !force_connect){
     return(get("con", envir = shinymanager_con))
   }
-  print("con")
+
   if("fun" %in% names(config_db$connect)){
     fun <- config_db$connect$fun
     params <- config_db$connect
