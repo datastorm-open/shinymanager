@@ -109,6 +109,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 tags$h3(lan$get("Please authenticate"), id = ns("shinymanager-auth-head"))
               ),
               tags$br(),
+              tags$div(id="auth_user_input",
               textInput(
                 inputId = ns("user_id"),
                 label = lan$get("Username:"),
@@ -118,7 +119,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 inputId = ns("user_pwd"),
                 label = lan$get("Password:"),
                 width = "100%"
-              ),
+              )),
               tags$br(),
               actionButton(
                 inputId = ns("go_auth"),
