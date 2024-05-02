@@ -129,6 +129,7 @@ logs <- function(input, output, session, sqlite_path, passphrase, config_db,
         on.exit(disconnect_sql_db(conn, config_db))
         logs_rv$logs <- db_read_table_sql(conn, config_db$tables$logs$tablename)
         logs_rv$users <- read_db_decrypt(conn = conn, name = config_db$tables$credentials$tablename, passphrase = passphrase)
+        
       }
       
       isolate({
@@ -146,6 +147,7 @@ logs <- function(input, output, session, sqlite_path, passphrase, config_db,
         }
       })
       
+   
       updateSelectInput(
         session = session,
         inputId = "user",

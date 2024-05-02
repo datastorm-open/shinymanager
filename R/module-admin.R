@@ -145,6 +145,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   observe({
     req(update_read_db$x)
+  
     db <- try({
       if(!is.null(sqlite_path)){
         conn <- dbConnect(SQLite(), dbname = sqlite_path)
@@ -157,6 +158,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         db_read_table_sql(conn, config_db$tables$credentials$tablename)
       }
     }, silent = TRUE)
+    
     if (inherits(db, "try-error")) {
       showModal(modalDialog("An error occurs when connecting or reading the database."))
       users(NULL)
@@ -368,6 +370,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   observeEvent(input$delete_selected_users, {
     users <- users()
     to_delete <- r_selected_users()
+    
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
+    
     if(!is.null(sqlite_path)){
       users <- users[!users$user %in% to_delete, , drop = FALSE]
       pwds <- pwds()
@@ -389,6 +399,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       dbExecute(conn, request)
     }
     
+    removeModal()
+    
     update_read_db$x <- Sys.time()
   })
   
@@ -409,7 +421,17 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   })
   
   observeEvent(input$changed_password_users, {
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px", style = "height:50px"), align = "center")
+      )
+    )
+    
     res_chg <- try(force_chg_pwd(r_selected_pwds()), silent = TRUE)
+    
+    removeModal()
+    
     if (inherits(res_chg, "try-error")) {
       showNotification(ui = lan()$get("Failed to update the database"), type = "error")
     } else {
@@ -474,6 +496,12 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     pwds <- pwds()
     newval <- value_edited$user
     
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
     
     res_edit <- try({
       if(!is.null(sqlite_path)){
@@ -501,6 +529,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         }
       }
     }, silent = FALSE)
+    
+    removeModal()
+    
     if (inherits(res_edit, "try-error")) {
       showNotification(ui = lan()$get("Fail to update user"), type = "error")
     } else {
@@ -536,6 +567,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     users <- users()
     newval <- value_mult_edited$user
     newval$user <- newval$admin <- NULL
+    
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
+    
     if(!is.null(sqlite_path)){
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
       on.exit(dbDisconnect(conn))
@@ -554,6 +593,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         }
       }, silent = FALSE)
     }
+    
+    removeModal()
+    
     if (inherits(res_edit, "try-error")) {
       showNotification(ui = lan()$get("Fail to update user"), type = "error")
     } else {
@@ -630,6 +672,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     }
     # password <- generate_pwd()
     # newuser$password <- password
+    
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
+    
     res_add <- try({
       
       if(!is.null(sqlite_path)){
@@ -682,6 +732,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         )
       }
     }, silent = FALSE)
+    
+    removeModal()
+    
     if (inherits(res_add, "try-error")) {
       showNotification(ui = lan()$get("Failed to update user"), type = "error")
     } else {
@@ -704,7 +757,17 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # store in database that the user must change password on next connection
   observeEvent(input$changed_password, {
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
+    
     res_chg <- try(force_chg_pwd(input$change_pwd), silent = TRUE)
+    
+    removeModal()
+    
     if (inherits(res_chg, "try-error")) {
       showNotification(ui = lan()$get("Failed to update the database"), type = "error")
     } else {
@@ -720,6 +783,13 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   })
   observeEvent(input$reseted_password, {
     password <- generate_pwd()
+    
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
     
     if(!is.null(sqlite_path)){
       users <- users()
@@ -747,6 +817,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     }
     
     res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
+    
+    removeModal()
     
     if (inherits(res_chg, "try-error")) {
       showNotification(ui = lan()$get("Failed to update user"), type = "error")
@@ -777,6 +849,14 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # delete the user
   observeEvent(input$delete_user, {
+    
+    showModal(
+      modalDialog(
+        title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
+        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+      )
+    )
+    
     if(!is.null(sqlite_path)){
       users <- users()
       users <- users[!users$user %in% input$remove_user, , drop = FALSE]
@@ -799,6 +879,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       request <- glue_sql(config_db$tables$pwd_mngt$delete, .con = conn)
       dbExecute(conn, request)
     }
+    
+    removeModal()
     
     update_read_db$x <- Sys.time()
   })
