@@ -13,16 +13,16 @@ custom_add_secret(
 )
 }
 \arguments{
-\item{name}{name of the new secret}
+\item{name}{Name of the new secret}
 
-\item{new_secret}{new secret}
+\item{new_secret}{Secret to be stored}
 
-\item{description}{description}
+\item{description}{Description}
 
-\item{path_to_keys_db}{path to keys_database.sqlite}
+\item{path_to_keys_db}{Path to keys_database.sqlite}
 
-\item{path_to_user_db}{path to shiny_users.sqlite}
+\item{path_to_user_db}{Path to shiny_users.sqlite}
 }
 \description{
-encrypts and stores new secret in keys_database
+Encrypts new secret with master_key and stores it in the keys_database
 }

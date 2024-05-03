@@ -9,11 +9,11 @@ custom_show_secrets(
 )
 }
 \arguments{
-\item{path_to_keys_db}{path to keys_database.sqlite}
+\item{path_to_keys_db}{Path to keys_database.sqlite}
 }
 \value{
-data data frame with names and descriptions
+Dataframe with names and descriptions
 }
 \description{
-encryps secret using master key and stores it in the local database
+Gets all stored names and descriptions from the keys_database
 }

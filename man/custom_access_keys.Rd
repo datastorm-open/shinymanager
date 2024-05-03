@@ -7,15 +7,12 @@
 custom_access_keys(requested_data)
 }
 \arguments{
-\item{requested_data}{name of the key you want to access}
-
-\item{encrypted_master_key}{master_key decrypted with users password}
-
-\item{key}{users password}
+\item{requested_data}{Name of the secret you want to access}
 }
 \value{
-decryption key for a data set
+Decrypted secret for the requested_data
 }
 \description{
-decryps master key using users password and then uses master key to decrypt the requested data
+Decryps master_key using users password (entered through shinymanager) from the shiny_users.sqlite database
+Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
 }

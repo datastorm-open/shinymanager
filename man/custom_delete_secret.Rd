@@ -10,10 +10,10 @@ custom_delete_secret(
 )
 }
 \arguments{
-\item{path_to_keys_db}{path to keys_database.sqlite}
+\item{path_to_keys_db}{Path to keys_database.sqlite}
 
-\item{name}{name of the new secret}
+\item{name}{Name of the secret}
 }
 \description{
-returns names of stored secrets and descriptions
+Deletes a secret from the keys_database
 }
