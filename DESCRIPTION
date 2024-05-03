@@ -24,7 +24,8 @@ Imports:
     billboarder,
     scrypt,
     yaml,
-    glue
+    glue,
+    getPass
 Suggests: 
     keyring,
     testthat (>= 2.1.0),
