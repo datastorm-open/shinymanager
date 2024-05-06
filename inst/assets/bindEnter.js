@@ -3,7 +3,6 @@
 function bindEnter(ns) {
   $('#' + ns + 'user_pwd').on('keyup',function(e) {
     if(e.which == 13) {
-      console.info($('#' + ns + 'user_pwd').val());
       $('#' + ns + 'go_auth').click();
     }
   });
