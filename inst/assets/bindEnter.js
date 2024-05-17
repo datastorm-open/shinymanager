@@ -1,4 +1,10 @@
-
+// #190
+window.onload = function() { 
+  val = $('#auth-language').find("option[selected]").val();
+  if(val === ''){
+    location.reload();
+  }
+};
 
 function bindEnter(ns) {
   $('#' + ns + 'user_pwd').on('keyup',function(e) {

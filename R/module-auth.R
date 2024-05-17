@@ -202,7 +202,7 @@ auth_server <- function(input, output, session,
   })
   
   observe({
-    if(!is.null(input$language)){
+    if(!is.null(input$language) && input$language != ""){
       lan()$set_language(input$language)
       updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
