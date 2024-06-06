@@ -30,3 +30,8 @@ shiny_users has the following columns:
 * is_hashed_password, 1
 
 columns marked with * are required
+
+### Build Process
+
+When you have updated anything you need to run `devtools::document()` and `devtools::build()` and then commit and push to the repo.
+With `packageVersion("shinymanager")` you can see what version you have installed.
