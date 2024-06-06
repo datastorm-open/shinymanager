@@ -1,6 +1,6 @@
 #' custom_access_keys
 #'
-#' Decryps master_key using users password (entered through shinymanager) from the shiny_users.sqlite database
+#' Decryps master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
 #' Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
 #'
 #' @param requested_data Name of the secret you want to access
