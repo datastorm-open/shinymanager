@@ -13,9 +13,17 @@
 custom_access_keys <- function(name_of_secret,
                                path_to_keys_db = "../../base-data/database/keys_database.sqlite",
                                path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
-  if(interactive()) {
-    user_name <- "produkt"
-    key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein")
+  if (interactive()) {
+    session <- shiny::getDefaultReactiveDomain()
+    if (!is.null(session)) {
+      if (is.null(session$userData$password_cache)) {
+        session$userData$password_cache <- getPass::getPass(msg = "Gib das Passwort fÃ¼r den Produktnutzer ein")
+      }
+      user_name <- "produkt"
+      key <- session$userData$password_cache
+    } else {
+      key <- getPass::getPass(msg = "Gib das Passwort fÃ¼r den Produktnutzer ein")
+    }
   } else {
     # Decrypt master_key
     key <- key()
@@ -181,7 +189,7 @@ custom_add_user <- function(username,
     db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
     if(interactive()) {
       current_user_name <- "produkt"
-      key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein")
+      key <- getPass::getPass(msg = "Gib das Passwort fÃ¼r den Produktnutzer ein")
     } else {
       current_user_name <- user_name()
       key <- key()
