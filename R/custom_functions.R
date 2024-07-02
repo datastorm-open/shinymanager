@@ -173,9 +173,9 @@ custom_add_user <- function(username,
                             password, 
                             include_master_key = TRUE, 
                             path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
-  if (!is.character(username) || !is.character(password)) {
+   if(!is.character(username) || !is.character(password)) {
     return("Error: Username and password must be characters.")
-  } ifelse(!is.logical(include_master_key)) {
+  } else if(!is.logical(include_master_key)) {
     return("Error: include_master_key must be TRUE or FALSE")
   } else {
     db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
