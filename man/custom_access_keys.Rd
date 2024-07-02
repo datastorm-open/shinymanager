@@ -13,6 +13,6 @@ custom_access_keys(requested_data)
 Decrypted secret for the requested_data
 }
 \description{
-Decryps master_key using users password (entered through shinymanager) from the shiny_users.sqlite database
+Decryps master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
 Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
 }
