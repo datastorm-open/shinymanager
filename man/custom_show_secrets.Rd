@@ -9,11 +9,12 @@ custom_show_secrets(
 )
 }
 \arguments{
-\item{path_to_keys_db}{Path to keys_database.sqlite}
+\item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
 }
 \value{
-Dataframe with names and descriptions
+Dataframe with names and descriptions of stored secrets.
 }
 \description{
-Gets all stored names and descriptions from the keys_database
+Should only be triggered interactively.
+Retrieves all stored names and descriptions from the keys_database.
 }

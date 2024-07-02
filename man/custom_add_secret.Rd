@@ -5,24 +5,27 @@
 \title{custom_add_secret}
 \usage{
 custom_add_secret(
-  name,
-  new_secret,
+  name_of_secret,
   description = "",
   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
   path_to_user_db = "../../base-data/database/shiny_users.sqlite"
 )
 }
 \arguments{
-\item{name}{Name of the new secret}
+\item{name_of_secret}{Name of the new secret.}
 
-\item{new_secret}{Secret to be stored}
+\item{description}{Description of the new secret (optional).}
 
-\item{description}{Description}
+\item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
 
-\item{path_to_keys_db}{Path to keys_database.sqlite}
-
-\item{path_to_user_db}{Path to shiny_users.sqlite}
+\item{path_to_user_db}{Path to shiny_users.sqlite (optional).}
+}
+\value{
+Message indicating the secret has been added.
 }
 \description{
-Encrypts new secret with master_key and stores it in the keys_database
+Should only be triggered interactively.
+Encrypts new secret with master_key and stores it in the keys database.
+Asks for password of produkt user to decrypt master_key and the value of 
+the new secret to be added.
 }

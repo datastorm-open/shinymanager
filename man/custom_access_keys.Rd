@@ -4,15 +4,25 @@
 \alias{custom_access_keys}
 \title{custom_access_keys}
 \usage{
-custom_access_keys(requested_data)
+custom_access_keys(
+  name_of_secret,
+  path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+  path_to_user_db = "../../base-data/database/shiny_users.sqlite"
+)
 }
 \arguments{
-\item{requested_data}{Name of the secret you want to access}
+\item{name_of_secret}{Name of the secret to be loaded.}
+
+\item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
+
+\item{path_to_user_db}{Path to shiny_users.sqlite (optional).}
 }
 \value{
-Decrypted secret for the requested_data
+Decrypted secret for the requested_data.
 }
 \description{
-Decryps master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
-Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
+Loads secret for given name from the keys database and returns the
+decrypted secret. 
+When triggered interactively, asks for password of produkt user to decrypt the secret.
+On the server, the provided password of the signed in user is used.
 }

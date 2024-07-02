@@ -5,15 +5,19 @@
 \title{custom_delete_secret}
 \usage{
 custom_delete_secret(
-  secret,
+  name_of_secret,
   path_to_keys_db = "../../base-data/database/keys_database.sqlite"
 )
 }
 \arguments{
-\item{path_to_keys_db}{Path to keys_database.sqlite}
+\item{name_of_secret}{Name of the secret to be deleted.}
 
-\item{name}{Name of the secret}
+\item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
+}
+\value{
+Message indicating the secret has been deleted.
 }
 \description{
+Should only be triggered interactively.
 Deletes a secret from the keys_database
 }

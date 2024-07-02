@@ -4,13 +4,25 @@
 \alias{custom_decrypt_data}
 \title{custom_decrypt_data}
 \usage{
-custom_decrypt_data(decryption_key, encrypted_df)
+custom_decrypt_data(
+  encrypted_df,
+  name_of_secret = "billomat_db_key",
+  path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+  path_to_user_db = "../../base-data/database/shiny_users.sqlite"
+)
 }
 \arguments{
-\item{decryption_key}{the secret to decrypt the data with}
+\item{encrypted_df}{Encrypted data frames.}
 
-\item{encrypted_df}{encrypted data frames}
+\item{name_of_secret}{The name of the secret that decrypts the data (optional).}
+
+\item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
+
+\item{path_to_user_db}{Path to shiny_users.sqlite (optional).}
+}
+\value{
+The decrypted dataframe
 }
 \description{
-returns a dataframe with the decrypted content. The decryption key has to be passed down within a function.
+Decrypts a dataframe without having to provide the secret.
 }
