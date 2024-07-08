@@ -1,25 +1,74 @@
 #' custom_access_keys
 #'
+#' Decrypts master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
+#' Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
+#'
+#' @param requested_data Name of the secret you want to access
+#' @return Decrypted secret for the requested_data
+#'
+#' @export
+custom_access_keys <- function(requested_data){
+  # decrypt master_key
+  key <- key()
+  user_name <- user_name()
+  path_to_user_db <- "../../base-data/database/shiny_users.sqlite"
+  db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
+  master_key_query <- paste0("SELECT encrypted_master_key FROM credentials WHERE user = '", user_name, "'")
+  encrypted_master_key <- DBI::dbGetQuery(db, master_key_query)$encrypted_master_key
+  master_key <- safer::decrypt_string(encrypted_master_key, key = key)
+  DBI::dbDisconnect(db)
+  
+  # connect to keys_database
+  path_to_keys_db <- "../../base-data/database/keys_database.sqlite"
+  db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
+  
+  # get the names of all data stored in keys_database
+  names_data <- DBI::dbGetQuery(db, "SELECT DISTINCT name FROM keys_database")
+  
+  # check if the requested data exists in the database
+  if (any(grepl(requested_data, names_data$name))) {
+    
+    # get data
+    data <- DBI::dbGetQuery(db, paste("SELECT encrypted_data FROM keys_database WHERE name =", shQuote(requested_data)))
+    DBI::dbDisconnect(db)
+    
+    # decrypt data with master_key and return the secret
+    safer::decrypt_string(data$encrypted_data[1], key = master_key)
+  } else {
+    DBI::dbDisconnect(db)
+    return("Error: The requested data does not exist in the database or the name of the requested data is incorrect")
+  }
+}
+
+
+#' custom_access_keys_new
+#'
 #' Loads secret for given name from the keys database and returns the
 #' decrypted secret. 
 #' When triggered interactively, asks for password of produkt user to decrypt the secret.
 #' On the server, the provided password of the signed in user is used.
 #'
 #' @param name_of_secret Name of the secret to be loaded.
+#' @param user_name Name of the user.
 #' @param path_to_keys_db Path to keys_database.sqlite (optional).
 #' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return Decrypted secret for the requested_data.
 #' @export
-custom_access_keys <- function(name_of_secret,
-                               path_to_keys_db = "../../base-data/database/keys_database.sqlite",
-                               path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+custom_access_keys_new <- function(name_of_secret,
+                                   user_name,
+                                   user_password,
+                                   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                                   path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   if (interactive()) {
+    print(user_name)
+    print(user_password)
     session <- shiny::getDefaultReactiveDomain()
     if (!is.null(session)) {
       if (is.null(session$userData$password_cache)) {
-        session$userData$password_cache <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein")
+        session$userData$password_cache <- user_password
+        #session$userData$password_cache <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein")
       }
-      user_name <- "produkt"
+      user_name <- user_name
       key <- session$userData$password_cache
     } else {
       key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein")
@@ -30,12 +79,35 @@ custom_access_keys <- function(name_of_secret,
     user_name <- user_name()
   }
   
-  db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
-  master_key_query <- paste0("SELECT encrypted_master_key FROM credentials WHERE user = '", user_name, "'")
-  encrypted_master_key <- DBI::dbGetQuery(db, master_key_query)$encrypted_master_key
-  master_key <- safer::decrypt_string(encrypted_master_key, key = key)
-  DBI::dbDisconnect(db)
-
+  result <- tryCatch({
+    db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
+    
+    encrypted_master_key_query <- paste0("SELECT encrypted_master_key FROM credentials WHERE user = '", user_name, "'")
+    encrypted_master_key <- DBI::dbGetQuery(db, master_key_query)$encrypted_master_key
+    
+    DBI::dbDisconnect(db)
+    
+    if(length(encrypted_master_key) == 0){
+      stop("No master key found for this user.")
+    }
+    
+    master_key <- safer::decrypt_string(encrypted_master_key, key = key)
+    
+    if (is.null(master_key) || master_key == "") {
+      stop("Decryption of the master key failed.")
+    }
+    
+    list(success = TRUE, master_key = master_key)
+  }, error = function(e) {
+    list(success = FALSE, message = e$message)
+  })
+  
+  if (!result$success) {
+    return(result$message)
+  }
+  
+  master_key <- result$master_key
+  
   # Connect to keys_database
   db <- DBI::dbConnect(RSQLite::SQLite(), path_to_keys_db)
 
@@ -143,6 +215,22 @@ custom_delete_secret <- function(name_of_secret,
 
 #' custom_decrypt_data
 #'
+#' Decrypts a dataframe with the decrypted content. 
+#' The decryption key has to be passed down within a function.
+#'
+#' @param decryption_key the secret to decrypt the data with
+#' @param encrypted_df encrypted data frames
+#'
+#' @export
+custom_decrypt_data <- function(decryption_key, encrypted_df) {
+  
+  encrypted_df %>%
+    safer::decrypt_object(decryption_key)
+}
+
+
+#' custom_decrypt_data_new
+#'
 #' Decrypts a dataframe without having to provide the secret.
 #'
 #' @param encrypted_df Encrypted data frames.
@@ -151,14 +239,18 @@ custom_delete_secret <- function(name_of_secret,
 #' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return The decrypted dataframe 
 #' @export
-custom_decrypt_data <- function(encrypted_df,
-                                name_of_secret = "billomat_db_key", 
-                                path_to_keys_db = "../../base-data/database/keys_database.sqlite",
-                                path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+custom_decrypt_data_new <- function(encrypted_df,
+                                    user_name, 
+                                    user_password,
+                                    name_of_secret = "billomat_db_key", 
+                                    path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                                    path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
 
-  decryption_key <- custom_access_keys(name_of_secret,
-                                       path_to_keys_db = path_to_keys_db,
-                                       path_to_user_db = path_to_user_db)
+  decryption_key <- custom_access_keys_new(name_of_secret,
+                                           user_name, 
+                                           user_password,
+                                           path_to_keys_db = path_to_keys_db,
+                                           path_to_user_db = path_to_user_db)
   
   decrypted_df <- encrypted_df %>%
     safer::decrypt_object(decryption_key)
