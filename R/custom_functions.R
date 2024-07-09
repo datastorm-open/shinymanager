@@ -41,7 +41,7 @@ custom_access_keys <- function(requested_data){
 }
 
 
-#' custom_access_keys_new
+#' custom_access_keys_2
 #'
 #' Loads secret for given name from the keys database and returns the
 #' decrypted secret. 
@@ -54,27 +54,32 @@ custom_access_keys <- function(requested_data){
 #' @return Decrypted secret for the requested_data.
 #' @export
 custom_access_keys_2 <- function(name_of_secret,
-                                   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
-                                   path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
-  password <- tryCatch({
-    key <- key()
-    print("Passwort erfolgreich abgerufen")
-    return(key)
-  }, error = function(e) {
-    message("Fehler: ", conditionMessage(e))
-    key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:")
-    return(key)
-  })
+                                 path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                                 path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+  retrieve_password <- function(){
+    tryCatch({
+      key <- key()
+      key
+    }, error = function(e) {
+      message("Fehler: ", conditionMessage(e))
+      key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:")
+      key
+    })
+  } 
   
-  user_name <- tryCatch({
-    user <- user_name()
-    print("Benutzername erfolgreich abgerufen")
-    return(user)
-  }, error = function(e) {
-    message("Fehler: ", conditionMessage(e))
-    user <- "produkt"
-    return(user)
-  })
+  retrieve_user_name <- function(){
+    tryCatch({
+      user <- user_name()
+      user
+    }, error = function(e) {
+      message("Fehler: ", conditionMessage(e))
+      user <- "produkt"
+      user
+    }) 
+  }
+  
+  password <- retrieve_password()
+  user_name <- retrieve_user_name()
   
   result <- tryCatch({
     db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
@@ -93,12 +98,12 @@ custom_access_keys_2 <- function(name_of_secret,
     if (is.null(master_key) || master_key == "") {
       stop("Decryption of the master key failed.")
     }
-    
+
     list(success = TRUE, master_key = master_key)
   }, error = function(e) {
     list(success = FALSE, message = e$message)
   })
-  
+
   if (!result$success) {
     return(result$message)
   }
@@ -235,13 +240,13 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
 #' @return The decrypted dataframe 
 #' @export
 custom_decrypt_data_2 <- function(encrypted_df,
-                                    name_of_secret = "billomat_db_key", 
-                                    path_to_keys_db = "../../base-data/database/keys_database.sqlite",
-                                    path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+                                  name_of_secret = "billomat_db_key", 
+                                  path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                                  path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
 
-  decryption_key <- custom_access_keys_new(name_of_secret,
-                                           path_to_keys_db = path_to_keys_db,
-                                           path_to_user_db = path_to_user_db)
+  decryption_key <- custom_access_keys_2(name_of_secret,
+                                         path_to_keys_db = path_to_keys_db,
+                                         path_to_user_db = path_to_user_db)
   
   decrypted_df <- encrypted_df %>%
     safer::decrypt_object(decryption_key)
