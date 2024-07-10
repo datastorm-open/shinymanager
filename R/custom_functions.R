@@ -310,22 +310,58 @@ custom_add_user <- function(username,
 }
 
 
-#' #' custom_permission
-#' #'
-#' #' 
-#' #' @param username = "../../base-data/database/shiny_users.sqlite"
-#' #' @param path_to_user_db = "../../base-data/database/shiny_users.sqlite" (optional)
-#' #' @return The Level of Rights the User has
-#' #' @export
-#' custom_permission <- function(username,
-#'                               path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
-#'   shiny_users <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
-#'   permissions_query <- paste0("SELECT permission FROM credentials WHERE user = '", username, "'")
-#'   decrypt_key_encrypted <- DBI::dbGetQuery(shiny_users, decrypt_key_query)$encrypted_master_key
-#'   
-#'   
-#'   
-#'   
-#'   tables <- DBI::dbListTables(shiny_users)
-#'   shiny_users <- shinymanager::read_db_decrypt(shiny_users, "credentials")
-#' }
+#' custom_permission
+#'
+#' Returns an integer telling you hat level of permission the user has.
+#' This function does not need any parameters.
+#'
+#' @param path_to_user_db = "../../base-data/database/shiny_users.sqlite" (optional)
+#' @return The Level of Rights the user has
+#' @export
+custom_permission <- function(path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+  
+  retrieve_user_name <- function(){
+    tryCatch({
+      user <- user_name()
+      user
+    }, error = function(e) {
+      message("Fehler: ", conditionMessage(e))
+      user <- "produkt"
+      user
+    }) 
+  }
+  
+  user_name <- retrieve_user_name()
+  
+  shiny_users <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
+  permission_query <- paste0("SELECT permission FROM credentials WHERE user = '", user_name, "'")
+  permission <- DBI::dbGetQuery(shiny_users, permission_query)$permission
+
+  determine_permission_level <- function(permission) {
+    level_2 <- c("Admin", "Entwickler", "Geschaeftsfuerung", "Headof", "Verwaltung")
+    level_1 <- c("Teamlead")
+    
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+      stop("The package 'dplyr' is not installed. Please install it.")
+    }
+    
+    tryCatch({
+      permission_level <- case_when(
+        permission %in% level_2 ~ 2,
+        permission %in% level_1 ~ 1,
+        TRUE ~ 0
+      )
+    }, error = function(e) {
+      if (grepl("konnte Funktion \"case_when\" nicht finden", e$message)) {
+        message("The function case_when was not found. Please load the package 'dplyr'.")  
+      } else {
+        message("An unknown error has occured")
+      }
+      permission_level <- NA
+    })
+    
+    return(permission_level)
+  }
+  
+  return(determine_permission_level(permission))
+}
