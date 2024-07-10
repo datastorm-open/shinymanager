@@ -14,4 +14,5 @@ custom_decrypt_data(decryption_key, encrypted_df)
 \description{
 Decrypts a dataframe with the decrypted content. 
 The decryption key has to be passed down within a function.
+Function is deprecated, please use custom_decrypt_data_2.
 }

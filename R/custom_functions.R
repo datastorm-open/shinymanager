@@ -56,30 +56,9 @@ custom_access_keys <- function(requested_data){
 custom_access_keys_2 <- function(name_of_secret,
                                  path_to_keys_db = "../../base-data/database/keys_database.sqlite",
                                  path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
-  retrieve_password <- function(){
-    tryCatch({
-      key <- key()
-      key
-    }, error = function(e) {
-      message("Fehler: ", conditionMessage(e))
-      key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:")
-      key
-    })
-  } 
-  
-  retrieve_user_name <- function(){
-    tryCatch({
-      user <- user_name()
-      user
-    }, error = function(e) {
-      message("Fehler: ", conditionMessage(e))
-      user <- "produkt"
-      user
-    }) 
-  }
-  
-  password <- retrieve_password()
-  user_name <- retrieve_user_name()
+  credentials <- custom_retrieve_credentials()
+  user_name <- credentials[[1]]
+  password <- credentials[[2]]
   
   result <- tryCatch({
     db <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
@@ -221,6 +200,7 @@ custom_delete_secret <- function(name_of_secret,
 #'
 #' Decrypts a dataframe with the decrypted content. 
 #' The decryption key has to be passed down within a function.
+#' Function is deprecated, please use custom_decrypt_data_2.
 #'
 #' @param decryption_key the secret to decrypt the data with
 #' @param encrypted_df encrypted data frames
@@ -238,13 +218,13 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
 #' Decrypts a dataframe without having to provide the secret.
 #'
 #' @param encrypted_df Encrypted data frames.
-#' @param name_of_secret The name of the secret that decrypts the data (optional).
+#' @param name_of_secret The name of the secret that decrypts the data.
 #' @param path_to_keys_db Path to keys_database.sqlite (optional).
 #' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return The decrypted dataframe 
 #' @export
 custom_decrypt_data_2 <- function(encrypted_df,
-                                  name_of_secret = "billomat_db_key", 
+                                  name_of_secret,
                                   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
                                   path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
 
@@ -320,24 +300,8 @@ custom_add_user <- function(username,
 #' @export
 custom_permission <- function(path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   
-  retrieve_user_name <- function(){
-    tryCatch({
-      user <- user_name()
-      user
-    }, error = function(e) {
-      if(grepl("konnte Funktion \"user_name\" nicht finden", e$message)) {
-        message("Nutzername wird auf produkt gesetzt.")
-        user <- "produkt"
-        user
-      } else {
-        message("Fehler: ", conditionMessage(e))
-        user <- "produkt"
-        user
-      }
-    }) 
-  }
-  
-  user_name <- retrieve_user_name()
+  credentials <- custom_retrieve_credentials()
+  user_name <- credentials[[1]]
   
   shiny_users <- DBI::dbConnect(RSQLite::SQLite(), path_to_user_db)
   permission_query <- paste0("SELECT permission FROM credentials WHERE user = '", user_name, "'")
@@ -370,4 +334,54 @@ custom_permission <- function(path_to_user_db = "../../base-data/database/shiny_
   }
   
   return(determine_permission_level(permission))
+}
+
+
+#' custom_retrieve_credentials
+#'
+#' This function is used to retrieve the credentials of the user.
+#'
+#' @return List which contains the user_name and password
+#' @export
+custom_retrieve_credentials <- function(){
+  retrieve_user_name <- function(){
+    tryCatch({
+      user <- user_name()
+      user
+    }, error = function(e) {
+      message("Fehler: ", conditionMessage(e))
+      user <- "produkt"
+      user
+    }) 
+  }
+  
+  retrieve_password <- function(){
+    tryCatch({
+      key <- key()
+      key
+    }, error = function(e) {
+      message("Fehler: ", conditionMessage(e))
+      key <- getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:")
+      key
+    })
+  } 
+  
+  user_name <- retrieve_user_name()
+  password <- retrieve_password()
+  
+  return(list(user_name, password))
+}
+
+
+#' custom_show_warnings
+#'
+#' This function shows the warning of any custom function.
+#' If a shiny app is started, the warning pops up on the dashboard.
+#' If a function is called locally, the warning is printed on the console. 
+#'
+#' @param 
+#' @return 
+#' @export
+custom_show_warnings <- function(){
+  
 }

@@ -6,7 +6,7 @@
 \usage{
 custom_decrypt_data_2(
   encrypted_df,
-  name_of_secret = "billomat_db_key",
+  name_of_secret,
   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
   path_to_user_db = "../../base-data/database/shiny_users.sqlite"
 )
@@ -14,7 +14,7 @@ custom_decrypt_data_2(
 \arguments{
 \item{encrypted_df}{Encrypted data frames.}
 
-\item{name_of_secret}{The name of the secret that decrypts the data (optional).}
+\item{name_of_secret}{The name of the secret that decrypts the data.}
 
 \item{path_to_keys_db}{Path to keys_database.sqlite (optional).}
 

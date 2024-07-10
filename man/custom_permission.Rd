@@ -12,7 +12,7 @@ custom_permission(
 \item{path_to_user_db}{= "../../base-data/database/shiny_users.sqlite" (optional)}
 }
 \value{
-The Level of Rights the Uuer has
+The Level of Rights the user has
 }
 \description{
 Returns an integer telling you hat level of permission the user has.
