@@ -325,9 +325,15 @@ custom_permission <- function(path_to_user_db = "../../base-data/database/shiny_
       user <- user_name()
       user
     }, error = function(e) {
-      message("Fehler: ", conditionMessage(e))
-      user <- "produkt"
-      user
+      if(grepl("konnte Funktion \"user_name\" nicht finden", e$message)) {
+        message("Nutzername wird auf produkt gesetzt.")
+        user <- "produkt"
+        user
+      } else {
+        message("Fehler: ", conditionMessage(e))
+        user <- "produkt"
+        user
+      }
     }) 
   }
   
