@@ -2,7 +2,7 @@
 % Please edit documentation in R/custom_functions.R
 \name{custom_decrypt_data_2}
 \alias{custom_decrypt_data_2}
-\title{custom_decrypt_data_new}
+\title{custom_decrypt_data_2}
 \usage{
 custom_decrypt_data_2(
   encrypted_df,

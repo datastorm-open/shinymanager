@@ -5,17 +5,11 @@
 \title{custom_add_user}
 \usage{
 custom_add_user(
-  username,
-  password,
   include_master_key = TRUE,
   path_to_user_db = "../../base-data/database/shiny_users.sqlite"
 )
 }
 \arguments{
-\item{username}{The username of the new user.}
-
-\item{password}{The password of the new user.}
-
 \item{include_master_key}{Boolean indicating if the master key should be accessible to the user (optional).}
 
 \item{path_to_user_db}{Path to shiny_users.sqlite (optional).}

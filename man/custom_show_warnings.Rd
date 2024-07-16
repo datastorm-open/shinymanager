@@ -4,7 +4,17 @@
 \alias{custom_show_warnings}
 \title{custom_show_warnings}
 \usage{
-custom_show_warnings()
+custom_show_warnings(warning, param = NA, username = NA)
+}
+\arguments{
+\item{warning}{The warning a try-catch block throws}
+
+\item{param}{Parameter used to distinguish between errors (Optional).}
+
+\item{username}{Used to print the username if not found in the database (Optional).}
+}
+\value{
+The modified warning message or NULL if the warning is to be suppressed.
 }
 \description{
 This function shows the warning of any custom function.
