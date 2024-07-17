@@ -357,7 +357,7 @@ custom_username <- function() {
 #' @param password Boolean indicating if the password should be retrieved. Default is TRUE (optional).
 #' @return List which contains the user_name and password
 custom_retrieve_credentials <- function(username = TRUE, password = TRUE){
-  is_interactive <- interactive()
+  is_interactive <- custom_interactive()
   
   retrieve_user_name <- function(){
     if (username == FALSE) {
@@ -366,7 +366,6 @@ custom_retrieve_credentials <- function(username = TRUE, password = TRUE){
     if (is_interactive) {
       return("produkt")
     }
-    
     tryCatch({
       user_name()
     }, error = function(e) {
@@ -412,7 +411,7 @@ custom_show_warnings <- function(warning, param = NA, username = NA){
     return("The package 'dplyr' is not loaded. Please load it.")
   }
   
-  is_interactive <- interactive()
+  is_interactive <- custom_interactive()
   
   warning_output <- dplyr::case_when(
     (warning == "could not find function \"user_name\"" || warning == "konnte funktion \"user_name\" nicht finden") && is_interactive ~ NA,
@@ -429,4 +428,19 @@ custom_show_warnings <- function(warning, param = NA, username = NA){
   } else {
     return(warning_output)
   }
+}
+
+
+#' custom_interactive
+#'
+#' This function checks if a function is called from a shiny app or from the console.
+#' It works just like interactive(), but returns FALSE if running from a shiny app.
+#'
+#' @return Boolean value indicating if a function is called from a shiny app or console
+custom_interactive <- function(){
+  if (!is.null(shiny::getDefaultReactiveDomain())) {
+    return(FALSE)
+  }
+  
+  return(interactive())
 }
