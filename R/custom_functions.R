@@ -90,7 +90,10 @@ custom_access_keys_2 <- function(name_of_secret,
     
     data <- DBI::dbGetQuery(db, paste("SELECT encrypted_data FROM keys_database WHERE name =", shQuote(name_of_secret)))
     DBI::dbDisconnect(db)
-      
+    
+    if (!any(grepl(name_of_secret, names_data$name))){
+      stop("Error: The name_of_secret does not exist in the database or the name_of_secret is incorrect")
+    }
     secret <- safer::decrypt_string(data$encrypted_data[1], key = get_master_key$master_key)
   }, error = function(e) {
     e$message <- custom_show_warnings(conditionMessage(e), "master_key")
@@ -221,7 +224,7 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
 #' @param name_of_secret The name of the secret that decrypts the data.
 #' @param path_to_keys_db Path to keys_database.sqlite (optional).
 #' @param path_to_user_db Path to shiny_users.sqlite (optional).
-#' @return The decrypted dataframe 
+#' @return The decrypted dataframe.
 #' @export
 custom_decrypt_data_2 <- function(encrypted_df,
                                   name_of_secret,
@@ -238,8 +241,35 @@ custom_decrypt_data_2 <- function(encrypted_df,
     e$message <- custom_show_warnings(conditionMessage(e))
     stop(e)
   })  
-  
 }
+
+
+#' custom_encrypt_data
+#'
+#' Encrypts a dataframe without having to provide the secret.
+#'
+#' @param data_df The data frame to be encrypted.
+#' @param name_of_secret The name of the secret that decrypts the data.
+#' @param path_to_keys_db Path to keys_database.sqlite (optional).
+#' @param path_to_user_db Path to shiny_users.sqlite (optional).
+#' @return The encrypted dataframe .
+#' @export
+custom_encrypt_data <- function(data_df,
+                                name_of_secret,
+                                path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                                path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
+  tryCatch({
+    decryption_key <- custom_access_keys_2(name_of_secret,
+                                           path_to_keys_db = path_to_keys_db,
+                                           path_to_user_db = path_to_user_db)
+    encrypted_df <- safer::encrypt_object(data_df, decryption_key)
+    return(encrypted_df)  
+  }, error = function(e) {
+    e$message <- custom_show_warnings(conditionMessage(e))
+    stop(e)
+  })  
+}
+
 
 
 #' custom_add_user
@@ -283,7 +313,8 @@ custom_add_user <- function(include_master_key = TRUE,
     
     return("User has been added successfully.")
   }, error = function(e) {
-    return(custom_show_warnings(conditionMessage(e), "password"))
+    e$message <- custom_show_warnings(conditionMessage(e), "password")
+    stop(e)
   })
 }
 
@@ -320,7 +351,7 @@ custom_permission_level <- function(path_to_user_db = "../../base-data/database/
 
   determine_permission_level <- function(permission) {
     permission_level <- tryCatch({
-      case_when(
+      dplyr::case_when(
         permission %in% c("Admin", "Entwickler", "Geschaeftsfuerung", "Headof", "Verwaltung") ~ 2,
         permission %in% c("Teamlead") ~ 1,
         TRUE ~ 0
@@ -360,33 +391,25 @@ custom_retrieve_credentials <- function(username = TRUE, password = TRUE){
   is_interactive <- custom_interactive()
   
   retrieve_user_name <- function(){
-    if (username == FALSE) {
+    if (!username) {
       return()
     }
     if (is_interactive) {
       return("produkt")
+    } else {
+      return(user_name())
     }
-    tryCatch({
-      user_name()
-    }, error = function(e) {
-      message(custom_show_warnings(conditionMessage(e)))
-      "produkt"
-    }) 
   }
   
   retrieve_password <- function(){
-    if(password == FALSE) {
+    if(!password) {
       return()
     }
     if(is_interactive) {
       return(getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:"))
+    } else {
+      return(key()) 
     }
-    tryCatch({
-      key()
-    }, error = function(e) {
-      message(custom_show_warnings(conditionMessage(e)))
-      getPass::getPass(msg = "Gib das Passwort für den Produktnutzer ein:")
-    })
   } 
   
   user_name <- retrieve_user_name()
@@ -407,27 +430,13 @@ custom_retrieve_credentials <- function(username = TRUE, password = TRUE){
 #' @param username Used to print the username if not found in the database (Optional).
 #' @return The modified warning message or NULL if the warning is to be suppressed.
 custom_show_warnings <- function(warning, param = NA, username = NA){
-  if (!requireNamespace("dplyr", quietly = TRUE)) {
-    return("The package 'dplyr' is not loaded. Please load it.")
-  }
-  
-  is_interactive <- custom_interactive()
-  
   warning_output <- dplyr::case_when(
-    (warning == "could not find function \"user_name\"" || warning == "konnte funktion \"user_name\" nicht finden") && is_interactive ~ NA,
-    (warning == "could not find function \"key\"" || warning == "konnte funktion \"key\" nicht finden") && is_interactive ~ NA,
     warning == "Unable to decrypt. Ensure that the input was generated by 'encrypt_string'." && param == "password" ~ "Unable to decrypt encrypted_master_key with the given password.",
-    warning == "Unable to decrypt. Ensure that the input was generated by 'encrypt_string'." && param == "master_key" ~ "Unable to decrypt encrypted_data with the given master_key. Please check the name_of_secret",
-    warning == "could not find function \"case_when\"" || warning == "konnte funktion \"case_when\" nicht finden" ~ "Could not find function \"case_when\". Please load the package 'dplyr'.",
-    warning == "string is not a string (a length one character vector). or string is not a raw vector" && param == "password" || warning == "Zeichenkette ist keine Zeichenkette (ein Vektor der Länge eins). oder Zeichenkette ist kein Raw-Vektor." && param == "password" ~ sprintf("The user '%s' was not found in the users database.", username),
+    warning == "Unable to decrypt. Ensure that the input was generated by 'encrypt_string'." && param == "master_key" ~ "Unable to decrypt encrypted_data with the given master_key.",
+    warning == "string is not a string (a length one character vector). or string is not a raw vector" && param == "password" || warning == "Zeichenkette ist keine Zeichenkette (ein Vektor der Länge eins). oder Zeichenkette ist kein Raw-Vektor." && param == "password" ~ sprintf("The user '%s' was not found in the users database. This user is important to manage the user and key database.", username),
     TRUE ~ warning
   )
-  
-  if (is.na(warning_output)) {
-    
-  } else {
-    return(warning_output)
-  }
+  return(warning_output)
 }
 
 
@@ -441,6 +450,5 @@ custom_interactive <- function(){
   if (!is.null(shiny::getDefaultReactiveDomain())) {
     return(FALSE)
   }
-  
   return(interactive())
 }
