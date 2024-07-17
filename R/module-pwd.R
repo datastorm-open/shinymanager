@@ -16,13 +16,13 @@
 #'
 #' @example examples/module-pwd.R
 pwd_ui <- function(id, tag_img = NULL, status = "primary", lan = NULL) {
-
+  
   ns <- NS(id)
-
+  
   if(is.null(lan)){
     lan <- use_language()
   }
-
+  
   tagList(
     singleton(tags$head(
       tags$link(href="shinymanager/styles-auth.css", rel="stylesheet"),
@@ -73,6 +73,7 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary", lan = NULL) {
               tags$script(
                 sprintf("bindEnter('%s');", ns(""))
               ),
+              tags$br(),
               tags$div(id = ns("result_pwd"))
             )
           )
@@ -104,7 +105,7 @@ pwd_ui <- function(id, tag_img = NULL, status = "primary", lan = NULL) {
 #' @importFrom utils getFromNamespace
 pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = NULL, 
                        use_token = FALSE, lan = NULL) {
-
+  
   if(!is.reactive(lan)){
     if(is.null(lan)){
       lan <- reactive(use_language())
@@ -116,19 +117,30 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
   if (is.null(validate_pwd)) {
     validate_pwd <- getFromNamespace("validate_pwd", "shinymanager")
   }
-
+  
   ns <- session$ns
   jns <- function(x) {
     paste0("#", ns(x))
   }
-
+  
   password <- reactiveValues(result = FALSE, user = NULL, relog = NULL)
-
+  
   observeEvent(input$update_pwd, {
     password$relog <- NULL
     removeUI(selector = jns("msg_pwd"))
-  
+    
+    insertUI(
+      selector = jns("container-btn-update"),
+      ui = tags$div(
+        id = ns("spinner_msg_pwd"),
+        img(src = "shinymanager/1497.gif", style = "height:30px;"), 
+        align = "center"
+      ),
+      immediate = TRUE 
+    )
+    
     if (!identical(input$pwd_one, input$pwd_two)) {
+      removeUI(selector = jns("spinner_msg_pwd"))
       insertUI(
         selector = jns("result_pwd"),
         ui = tags$div(
@@ -137,6 +149,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
         )
       )
     } else if (!check_new_pwd(user$user, input$pwd_one)) {
+      removeUI(selector = jns("spinner_msg_pwd"))
       insertUI(
         selector = jns("result_pwd"),
         ui = tags$div(
@@ -146,6 +159,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
       )
     } else {
       if (!isTRUE(validate_pwd(input$pwd_one))) {
+        removeUI(selector = jns("spinner_msg_pwd"))
         insertUI(
           selector = jns("result_pwd"),
           ui = tags$div(
@@ -154,7 +168,9 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
           )
         )
       } else {
+        
         res_pwd <- update_pwd(user$user, input$pwd_one)
+        
         if (isTRUE(res_pwd$result)) {
           password$result <- TRUE
           password$user <- user$user
@@ -186,7 +202,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
       }
     }
   }, ignoreInit = TRUE)
-
+  
   observeEvent(input$relog, {
     if (isTRUE(use_token)) {
       token <- getToken(session = session)
@@ -196,7 +212,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
     }
     password$relog <- input$relog
   }, ignoreInit = TRUE)
-
+  
   return(password)
 }
 

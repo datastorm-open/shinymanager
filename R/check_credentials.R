@@ -193,8 +193,8 @@ check_credentials_sqlite <- function(sqlite_path, passphrase) {
 check_credentials_sql <- function(config_db){
   function(user, password) {
     conn <- connect_sql_db(config_db)
-    on.exit(disconnect_sql_db(conn))
-    tablename <- config_db$tables$credentials$tablename
+    on.exit(disconnect_sql_db(conn, config_db))
+    tablename <- SQL(config_db$tables$credentials$tablename)
     request <- glue_sql(config_db$tables$credentials$select, .con = conn)
     db <- dbGetQuery(conn, request)
     if(nrow(db) > 0) db$is_hashed_password <- T

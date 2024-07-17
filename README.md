@@ -92,6 +92,13 @@ require(shinymanager)
 
 ````
 
+### News on shinymanager 1.0.510
+
+* Improve global performance
+* Add sparklyr support
+* (#188) FEAT : disable write logs and see logs
+* (#182 & #187) FIX quiclky bind enter on auth
+* FEAT/FIX : SQL features (not only sqlite but Postgres, MySQL, ...)
 
 ### News on shinymanager 1.0.500
 
@@ -246,6 +253,8 @@ server <- function(input, output, session) {
 Store your credentials data in your SQL database using the ``DBI`` interface (and always password hashing using `scrypt`) : 
 
 - ``?create_sql_db``
+
+Template available here : https://github.com/datastorm-open/shinymanager/tree/master/inst/sql_config
 
 ```r
 library(shiny)

@@ -72,6 +72,7 @@ secure_app <- function(ui,
       if (isTRUE(enable_admin) && .tok$is_admin(token) & identical(admin, "true") && (!is.null(.tok$get_sqlite_path()) | !is.null(.tok$get_sql_config_db()))) {
         navbarPage(
           title = "Admin",
+          id = "sm_admin_nv",
           theme = theme,
           header = tagList(
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
@@ -96,11 +97,13 @@ secure_app <- function(ui,
             admin_ui("admin", lan),
             shinymanager_language(lan$get_language())
           ),
-          tabPanel(
-            title = lan$get("Logs"),
-            logs_ui("logs", lan),
-            shinymanager_language(lan$get_language())
-          )
+          if(show_logs_enabled()){
+            tabPanel(
+              title = lan$get("Logs"),
+              logs_ui("logs", lan),
+              shinymanager_language(lan$get_language())
+            )
+          }
         )
       } else {
         if (isTRUE(enable_admin) && .tok$is_admin(token) && (!is.null(.tok$get_sqlite_path()) | !is.null(.tok$get_sql_config_db()))) {
@@ -211,8 +214,18 @@ secure_app <- function(ui,
 #' Using \code{options("shinymanager.pwd_failure_limit")}, you can set password failure limit. It defaults
 #' to \code{Inf}. You can specify for example
 #' \code{options("shinymanager.pwd_failure_limit" = 5)} if you want to lock user account after 5 wrong password.
-#'
-#'
+#' 
+#' Using \code{options("shinymanager.auto_sqlite_reader")}, you can set reactiveFileReader time (milliseconds) used to look at sqlite db only. 
+#' Used and useful in admin panel to prevent bug having potentially multiple admin session. It defaults to \code{1000}
+#'  
+#' Using \code{options("shinymanager.auto_sql_reader")}, you can set reactiveTimer SQL (not sqlite) admin reader. It defaults
+#' to \code{Inf} (disabled). It's only needed to prevent potential bug if two ore more admin are updated users
+#' at the same time.
+#'   
+#' Using \code{options("shinymanager.write_logs")}, you can activate or not writing users connection logs. Default to \code{TRUE}
+#' 
+#' Using \code{options("shinymanager.show_logs")}, you can activate or not showing users connection logs in admin panel. Default to \code{TRUE}
+#' 
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString
@@ -285,15 +298,18 @@ secure_server <- function(check_credentials,
       max_users = max_users,
       lan = lan
     )
-    callModule(
-      module = logs,
-      id = "logs",
-      sqlite_path = path_sqlite,
-      passphrase = .tok$get_passphrase(),
-      config_db = config_db,
-      fileEncoding = fileEncoding,
-      lan = lan
-    )
+    
+    if(show_logs_enabled()){
+      callModule(
+        module = logs,
+        id = "logs",
+        sqlite_path = path_sqlite,
+        passphrase = .tok$get_passphrase(),
+        config_db = config_db,
+        fileEncoding = fileEncoding,
+        lan = lan
+      )
+    }
   }
 
   user_info_rv <- reactiveValues()

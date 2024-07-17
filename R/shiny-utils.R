@@ -178,7 +178,7 @@ fileReaderSqlite <- function(sqlite_path, passphrase, name){
 
 fileReaderSQL <- function(config_db, name){
     conn <- connect_sql_db(config_db)
-    on.exit(disconnect_sql_db(conn))
-    res <- tryCatch(dbReadTable(conn, config_db$tables[[name]]$tablename), 
+    on.exit(disconnect_sql_db(conn, config_db))
+    res <- tryCatch(db_read_table_sql(conn, config_db$tables[[name]]$tablename), 
                     error = function(e) NULL)
 }

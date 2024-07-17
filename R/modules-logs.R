@@ -118,51 +118,55 @@ logs <- function(input, output, session, sqlite_path, passphrase, config_db,
   print_app_input <- reactiveVal(FALSE)
   
   observe({
-    
-    if(!is.null(sqlite_path)){
-      conn <- dbConnect(SQLite(), dbname = sqlite_path)
-      on.exit(dbDisconnect(conn))
-      logs_rv$logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
-    } else {
-      conn <- connect_sql_db(config_db)
-      on.exit(disconnect_sql_db(conn))
-      logs_rv$logs <- dbReadTable(conn, config_db$tables$logs$tablename)
-    }
-    
-    isolate({
-      ctrl_log <- isolate({logs_rv$logs})
-      # treat old bad admin log
-      if(any(duplicated(ctrl_log$token))){
-        ctrl_log$date_days <- substring(ctrl_log$server_connected, 1, 10)
-        ctrl_log <- ctrl_log[!duplicated(ctrl_log[, c("user", "token", "date_days")]), ]
-        ctrl_log$date_days <- NULL
-        logs_rv$logs <- ctrl_log
+    if(show_logs_enabled() & "overview_period" %in% isolate(names(input))){
+      if(!is.null(sqlite_path)){
+        conn <- dbConnect(SQLite(), dbname = sqlite_path)
+        on.exit(dbDisconnect(conn))
+        logs_rv$logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+        logs_rv$users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
+      } else {
+        conn <- connect_sql_db(config_db)
+        on.exit(disconnect_sql_db(conn, config_db))
+        logs_rv$logs <- db_read_table_sql(conn, config_db$tables$logs$tablename)
+        logs_rv$users <- read_db_decrypt(conn = conn, name = config_db$tables$credentials$tablename, passphrase = passphrase)
+        
       }
       
-      if("status" %in% colnames(isolate({logs_rv$logs}))){
-        logs_rv$logs <- logs_rv$logs[logs_rv$logs$status %in% "Success", ]
+      isolate({
+        ctrl_log <- isolate({logs_rv$logs})
+        # treat old bad admin log
+        if(any(duplicated(ctrl_log$token))){
+          ctrl_log$date_days <- substring(ctrl_log$server_connected, 1, 10)
+          ctrl_log <- ctrl_log[!duplicated(ctrl_log[, c("user", "token", "date_days")]), ]
+          ctrl_log$date_days <- NULL
+          logs_rv$logs <- ctrl_log
+        }
+        
+        if("status" %in% colnames(isolate({logs_rv$logs}))){
+          logs_rv$logs <- logs_rv$logs[logs_rv$logs$status %in% "Success", ]
+        }
+      })
+      
+   
+      updateSelectInput(
+        session = session,
+        inputId = "user",
+        choices = c(lan()$get("All users"), as.character(logs_rv$users$user)),
+        selected = lan()$get("All users")
+      )
+      
+      app_choices <- unique(unique(logs_rv$logs$app), get_appname())
+      updateSelectInput(
+        session = session,
+        inputId = "app",
+        choices = c("All applications", as.character(app_choices)),
+        selected = get_appname()
+      )
+      if(length(app_choices) <= 1){
+        print_app_input(FALSE)
+      } else {
+        print_app_input(TRUE)
       }
-    })
-    
-    logs_rv$users <- read_db_decrypt(conn = conn, name = "credentials", passphrase = passphrase)
-    updateSelectInput(
-      session = session,
-      inputId = "user",
-      choices = c(lan()$get("All users"), as.character(logs_rv$users$user)),
-      selected = lan()$get("All users")
-    )
-    
-    app_choices <- unique(unique(logs_rv$logs$app), get_appname())
-    updateSelectInput(
-      session = session,
-      inputId = "app",
-      choices = c("All applications", as.character(app_choices)),
-      selected = get_appname()
-    )
-    if(length(app_choices) <= 1){
-      print_app_input(FALSE)
-    } else {
-      print_app_input(TRUE)
     }
   })
   
@@ -172,6 +176,9 @@ logs <- function(input, output, session, sqlite_path, passphrase, config_db,
   outputOptions(output, "print_app_input_js", suspendWhenHidden = FALSE)
   
   observe({
+    req(logs_rv$logs)
+    req(input$overview_period)
+    req(input$user)
     logs <- isolate(logs_rv$logs)
     logs$date <- as.Date(substr(logs$server_connected, 1, 10))
     logs <- logs[logs$date >= input$overview_period[1] & logs$date <= input$overview_period[2], ]
@@ -299,10 +306,10 @@ logs <- function(input, output, session, sqlite_path, passphrase, config_db,
         }
       } else {
         conn <- connect_sql_db(config_db)
-        on.exit(disconnect_sql_db(conn))
+        on.exit(disconnect_sql_db(conn, config_db))
         
-        logs <- dbReadTable(conn, config_db$tables$logs$tablename)
-        users <-  dbReadTable(conn, config_db$tables$credentials$tablename)
+        logs <- db_read_table_sql(conn, config_db$tables$logs$tablename)
+        users <-  db_read_table_sql(conn, config_db$tables$credentials$tablename)
       }
       
       logs$token <- NULL
