@@ -2,12 +2,24 @@
 #'
 #' Decrypts master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
 #' Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
+#' Function is deprecated, please use custom_access_keys_2.
 #'
 #' @param requested_data Name of the secret you want to access
 #' @return Decrypted secret for the requested_data
 #'
 #' @export
 custom_access_keys <- function(requested_data){
+  is_interactive <- custom_interactive()
+  if(is_interactive) {
+   warning("The function custom_access_keys is deprecated. Please use custom_access_keys_2 instead.") 
+  } else {
+    shiny::showModal(modalDialog(
+      title = "Attention",
+      "The function custom_access_keys is deprecated. Please use custom_access_keys_2 instead.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  }
   # decrypt master_key
   key <- key()
   user_name <- user_name()
@@ -210,6 +222,17 @@ custom_delete_secret <- function(name_of_secret,
 #'
 #' @export
 custom_decrypt_data <- function(decryption_key, encrypted_df) {
+  is_interactive <- custom_interactive()
+  if(is_interactive) {
+    warning("The function custom_decrypt_data is deprecated. Please use custom_decrypt_data_2 instead.")
+  } else {
+    shiny::showModal(modalDialog(
+      title = "Attention",
+      "The function custom_decrypt_data is deprecated. Please use custom_decrypt_data_2 instead.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  }
   
   encrypted_df %>%
     safer::decrypt_object(decryption_key)
