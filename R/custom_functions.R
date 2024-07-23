@@ -12,6 +12,8 @@ custom_access_keys <- function(requested_data){
   is_interactive <- custom_interactive()
   if(is_interactive) {
    warning("The function custom_access_keys is deprecated. Please use custom_access_keys_2 instead.") 
+  } else if (!interactive()) {
+    # Running on Server, no warning should be visible
   } else {
     shiny::showModal(modalDialog(
       title = "Attention",
@@ -225,6 +227,8 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
   is_interactive <- custom_interactive()
   if(is_interactive) {
     warning("The function custom_decrypt_data is deprecated. Please use custom_decrypt_data_2 instead.")
+  } else if (!interactive()) {
+    # Running on Server, no warning should be visible
   } else {
     shiny::showModal(modalDialog(
       title = "Attention",
