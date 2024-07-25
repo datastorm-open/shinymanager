@@ -452,3 +452,42 @@ custom_interactive <- function(){
   }
   return(interactive())
 }
+
+#' custom_load_shiny_module_data
+#'
+#' @param data_file This can be an Data Frame for example TestData or the path (string) to the data file
+#' @param name_of_secret Only necessary if the data is encrypted: The name of the secret in the keys database that decrypts the data
+#' @return Returns the loaded data as a dataframe.
+#' @details If the data is encrypted (detected by it being of type `raw`), the function attempts to decrypt it using `shinymanager::custom_decrypt_data_2()`.
+#' @examples
+#' # Load unencrypted data frame
+#' data <- custom_load_shiny_module_data(TestData)
+#' 
+#' # Load encrypted data and decrypt it
+#' data <- custom_load_shiny_module_data("cars_encrypted.RDS", name_of_secret = "billomat_db_key")
+custom_load_data_in_module <- function(data_file, name_of_secret) {
+  # ---- start ---- #
+  # Use data_file as dataframe or path
+  if (is.data.frame(data_file)) {
+    data_df <- data_file
+  } else if (is.character(data_file)) {
+    data_df <- readRDS(data_file)
+  } else {
+    stop("The 'data_file'-Parameter has to be an Path (String) or an data frame.")
+  }
+  
+  # check if data is encrypted (raw type)
+  if (is.raw(data_df)) {
+    # Ensure name_of_secret is provided for decryption
+    if (!is.character(name_of_secret)) { # Test if secret available
+      stop(
+        "The data in data_df is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
+      )
+    } else {
+      data_df <- shinymanager::custom_decrypt_data_2(data_df, name_of_secret)
+    }
+  }
+  
+  return(data_df)
+  
+}
