@@ -17,3 +17,13 @@ Returns the loaded data as a dataframe.
 \description{
 custom_load_shiny_module_data
 }
+\details{
+If the data is encrypted (detected by it being of type `raw`), the function attempts to decrypt it using `shinymanager::custom_decrypt_data_2()`.
+}
+\examples{
+# Load unencrypted data frame
+data <- custom_load_shiny_module_data(TestData)
+
+# Load encrypted data and decrypt it
+data <- custom_load_shiny_module_data("cars_encrypted.RDS", name_of_secret = "billomat_db_key")
+}

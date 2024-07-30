@@ -15,4 +15,5 @@ Decrypted secret for the requested_data
 \description{
 Decrypts master_key using users password (entered through shinymanager ui) from the shiny_users.sqlite database
 Afterwards decrypts requested data with the decrypted master_key from the keys_database.sqlite
+Function is deprecated, please use custom_access_keys_2.
 }

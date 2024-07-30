@@ -306,7 +306,6 @@ custom_encrypt_data <- function(data_df,
 #' @param include_master_key Boolean indicating if the master key should be accessible to the user (optional).
 #' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return A message indicating success or the specific error encountered.
-#' @export
 custom_add_user <- function(include_master_key = TRUE, 
                             path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   username <- getPass::getPass("Enter the username for the new user: ")
