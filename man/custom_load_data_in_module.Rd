@@ -2,7 +2,7 @@
 % Please edit documentation in R/custom_functions.R
 \name{custom_load_data_in_module}
 \alias{custom_load_data_in_module}
-\title{custom_load_shiny_module_data}
+\title{custom_load_data_in_module}
 \usage{
 custom_load_data_in_module(data_file, name_of_secret)
 }
@@ -15,7 +15,7 @@ custom_load_data_in_module(data_file, name_of_secret)
 Returns the loaded data as a dataframe.
 }
 \description{
-custom_load_shiny_module_data
+custom_load_data_in_module
 }
 \details{
 If the data is encrypted (detected by it being of type `raw`), the function attempts to decrypt it using `shinymanager::custom_decrypt_data_2()`.
