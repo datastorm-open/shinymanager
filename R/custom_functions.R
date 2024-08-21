@@ -502,21 +502,34 @@ custom_load_data_in_module <- function(data_file, name_of_secret) {
     data_df <- data_file
   } else if (is.character(data_file)) {
     data_df <- readRDS(data_file)
+    
+    if (is.raw(data(data_file))) {
+      data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
+    }
+    
+  } else if (is.raw(data_file)) {
+    # if (!is.character(name_of_secret)) { # Test if secret available
+    #   stop(
+    #     "The data in data_file is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
+    #   )
+    # } else {
+      data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
+    # }
   } else {
-    stop("The 'data_file'-Parameter has to be an Path (String) or an data frame.")
+    stop("The 'data_file'-Parameter has to be an Path (String) or an (encrypted) data frame.")
   }
   
   # check if data is encrypted (raw type)
-  if (is.raw(data_file)) {
-    # Ensure name_of_secret is provided for decryption
-    if (!is.character(name_of_secret)) { # Test if secret available
-      stop(
-        "The data in data_file is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
-      )
-    } else {
-      data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
-    }
-  }
+  # if (is.raw(data_file)) {
+  #   # Ensure name_of_secret is provided for decryption
+  #   if (!is.character(name_of_secret)) { # Test if secret available
+  #     stop(
+  #       "The data in data_file is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
+  #     )
+  #   } else {
+  #     data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
+  #   }
+  # }
   
   return(data_df)
   
