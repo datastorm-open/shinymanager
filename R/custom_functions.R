@@ -482,7 +482,7 @@ custom_interactive <- function(){
   return(interactive())
 }
 
-#' custom_load_shiny_module_data
+#' custom_load_data_in_module
 #'
 #' @param data_file This can be an Data Frame for example TestData or the path (string) to the data file
 #' @param name_of_secret Only necessary if the data is encrypted: The name of the secret in the keys database that decrypts the data
@@ -507,14 +507,14 @@ custom_load_data_in_module <- function(data_file, name_of_secret) {
   }
   
   # check if data is encrypted (raw type)
-  if (is.raw(data_df)) {
+  if (is.raw(data_file)) {
     # Ensure name_of_secret is provided for decryption
     if (!is.character(name_of_secret)) { # Test if secret available
       stop(
-        "The data in data_df is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
+        "The data in data_file is encrypted. In order to decrypt the data, you have to pass the correct name_of_secret"
       )
     } else {
-      data_df <- shinymanager::custom_decrypt_data_2(data_df, name_of_secret)
+      data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
     }
   }
   
