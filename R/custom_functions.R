@@ -455,7 +455,7 @@ custom_load_data_in_module <- function(data_file, name_of_secret) {
   } else if (is.character(data_file)) {
     data_df <- readRDS(data_file)
     
-    if (is.raw(data(data_file))) {
+    if (is.raw(data_df)) {
       data_df <- shinymanager::custom_decrypt_data_2(data_file, name_of_secret)
     }
     
