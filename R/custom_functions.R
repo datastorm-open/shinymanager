@@ -109,6 +109,9 @@ custom_access_keys_2 <- function(name_of_secret,
       stop("Error: The name_of_secret does not exist in the database or the name_of_secret is incorrect")
     }
     secret <- safer::decrypt_string(data$encrypted_data[1], key = get_master_key$master_key)
+    if (name_of_secret == "bonus_db_key") {
+      secret <- sodium::hash(charToRaw(secret))
+    }
   }, error = function(e) {
     e$message <- custom_show_warnings(conditionMessage(e), "master_key")
     stop(e)
