@@ -344,7 +344,7 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
 #' @param columns_to_encrypt The columns that need to be decrpyted.
 #' @return 
 #' @export
-custom_decrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
+custom_decrypt_db <- function(df, name_of_secret, columns_to_decrpyt) {
   df_decrypted <- df
   columns_to_decrpyt <- columns_to_decrpyt %||% names(df)  
   

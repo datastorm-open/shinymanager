@@ -24,5 +24,5 @@ custom_encrypt_data(
 The encrypted dataframe .
 }
 \description{
-Encrypts a dataframe without having to provide the secret.
+Encrypts a dataframe completely without having to provide the secret.
 }

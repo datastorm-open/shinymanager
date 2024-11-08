@@ -24,5 +24,5 @@ custom_decrypt_data_2(
 The decrypted dataframe.
 }
 \description{
-Decrypts a dataframe without having to provide the secret.
+Decrypts a dataframe completely without having to provide the secret.
 }
