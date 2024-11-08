@@ -344,9 +344,9 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
 #' @param columns_to_encrypt The columns that need to be decrpyted.
 #' @return 
 #' @export
-custom_decrypt_db <- function(df, name_of_secret, columns_to_decrpyt) {
+custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt) {
   df_decrypted <- df
-  columns_to_decrpyt <- columns_to_decrpyt %||% names(df)  
+  columns_to_decrpyt <- columns_to_decrypt %||% names(df)  
   
   public_key <- custom_access_keys_2(name_of_secret,
                                      path_to_keys_db = path_to_keys_db,
@@ -356,7 +356,7 @@ custom_decrypt_db <- function(df, name_of_secret, columns_to_decrpyt) {
   
   key <- safer::decrypt_string(encrypted_api_key, key = public_key)
   
-  df_decrypted[columns_to_decrpyt] <- lapply(df[columns_to_decrpyt], function(col) {
+  df_decrypted[columns_to_decrypt] <- lapply(df[columns_to_decrypt], function(col) {
     sapply(col, function(value) {
       if (!is.na(value)) {
         data <- base64enc::base64decode(value)
