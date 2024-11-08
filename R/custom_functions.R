@@ -248,7 +248,7 @@ custom_decrypt_data <- function(decryption_key, encrypted_df) {
 
 #' custom_decrypt_data_2
 #'
-#' Decrypts a dataframe without having to provide the secret.
+#' Decrypts a dataframe completely without having to provide the secret.
 #'
 #' @param encrypted_df Encrypted data frames.
 #' @param name_of_secret The name of the secret that decrypts the data.
@@ -276,7 +276,7 @@ custom_decrypt_data_2 <- function(encrypted_df,
 
 #' custom_encrypt_data
 #'
-#' Encrypts a dataframe without having to provide the secret.
+#' Encrypts a dataframe completely without having to provide the secret.
 #'
 #' @param data_df The data frame to be encrypted.
 #' @param name_of_secret The name of the secret that decrypts the data.
@@ -298,6 +298,70 @@ custom_encrypt_data <- function(data_df,
     e$message <- custom_show_warnings(conditionMessage(e))
     stop(e)
   })  
+}
+
+
+#' custom_encrypt_db
+#'
+#' This function is used to encrypt a dataframe that is saved within a sqlite database.
+#' You are able to specifiy which columns you want to encrypt.
+#'
+#' @param df The dataframe to be encrypted.
+#' @param name_of_secret The name of the secret that encrypts the data.
+#' @param columns_to_encrypt The columns that need to be encrpyted.
+#' @return 
+#' @export
+custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
+  df_encrypted <- df
+  columns_to_encrypt <- columns_to_encrypt %||% names(df)
+  
+  key <- custom_access_keys_2(name_of_secret,
+                              path_to_keys_db = path_to_keys_db,
+                              path_to_user_db = path_to_user_db)
+  
+  df_encrypted[columns_to_encrypt] <- lapply(df[columns_to_encrypt], function(col) {
+    sapply(col, function(value) {
+      iv <- rand_bytes(16)
+      encrypted <- aes_cbc_encrypt(charToRaw(value), key = charToRaw(key), iv = iv)
+      base64enc::base64encode(c(iv, encrypted))
+    })
+  })
+  return(as.data.frame(df_encrypted, stringsAsFactors = FALSE))
+}
+
+
+#' custom_decrypt_db
+#'
+#' This function is used to decrypt a dataframe that is saved within a sqlite database.
+#' You are able to specifiy which columns you want to decrypt.
+#'
+#' @param df The dataframe to be decrypted.
+#' @param name_of_secret The name of the secret that decrypts the data.
+#' @param columns_to_encrypt The columns that need to be decrpyted.
+#' @return 
+#' @export
+custom_decrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
+  df_decrypted <- df
+  columns_to_decrpyt <- columns_to_decrpyt %||% names(df)  
+  
+  key <- custom_access_keys_2(name_of_secret,
+                              path_to_keys_db = path_to_keys_db,
+                              path_to_user_db = path_to_user_db)
+  
+  df_decrypted[columns_to_decrpyt] <- lapply(df[columns_to_decrpyt], function(col) {
+    sapply(col, function(value) {
+      if (!is.na(value)) {
+        data <- base64enc::base64decode(value)
+        iv <- data[1:16] 
+        encrypted_data <- data[-(1:16)] 
+        decrypted <- aes_cbc_decrypt(encrypted_data, key = key, iv = iv)
+        rawToChar(decrypted)
+      } else {
+        NA
+      }
+    })
+  })
+  return(as.data.frame(df_decrypted, stringsAsFactors = FALSE))
 }
 
 
