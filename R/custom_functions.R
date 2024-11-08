@@ -315,9 +315,13 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
   df_encrypted <- df
   columns_to_encrypt <- columns_to_encrypt %||% names(df)
   
-  key <- custom_access_keys_2(name_of_secret,
-                              path_to_keys_db = path_to_keys_db,
-                              path_to_user_db = path_to_user_db)
+  public_key <- custom_access_keys_2(name_of_secret,
+                                     path_to_keys_db = path_to_keys_db,
+                                     path_to_user_db = path_to_user_db)
+  
+  encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
+  
+  key <- safer::decrypt_string(encrypted_api_key, key = public_key)
   
   df_encrypted[columns_to_encrypt] <- lapply(df[columns_to_encrypt], function(col) {
     sapply(col, function(value) {
@@ -344,9 +348,13 @@ custom_decrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
   df_decrypted <- df
   columns_to_decrpyt <- columns_to_decrpyt %||% names(df)  
   
-  key <- custom_access_keys_2(name_of_secret,
-                              path_to_keys_db = path_to_keys_db,
-                              path_to_user_db = path_to_user_db)
+  public_key <- custom_access_keys_2(name_of_secret,
+                                     path_to_keys_db = path_to_keys_db,
+                                     path_to_user_db = path_to_user_db)
+  
+  encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
+  
+  key <- safer::decrypt_string(encrypted_api_key, key = public_key)
   
   df_decrypted[columns_to_decrpyt] <- lapply(df[columns_to_decrpyt], function(col) {
     sapply(col, function(value) {
