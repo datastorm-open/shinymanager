@@ -311,9 +311,17 @@ custom_encrypt_data <- function(data_df,
 #' @param columns_to_encrypt The columns that need to be encrpyted.
 #' @param base_app Boolean indicating if this function is used in a base_app (Optional)
 #' @param key The key (Optional).
+#' @param path_to_keys_db Path to keys_database.sqlite (optional).
+#' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return The specified columns of the database table gets encrypted
 #' @export
-custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app = FALSE, key = NULL) {
+custom_encrypt_db <- function(df, 
+                              name_of_secret, 
+                              columns_to_encrypt, 
+                              base_app = FALSE, 
+                              key = NULL,
+                              path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                              path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   df_encrypted <- df
   columns_to_encrypt <- columns_to_encrypt %||% names(df)
   
@@ -352,9 +360,17 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app =
 #' @param columns_to_encrypt The columns that need to be decrpyted.
 #' @param base_app Boolean indicating if this function is used in a base_app (Optional).
 #' @param key The key (Optional).
+#' @param path_to_keys_db Path to keys_database.sqlite (optional).
+#' @param path_to_user_db Path to shiny_users.sqlite (optional).
 #' @return The specified columns of the database table gets decrypted
 #' @export
-custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app = FALSE, key = NULL) {
+custom_decrypt_db <- function(df, 
+                              name_of_secret, 
+                              columns_to_encrypt, 
+                              base_app = FALSE, 
+                              key = NULL,
+                              path_to_keys_db = "../../base-data/database/keys_database.sqlite",
+                              path_to_user_db = "../../base-data/database/shiny_users.sqlite") {
   df_decrypted <- df
   columns_to_decrpyt <- columns_to_decrypt %||% names(df)  
   
