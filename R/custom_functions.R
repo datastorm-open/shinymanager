@@ -321,6 +321,10 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app =
     public_key <- custom_access_keys_2(name_of_secret,
                                        path_to_keys_db = path_to_keys_db,
                                        path_to_user_db = path_to_user_db) 
+    
+    encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
+    
+    key <- safer::decrypt_string(encrypted_api_key, key = public_key)  
   }
   
   encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
@@ -358,11 +362,11 @@ custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app =
     public_key <- custom_access_keys_2(name_of_secret,
                                        path_to_keys_db = path_to_keys_db,
                                        path_to_user_db = path_to_user_db) 
+    
+    encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
+    
+    key <- safer::decrypt_string(encrypted_api_key, key = public_key)  
   }
-  
-  encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
-  
-  key <- safer::decrypt_string(encrypted_api_key, key = public_key)
   
   df_decrypted[columns_to_decrypt] <- lapply(df[columns_to_decrypt], function(col) {
     sapply(col, function(value) {
@@ -370,7 +374,7 @@ custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app =
         data <- base64enc::base64decode(value)
         iv <- data[1:16] 
         encrypted_data <- data[-(1:16)] 
-        decrypted <- aes_cbc_decrypt(encrypted_data, key = key, iv = iv)
+        decrypted <- aes_cbc_decrypt(encrypted_data, key = charToRaw(key), iv = iv)
         rawToChar(decrypted)
       } else {
         NA
