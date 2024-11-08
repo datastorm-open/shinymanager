@@ -309,15 +309,19 @@ custom_encrypt_data <- function(data_df,
 #' @param df The dataframe to be encrypted.
 #' @param name_of_secret The name of the secret that encrypts the data.
 #' @param columns_to_encrypt The columns that need to be encrpyted.
+#' @param base_app Boolean indicating if this function is used in a base_app (Optional)
+#' @param public_key The public key (Optional).
 #' @return 
 #' @export
-custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
+custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app = FALSE, public_key = NULL) {
   df_encrypted <- df
   columns_to_encrypt <- columns_to_encrypt %||% names(df)
   
-  public_key <- custom_access_keys_2(name_of_secret,
-                                     path_to_keys_db = path_to_keys_db,
-                                     path_to_user_db = path_to_user_db)
+  if(!base_app) {
+    public_key <- custom_access_keys_2(name_of_secret,
+                                       path_to_keys_db = path_to_keys_db,
+                                       path_to_user_db = path_to_user_db) 
+  }
   
   encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
   
@@ -342,15 +346,19 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt) {
 #' @param df The dataframe to be decrypted.
 #' @param name_of_secret The name of the secret that decrypts the data.
 #' @param columns_to_encrypt The columns that need to be decrpyted.
+#' @param base_app Boolean indicating if this function is used in a base_app (Optional).
+#' @param public_key The public key (Optional).
 #' @return 
 #' @export
-custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt) {
+custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app = FALSE, public_key = NULL) {
   df_decrypted <- df
   columns_to_decrpyt <- columns_to_decrypt %||% names(df)  
   
-  public_key <- custom_access_keys_2(name_of_secret,
-                                     path_to_keys_db = path_to_keys_db,
-                                     path_to_user_db = path_to_user_db)
+  if(!base_app) {
+    public_key <- custom_access_keys_2(name_of_secret,
+                                       path_to_keys_db = path_to_keys_db,
+                                       path_to_user_db = path_to_user_db) 
+  }
   
   encrypted_api_key <- readLines("../../keys/BonusDB/bonusDBKey.txt")
   
