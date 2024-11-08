@@ -4,14 +4,27 @@
 \alias{custom_decrypt_db}
 \title{custom_decrypt_db}
 \usage{
-custom_decrypt_db(df, name_of_secret, columns_to_encrypt)
+custom_decrypt_db(
+  df,
+  name_of_secret,
+  columns_to_decrypt,
+  base_app = FALSE,
+  key = NULL
+)
 }
 \arguments{
 \item{df}{The dataframe to be decrypted.}
 
 \item{name_of_secret}{The name of the secret that decrypts the data.}
 
+\item{base_app}{Boolean indicating if this function is used in a base_app (Optional).}
+
+\item{key}{The key (Optional).}
+
 \item{columns_to_encrypt}{The columns that need to be decrpyted.}
+}
+\value{
+The specified columns of the database table gets decrypted
 }
 \description{
 This function is used to decrypt a dataframe that is saved within a sqlite database.

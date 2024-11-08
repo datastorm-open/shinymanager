@@ -310,10 +310,10 @@ custom_encrypt_data <- function(data_df,
 #' @param name_of_secret The name of the secret that encrypts the data.
 #' @param columns_to_encrypt The columns that need to be encrpyted.
 #' @param base_app Boolean indicating if this function is used in a base_app (Optional)
-#' @param public_key The public key (Optional).
-#' @return 
+#' @param key The key (Optional).
+#' @return The specified columns of the database table gets encrypted
 #' @export
-custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app = FALSE, public_key = NULL) {
+custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app = FALSE, key = NULL) {
   df_encrypted <- df
   columns_to_encrypt <- columns_to_encrypt %||% names(df)
   
@@ -351,10 +351,10 @@ custom_encrypt_db <- function(df, name_of_secret, columns_to_encrypt, base_app =
 #' @param name_of_secret The name of the secret that decrypts the data.
 #' @param columns_to_encrypt The columns that need to be decrpyted.
 #' @param base_app Boolean indicating if this function is used in a base_app (Optional).
-#' @param public_key The public key (Optional).
-#' @return 
+#' @param key The key (Optional).
+#' @return The specified columns of the database table gets decrypted
 #' @export
-custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app = FALSE, public_key = NULL) {
+custom_decrypt_db <- function(df, name_of_secret, columns_to_decrypt, base_app = FALSE, key = NULL) {
   df_decrypted <- df
   columns_to_decrpyt <- columns_to_decrypt %||% names(df)  
   

@@ -4,7 +4,13 @@
 \alias{custom_encrypt_db}
 \title{custom_encrypt_db}
 \usage{
-custom_encrypt_db(df, name_of_secret, columns_to_encrypt)
+custom_encrypt_db(
+  df,
+  name_of_secret,
+  columns_to_encrypt,
+  base_app = FALSE,
+  key = NULL
+)
 }
 \arguments{
 \item{df}{The dataframe to be encrypted.}
@@ -12,6 +18,13 @@ custom_encrypt_db(df, name_of_secret, columns_to_encrypt)
 \item{name_of_secret}{The name of the secret that encrypts the data.}
 
 \item{columns_to_encrypt}{The columns that need to be encrpyted.}
+
+\item{base_app}{Boolean indicating if this function is used in a base_app (Optional)}
+
+\item{key}{The key (Optional).}
+}
+\value{
+The specified columns of the database table gets encrypted
 }
 \description{
 This function is used to encrypt a dataframe that is saved within a sqlite database.
