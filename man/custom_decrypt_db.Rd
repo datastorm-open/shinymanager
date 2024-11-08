@@ -7,7 +7,7 @@
 custom_decrypt_db(
   df,
   name_of_secret,
-  columns_to_encrypt,
+  columns_to_decrypt,
   base_app = FALSE,
   key = NULL,
   path_to_keys_db = "../../base-data/database/keys_database.sqlite",
@@ -19,7 +19,7 @@ custom_decrypt_db(
 
 \item{name_of_secret}{The name of the secret that decrypts the data.}
 
-\item{columns_to_encrypt}{The columns that need to be decrpyted.}
+\item{columns_to_decrypt}{The columns that need to be decrpyted.}
 
 \item{base_app}{Boolean indicating if this function is used in a base_app (Optional).}
 
