@@ -97,7 +97,7 @@ require(shinymanager)
 * Improve global performance
 * Add sparklyr support
 * (#188) FEAT: disable write logs and see logs
-* (#182 & #187) FIX quickly bind enter on auth
+* (#182 & #187) FIX: quickly bind enter on auth
 * FEAT/FIX: SQL features (not only sqlite but PostgreSQL, MySQL, ...)
 
 ### News on shinymanager 1.0.500
