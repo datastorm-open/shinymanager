@@ -202,8 +202,8 @@ auth_server <- function(input, output, session,
   })
   
   observe({
-    if(!is.null(input$language) && input$language != ""){
-      lan()$set_language(input$language)
+    if(!is.null(input$shinymanager_language) && input$shinymanager_language != ""){
+      lan()$set_language(input$shinymanager_language)
       updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
       updateActionButton(session, inputId = "go_auth", label = lan()$get("Login"))
