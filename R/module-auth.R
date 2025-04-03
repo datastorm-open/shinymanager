@@ -62,12 +62,12 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
               class = "panel-body",
               {
                 
-                choices = lan$get_language()
-                lan_registered <- lan$get_language_registered()
-                if(is.logical(choose_language) && choose_language){
-                  choices = unname(lan$get_language_registered())
-                } else if(is.character(choose_language)){
-                  choices = unique(c(intersect(choose_language, unname(lan$get_language_registered())), lan$get_language()))
+                choices = lan$get_()
+                lan_registered <- lan$get__registered()
+                if(is.logical(choose_) && choose_){
+                  choices = unname(lan$get__registered())
+                } else if(is.character(choose_)){
+                  choices = unique(c(intersect(choose_, unname(lan$get__registered())), lan$get_()))
                 }
                 
                 names(choices) <- choices
@@ -77,8 +77,8 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                     names(choices)[i] <- names(lan_registered)[ind]
                   }
                 }
-                selected = ifelse(lan$get_language() %in% choices,
-                                  lan$get_language(),
+                selected = ifelse(lan$get_() %in% choices,
+                                  lan$get_(),
                                   choices[1])
                 if(length(choices) == 1){
                   style = "display:none"
@@ -87,12 +87,12 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 }
                 tags$div(style = style,
                          fluidRow(
-                           column(width = 4, offset = 4, uiOutput(ns("label_language"))),
+                           column(width = 4, offset = 4, uiOutput(ns("label_"))),
                            column(4,
                                   tags$div(
                                     style = "text-align: left; font-size: 12px;",
                                     selectInput(
-                                      inputId = ns("language"),
+                                      inputId = ns(""),
                                       label = NULL,
                                       choices = choices,
                                       selected = selected,
@@ -136,7 +136,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
               ),
               tags$div(id = ns("result_auth")),
               if (!is.null(tags_bottom)) tags$div(style = "margin-top:-10px;", tags$hr()), tags_bottom,
-              uiOutput(ns("update_shinymanager_language"))
+              uiOutput(ns("update_shinymanager_"))
             )
           )
         )
@@ -159,7 +159,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'
 #' @param use_token Add a token in the URL to check authentication. Should not be used directly.
-#' @param lan A language object. See  \code{\link{use_language}}
+#' @param lan A  object. See  \code{\link{use_}}
 #'
 #' @export
 #'
@@ -187,7 +187,7 @@ auth_server <- function(input, output, session,
   
   if(!is.reactive(lan)){
     if(is.null(lan)){
-      lan <- reactiveVal(use_language())
+      lan <- reactiveVal(use_())
     } else {
       lan <- reactiveVal(lan)
     }
@@ -202,8 +202,8 @@ auth_server <- function(input, output, session,
   })
   
   observe({
-    if(!is.null(input$shinymanager_language) && input$shinymanager_language != ""){
-      lan()$set_language(input$shinymanager_language)
+    if(!is.null(input$language) && input$language != ""){
+      lan()$set_language(input$language)
       updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
       updateActionButton(session, inputId = "go_auth", label = lan()$get("Login"))
