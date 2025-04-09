@@ -163,8 +163,21 @@ write_sql_db <- function(config_db, value, name = "credentials") {
   name <- SQL(name)
   
   if("password" %in% colnames(value)){
-    # store hashed password
-    value$password <- sapply(value$password, function(x) scrypt::hashPassword(x))
+    # is_hashed_password is a column from storing credentials in SQLite.
+    if("is_hashed_password" %in% colnames(value)){
+      value$password <- mapply(function(pwd, is_hashed){
+        if(as.logical(is_hashed)){
+          # So, the passwords may already be hashed.
+          value$password
+        } else {
+          scrypt::hashPassword(pwd)
+        }
+      }, value$password, value$is_hashed_password)
+    } else {
+      # Any clients since the addition of SQL support in version 1.0.5 won't have the
+      # is_hashed_password column (unless they specify it explicitly in their db config)
+      value$password <- sapply(value$password, function(x) scrypt::hashPassword(x))
+    }
   }
   
   if("MariaDBConnection" %in% class(conn)){
