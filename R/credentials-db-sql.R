@@ -162,9 +162,11 @@ write_sql_db <- function(config_db, value, name = "credentials") {
   on.exit(disconnect_sql_db(conn, config_db))
   name <- SQL(name)
   
-  if("password" %in% colnames(value)){
+  if("password" %in% colnames(value) && !("is_hashed_password" %in% colnames(value))){
     # store hashed password
     value$password <- sapply(value$password, function(x) scrypt::hashPassword(x))
+  } else {
+    value$password <- value$password
   }
   
   if("MariaDBConnection" %in% class(conn)){
