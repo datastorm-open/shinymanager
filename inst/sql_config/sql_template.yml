@@ -1,0 +1,72 @@
+# R packages required for DB connection.
+# Use comma separation for multiple dependencies [package1, package2]
+r_packages: [odbc]
+
+# Optional. Default is false == connect one time per session.
+# True = connect/disconnect each request.
+connect_every_request: false 
+
+# Connection via DBI interface.
+# Access env variables via !expr Sys.getenv("NAME_ENV_VAR").
+connect:
+  drv: !expr odbc::odbc()
+  driver: "ODBC Driver 18 for SQL Server"  # value depends on local environment
+  server: "SERVER_NAME"
+  database: "DB_NAME"
+  port: 1433
+  uid: !expr Sys.getenv("SQL_SERVER_UID")
+  pwd: !expr Sys.getenv("SQL_SERVER_PWD")
+
+# optional / Default
+# disconnect:
+#   fun: "dbDisconnect"
+
+tables:
+  credentials:
+    tablename: SHINY_CREDENTIALS                    # if you want to change tablename
+    # The fields user, password, start, expire, admin are mandatory.
+    # Then add optional custom columns.
+    init: CREATE TABLE {`tablename`} (
+            "user"  varchar(100) PRIMARY KEY, 
+            "password"  varchar(256),         
+            "start"  date,                   
+            "expire" date,                   
+            "admin" BIT,
+            "applications" varchar(512)
+        )
+    # Keep same {glue_name*}, update request only if needed.   
+    select: SELECT * FROM {`tablename`} WHERE "user" IN ({user*})
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE "user" IN ({udpate_users*})
+    delete: DELETE FROM {`tablename`} WHERE "user" IN ({del_users*})
+  pwd_mngt:
+    tablename: SHINY_PWDS                       # if you want to change tablename
+    # user, must_change, have_changed, date_change, n_wrong_pwd = mandatory with this name
+    #  No additionnal columns here
+    init: CREATE TABLE {`tablename`} (
+            "user"  varchar(100) PRIMARY KEY, 
+            "must_change"  BIT,           
+            "have_changed"  BIT,        
+            "date_change" date, 
+            "n_wrong_pwd" smallint
+          )
+    # Keep same {glue_name*}, update request only if needed.  
+    select: SELECT * FROM {`tablename`} WHERE "user" IN ({user*})
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE "user" IN ({udpate_users*})
+    delete: DELETE FROM {`tablename`} WHERE "user" IN ({del_users*})
+  logs:
+    tablename: SHINY_AUTH_LOGS                          # if you want to change tablename
+    #  all = mandatory with this name
+    #  No additionnal columns here
+    init: CREATE TABLE {`tablename`} (
+            "id" INT IDENTITY(1,1) PRIMARY KEY,
+            "user"  varchar(100),             
+            "server_connected" DATETIMEOFFSET, 
+            "token"  varchar(100),          
+            "logout" DATETIMEOFFSET,          
+            "status"  varchar(100),          
+            "app" varchar(100)               
+          )
+    # Keep same {glue_name*}, update request only if needed. 
+    check_token: SELECT * FROM {`tablename`} WHERE "token" IN ({token*})
+    select: SELECT * FROM {`tablename`} WHERE "user" IN ({user*}) AND "server_connected" >= {`date_h_begin`}  AND "server_connected" <= {`date_h_end`}
+    update: UPDATE {`tablename`} SET {`name`} = {value} WHERE "token" IN ({token*})
