@@ -166,7 +166,16 @@ write_sql_db <- function(config_db, value, name = "credentials") {
     # store hashed password
     value$password <- sapply(value$password, function(x) scrypt::hashPassword(x))
   }
-  
+
+  if("Microsoft SQL Server" %in% class(conn)){
+    is_logical <- sapply(value, function(x) "logical" %in% class(x) || all(x %in% c("TRUE", "FALSE")))
+    if(any(is_logical)){
+      for(i in which(is_logical)){
+        value[[i]] <- as.integer(as.logical(value[[i]]))
+      }
+    }
+  }
+                             
   if("MariaDBConnection" %in% class(conn)){
     is_logical <- sapply(value, function(x) "logical" %in% class(x) || all(x %in% c("TRUE", "FALSE")))
     if(any(is_logical)){
