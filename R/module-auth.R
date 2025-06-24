@@ -109,11 +109,11 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 tags$h3(lan$get("Please authenticate"), id = ns("shinymanager-auth-head"))
               ),
               tags$br(),
-              textInput(
+              htmltools::tagAppendAttributes(textInput(
                 inputId = ns("user_id"),
                 label = lan$get("Username:"),
                 width = "100%"
-              ),
+              ), .cssSelector = "input", autofocus = NA),
               passwordInput(
                 inputId = ns("user_pwd"),
                 label = lan$get("Password:"),
@@ -192,14 +192,6 @@ auth_server <- function(input, output, session,
       lan <- reactiveVal(lan)
     }
   }
-  
-  
-  observe({
-    session$sendCustomMessage(
-      type = "focus_input",
-      message = list(inputId = ns("user_id"))
-    )
-  })
   
   observe({
     if(!is.null(input$language) && input$language != ""){
