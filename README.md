@@ -20,7 +20,7 @@ You can authenticate with:
 
 Online documentation: https://datastorm-open.github.io/shinymanager/
 
-### Available language
+### Available languages
 
 - English
 - Français
