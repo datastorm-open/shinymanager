@@ -17,7 +17,7 @@
 #'
 #' @name module-authentication
 #'
-#' @importFrom htmltools tagList tags singleton
+#' @importFrom htmltools tagList tags singleton tagAppendAttributes
 #' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
 #'
 #' @example examples/module-auth.R
@@ -109,7 +109,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 tags$h3(lan$get("Please authenticate"), id = ns("shinymanager-auth-head"))
               ),
               tags$br(),
-              htmltools::tagAppendAttributes(textInput(
+              tagAppendAttributes(textInput(
                 inputId = ns("user_id"),
                 label = lan$get("Username:"),
                 width = "100%"
