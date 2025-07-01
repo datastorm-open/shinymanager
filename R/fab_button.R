@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @importFrom shiny icon
-#' @importFrom htmltools tagList tags tagAppendAttributes
+#' @importFrom htmltools tagList tags tagAppendAttributes tagQuery
 #'
 #' @example examples/fab_button.R
 fab_button <- function(...,
@@ -67,8 +67,8 @@ fab_button <- function(...,
                 tagIcon <- x$icon
               } else if (inherits(x, "shiny.tag")) {
                 id <- x$attribs$id
-                label <- x$children[[1]][[2]]
-                tagIcon <- x$children[[1]][[1]]
+                label <- x$children[[1]][[length(x$children[[1]])]]
+                tagIcon <- tagQuery(x)$find("i")$selectedTags()[[1]]
               } else {
                 stop("Arguments in `...` must be lists or actionButtons")
               }
