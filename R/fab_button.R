@@ -68,7 +68,7 @@ fab_button <- function(...,
               } else if (inherits(x, "shiny.tag")) {
                 id <- x$attribs$id
                 label <- x$children[[1]][[length(x$children[[1]])]]
-                tagIcon <- tagQuery(x)$find("i")$selectedTags()[[1]]
+                tagIcon <- htmltools::tagQuery(x)$find("i")$selectedTags()[[1]]
               } else {
                 stop("Arguments in `...` must be lists or actionButtons")
               }
