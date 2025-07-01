@@ -20,7 +20,7 @@
 #'
 #' @export
 #'
-#' @importFrom shiny parseQueryString fluidPage actionButton icon navbarPage tabPanel
+#' @importFrom shiny parseQueryString fluidPage icon navbarPage tabPanel
 #' @importFrom htmltools tagList
 #'
 #' @name secure-app
@@ -78,12 +78,12 @@ secure_app <- function(ui,
             tags$style(".navbar-header {margin-left: 16.66% !important;}"),
             fab_button(
               position = fab_position,
-              actionButton(
+              list(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
                 icon = icon("right-from-bracket")
               ),
-              actionButton(
+              list(
                 inputId = ".shinymanager_app",
                 label = lan$get("Go to application"),
                 icon = icon("share")
@@ -109,12 +109,12 @@ secure_app <- function(ui,
         if (isTRUE(enable_admin) && .tok$is_admin(token) && (!is.null(.tok$get_sqlite_path()) | !is.null(.tok$get_sql_config_db()))) {
           menu <- fab_button(
             position = fab_position,
-            actionButton(
+            list(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
               icon = icon("right-from-bracket")
             ),
-            actionButton(
+            list(
               inputId = ".shinymanager_admin",
               label = lan$get("Administrator mode"),
               icon = icon("gears")
@@ -126,7 +126,7 @@ secure_app <- function(ui,
           }
           menu <- fab_button(
             position = fab_position,
-            actionButton(
+            list(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
               icon = icon("right-from-bracket")
