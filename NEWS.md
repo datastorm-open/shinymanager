@@ -1,9 +1,16 @@
+# shinymanager 1.0.6
+
+* (#220) Added Norwegian Language, Thanks @mcldrchl
+* (#212) Add MS SQL Server support, Thanks @ads40
+* (#217) focus_input event fires too late, Thanks @ismirsehregal
+* (#219) Malformed labels using latest shiny version, Thanks @ismirsehregal
+
 # shinymanager 1.0.510
 
 * Improve global performance
 * Add sparklyr support
 * (#188) FEAT : disable write logs and see logs
-* (#182 & #187) FIX quiclky bind enter on auth
+* (#182 & #187) FIX quickly bind enter on auth
 * FEAT/FIX : SQL features (not only sqlite but Postgres, MySQL, ...)
 
 # shinymanager 1.0.5
