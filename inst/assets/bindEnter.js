@@ -30,10 +30,6 @@ function bindEnter(ns) {
   });
 }
 
-Shiny.addCustomMessageHandler('focus_input', function(data) {
-  $('#' + data.inputId).focus();
-});
-
 Shiny.addCustomMessageHandler('update_auth_title', function(data) {
   $('#' + data.inputId).html(data.title);
 });
