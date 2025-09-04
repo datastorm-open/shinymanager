@@ -6,21 +6,21 @@
 [![cran checks](https://cranchecks.info/badges/worst/shinymanager)](https://cranchecks.info/pkgs/shinymanager)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials can be stored in an encrypted 'SQLite' database or on your own SQL Database (Postgres, MySQL, ...). Source code of main application is protected until authentication is successful.
+> Simple and secure authentication mechanism for single 'Shiny' applications. Credentials can be stored in an encrypted 'SQLite' database or on your own SQL Database (PostgreSQL, MySQL, ...). Source code of main application is protected until authentication is successful.
 
 Live demo:
 
 * On Shiny-server: http://shinyapps.dreamrs.fr/shinymanager-demo/
-* On shinyapps.io : https://dreamrs.shinyapps.io/shinymanager-demo/
+* On shinyapps.io: https://dreamrs.shinyapps.io/shinymanager-demo/
 
 You can authenticate with:
 
 * user: `shiny` / password: `shiny`
 * user: `shinymanager` / password: `shinymanager` (Admin)
 
-Online documentation : https://datastorm-open.github.io/shinymanager/
+Online documentation: https://datastorm-open.github.io/shinymanager/
 
-### Available language
+### Available languages
 
 - English
 - Français
@@ -39,12 +39,12 @@ Using ``options("shinymanager.pwd_validity")``, you can set password validity pe
 
 ### Failure limit
 
-Using ``options("shinymanager.pwd_failure_limit")``, you can set password failure limit. It defaults to Inf. You can specify for example ``options("shinymanager.pwd_failure_limit" = 5)`` if you want to lock user account after 5 wrong password.
+Using ``options("shinymanager.pwd_failure_limit")``, you can set password failure limit. It defaults to ``Inf``. You can specify for example ``options("shinymanager.pwd_failure_limit" = 5)`` if you want to lock user account after 5 wrong password.
 
 
 ### Cross-application
 
-Adding optional ``applications`` column in *credentials* db : the name of the applications to which the user is authorized, separated by a semicolon. The name of the application corresponds to the name of the directory, or can be declared using : options("shinymanager.application" = "my-app")
+Adding optional ``applications`` column in *credentials* db: the name of the applications to which the user is authorized, separated by a semicolon. The name of the application corresponds to the name of the directory, or can be declared using: options("shinymanager.application" = "my-app")
 
 ### Custom password rules
 
@@ -96,19 +96,19 @@ require(shinymanager)
 
 * Improve global performance
 * Add sparklyr support
-* (#188) FEAT : disable write logs and see logs
-* (#182 & #187) FIX quiclky bind enter on auth
-* FEAT/FIX : SQL features (not only sqlite but Postgres, MySQL, ...)
+* (#188) FEAT: disable write logs and see logs
+* (#182 & #187) FIX: quickly bind enter on auth
+* FEAT/FIX: SQL features (not only sqlite but PostgreSQL, MySQL, ...)
 
 ### News on shinymanager 1.0.500
 
 * (#154) add indonesian. Thanks @aswansyahputra 
 * (#178) add chinese. Thanks @wtbxsjy
-* FEAT : SQL features (not only sqlite but Postgres, MySQL, ...)
+* FEAT: SQL features (not only sqlite but PostgreSQL, MySQL, ...)
 
 ### News on shinymanager 1.0.410
 
-* (#112) : fix bug changing user name. Thanks @StatisMike
+* (#112): fix bug changing user name. Thanks @StatisMike
 * fix DT checkbox (rm/add user)
 * Changed fab button z-index to make it appear above sidebar in shinydashboard/bs4Dash (fix [#123](https://github.com/datastorm-open/shinymanager/issues/123))
 * can pass validate_pwd_ to secure_server
@@ -123,13 +123,13 @@ require(shinymanager)
 
 ### Installation
 
-Install from CRAN with :
+Install from CRAN with:
 
 ```r
 install.packages("shinymanager")
 ```
 
-Or install development version from GitHub :
+Or install development version from GitHub:
 
 ```r
 remotes::install_github("datastorm-open/shinymanager")
@@ -138,7 +138,7 @@ remotes::install_github("datastorm-open/shinymanager")
 
 ### Usage
 
-Secure your Shiny app to control who can access it : 
+Secure your Shiny app to control who can access it: 
 
 - ``secure_app()`` & ``auth_ui()`` (customization)
 - ``secure_server()`` & ``check_credentials()``
@@ -187,18 +187,18 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-Starting page of the application will be :
+Starting page of the application will be:
 
 ![](man/figures/shinymanager-login.png)
 
 
-Once logged, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application :
+Once logged in, the application will be launched and a button added to navigate between the app and the admin panel (SQL credentials only and if user is authorized to access it), and to logout from the application:
 
 ![](man/figures/shinymanager-info-nav.png)
 
 ### Secure Sqlite database
 
-Store your credentials data in Sqlite database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt` : 
+Store your credentials data in Sqlite database protected with a symmetric AES encryption from `openssl`, and password hashing using `scrypt`: 
 
 - ``?create_db``
 
@@ -250,11 +250,11 @@ server <- function(input, output, session) {
 
 ### Use your own SQL database
 
-Store your credentials data in your SQL database using the ``DBI`` interface (and always password hashing using `scrypt`) : 
+Store your credentials data in your SQL database using the ``DBI`` interface (and always password hashing using `scrypt`): 
 
 - ``?create_sql_db``
 
-Template available here : https://github.com/datastorm-open/shinymanager/tree/master/inst/sql_config
+Template available here: https://github.com/datastorm-open/shinymanager/tree/master/inst/sql_config
 
 ```r
 library(shiny)
@@ -273,7 +273,7 @@ credentials <- data.frame(
 )
 
 # Create SQL database
-create_db_sql(
+create_sql_db(
   credentials_data = credentials,
   config_path = "path/to/your_sql_configuration.yml"
 )
@@ -307,7 +307,7 @@ shinyApp(ui, server)
 
 Using SQL/Sqlite database protected, an admin mode is available to manage access to the application, features included are
 
- * manage users account : add, modify and delete users
+ * manage users account: add, modify and delete users
  * ask the user to change his password
  * see logs about application usage
 
@@ -317,7 +317,7 @@ Using SQL/Sqlite database protected, an admin mode is available to manage access
 
 ### Use your own function ?
 
-You can also use your own authentification function with ``check_credentials``, for example doiing a control to your intern database. ``check_credentials`` must be a function  with two arguments ``user`` & ``password``, returning a least with at least ``result`` (``TRUE`` to authorize acces, or ``FALSE``) and ``user_info`` (all you want to retrieve from the user in the app) :
+You can also use your own authentification function with ``check_credentials``, for example doing a control to your intern database. ``check_credentials`` must be a function  with two arguments ``user`` & ``password``, returning a ``list`` with at least ``result`` (``TRUE`` to authorize acces, or ``FALSE``) and ``user_info`` (all you want to retrieve from the user in the app):
 
 ````R
 require(RPostgreSQL)
@@ -400,7 +400,7 @@ shinyApp(ui, server)
 
 ### shiny input
 
-Two inputs are created : 
+Two inputs are created: 
 
 ````
 observe({
@@ -427,7 +427,7 @@ It's possible to use ``shinymanager`` authentification on ``flexdashboard`` (but
 
 ### shinyapps.io
 
-There's no persistent data storage on ``shinyapps.io``, you can read more here : https://docs.rstudio.com/shinyapps.io/Storage.html. So your **sqlite** database is lost when the instance is closed, and the one you've pushed when deploying the application will be used. You have to use external database.
+There's no persistent data storage on ``shinyapps.io``, you can read more here: https://docs.rstudio.com/shinyapps.io/Storage.html. So your **sqlite** database is lost when the instance is closed, and the one you've pushed when deploying the application will be used. You have to use external database.
 
 ### Troubleshooting
 
@@ -437,7 +437,7 @@ There is a *lag* between your ``ui`` and the ``server``, since ``shinymanger`` h
 
 So we recommend to use in all your reactive/observer functions the ``req`` instruction  to **validate the inputs**.
 
-One more *global and brutal* solution can be :
+One more *global and brutal* solution can be:
 
 ````
 server <- function(input, output, session) {

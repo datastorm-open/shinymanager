@@ -17,7 +17,7 @@
 #'
 #' @name module-authentication
 #'
-#' @importFrom htmltools tagList tags singleton
+#' @importFrom htmltools tagList tags singleton tagAppendAttributes
 #' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
 #'
 #' @example examples/module-auth.R
@@ -110,11 +110,11 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
               ),
               tags$br(),
               tags$div(id="auth_user_input",
-              textInput(
+              tagAppendAttributes(textInput(
                 inputId = ns("user_id"),
                 label = lan$get("Username:"),
                 width = "100%"
-              ),
+              ), .cssSelector = "input", autofocus = NA),
               passwordInput(
                 inputId = ns("user_pwd"),
                 label = lan$get("Password:"),
@@ -193,14 +193,6 @@ auth_server <- function(input, output, session,
       lan <- reactiveVal(lan)
     }
   }
-  
-  
-  observe({
-    session$sendCustomMessage(
-      type = "focus_input",
-      message = list(inputId = ns("user_id"))
-    )
-  })
   
   observe({
     if(!is.null(input$language) && input$language != ""){
