@@ -9,7 +9,7 @@
 #' @param tags_bottom A \code{tags (div, img, ...)} to be displayed on bottom of the authentication module.
 #' @param background A optionnal \code{css} for authentication background. See example.
 #' @param choose_language \code{logical/character}. Add language selection on top ? TRUE for all supported languages
-#' or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")}. If enabled, \code{input$shinymanager_language} is created
+#' or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")}. If enabled, \code{input$shinymanager_language} is created
 #' @param ... : Used for old version compatibility.
 #'
 #'
@@ -109,6 +109,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 tags$h3(lan$get("Please authenticate"), id = ns("shinymanager-auth-head"))
               ),
               tags$br(),
+              tags$div(id="auth_user_input",
               tagAppendAttributes(textInput(
                 inputId = ns("user_id"),
                 label = lan$get("Username:"),
@@ -118,7 +119,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 inputId = ns("user_pwd"),
                 label = lan$get("Password:"),
                 width = "100%"
-              ),
+              )),
               tags$br(),
               tags$div(
                 id = ns("container-btn-ok"),
