@@ -124,7 +124,7 @@ admin_ui <- function(id, lan = NULL) {
 }
 
 #' @importFrom DT renderDT datatable JS
-#' @importFrom shiny reactive observeEvent isolate showModal modalDialog reactiveFileReader
+#' @importFrom shiny reactive observeEvent isolate showModal modalDialog removeModal reactiveFileReader
 #'  removeUI insertUI reactiveValues showNotification callModule req updateCheckboxInput reactiveTimer
 #' @importFrom DBI dbConnect SQL
 #' @importFrom RSQLite SQLite
@@ -374,7 +374,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -424,7 +424,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px", style = "height:50px"), align = "center")
       )
     )
     
@@ -499,7 +499,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -571,7 +571,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -676,7 +676,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -760,7 +760,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -787,7 +787,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     
@@ -853,7 +853,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
-        div(img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
+        tags$div(tags$img(src = "shinymanager/1497.gif", style = "height:50px"), align = "center")
       )
     )
     

@@ -4,14 +4,14 @@
 \alias{custom-labels}
 \alias{set_labels}
 \alias{get_labels}
-\title{Modify {shinymanager} labels to use custom text}
+\title{Modify shinymanager labels to use custom text}
 \usage{
 set_labels(language, ...)
 
 get_labels(language = "en")
 }
 \arguments{
-\item{language}{Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN".}
+\item{language}{Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".}
 
 \item{...}{A named list with labels to replace.}
 }

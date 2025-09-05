@@ -32,6 +32,7 @@ Online documentation: https://datastorm-open.github.io/shinymanager/
 - Chinese
 - Indonesian
 - Greek
+- Norwegian
 
 ### Password validity period
 
@@ -91,6 +92,13 @@ require(shinymanager)
  ?set_labels
 
 ````
+
+### News on shinymanager 1.0.6
+
+* (#220) Added Norwegian Language, Thanks @mcldrchl
+* (#212) Add MS SQL Server support, Thanks @ads40
+* (#217) focus_input event fires too late, Thanks @ismirsehregal
+* (#219) Malformed labels using latest shiny version, Thanks @ismirsehregal
 
 ### News on shinymanager 1.0.510
 

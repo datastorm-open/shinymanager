@@ -40,7 +40,7 @@ Valid status are: \code{"default"}, \code{"primary"}, \code{"success"},
 \item{background}{A optionnal \code{css} for authentication background. See example.}
 
 \item{choose_language}{\code{logical/character}. Add language selection on top ? TRUE for all supported languages
-or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN")}. If enabled, \code{input$shinymanager_language} is created}
+or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")}. If enabled, \code{input$shinymanager_language} is created}
 
 \item{lan}{A language object. See  \code{\link{use_language}}}
 

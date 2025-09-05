@@ -902,7 +902,7 @@ pkgEnv$label_no = list(
   "Change saved!" = "Endring lagret!",
   "Failed to update the database" = "Kunne ikke oppdatere databasen",
   "Password does not respect safety requirements" = "Passordet respekterer ikke sikkerhetskravene",
-  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Passordet m\u00e5 inneholde minst ett tall, én liten bokstav, én stor bokstav og m\u00e5 v\u00e6re minst 6 tegn.",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "Passordet m\u00e5 inneholde minst ett tall, \u00e9n liten bokstav, \u00e9n stor bokstav og m\u00e5 v\u00e6re minst 6 tegn.",
   "Number of connections per user" = "Antall tilkoblinger per bruker",
   "Number of connections per day" = "Antall tilkoblinger per dag",
   "Total number of connection" = "Totalt antall tilkoblinger",
@@ -1248,16 +1248,16 @@ language <- R6::R6Class(
       ),
       no = list(
         sEmptyTable = "Ingen data tilgjengelig i tabellen",
-        sInfo = "Viser _START_ til _END_ av _TOTAL_ oppføringer",
-        sInfoEmpty = "Viser 0 til 0 av 0 oppføringer",
-        sInfoFiltered = "(filtrert fra _MAX_ totale oppføringer)",
+        sInfo = "Viser _START_ til _END_ av _TOTAL_ oppf\u00f8ringer",
+        sInfoEmpty = "Viser 0 til 0 av 0 oppf\u00f8ringer",
+        sInfoFiltered = "(filtrert fra _MAX_ totale oppf\u00f8ringer)",
         sInfoPostFix = "",
         sInfoThousands = ",",
-        sLengthMenu = "Vis _MENU_ oppføringer",
+        sLengthMenu = "Vis _MENU_ oppf\u00f8ringer",
         sLoadingRecords = "Lasting...",
         sProcessing = "Bearbeiding...",
         sSearch = "S\u00f8k:",
-        sZeroRecords = "Ingen matchende oppføringer funnet",
+        sZeroRecords = "Ingen matchende oppf\u00f8ringer funnet",
         oPaginate = list(
           sFirst = "F\u00f8rst",
           sLast = "Sist",
@@ -1265,8 +1265,8 @@ language <- R6::R6Class(
           sPrevious = "Forrige"
         ),
         oAria = list(
-          sSortAscending = ": aktiver for å sortere kolonnen stigende",
-          sSortDescending = ": aktiver for å sortere kolonnen synkende"
+          sSortAscending = ": aktiver for \u00e5 sortere kolonnen stigende",
+          sSortDescending = ": aktiver for \u00e5 sortere kolonnen synkende"
         )
       )
     ),
@@ -1275,7 +1275,7 @@ language <- R6::R6Class(
 )
 
 
-#' @title Use {shinymanager} labels
+#' @title Use shinymanager labels
 #'
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
@@ -1296,7 +1296,7 @@ use_language <- function(lan = "en") {
   lang
 }
 
-#' @title Modify {shinymanager} labels to use custom text
+#' @title Modify shinymanager labels to use custom text
 #'
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.

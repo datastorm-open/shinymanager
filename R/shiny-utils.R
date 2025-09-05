@@ -23,7 +23,7 @@ shinymanager_where <- function(where) {
   # humm, little hack ^^
   tags$div(
     style = "display: none;",
-    selectInput(inputId = "shinymanager_where", label = NULL, 
+    selectInput(inputId = "shinymanager_where", label = NULL,
                choices = where, selected = where, multiple = FALSE)
   )
 }

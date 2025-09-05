@@ -2,12 +2,12 @@
 % Please edit documentation in R/language.R
 \name{use_language}
 \alias{use_language}
-\title{Use {shinymanager} labels}
+\title{Use shinymanager labels}
 \usage{
 use_language(lan = "en")
 }
 \arguments{
-\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN".}
+\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".}
 }
 \value{
 A language object

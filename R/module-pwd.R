@@ -133,7 +133,7 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
       selector = jns("container-btn-update"),
       ui = tags$div(
         id = ns("spinner_msg_pwd"),
-        img(src = "shinymanager/1497.gif", style = "height:30px;"), 
+        tags$img(src = "shinymanager/1497.gif", style = "height:30px;"), 
         align = "center"
       ),
       immediate = TRUE 
