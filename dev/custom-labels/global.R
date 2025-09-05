@@ -16,8 +16,11 @@ credentials <- data.frame(
 
 # Customize some labels displayed in application
 set_labels(
+  language = "en",
+  list(
   "Please authenticate" = "You have to login!",
   "Username:" = "What's your name:",
   "Password:" = "Enter your password:"
+  )
 )
 

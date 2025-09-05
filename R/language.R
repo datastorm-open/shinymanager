@@ -1302,7 +1302,7 @@ use_language <- function(lan = "en") {
 #'  then set custom text with \code{set_labels()}.
 #'
 #' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".
-#' @param ... A named list with labels to replace.
+#' @param ... A named list with labels to replace or several named argument
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
 #' @export
@@ -1318,12 +1318,26 @@ use_language <- function(lan = "en") {
 #'   "Username:" = "What's your name:",
 #'   "Password:" = "Enter your password:"
 #' )
+#' 
+#' # same with named list
+#' set_labels(
+#'   language = "en",
+#'   list(
+#'     "Please authenticate" = "You have to login",
+#'     "Username:" = "What's your name:",
+#'     "Password:" = "Enter your password:"
+#'  )
+#' )
 set_labels <- function(language, ...) {
 
   if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
     stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
   }
   args <- list(...)
+  # named list in input ?
+  if("list" %in% class(args[[1]])){
+    args <- args[[1]]
+  }
   if (!all(nzchar(names(args)))) {
     stop("All arguments must be named!", call. = FALSE)
   }
