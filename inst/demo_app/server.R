@@ -7,17 +7,18 @@ server <- function(input, output, session) {
         )
     )
     
+  
     # recuperation des infos utilisateurs
     output$auth_output <- renderPrint({
         reactiveValuesToList(res_auth)
     })
     
     # si besoin, des inputs sont créés
-    output$shinymanager_language <- renderPrint({
+    output$shinymanager_language_ <- renderPrint({
         input$shinymanager_language
     })
     
-    output$shinymanager_where <- renderPrint({
+    output$shinymanager_where_ <- renderPrint({
         input$shinymanager_where
     })
     

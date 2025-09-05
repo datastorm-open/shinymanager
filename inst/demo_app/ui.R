@@ -22,9 +22,9 @@ ui <- navbarPage(title = HTML(paste0('<p style="margin-top: 0.05cm;">', paste0(r
                           h3("User information :"),
                           verbatimTextOutput("auth_output"),
                           h3("input$shinymanager_language :"),
-                          verbatimTextOutput("shinymanager_language"),
+                          verbatimTextOutput("shinymanager_language_"),
                           h3("input$shinymanager_where :"),
-                          verbatimTextOutput("shinymanager_where")
+                          verbatimTextOutput("shinymanager_where_")
                  ),
                  
                  tabPanel("Code",
