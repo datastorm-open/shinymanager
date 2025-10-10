@@ -10,7 +10,7 @@
 #' @param theme Alternative Bootstrap stylesheet, default is to use \code{readable},
 #'  you can use themes provided by \code{shinythemes}.
 #'  It will affect the authentication panel and the admin page.
-#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no.
+#' @param language Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".
 #' @param fab_position Position for the FAB button, see \code{\link{fab_button}} for options.
 #'
 #' @note A special input value will be accessible server-side with \code{input$shinymanager_where}
@@ -33,8 +33,8 @@ secure_app <- function(ui,
                        theme = NULL,
                        language = "en",
                        fab_position = "bottom-right") {
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no, it", call. = FALSE)
     language <- "en"
   }
 
@@ -389,5 +389,3 @@ secure_server <- function(check_credentials,
 
   return(user_info_rv)
 }
-
-
