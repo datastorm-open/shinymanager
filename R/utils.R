@@ -82,7 +82,7 @@ is_force_chg_pwd <- function(token) {
     if(!res){
       pwd_validity <- as.numeric(get_pwd_validity())
       if(length(pwd_validity) > 0 && !is.na(pwd_validity)){
-        user_date <- as.Date(resetpwd$date_change[ind_user])
+        user_date <- tryCatch(as.Date(resetpwd$date_change[ind_user]), error = function(e) NA)
         if(length(user_date) > 0 && !is.na(user_date)){
           res <- as.numeric(difftime(Sys.Date(), user_date, units = "days")) > pwd_validity
         }
@@ -105,7 +105,7 @@ is_force_chg_pwd <- function(token) {
     if(!res){
       pwd_validity <- as.numeric(get_pwd_validity())
       if(length(pwd_validity) > 0 && !is.na(pwd_validity)){
-        user_date <- as.Date(resetpwd$date_change[1])
+        user_date <- tryCatch(as.Date(resetpwd$date_change[1]), error = function(e) NA)
         if(length(user_date) > 0 && !is.na(user_date)){
           res <- as.numeric(difftime(Sys.Date(), user_date, units = "days")) > pwd_validity
         }
