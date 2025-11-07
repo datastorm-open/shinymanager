@@ -17,6 +17,9 @@ edit_user_ui <- function(id, credentials, username = NULL, inputs_list = NULL, l
     }
   } else {
     data_user <- credentials[0, ]
+    if("admin" %in% names(data_user)){
+      data_user$admin <- FALSE
+    }
   }
 
   input_list <- lapply(
