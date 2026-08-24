@@ -95,6 +95,13 @@
     },
     get_timeout = function() {
       private$timeout
+    },
+    set_send_mail = function(send_mail) {
+      private$send_mail <- send_mail
+      invisible()
+    },
+    get_send_mail = function() {
+      private$send_mail
     }
   ),
   private = list(
@@ -105,6 +112,7 @@
     passphrase = NULL,
     sql_config_db = NULL,
     timeout = 0,
+    send_mail = NULL,
     length = function() base::length(private$tokens)
   )
 )

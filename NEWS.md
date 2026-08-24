@@ -1,3 +1,14 @@
+# shinymanager (development version)
+
+* FEAT: optional email sending, with no mandatory dependency. Provide a `send_mail`
+  function to `secure_server()` (any backend), or use the optional helper `send_smtp_mail()`
+  (based on `emayili`, in Suggests).
+* FEAT: self-service password reset from the authentication page, enabled with
+  `options("shinymanager.reset_password" = TRUE)`. A user can reset its password only by
+  providing a valid username and its associated email (requires an `email` column and a
+  SQLite / SQL backend). A temporary password is emailed and the user is forced to change
+  it on next login.
+
 # shinymanager 1.1.0
 
 * (#220) Added Norwegian Language, Thanks @mcldrchl

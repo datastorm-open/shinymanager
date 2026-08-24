@@ -41,6 +41,35 @@ Using ``options("shinymanager.pwd_validity")``, you can set password validity pe
 Using ``options("shinymanager.pwd_failure_limit")``, you can set password failure limit. It defaults to ``Inf``. You can specify for example ``options("shinymanager.pwd_failure_limit" = 5)`` if you want to lock user account after 5 wrong password.
 
 
+### Self-service password reset (by email)
+
+Using ``options("shinymanager.reset_password" = TRUE)``, a *"Forgot password?"* link is added on the authentication page. A user can reset the password by entering a valid username **and** its associated email : a temporary password is generated, sent by email, and the user is forced to change it on next login. The same generic message is always displayed to avoid account enumeration.
+
+It requires an ``email`` column in the *credentials* (use ``options("shinymanager.email_column")`` for another column name), a SQLite / SQL backend, and a ``send_mail`` function passed to ``secure_server``. No email package is mandatory : provide your own sending function (any backend), or use the optional helper ``send_smtp_mail()`` (based on the suggested package ``emayili``).
+
+````
+# server.R
+server <- function(input, output, session) {
+
+    res_auth <- secure_server(
+        check_credentials = check_credentials("credentials.sqlite", passphrase = "supersecret"),
+        send_mail = function(user, email, temp_password) {
+            send_smtp_mail(
+                to = email, from = "no-reply@example.com",
+                subject = "Password reset",
+                body = paste0("Hello ", user, ", your temporary password is : ", temp_password),
+                host = "smtp.example.com", port = 587,
+                username = "no-reply@example.com", password = "smtp_secret"
+            )
+        }
+    )
+
+    # your classic server logic
+
+}
+````
+
+
 ### Cross-application
 
 Adding optional ``applications`` column in *credentials* db: the name of the applications to which the user is authorized, separated by a semicolon. The name of the application corresponds to the name of the directory, or can be declared using: options("shinymanager.application" = "my-app")

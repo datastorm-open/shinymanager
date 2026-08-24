@@ -43,6 +43,14 @@ get_pwd_failure_limit <- function(){
   getOption("shinymanager.pwd_failure_limit", default = Inf)
 }
 
+reset_password_enabled <- function() {
+  isTRUE(getOption("shinymanager.reset_password", default = FALSE))
+}
+
+get_email_column <- function() {
+  getOption("shinymanager.email_column", default = "email")
+}
+
 
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))

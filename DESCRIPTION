@@ -25,11 +25,12 @@ Imports:
     scrypt,
     yaml,
     glue
-Suggests: 
+Suggests:
     keyring,
     testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     RPostgres,
-    sparklyr
+    sparklyr,
+    emayili
 VignetteBuilder: knitr

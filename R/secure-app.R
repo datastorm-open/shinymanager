@@ -182,6 +182,12 @@ secure_app <- function(ui,
 #' @param validate_pwd A \code{function} to validate the password enter by the user.
 #'  Default is to check for the password to have at least one number, one lowercase,
 #'  one uppercase and be of length 6 at least.
+#' @param send_mail A \code{function} used to send emails, with three arguments:
+#'  \code{user} (the username), \code{email} (the email stored for this user) and
+#'  \code{temp_password} (the generated temporary password). It is only used by the
+#'  self-service password reset (see \code{shinymanager.reset_password} option below).
+#'  You can use the helper \code{\link{send_smtp_mail}} inside this function, or any
+#'  other email backend. No email package is required unless you use this feature.
 #' @param session Shiny session.
 #'
 #' @details
@@ -228,7 +234,16 @@ secure_app <- function(ui,
 #' Using \code{options("shinymanager.write_logs")}, you can activate or not writing users connection logs. Default to \code{TRUE}
 #' 
 #' Using \code{options("shinymanager.show_logs")}, you can activate or not showing users connection logs in admin panel. Default to \code{TRUE}
-#' 
+#'
+#' Using \code{options("shinymanager.reset_password")}, you can enable a self-service
+#' password reset link ("Forgot password?") on the authentication page. Default to \code{FALSE}.
+#' It requires a \code{email} column in the credentials, a \code{send_mail} function passed to
+#' \code{secure_server} and a SQLite / SQL backend. When a user enters a valid username and its
+#' associated email, a temporary password is generated, emailed, and the user is forced to change
+#' it on next login. The same generic confirmation message is always displayed to avoid account enumeration.
+#' By default the email is looked up in the \code{email} column; use
+#' \code{options("shinymanager.email_column" = "my_col")} to use another column name.
+#'
 #' @export
 #'
 #' @importFrom shiny callModule getQueryString parseQueryString
@@ -242,7 +257,10 @@ secure_server <- function(check_credentials,
                           fileEncoding = "",
                           keep_token = FALSE,
                           validate_pwd = NULL,
+                          send_mail = NULL,
                           session = shiny::getDefaultReactiveDomain()) {
+
+  .tok$set_send_mail(send_mail)
 
   session$setBookmarkExclude(c(session$getBookmarkExclude(),
                                "shinymanager_language",

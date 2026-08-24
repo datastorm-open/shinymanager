@@ -18,7 +18,7 @@
 #' @name module-authentication
 #'
 #' @importFrom htmltools tagList tags singleton tagAppendAttributes
-#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
+#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton actionLink uiOutput
 #'
 #' @example examples/module-auth.R
 auth_ui <- function(id, status = "primary", tags_top = NULL,
@@ -131,6 +131,16 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 ),
                 tags$br(), tags$br()
               ),
+              if (reset_password_enabled()) {
+                tags$div(
+                  style = "text-align: center; margin-top: -10px; margin-bottom: 10px;",
+                  actionLink(
+                    inputId = ns("show_reset_pwd"),
+                    label = lan$get("Forgot password?")
+                  )
+                )
+              },
+              tags$div(id = ns("reset_pwd_panel")),
               tags$br(),
               tags$script(
                 sprintf("bindEnter('%s');", ns(""))
@@ -174,7 +184,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI
+#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI textInput actionButton
 #' @importFrom stats setNames
 auth_server <- function(input, output, session,
                         check_credentials,
@@ -197,10 +207,22 @@ auth_server <- function(input, output, session,
   observe({
     if(!is.null(input$language) && input$language != ""){
       lan()$set_language(input$language)
+
+      # remove transient messages so no stale-language text remains
+      removeUI(selector = jns("msg_auth"))
+      removeUI(selector = jns("reset_pwd_msg"))
+
       updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
       updateActionButton(session, inputId = "go_auth", label = lan()$get("Login"))
-      
+
+      if (reset_password_enabled()) {
+        updateActionButton(session, inputId = "show_reset_pwd", label = lan()$get("Forgot password?"))
+        updateTextInput(session, inputId = "reset_user", label = lan()$get("Username:"))
+        updateTextInput(session, inputId = "reset_email", label = lan()$get("Email:"))
+        updateActionButton(session, inputId = "do_reset_pwd", label = lan()$get("Reset my password"))
+      }
+
       session$sendCustomMessage(
         type = "update_auth_title",
         message = list(
@@ -328,9 +350,53 @@ auth_server <- function(input, output, session,
     }
     
     removeUI(selector = jns("spinner_msg_ok"))
-    
+
   }, ignoreInit = TRUE)
-  
+
+  # self-service password reset (user + email)
+  observeEvent(input$show_reset_pwd, {
+    removeUI(selector = jns("reset_pwd_form"))
+    insertUI(
+      selector = jns("reset_pwd_panel"),
+      ui = tags$div(
+        id = ns("reset_pwd_form"),
+        tags$hr(),
+        textInput(
+          inputId = ns("reset_user"),
+          label = lan()$get("Username:"),
+          width = "100%"
+        ),
+        textInput(
+          inputId = ns("reset_email"),
+          label = lan()$get("Email:"),
+          width = "100%"
+        ),
+        actionButton(
+          inputId = ns("do_reset_pwd"),
+          label = lan()$get("Reset my password"),
+          width = "100%"
+        ),
+        tags$br(), tags$br(),
+        tags$div(id = ns("reset_pwd_result"))
+      )
+    )
+  }, ignoreInit = TRUE)
+
+  observeEvent(input$do_reset_pwd, {
+    removeUI(selector = jns("reset_pwd_msg"))
+    # result is intentionally ignored: the same generic message is always shown
+    # to avoid revealing which users / emails exist
+    reset_pwd_user_email(input$reset_user, input$reset_email)
+    insertUI(
+      selector = jns("reset_pwd_result"),
+      ui = tags$div(
+        id = ns("reset_pwd_msg"), class = "alert alert-info",
+        icon("circle-info"),
+        lan()$get("If the account exists and an email address is associated with it, an email containing a temporary password has been sent.")
+      )
+    )
+  }, ignoreInit = TRUE)
+
   return(authentication)
 }
 
