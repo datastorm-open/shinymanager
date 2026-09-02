@@ -7,7 +7,8 @@ server <- function(input, output, session) {
         ),
         send_mail = function(user, email, temp_password) {
             message(sprintf("[MAIL] to=%s | user=%s | temp_pwd=%s", email, user, temp_password))
-        })
+        }
+        )
   
     # recuperation des infos utilisateurs
     output$auth_output <- renderPrint({

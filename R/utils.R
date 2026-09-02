@@ -44,7 +44,14 @@ get_pwd_failure_limit <- function(){
 }
 
 reset_password_enabled <- function() {
-  isTRUE(getOption("shinymanager.reset_password", default = FALSE))
+  opt <- getOption("shinymanager.reset_password", default = FALSE)
+  isTRUE(opt) || identical(opt, "username")
+}
+
+# TRUE when the reset form should ask for a username only (email taken from the
+# credentials), FALSE when it should ask for both username and email.
+reset_password_username_only <- function() {
+  identical(getOption("shinymanager.reset_password", default = FALSE), "username")
 }
 
 get_email_column <- function() {

@@ -366,11 +366,13 @@ auth_server <- function(input, output, session,
           label = lan()$get("Username:"),
           width = "100%"
         ),
-        textInput(
-          inputId = ns("reset_email"),
-          label = lan()$get("Email:"),
-          width = "100%"
-        ),
+        if (!reset_password_username_only()) {
+          textInput(
+            inputId = ns("reset_email"),
+            label = lan()$get("Email:"),
+            width = "100%"
+          )
+        },
         actionButton(
           inputId = ns("do_reset_pwd"),
           label = lan()$get("Reset my password"),
@@ -384,9 +386,11 @@ auth_server <- function(input, output, session,
 
   observeEvent(input$do_reset_pwd, {
     removeUI(selector = jns("reset_pwd_msg"))
-    # result is intentionally ignored: the same generic message is always shown
-    # to avoid revealing which users / emails exist
-    reset_pwd_user_email(input$reset_user, input$reset_email)
+    # The outcome is logged server-side (admin logs) but never shown to the
+    # visitor: the same generic message is always displayed to avoid revealing
+    # which users / emails exist.
+    res_reset <- reset_pwd_user_email(input$reset_user, input$reset_email)
+    save_reset_logs(input$reset_user, res_reset$reason)
     insertUI(
       selector = jns("reset_pwd_result"),
       ui = tags$div(

@@ -45,6 +45,8 @@ Using ``options("shinymanager.pwd_failure_limit")``, you can set password failur
 
 Using ``options("shinymanager.reset_password" = TRUE)``, a *"Forgot password?"* link is added on the authentication page. A user can reset the password by entering a valid username **and** its associated email : a temporary password is generated, sent by email, and the user is forced to change it on next login. The same generic message is always displayed to avoid account enumeration.
 
+With ``options("shinymanager.reset_password" = "username")``, the form only asks for a username and the temporary password is sent to the email stored for that user (if any).
+
 It requires an ``email`` column in the *credentials* (use ``options("shinymanager.email_column")`` for another column name), a SQLite / SQL backend, and a ``send_mail`` function passed to ``secure_server``. No email package is mandatory : provide your own sending function (any backend), or use the optional helper ``send_smtp_mail()`` (based on the suggested package ``emayili``).
 
 ````

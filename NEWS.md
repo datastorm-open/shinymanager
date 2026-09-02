@@ -1,4 +1,4 @@
-# shinymanager (development version)
+# shinymanager 1.1.0.1
 
 * FEAT: optional email sending, with no mandatory dependency. Provide a `send_mail`
   function to `secure_server()` (any backend), or use the optional helper `send_smtp_mail()`
@@ -7,7 +7,11 @@
   `options("shinymanager.reset_password" = TRUE)`. A user can reset its password only by
   providing a valid username and its associated email (requires an `email` column and a
   SQLite / SQL backend). A temporary password is emailed and the user is forced to change
-  it on next login.
+  it on next login. Set the option to `"username"` to only ask for a username and send the
+  temporary password to the email stored for that user. Reset attempts are recorded in the
+  admin logs (`Reset password`, `Reset password: unknown user`, `... wrong email`, `... no email`).
+  The `send_mail` function must raise an error when sending fails, otherwise the password would be
+  reset without the user receiving it.
 
 # shinymanager 1.1.0
 

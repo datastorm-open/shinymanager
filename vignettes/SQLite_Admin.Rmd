@@ -153,6 +153,8 @@ Enabling ``options("shinymanager.reset_password" = TRUE)`` adds a *"Forgot passw
 
 The user enters a username and its associated email. If they match a record, a temporary password is generated, sent by email, and the user must change it on next login (same security rules as above). The same generic confirmation message is always displayed, whether or not the email matches, to avoid account enumeration.
 
+With ``options("shinymanager.reset_password" = "username")``, the form only asks for a username and the temporary password is sent to the email stored for that user (if any).
+
 Requirements :
 
 - an ``email`` column in the *credentials* (or another column name set with ``options("shinymanager.email_column" = "my_col")``),

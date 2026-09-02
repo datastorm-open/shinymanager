@@ -157,6 +157,119 @@ test_that("custom email column name is honored", {
   .tok$set_sqlite_path(tmp_sqlite) # restore
 })
 
+test_that("reset_password_username_only follows the option", {
+  old <- options(shinymanager.reset_password = "username")
+  expect_true(reset_password_enabled())
+  expect_true(reset_password_username_only())
+  options(shinymanager.reset_password = TRUE)
+  expect_true(reset_password_enabled())
+  expect_false(reset_password_username_only())
+  options(old)
+})
+
+test_that("username-only mode: reset works without email input", {
+  old <- options(shinymanager.reset_password = "username")
+  reset_capture()
+  .tok$set_send_mail(fake_mail_ok)
+
+  res <- reset_pwd_user_email("fanny")  # no email provided
+
+  expect_true(res$result)
+  expect_equal(captured$called, 1L)
+  # temp password is sent to the email stored in the database
+  expect_equal(captured$email, "fanny@mail.com")
+
+  db <- read_db_decrypt(conn = tmp_sqlite, name = "credentials", passphrase = "secret")
+  stored <- db$password[db$user == "fanny"]
+  expect_true(scrypt::verifyPassword(stored, captured$pwd))
+
+  options(old)
+})
+
+test_that("username-only mode: unknown user is refused, nothing sent", {
+  old <- options(shinymanager.reset_password = "username")
+  reset_capture()
+  .tok$set_send_mail(fake_mail_ok)
+  expect_false(reset_pwd_user_email("ghost")$result)
+  expect_equal(captured$called, 0L)
+  options(old)
+})
+
+test_that("username-only mode: refused if user has no stored email", {
+  tmp4 <- tempfile(fileext = ".sqlite")
+  create_db(
+    credentials_data = data.frame(
+      user = "noemail", password = "azerty12", email = NA_character_,
+      stringsAsFactors = FALSE
+    ),
+    sqlite_path = tmp4, passphrase = "secret"
+  )
+  old <- options(shinymanager.reset_password = "username")
+  .tok$set_sqlite_path(tmp4)
+  .tok$set_send_mail(fake_mail_ok)
+  reset_capture()
+
+  expect_false(reset_pwd_user_email("noemail")$result)
+  expect_equal(captured$called, 0L)
+
+  options(old)
+  .tok$set_sqlite_path(tmp_sqlite) # restore
+})
+
+test_that("reset_pwd_user_email returns granular reasons", {
+  .tok$set_sqlite_path(tmp_sqlite)
+  .tok$set_send_mail(fake_mail_ok)
+  expect_equal(reset_pwd_user_email("ghost", "x@mail.com")$reason, "unknown_user")
+  expect_equal(reset_pwd_user_email("fanny", "wrong@mail.com")$reason, "email_mismatch")
+  expect_equal(reset_pwd_user_email("fanny", "fanny@mail.com")$reason, "success")
+})
+
+test_that("reason is mail_failed when send_mail throws", {
+  .tok$set_send_mail(function(user, email, temp_password) stop("smtp down"))
+  expect_equal(reset_pwd_user_email("victor", "victor@mail.com")$reason, "mail_failed")
+})
+
+test_that("reason is no_mailer when send_mail is not configured", {
+  .tok$set_send_mail(NULL)
+  expect_equal(reset_pwd_user_email("fanny", "fanny@mail.com")$reason, "no_mailer")
+})
+
+test_that("username mode: reason is no_stored_email when user has no email", {
+  tmp5 <- tempfile(fileext = ".sqlite")
+  create_db(
+    credentials_data = data.frame(
+      user = "ne", password = "azerty12", email = NA_character_, stringsAsFactors = FALSE
+    ),
+    sqlite_path = tmp5, passphrase = "secret"
+  )
+  old <- options(shinymanager.reset_password = "username")
+  .tok$set_sqlite_path(tmp5)
+  .tok$set_send_mail(fake_mail_ok)
+  expect_equal(reset_pwd_user_email("ne")$reason, "no_stored_email")
+  options(old)
+  .tok$set_sqlite_path(tmp_sqlite)
+})
+
+test_that("save_reset_logs writes a mapped status, skips config/empty reasons", {
+  .tok$set_sqlite_path(tmp_sqlite)
+
+  before <- read_db_decrypt(tmp_sqlite, "logs", "secret")
+  save_reset_logs("fanny", "success")
+  after <- read_db_decrypt(tmp_sqlite, "logs", "secret")
+  expect_equal(nrow(after), nrow(before) + 1)
+  expect_equal(after$status[nrow(after)], "Reset password")
+
+  save_reset_logs("someone", "unknown_user")
+  logs2 <- read_db_decrypt(tmp_sqlite, "logs", "secret")
+  expect_equal(logs2$status[nrow(logs2)], "Reset password: unknown user")
+
+  # config / empty-input reasons must not create a log line
+  n <- nrow(logs2)
+  save_reset_logs("fanny", "empty_input")
+  save_reset_logs("fanny", "no_mailer")
+  expect_equal(nrow(read_db_decrypt(tmp_sqlite, "logs", "secret")), n)
+})
+
 # reset the shared token store so later test files start clean
 .tok$set_sqlite_path(NULL)
 .tok$set_passphrase(NULL)
