@@ -21,7 +21,11 @@
 #'   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
 #'  }
 #'
-#' @importFrom DBI dbConnect dbDisconnect dbSendQuery dbClearResult dbListTables dbAppendTable dbGetQuery dbExecute dbListFields
+#' To use tables in a specific schema (e.g. Postgres), you can either prefix \code{tablename} with the schema
+#' in the configuration file (\code{tablename: my_schema.credentials}), or set the search path in the
+#' \code{connect} section (\code{options: "-c search_path=my_schema,public"} with \code{RPostgres}).
+#'
+#' @importFrom DBI dbConnect dbDisconnect dbSendQuery dbClearResult dbListTables dbAppendTable dbGetQuery dbExecute dbListFields dbExistsTable Id
 #' @importFrom scrypt hashPassword
 #' @importFrom glue glue_sql
 #' @import yaml
@@ -117,11 +121,11 @@ create_sql_db <- function(credentials_data, config_path) {
   conn <- connect_sql_db(config_db)
   on.exit(disconnect_sql_db(conn, config_db))
   
-  init_user <- !config_db$tables$pwd_mngt$tablename %in% dbListTables(conn)
+  init_user <- !db_exists_table_sql(conn, config_db$tables$pwd_mngt$tablename)
   
   for(t in config_db$tables){
     tablename <- t$tablename
-    if(tablename %in% dbListTables(conn)){
+    if(db_exists_table_sql(conn, tablename)){
       warning(tablename, " already exists in database. Please remove it if wanted / needed")
     } else {
       tablename <- SQL(tablename)
@@ -219,9 +223,29 @@ write_sql_db <- function(config_db, value, name = "credentials") {
   }
 }
 
+# "schema.table" (or "catalog.schema.table") to DBI::Id, to be correctly quoted by DBI
+db_table_id_sql <- function(tablename){
+  parts <- strsplit(tablename, ".", fixed = TRUE)[[1]]
+  if(length(parts) == 2){
+    Id(schema = parts[1], table = parts[2])
+  } else if(length(parts) == 3){
+    Id(catalog = parts[1], schema = parts[2], table = parts[3])
+  } else {
+    tablename
+  }
+}
+
+db_exists_table_sql <- function(conn, tablename){
+  if(!"spark_connection" %in% class(conn)){
+    dbExistsTable(conn, db_table_id_sql(tablename))
+  } else {
+    tablename %in% dbListTables(conn)
+  }
+}
+
 db_read_table_sql <- function(conn, tablename){
   if(!"spark_connection" %in% class(conn)){
-    res <- dbReadTable(conn, tablename)
+    res <- dbReadTable(conn, db_table_id_sql(tablename))
   } else {
     tablename <- SQL(tablename)
     request <- glue_sql("SELECT *  FROM {tablename}", .con = conn)
@@ -233,7 +257,7 @@ db_read_table_sql <- function(conn, tablename){
 
 db_list_fields_sql <-function(conn, tablename){
   if(!"spark_connection" %in% class(conn)){
-    dbListFields(conn, tablename) 
+    dbListFields(conn, db_table_id_sql(tablename))
   } else {
     tablename <- SQL(tablename)
     request <- glue_sql("SELECT *  FROM {tablename} LIMIT 1", .con = conn)

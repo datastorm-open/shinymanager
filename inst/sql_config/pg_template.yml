@@ -15,6 +15,9 @@ connect:
   port: 5432
   user: "username"
   password: "*********"
+  # optional. To use a specific schema, set the search path...
+  # options: "-c search_path=my_schema,public"
+  # ...or prefix tablename with the schema (tablename: my_schema.credentials)
 
 # optional / Default
 # disconnect:

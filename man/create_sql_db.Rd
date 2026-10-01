@@ -28,6 +28,10 @@ The credentials \code{data.frame} can have the following columns:
    or can be declared using : \code{options("shinymanager.application" = "my-app")}
   \item \strong{additional columns} : add others columns to retrieve the values server-side after authentication
  }
+
+To use tables in a specific schema (e.g. Postgres), you can either prefix \code{tablename} with the schema
+in the configuration file (\code{tablename: my_schema.credentials}), or set the search path in the
+\code{connect} section (\code{options: "-c search_path=my_schema,public"} with \code{RPostgres}).
 }
 \examples{
 \dontrun{

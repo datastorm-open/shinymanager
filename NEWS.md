@@ -2,6 +2,7 @@
 
 * (#222) Added Italian Language, Thanks @stewerner
 * FIX Norwegian label "Maximum number of users: %s"
+* (#228) SQL : support schema in tablename (`my_schema.credentials`) & document Postgres search_path
 
 # shinymanager 1.1.0
 
