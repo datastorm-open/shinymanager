@@ -31,6 +31,7 @@ Online documentation: https://datastorm-open.github.io/shinymanager/
 - Indonesian
 - Greek
 - Norwegian
+- Italian
 
 ### Password validity period
 

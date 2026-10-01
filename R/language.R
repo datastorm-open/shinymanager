@@ -774,7 +774,6 @@ pkgEnv$label_el = list(
   "Allowed null values" = "\u0395\u03c0\u03b9\u03c4\u03c1\u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03bc\u03b7\u03b4\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 (null) \u03c4\u03b9\u03bc\u03ad\u03c2"
 )
 
-
 pkgEnv$label_id = list(
   "Please authenticate" = "Masuk",
   "Username:" = "Nama akun:",
@@ -860,7 +859,6 @@ pkgEnv$label_id = list(
   "Nb logged" = "Jumlah akses masuk",
   "Allowed null values" = "Nilai kosong diperbolehkan"
 )
-
 
 pkgEnv$label_no = list(
   "Please authenticate" = "Vennligst godkjenn",
@@ -948,8 +946,94 @@ pkgEnv$label_no = list(
   "Allowed null values" = "Tillatte nullverdier"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "\u4e2d\u6587", "Norsk")
+pkgEnv$label_it = list(
+  "Please authenticate" = "Autenticati per favore",
+  "Username:" = "Nome utente:",
+  "Password:" = "Password:",
+  "Login" = "Accedi",
+  "Username or password are incorrect" = "Nome utente o password non corretti",
+  "Your account has expired" = "Il tuo account è scaduto",
+  "Your account is locked" = "Il tuo account è bloccato",
+  "Please change your password" = "Cambia la tua password per favore",
+  "New password cannot be the same as old" = "La nuova password non può essere uguale alla vecchia",
+  "New password:" = "Nuova password:",
+  "Confirm password:" = "Conferma password:",
+  "Update new password" = "Aggiorna nuova password",
+  "Password successfully updated! Please re-login" = "Password aggiornata con successo! Effettua di nuovo l'accesso",
+  "The two passwords are different" = "Le due password sono diverse",
+  "Failed to update password" = "Aggiornamento della password non riuscito",
+  "Logout" = "Disconnetti",
+  "Go to application" = "Vai all'applicazione",
+  "Administrator mode" = "Modalità amministratore",
+  "Add a user" = "Aggiungi un utente",
+  "Too many users" = "Troppi utenti",
+  "Maximum number of users: %s" = "Numero massimo di utenti: %s",
+  "Failed to update user" = "Aggiornamento utente non riuscito",
+  "User successfully updated" = "Utente aggiornato con successo",
+  "Cancel" = "Annulla",
+  "Confirm new user" = "Conferma nuovo utente",
+  "Confirm change" = "Conferma modifica",
+  "Are you sure to remove user(s): %s from the database ?" = "Sei sicuro di voler rimuovere l'utente/gli utenti: %s dal database?",
+  "Delete user(s)" = "Elimina utente/i",
+  "Delete user" = "Elimina utente",
+  "Edit user" = "Modifica utente",
+  "User already exist!" = "L'utente esiste già!",
+  "Dismiss" = "Chiudi",
+  "New user %s succesfully created!" = "Nuovo utente %s creato con successo!",
+  "Ask to change password" = "Chiedi di cambiare la password",
+  "Confirm" = "Conferma",
+  "Ask %s to change password on next connection?" = "Chiedere a %s di cambiare la password al prossimo accesso?",
+  "Change saved!" = "Modifica salvata!",
+  "Failed to update the database" = "Aggiornamento del database non riuscito",
+  "Password does not respect safety requirements" = "La password non rispetta i requisiti di sicurezza",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "La password deve contenere almeno un numero, una lettera minuscola, una maiuscola e deve essere lunga almeno 6 caratteri.",
+  "Number of connections per user" = "Numero di connessioni per utente",
+  "Number of connections per day" = "Numero di connessioni al giorno",
+  "Total number of connection" = "Numero totale di connessioni",
+  "You can\'t remove yourself!" = "Non puoi rimuovere te stesso!",
+  "User:" = "Utente:",
+  "Period:" = "Periodo:",
+  "Last week" = "Settimana scorsa",
+  "Last month" = "Mese scorso",
+  "All period" = "Tutto il periodo",
+  "Home" = "Home",
+  "Select all shown users" = "Seleziona tutti gli utenti mostrati",
+  "Remove selected users" = "Rimuovi gli utenti selezionati",
+  "Edit selected users" = "Modifica gli utenti selezionati",
+  "Force selected users to change password" = "Forza gli utenti selezionati a cambiare password",
+  "Users" = "Utenti",
+  "Passwords" = "Password",
+  "Download logs database" = "Scarica database dei log",
+  "Download SQL database" = "Scarica database SQL",
+  "Download Users file" = "Scarica file utenti",
+  "Reset password for %s?" = "Reimpostare la password per %s?",
+  "Reset password" = "Reimposta password",
+  "Temporary password:" = "Password temporanea:",
+  "Password succesfully reset!" = "Password reimpostata con successo!",
+  "You are not authorized for this application" = "Non sei autorizzato per questa applicazione",
+  "Language" = "Lingua",
+  "Yes" = "Sì",
+  "No" = "No",
+  "Password" = "Password",
+  "start" = "inizio",
+  "expire" = "scadenza",
+  "admin" = "Amministratore",
+  "user" = "Utente",
+  "Edit" = "Modifica",
+  "Remove" = "Rimuovi",
+  "must_change" = "Deve cambiare",
+  "have_changed" = "Ha cambiato",
+  "date_change" = "Data",
+  "Change password" = "Cambia password",
+  "Select" = "Seleziona",
+  "Logs" = "Registri",
+  "All users" = "Tutti gli utenti",
+  "Nb logged" = "Connessioni",
+  "Allowed null values" = "Valori null ammessi"
+)
+
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "\u4e2d\u6587", "Norsk", "Italiano")
 
 
 #' @importFrom R6 R6Class
@@ -976,7 +1060,8 @@ language <- R6::R6Class(
                                   "el" = pkgEnv$label_el,
                                   "id" = pkgEnv$label_id,
                                   "zh-CN" = pkgEnv$label_cn,
-                                  "no" = pkgEnv$label_no
+                                  "no" = pkgEnv$label_no,
+                                  "it" = pkgEnv$label_it
       )
     },
     get = function(label) {
@@ -1018,7 +1103,8 @@ language <- R6::R6Class(
       "el" = "el",
       "id" = "id",
       "zh-CN" = "zh-CN",
-      "no" = "no"
+      "no" = "no",
+      "it" = "it"
     ),
     DT_lan = list(
       fr = list(
@@ -1268,6 +1354,29 @@ language <- R6::R6Class(
           sSortAscending = ": aktiver for \u00e5 sortere kolonnen stigende",
           sSortDescending = ": aktiver for \u00e5 sortere kolonnen synkende"
         )
+      ),
+      it = list(
+        sEmptyTable = "Nessun dato disponibile nella tabella",
+        sInfo = "Visualizzazione da _START_ a _END_ di _TOTAL_ elementi",
+        sInfoEmpty = "Visualizzazione da 0 a 0 di 0 elementi",
+        sInfoFiltered = "(filtrato da _MAX_ elementi totali)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Mostra _MENU_ elementi",
+        sLoadingRecords = "Caricamento in corso...",
+        sProcessing = "Elaborazione in corso...",
+        sSearch = "Cerca:",
+        sZeroRecords = "Nessun record corrispondente trovato",
+        oPaginate = list(
+          sFirst = "Primo",
+          sLast = "Ultimo",
+          sNext = "Successivo",
+          sPrevious = "Precedente"
+        ),
+        oAria = list(
+          sSortAscending = ": attivare per ordinare la colonna in modo crescente",
+          sSortDescending = ": attivare per ordinare la colonna in modo decrescente"
+        )
       )
     ),
     length = function() base::length(private$labels)
@@ -1280,7 +1389,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".
 #'
 #' @return A language object
 #' @export
@@ -1301,7 +1410,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".
 #' @param ... A named list with labels to replace or several named argument
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -1330,8 +1439,8 @@ use_language <- function(lan = "en") {
 #' )
 set_labels <- function(language, ...) {
 
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no, it", call. = FALSE)
   }
   args <- list(...)
   # named list in input ?
@@ -1353,7 +1462,8 @@ set_labels <- function(language, ...) {
                    "el" = pkgEnv$label_el,
                    "id" = pkgEnv$label_id,
                    "zh-CN" = pkgEnv$label_cn,
-                   "no" = pkgEnv$label_no
+                   "no" = pkgEnv$label_no,
+                   "it" = pkgEnv$label_it
   )
 
   update_labels <- modifyList(
@@ -1383,6 +1493,8 @@ set_labels <- function(language, ...) {
     pkgEnv$label_id <- update_labels
   } else if (language %in% "no") {
     pkgEnv$label_no <- update_labels
+  } else if (language %in% "it") {
+    pkgEnv$label_it <- update_labels
   }
 
   invisible(TRUE)
@@ -1393,8 +1505,8 @@ set_labels <- function(language, ...) {
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
 
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no, it", call. = FALSE)
     language <- "en"
   }
 
@@ -1409,6 +1521,7 @@ get_labels <- function(language = "en") {
           "zh-CN" = pkgEnv$label_cn,
           "el" = pkgEnv$label_el,
           "id" = pkgEnv$label_id,
-          "no" = pkgEnv$label_no
+          "no" = pkgEnv$label_no,
+          "it" = pkgEnv$label_it
   )
 }
