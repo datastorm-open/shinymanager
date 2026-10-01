@@ -1,3 +1,8 @@
+# shinymanager 1.1.1
+
+* (#222) Added Italian Language, Thanks @stewerner
+* FIX Norwegian label "Maximum number of users: %s"
+
 # shinymanager 1.1.0
 
 * (#220) Added Norwegian Language, Thanks @mcldrchl

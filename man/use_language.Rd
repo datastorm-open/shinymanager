@@ -7,7 +7,7 @@
 use_language(lan = "en")
 }
 \arguments{
-\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".}
+\item{lan}{Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".}
 }
 \value{
 A language object
