@@ -96,6 +96,7 @@ is_force_chg_pwd <- function(token) {
     user <- user_info$user
     tablename <- SQL(config_db$tables$pwd_mngt$tablename)
     request <- glue_sql(config_db$tables$pwd_mngt$select, .con = conn)
+    if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
     resetpwd <- dbGetQuery(conn, request)
     
     # first check must change
@@ -158,22 +159,25 @@ force_chg_pwd <- function(user, change = TRUE) {
     name <- "must_change"
     value <- change
     request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+    if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
     dbExecute(conn, request)
     
     name <- "n_wrong_pwd"
     value <- 0
     request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+    if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
     dbExecute(conn, request)
     
     if (!isTRUE(change)) {
       name <- "have_changed"
       value <- TRUE
       request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+      if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
       dbExecute(conn, request)
       
       name <- "date_change"
       value <- Sys.Date()
-      request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+      request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)      
       dbExecute(conn, request)
       
     }
@@ -219,6 +223,7 @@ update_pwd <- function(user, pwd) {
       
       tablename <- SQL(config_db$tables$credentials$tablename)
       request <- glue_sql(config_db$tables$credentials$update, .con = conn)
+      if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)    
       dbExecute(conn, request)
       
       force_chg_pwd(user, FALSE)
@@ -261,7 +266,7 @@ check_new_pwd <- function(user, pwd) {
       on.exit(disconnect_sql_db(conn, config_db))
       
       tablename <- SQL(config_db$tables$credentials$tablename)
-      request <- glue_sql(config_db$tables$credentials$select, .con = conn)
+      request <- glue_sql(config_db$tables$credentials$select, .con = conn)      
       user_info <- dbGetQuery(conn, request)
       
       !scrypt::verifyPassword(user_info$password[1], pwd)
@@ -372,6 +377,7 @@ save_logs <- function(token) {
             name <- "n_wrong_pwd"
             udpate_users <- user
             request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+            if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
             db <- dbExecute(conn, request)
           } 
         }
@@ -516,6 +522,7 @@ save_logs_failed <- function(user, status = "Failed") {
             name <- "n_wrong_pwd"
             udpate_users <- user
             request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
+            if (inherits(config_db$connect$drv, "MariaDBDriver")) request <- gsub('"', "", request)
             db <- dbExecute(conn, request)
           } 
         }
@@ -568,7 +575,7 @@ logout_logs <- function(token) {
           value <-  as.character(Sys.time())
           name <- "logout"
           token <- logs_user$token
-          request <- glue_sql(config_db$tables$logs$update, .con = conn)
+          request <- glue_sql(config_db$tables$logs$update, .con = conn)          
           db <- dbExecute(conn, request)
         } 
       }
