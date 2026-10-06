@@ -1,5 +1,7 @@
-# shinymanager 1.1.1.1
+# shinymanager 1.1.1
 
+* (#222) Added Italian Language, Thanks @stewerner
+* FIX Norwegian label "Maximum number of users: %s"
 * FEAT: optional email sending, with no mandatory dependency. Provide a `send_mail`
   function to `secure_server()` (any backend), or use the optional helper `send_smtp_mail()`
   (based on `emayili`, in Suggests).
@@ -21,12 +23,7 @@
 * `send_smtp_mail()` gains `timeout` (seconds per attempt, default `30`) and `max_times`
   (sending attempts, default `1`) to bound the time an unresponsive SMTP server can block
   the R process.
-
-# shinymanager 1.1.1
-
-* (#222) Added Italian Language, Thanks @stewerner
-* FIX Norwegian label "Maximum number of users: %s"
-
+  
 # shinymanager 1.1.0
 
 * (#220) Added Norwegian Language, Thanks @mcldrchl
