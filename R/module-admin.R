@@ -300,7 +300,10 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     if("n_wrong_pwd" %in% colnames(pwds)){
       pwds$n_wrong_pwd <- NULL
     }
-    
+    if("temp_pwd_expire" %in% colnames(pwds)){
+      pwds$temp_pwd_expire <- NULL
+    }
+
     pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
     pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("arrow-rotate-left"), status = "warning", lan = lan())
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user, session = session)
@@ -699,14 +702,19 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         if(!"n_wrong_pwd" %in% colnames(resetpwd)){
           resetpwd$n_wrong_pwd <- 0
         }
-        resetpwd <- rbind(resetpwd, data.frame(
+        newpwd <- data.frame(
           user = newuser$user,
           must_change = must_change,
           have_changed = as.character(FALSE),
           date_change = as.character(Sys.Date()),
           n_wrong_pwd = 0,
           stringsAsFactors = FALSE
-        ))
+        )
+        # column added by the self-service reset: empty = no expiration
+        if("temp_pwd_expire" %in% colnames(resetpwd)){
+          newpwd$temp_pwd_expire <- ""
+        }
+        resetpwd <- rbind(resetpwd, newpwd)
         write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
       } else {
         conn <- connect_sql_db(config_db)
@@ -816,7 +824,11 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       dbExecute(conn, request)
     }
     
-    res_chg <- try(force_chg_pwd(input$reset_pwd), silent = TRUE)
+    res_chg <- try({
+      force_chg_pwd(input$reset_pwd)
+      # admin-generated password: no expiration, cancels a mailed temporary one
+      set_temp_pwd_expire(input$reset_pwd, "")
+    }, silent = TRUE)
     
     removeModal()
     

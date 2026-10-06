@@ -58,6 +58,16 @@ get_email_column <- function() {
   getOption("shinymanager.email_column", default = "email")
 }
 
+# Validity, in minutes, of the temporary password sent by the self-service
+# reset. NA (default, or invalid value) means the temporary password never expires.
+get_reset_password_validity <- function() {
+  validity <- suppressWarnings(as.numeric(getOption("shinymanager.reset_password_validity", default = NA)))
+  if (length(validity) != 1 || is.na(validity) || validity <= 0) {
+    return(NA_real_)
+  }
+  validity
+}
+
 
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
@@ -220,6 +230,8 @@ update_pwd <- function(user, pwd) {
       users$is_hashed_password[ind_user] <- FALSE
       write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       force_chg_pwd(user, FALSE)
+      # the new password is final: drop any mailed temporary password expiration
+      set_temp_pwd_expire(user, "")
     }, silent = TRUE)
     return(list(result = !inherits(res_pwd, "try-error")))
   } else  if (!is.null(config_db)) {
@@ -235,8 +247,10 @@ update_pwd <- function(user, pwd) {
       tablename <- SQL(config_db$tables$credentials$tablename)
       request <- glue_sql(config_db$tables$credentials$update, .con = conn)
       dbExecute(conn, request)
-      
+
       force_chg_pwd(user, FALSE)
+      # the new password is final: drop any mailed temporary password expiration
+      set_temp_pwd_expire(user, "")
     })
     return(list(result = !inherits(res_pwd, "try-error")))
   } else {

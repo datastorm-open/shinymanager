@@ -68,6 +68,7 @@ pkgEnv$label_cn = list(
   "Reset my password" = "\u91cd\u7f6e\u6211\u7684\u5bc6\u7801",
   "Email:" = "\u7535\u5b50\u90ae\u7bb1:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "\u5982\u679c\u8be5\u8d26\u6237\u5b58\u5728\u4e14\u5df2\u5173\u8054\u7535\u5b50\u90ae\u7bb1\uff0c\u5305\u542b\u4e34\u65f6\u5bc6\u7801\u7684\u90ae\u4ef6\u5df2\u53d1\u9001\u3002",
+  "Your temporary password has expired, please request a new one." = "\u60a8\u7684\u4e34\u65f6\u5bc6\u7801\u5df2\u8fc7\u671f\uff0c\u8bf7\u91cd\u65b0\u7533\u8bf7\u3002",
   "You are not authorized for this application" = "\u60a8\u672a\u88ab\u6388\u6743\u4f7f\u7528\u6b64\u5e94\u7528\u7a0b\u5e8f",
   "Language"  = "\u8bed\u8a00",
   "Yes" = "\u662f",
@@ -158,6 +159,7 @@ pkgEnv$label_en = list(
   "Reset my password" = "Reset my password",
   "Email:" = "Email:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "If the account exists and an email address is associated with it, an email containing a temporary password has been sent.",
+  "Your temporary password has expired, please request a new one." = "Your temporary password has expired, please request a new one.",
   "You are not authorized for this application" = "You are not authorized for this application",
   "Language"  = "Language",
   "Yes" = "Yes",
@@ -248,6 +250,7 @@ pkgEnv$label_fr = list(
   "Reset my password" = "R\u00e9initialiser mon mot de passe",
   "Email:" = "Email :",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Si le compte existe et qu\'une adresse email y est associ\u00e9e, un mail contenant un mot de passe temporaire a \u00e9t\u00e9 envoy\u00e9.",
+  "Your temporary password has expired, please request a new one." = "Votre mot de passe temporaire a expir\u00e9, veuillez en demander un nouveau.",
   "You are not authorized for this application" = "Vous n\'\u00eates pas habilit\u00e9 pour cette application",
   "Language"  = "Langue",
   "Yes" = "Oui",
@@ -338,6 +341,7 @@ pkgEnv$label_ptbr = list(
   "Reset my password" = "Redefinir minha senha",
   "Email:" = "Email:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Se a conta existir e um endere\u00e7o de email estiver associado a ela, um email com uma senha tempor\u00e1ria foi enviado.",
+  "Your temporary password has expired, please request a new one." = "Sua senha tempor\u00e1ria expirou, solicite uma nova.",
   "You are not authorized for this application" = "Voc\u00ea n\u00e3o est\u00e1 autorizado a utilizar esse aplicativo",
   "Language"  = "L\u00edngua",
   "Yes" = "Sim",
@@ -428,6 +432,7 @@ pkgEnv$label_es = list(
   "Reset my password" = "Restablecer mi contrase\u00f1a",
   "Email:" = "Correo electr\u00f3nico:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Si la cuenta existe y tiene asociada una direcci\u00f3n de correo electr\u00f3nico, se ha enviado un correo con una contrase\u00f1a temporal.",
+  "Your temporary password has expired, please request a new one." = "Su contrase\u00f1a temporal ha caducado, solicite una nueva.",
   "You are not authorized for this application" = "No est\u00e1s autorizado para esta aplicaci\u00f3n",
   "Language" = "Lenguaje",
   "Yes" = "S\u00ed",
@@ -518,6 +523,7 @@ pkgEnv$label_de = list(
   "Reset my password" = "Mein Passwort zur\u00fccksetzen",
   "Email:" = "E-Mail:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Wenn das Konto existiert und eine E-Mail-Adresse damit verkn\u00fcpft ist, wurde eine E-Mail mit einem tempor\u00e4ren Passwort gesendet.",
+  "Your temporary password has expired, please request a new one." = "Ihr tempor\u00e4res Passwort ist abgelaufen, bitte fordern Sie ein neues an.",
   "You are not authorized for this application" = "F\u00fcr diese Anwendung nicht autorisiert",
   "Language"  = "Sprache",
   "Yes" = "Ja",
@@ -608,6 +614,7 @@ pkgEnv$label_pl = list(
   "Reset my password" = "Zresetuj moje has\u0142o",
   "Email:" = "Email:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Je\u015bli konto istnieje i jest z nim powi\u0105zany adres email, wys\u0142ano wiadomo\u015b\u0107 zawieraj\u0105c\u0105 has\u0142o tymczasowe.",
+  "Your temporary password has expired, please request a new one." = "Twoje has\u0142o tymczasowe wygas\u0142o, popro\u015b o nowe.",
   "You are not authorized for this application" = "Nie masz autoryzacji dla tej aplikacji",
   "Language"  = "J\u0119zyk",
   "Yes" = "Tak",
@@ -698,6 +705,7 @@ pkgEnv$label_ja = list(
   "Reset my password" = "\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u30ea\u30bb\u30c3\u30c8",
   "Email:" = "\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "\u30a2\u30ab\u30a6\u30f3\u30c8\u304c\u5b58\u5728\u3057\u3001\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u304c\u767b\u9332\u3055\u308c\u3066\u3044\u308b\u5834\u5408\u3001\u4eee\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u8a18\u8f09\u3057\u305f\u30e1\u30fc\u30eb\u3092\u9001\u4fe1\u3057\u307e\u3057\u305f\u3002",
+  "Your temporary password has expired, please request a new one." = "\u4eee\u30d1\u30b9\u30ef\u30fc\u30c9\u306e\u6709\u52b9\u671f\u9650\u304c\u5207\u308c\u307e\u3057\u305f\u3002\u65b0\u3057\u3044\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u7533\u8acb\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
   "You are not authorized for this application" = "\u3053\u306e\u30a2\u30d7\u30ea\u30b1\u30fc\u30b7\u30e7\u30f3\u306e\u5229\u7528\u3092\u3042\u306a\u305f\u306f\u8a31\u53ef\u3055\u308c\u3066\u3044\u307e\u305b\u3093",
   "Language"  = "\u8a00\u8a9e",
   "Yes" = "\u306f\u3044",
@@ -788,6 +796,7 @@ pkgEnv$label_el = list(
   "Reset my password" = "\u0395\u03c0\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac \u03c4\u03bf\u03c5 \u03ba\u03c9\u03b4\u03b9\u03ba\u03bf\u03cd \u03bc\u03bf\u03c5",
   "Email:" = "Email:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "\u0395\u03ac\u03bd \u03bf \u03bb\u03bf\u03b3\u03b1\u03c1\u03b9\u03b1\u03c3\u03bc\u03cc\u03c2 \u03c5\u03c0\u03ac\u03c1\u03c7\u03b5\u03b9 \u03ba\u03b1\u03b9 \u03ad\u03c7\u03b5\u03b9 \u03c3\u03c5\u03c3\u03c7\u03b5\u03c4\u03b9\u03c3\u03c4\u03b5\u03af \u03b4\u03b9\u03b5\u03cd\u03b8\u03c5\u03bd\u03c3\u03b7 email, \u03ad\u03c7\u03b5\u03b9 \u03c3\u03c4\u03b1\u03bb\u03b5\u03af \u03ad\u03bd\u03b1 email \u03bc\u03b5 \u03c0\u03c1\u03bf\u03c3\u03c9\u03c1\u03b9\u03bd\u03cc \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2.",
+  "Your temporary password has expired, please request a new one." = "\u039f \u03c0\u03c1\u03bf\u03c3\u03c9\u03c1\u03b9\u03bd\u03cc\u03c2 \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 \u03c0\u03c1\u03cc\u03c3\u03b2\u03b1\u03c3\u03b7\u03c2 \u03ad\u03c7\u03b5\u03b9 \u03bb\u03ae\u03be\u03b5\u03b9, \u03b6\u03b7\u03c4\u03ae\u03c3\u03c4\u03b5 \u03bd\u03ad\u03bf.",
   "You are not authorized for this application" = "\u0394\u03b5\u03bd \u03b5\u03af\u03c3\u03c4\u03b5 \u03b5\u03be\u03bf\u03c5\u03c3\u03b9\u03bf\u03b4\u03bf\u03c4\u03b7\u03bc\u03ad\u03bd\u03bf\u03b9 \u03b3\u03b9\u03b1 \u03b1\u03c5\u03c4\u03ae\u03bd \u03c4\u03b7\u03bd \u03b5\u03c6\u03b1\u03c1\u03bc\u03bf\u03b3\u03ae",
   "Language"  = "\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",
   "Yes" = "\u039d\u03b1\u03b9",
@@ -809,7 +818,6 @@ pkgEnv$label_el = list(
   "Nb logged" = "\u03a3\u03b7\u03bc. \u03ba\u03b1\u03c4\u03b1\u03b3\u03c1\u03ac\u03c6\u03b7\u03ba\u03b5",
   "Allowed null values" = "\u0395\u03c0\u03b9\u03c4\u03c1\u03b5\u03c0\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03bc\u03b7\u03b4\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 (null) \u03c4\u03b9\u03bc\u03ad\u03c2"
 )
-
 
 pkgEnv$label_id = list(
   "Please authenticate" = "Masuk",
@@ -879,6 +887,7 @@ pkgEnv$label_id = list(
   "Reset my password" = "Atur ulang kata sandi saya",
   "Email:" = "Email:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Jika akun ada dan memiliki alamat email yang terkait, email berisi kata sandi sementara telah dikirim.",
+  "Your temporary password has expired, please request a new one." = "Kata sandi sementara Anda telah kedaluwarsa, silakan minta yang baru.",
   "You are not authorized for this application" = "Anda tidak memiliki akses untuk aplikasi ini",
   "Language"  = "Bahasa",
   "Yes" = "Ya",
@@ -901,7 +910,6 @@ pkgEnv$label_id = list(
   "Allowed null values" = "Nilai kosong diperbolehkan"
 )
 
-
 pkgEnv$label_no = list(
   "Please authenticate" = "Vennligst godkjenn",
   "Username:" = "Brukernavn:",
@@ -923,7 +931,7 @@ pkgEnv$label_no = list(
   "Administrator mode" = "Administratormodus",
   "Add a user" = "Legg til en bruker",
   "Too many users" = "For mange brukere",
-  "Maximum number of users : %s" = "Maximalt antall brukere: %s",
+  "Maximum number of users: %s" = "Maximalt antall brukere: %s",
   "Failed to update user" = "Kunne ikke oppdatere bruker",
   "User successfully updated" = "Bruker opdatert",
   "Cancel" = "Avbryte",
@@ -970,6 +978,7 @@ pkgEnv$label_no = list(
   "Reset my password" = "Tilbakestill passordet mitt",
   "Email:" = "E-post:",
   "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Hvis kontoen finnes og en e-postadresse er knyttet til den, er det sendt en e-post med et midlertidig passord.",
+  "Your temporary password has expired, please request a new one." = "Det midlertidige passordet ditt har utl\u00f8pt, be om et nytt.",
   "You are not authorized for this application" = "Du er ikke autorisert for denne applikasjonen",
   "Language"  = "Spr\u00e5k",
   "Yes" = "Ja",
@@ -992,8 +1001,99 @@ pkgEnv$label_no = list(
   "Allowed null values" = "Tillatte nullverdier"
 )
 
-v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")
-names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "\u4e2d\u6587", "Norsk")
+pkgEnv$label_it = list(
+  "Please authenticate" = "Autenticati per favore",
+  "Username:" = "Nome utente:",
+  "Password:" = "Password:",
+  "Login" = "Accedi",
+  "Username or password are incorrect" = "Nome utente o password non corretti",
+  "Your account has expired" = "Il tuo account \u00e8 scaduto",
+  "Your account is locked" = "Il tuo account \u00e8 bloccato",
+  "Please change your password" = "Cambia la tua password per favore",
+  "New password cannot be the same as old" = "La nuova password non pu\u00f2 essere uguale alla vecchia",
+  "New password:" = "Nuova password:",
+  "Confirm password:" = "Conferma password:",
+  "Update new password" = "Aggiorna nuova password",
+  "Password successfully updated! Please re-login" = "Password aggiornata con successo! Effettua di nuovo l'accesso",
+  "The two passwords are different" = "Le due password sono diverse",
+  "Failed to update password" = "Aggiornamento della password non riuscito",
+  "Logout" = "Disconnetti",
+  "Go to application" = "Vai all'applicazione",
+  "Administrator mode" = "Modalit\u00e0 amministratore",
+  "Add a user" = "Aggiungi un utente",
+  "Too many users" = "Troppi utenti",
+  "Maximum number of users: %s" = "Numero massimo di utenti: %s",
+  "Failed to update user" = "Aggiornamento utente non riuscito",
+  "User successfully updated" = "Utente aggiornato con successo",
+  "Cancel" = "Annulla",
+  "Confirm new user" = "Conferma nuovo utente",
+  "Confirm change" = "Conferma modifica",
+  "Are you sure to remove user(s): %s from the database ?" = "Sei sicuro di voler rimuovere l'utente/gli utenti: %s dal database?",
+  "Delete user(s)" = "Elimina utente/i",
+  "Delete user" = "Elimina utente",
+  "Edit user" = "Modifica utente",
+  "User already exist!" = "L'utente esiste gi\u00e0!",
+  "Dismiss" = "Chiudi",
+  "New user %s succesfully created!" = "Nuovo utente %s creato con successo!",
+  "Ask to change password" = "Chiedi di cambiare la password",
+  "Confirm" = "Conferma",
+  "Ask %s to change password on next connection?" = "Chiedere a %s di cambiare la password al prossimo accesso?",
+  "Change saved!" = "Modifica salvata!",
+  "Failed to update the database" = "Aggiornamento del database non riuscito",
+  "Password does not respect safety requirements" = "La password non rispetta i requisiti di sicurezza",
+  "Password must contain at least one number, one lowercase, one uppercase and must be at least length 6." = "La password deve contenere almeno un numero, una lettera minuscola, una maiuscola e deve essere lunga almeno 6 caratteri.",
+  "Number of connections per user" = "Numero di connessioni per utente",
+  "Number of connections per day" = "Numero di connessioni al giorno",
+  "Total number of connection" = "Numero totale di connessioni",
+  "You can\'t remove yourself!" = "Non puoi rimuovere te stesso!",
+  "User:" = "Utente:",
+  "Period:" = "Periodo:",
+  "Last week" = "Settimana scorsa",
+  "Last month" = "Mese scorso",
+  "All period" = "Tutto il periodo",
+  "Home" = "Home",
+  "Select all shown users" = "Seleziona tutti gli utenti mostrati",
+  "Remove selected users" = "Rimuovi gli utenti selezionati",
+  "Edit selected users" = "Modifica gli utenti selezionati",
+  "Force selected users to change password" = "Forza gli utenti selezionati a cambiare password",
+  "Users" = "Utenti",
+  "Passwords" = "Password",
+  "Download logs database" = "Scarica database dei log",
+  "Download SQL database" = "Scarica database SQL",
+  "Download Users file" = "Scarica file utenti",
+  "Reset password for %s?" = "Reimpostare la password per %s?",
+  "Reset password" = "Reimposta password",
+  "Temporary password:" = "Password temporanea:",
+  "Password succesfully reset!" = "Password reimpostata con successo!",
+  "Forgot password?" = "Password dimenticata?",
+  "Reset my password" = "Reimposta la mia password",
+  "Email:" = "Email:",
+  "If the account exists and an email address is associated with it, an email containing a temporary password has been sent." = "Se l\'account esiste ed \u00e8 associato a un indirizzo email, \u00e8 stata inviata un\'email contenente una password temporanea.",
+  "Your temporary password has expired, please request a new one." = "La tua password temporanea \u00e8 scaduta, richiedine una nuova.",
+  "You are not authorized for this application" = "Non sei autorizzato per questa applicazione",
+  "Language" = "Lingua",
+  "Yes" = "S\u00ec",
+  "No" = "No",
+  "Password" = "Password",
+  "start" = "inizio",
+  "expire" = "scadenza",
+  "admin" = "Amministratore",
+  "user" = "Utente",
+  "Edit" = "Modifica",
+  "Remove" = "Rimuovi",
+  "must_change" = "Deve cambiare",
+  "have_changed" = "Ha cambiato",
+  "date_change" = "Data",
+  "Change password" = "Cambia password",
+  "Select" = "Seleziona",
+  "Logs" = "Registri",
+  "All users" = "Tutti gli utenti",
+  "Nb logged" = "Connessioni",
+  "Allowed null values" = "Valori null ammessi"
+)
+
+v_language_registered = c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")
+names(v_language_registered) = c("English", "Fran\u00e7ais", "Portuguese", "Espa\u00f1ol", "Deutsch", "Polski", "\u65e5\u672c\u8a9e", "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", "Indonesian", "\u4e2d\u6587", "Norsk", "Italiano")
 
 
 #' @importFrom R6 R6Class
@@ -1020,7 +1120,8 @@ language <- R6::R6Class(
                                   "el" = pkgEnv$label_el,
                                   "id" = pkgEnv$label_id,
                                   "zh-CN" = pkgEnv$label_cn,
-                                  "no" = pkgEnv$label_no
+                                  "no" = pkgEnv$label_no,
+                                  "it" = pkgEnv$label_it
       )
     },
     get = function(label) {
@@ -1062,7 +1163,8 @@ language <- R6::R6Class(
       "el" = "el",
       "id" = "id",
       "zh-CN" = "zh-CN",
-      "no" = "no"
+      "no" = "no",
+      "it" = "it"
     ),
     DT_lan = list(
       fr = list(
@@ -1312,6 +1414,29 @@ language <- R6::R6Class(
           sSortAscending = ": aktiver for \u00e5 sortere kolonnen stigende",
           sSortDescending = ": aktiver for \u00e5 sortere kolonnen synkende"
         )
+      ),
+      it = list(
+        sEmptyTable = "Nessun dato disponibile nella tabella",
+        sInfo = "Visualizzazione da _START_ a _END_ di _TOTAL_ elementi",
+        sInfoEmpty = "Visualizzazione da 0 a 0 di 0 elementi",
+        sInfoFiltered = "(filtrato da _MAX_ elementi totali)",
+        sInfoPostFix = "",
+        sInfoThousands = ",",
+        sLengthMenu = "Mostra _MENU_ elementi",
+        sLoadingRecords = "Caricamento in corso...",
+        sProcessing = "Elaborazione in corso...",
+        sSearch = "Cerca:",
+        sZeroRecords = "Nessun record corrispondente trovato",
+        oPaginate = list(
+          sFirst = "Primo",
+          sLast = "Ultimo",
+          sNext = "Successivo",
+          sPrevious = "Precedente"
+        ),
+        oAria = list(
+          sSortAscending = ": attivare per ordinare la colonna in modo crescente",
+          sSortDescending = ": attivare per ordinare la colonna in modo decrescente"
+        )
       )
     ),
     length = function() base::length(private$labels)
@@ -1324,7 +1449,7 @@ language <- R6::R6Class(
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".
+#' @param lan Language to use for labels, supported values are : "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".
 #'
 #' @return A language object
 #' @export
@@ -1345,7 +1470,7 @@ use_language <- function(lan = "en") {
 #' @description See all labels registered with \code{get_labels()},
 #'  then set custom text with \code{set_labels()}.
 #'
-#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no".
+#' @param language Language to use for labels, supported values are :  "en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it".
 #' @param ... A named list with labels to replace or several named argument
 #'
 #' @return \code{get_labels()} return a named list with all labels registered.
@@ -1374,8 +1499,8 @@ use_language <- function(lan = "en") {
 #' )
 set_labels <- function(language, ...) {
 
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
-    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")) {
+    stop("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no, it", call. = FALSE)
   }
   args <- list(...)
   # named list in input ?
@@ -1397,7 +1522,8 @@ set_labels <- function(language, ...) {
                    "el" = pkgEnv$label_el,
                    "id" = pkgEnv$label_id,
                    "zh-CN" = pkgEnv$label_cn,
-                   "no" = pkgEnv$label_no
+                   "no" = pkgEnv$label_no,
+                   "it" = pkgEnv$label_it
   )
 
   update_labels <- modifyList(
@@ -1427,6 +1553,8 @@ set_labels <- function(language, ...) {
     pkgEnv$label_id <- update_labels
   } else if (language %in% "no") {
     pkgEnv$label_no <- update_labels
+  } else if (language %in% "it") {
+    pkgEnv$label_it <- update_labels
   }
 
   invisible(TRUE)
@@ -1437,8 +1565,8 @@ set_labels <- function(language, ...) {
 #' @rdname custom-labels
 get_labels <- function(language = "en") {
 
-  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")) {
-    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no", call. = FALSE)
+  if (!language %in% c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")) {
+    warning("Only supported language for the now are: en, fr, pt-BR, es, de, pl, ja, el, id, zh-CN, no, it", call. = FALSE)
     language <- "en"
   }
 
@@ -1453,6 +1581,7 @@ get_labels <- function(language = "en") {
           "zh-CN" = pkgEnv$label_cn,
           "el" = pkgEnv$label_el,
           "id" = pkgEnv$label_id,
-          "no" = pkgEnv$label_no
+          "no" = pkgEnv$label_no,
+          "it" = pkgEnv$label_it
   )
 }

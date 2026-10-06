@@ -1,4 +1,4 @@
-# shinymanager 1.1.0.1
+# shinymanager 1.1.1.1
 
 * FEAT: optional email sending, with no mandatory dependency. Provide a `send_mail`
   function to `secure_server()` (any backend), or use the optional helper `send_smtp_mail()`
@@ -12,6 +12,17 @@
   admin logs (`Reset password`, `Reset password: unknown user`, `... wrong email`, `... no email`).
   The `send_mail` function must raise an error when sending fails, otherwise the password would be
   reset without the user receiving it.
+* FEAT: `options("shinymanager.reset_password_validity" = X)` limits the validity of the emailed
+  temporary password to X minutes (default : no expiration). Stored as text (UTC) in a
+  `temp_pwd_expire` column of `pwd_mngt` (created automatically with SQLite, to add manually as a
+  text column with a SQL backend). Admin-generated passwords are not concerned; an admin reset
+  cancels a pending emailed password. Login with an expired temporary password shows a dedicated
+  message (translated) and is logged as `Reset password: expired`.
+
+# shinymanager 1.1.1
+
+* (#222) Added Italian Language, Thanks @stewerner
+* FIX Norwegian label "Maximum number of users: %s"
 
 # shinymanager 1.1.0
 

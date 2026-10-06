@@ -9,7 +9,7 @@
 #' @param tags_bottom A \code{tags (div, img, ...)} to be displayed on bottom of the authentication module.
 #' @param background A optionnal \code{css} for authentication background. See example.
 #' @param choose_language \code{logical/character}. Add language selection on top ? TRUE for all supported languages
-#' or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no")}. If enabled, \code{input$shinymanager_language} is created
+#' or a vector of possibilities like \code{c("en", "fr", "pt-BR", "es", "de", "pl", "ja", "el", "id", "zh-CN", "no", "it")}. If enabled, \code{input$shinymanager_language} is created
 #' @param ... : Used for old version compatibility.
 #'
 #'
@@ -267,8 +267,11 @@ auth_server <- function(input, output, session,
     if(length(pwd_failure_limit) > 0 && !is.na(pwd_failure_limit) && !is.infinite(pwd_failure_limit)){
       locked <- check_locked_account(input$user_id, pwd_failure_limit)
     }
-    
-    if (isTRUE(res_auth$result) & !locked) {
+
+    # temporary password sent by the self-service reset and no longer valid ?
+    temp_pwd_expired <- isTRUE(res_auth$result) && is_temp_pwd_expired(input$user_id)
+
+    if (isTRUE(res_auth$result) & !locked & !temp_pwd_expired) {
       removeUI(selector = jns("auth-mod"))
       authentication$result <- TRUE
       authentication$user <- input$user_id
@@ -294,7 +297,21 @@ auth_server <- function(input, output, session,
           icon("triangle-exclamation"), lan()$get("Your account is locked")
         )
       )
-      
+
+    } else if (isTRUE(res_auth$result) & temp_pwd_expired) {
+
+      # dedicated message: only shown to someone who knows the (temporary)
+      # password, so it reveals nothing about which accounts exist
+      save_logs_failed(input$user_id, status = "Reset password: expired")
+
+      insertUI(
+        selector = jns("result_auth"),
+        ui = tags$div(
+          id = ns("msg_auth"), class = "alert alert-danger",
+          icon("triangle-exclamation"), lan()$get("Your temporary password has expired, please request a new one.")
+        )
+      )
+
     } else {
       if (is.null(res_auth$user_info)) {
         save_logs_failed(input$user_id, status = "Unknown user")

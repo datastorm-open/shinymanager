@@ -270,6 +270,88 @@ test_that("save_reset_logs writes a mapped status, skips config/empty reasons", 
   expect_equal(nrow(read_db_decrypt(tmp_sqlite, "logs", "secret")), n)
 })
 
+test_that("get_reset_password_validity reads the option, NA when unset or invalid", {
+  old <- options(shinymanager.reset_password_validity = NULL)
+  expect_true(is.na(get_reset_password_validity()))
+  options(shinymanager.reset_password_validity = 20)
+  expect_equal(get_reset_password_validity(), 20)
+  options(shinymanager.reset_password_validity = -5)
+  expect_true(is.na(get_reset_password_validity()))
+  options(shinymanager.reset_password_validity = "abc")
+  expect_true(is.na(get_reset_password_validity()))
+  options(old)
+})
+
+test_that("without validity option, no expiration column is created", {
+  tmp6 <- tempfile(fileext = ".sqlite")
+  create_db(credentials_data = credentials, sqlite_path = tmp6, passphrase = "secret")
+  old <- options(shinymanager.reset_password_validity = NULL)
+  .tok$set_sqlite_path(tmp6)
+  .tok$set_send_mail(fake_mail_ok)
+
+  expect_true(reset_pwd_user_email("fanny", "fanny@mail.com")$result)
+  pm <- read_db_decrypt(tmp6, "pwd_mngt", "secret")
+  expect_false("temp_pwd_expire" %in% colnames(pm))
+  expect_false(is_temp_pwd_expired("fanny"))
+
+  options(old)
+  .tok$set_sqlite_path(tmp_sqlite)
+})
+
+test_that("with validity option, the mailed password gets an expiration", {
+  tmp7 <- tempfile(fileext = ".sqlite")
+  create_db(credentials_data = credentials, sqlite_path = tmp7, passphrase = "secret")
+  old <- options(shinymanager.reset_password_validity = 20)
+  .tok$set_sqlite_path(tmp7)
+  .tok$set_send_mail(fake_mail_ok)
+
+  expect_true(reset_pwd_user_email("fanny", "fanny@mail.com")$result)
+  pm <- read_db_decrypt(tmp7, "pwd_mngt", "secret")
+  expire <- as.POSIXct(pm$temp_pwd_expire[pm$user == "fanny"], tz = "UTC")
+  expect_true(expire > Sys.time() + 19 * 60 && expire <= Sys.time() + 20 * 60)
+  # other users are not concerned
+  expect_equal(pm$temp_pwd_expire[pm$user == "victor"], "")
+  expect_false(is_temp_pwd_expired("fanny"))
+  expect_false(is_temp_pwd_expired("victor"))
+
+  # once the validity has passed, the temporary password is expired
+  set_temp_pwd_expire("fanny", "2000-01-01 00:00:00")
+  expect_true(is_temp_pwd_expired("fanny"))
+
+  # a new request replaces the previous expiration
+  expect_true(reset_pwd_user_email("fanny", "fanny@mail.com")$result)
+  expect_false(is_temp_pwd_expired("fanny"))
+
+  # a new request without the option removes the expiration
+  set_temp_pwd_expire("fanny", "2000-01-01 00:00:00")
+  options(shinymanager.reset_password_validity = NULL)
+  expect_true(reset_pwd_user_email("fanny", "fanny@mail.com")$result)
+  expect_false(is_temp_pwd_expired("fanny"))
+
+  options(old)
+  .tok$set_sqlite_path(tmp_sqlite)
+})
+
+test_that("changing the password (or an admin reset) clears the expiration", {
+  tmp8 <- tempfile(fileext = ".sqlite")
+  create_db(credentials_data = credentials, sqlite_path = tmp8, passphrase = "secret")
+  .tok$set_sqlite_path(tmp8)
+
+  set_temp_pwd_expire("fanny", "2000-01-01 00:00:00")
+  expect_true(is_temp_pwd_expired("fanny"))
+  expect_true(update_pwd("fanny", "NewPassword1")$result)
+  pm <- read_db_decrypt(tmp8, "pwd_mngt", "secret")
+  expect_equal(pm$temp_pwd_expire[pm$user == "fanny"], "")
+  expect_false(is_temp_pwd_expired("fanny"))
+
+  # admin reset path: clearing
+  set_temp_pwd_expire("victor", "2000-01-01 00:00:00")
+  set_temp_pwd_expire("victor", "")
+  expect_false(is_temp_pwd_expired("victor"))
+
+  .tok$set_sqlite_path(tmp_sqlite)
+})
+
 # reset the shared token store so later test files start clean
 .tok$set_sqlite_path(NULL)
 .tok$set_passphrase(NULL)
