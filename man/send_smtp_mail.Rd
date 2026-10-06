@@ -13,7 +13,9 @@ send_smtp_mail(
   port = 587,
   username = NULL,
   password = NULL,
-  html = FALSE
+  html = FALSE,
+  timeout = 30,
+  max_times = 1
 )
 }
 \arguments{
@@ -34,6 +36,13 @@ send_smtp_mail(
 \item{password}{Password used to authenticate on the SMTP server. Optional.}
 
 \item{html}{Logical, is \code{body} an HTML content ? Default to \code{FALSE}.}
+
+\item{timeout}{Maximum time, in seconds, allowed for each sending attempt
+(curl \code{timeout} option). Default to \code{30}. Sending blocks the R process
+(and so every user served by it), so keep it short.}
+
+\item{max_times}{Maximum number of sending attempts (\code{emayili} retries with an
+exponential backoff). Default to \code{1} (no retry): the user can simply ask again.}
 }
 \value{
 \code{TRUE} invisibly on success. An error is raised if \code{emayili}

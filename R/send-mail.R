@@ -16,6 +16,11 @@
 #' @param username Username used to authenticate on the SMTP server. Optional.
 #' @param password Password used to authenticate on the SMTP server. Optional.
 #' @param html Logical, is \code{body} an HTML content ? Default to \code{FALSE}.
+#' @param timeout Maximum time, in seconds, allowed for each sending attempt
+#'  (curl \code{timeout} option). Default to \code{30}. Sending blocks the R process
+#'  (and so every user served by it), so keep it short.
+#' @param max_times Maximum number of sending attempts (\code{emayili} retries with an
+#'  exponential backoff). Default to \code{1} (no retry): the user can simply ask again.
 #'
 #' @return \code{TRUE} invisibly on success. An error is raised if \code{emayili}
 #'  is not installed or if sending fails.
@@ -46,7 +51,7 @@
 send_smtp_mail <- function(to, subject, body, from,
                            host, port = 587,
                            username = NULL, password = NULL,
-                           html = FALSE) {
+                           html = FALSE, timeout = 30, max_times = 1) {
   if (!requireNamespace("emayili", quietly = TRUE)) {
     stop(
       "Package 'emayili' is required to use send_smtp_mail(). ",
@@ -70,7 +75,11 @@ send_smtp_mail <- function(to, subject, body, from,
     host = host,
     port = port,
     username = username,
-    password = password
+    password = password,
+    # bound the time the R process can be blocked by an unresponsive server:
+    # no retry by default, and 'timeout' is passed to curl through '...'
+    max_times = max_times,
+    timeout = timeout
   )
   smtp(msg, verbose = FALSE)
 

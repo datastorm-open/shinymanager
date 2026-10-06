@@ -18,6 +18,9 @@
   text column with a SQL backend). Admin-generated passwords are not concerned; an admin reset
   cancels a pending emailed password. Login with an expired temporary password shows a dedicated
   message (translated) and is logged as `Reset password: expired`.
+* `send_smtp_mail()` gains `timeout` (seconds per attempt, default `30`) and `max_times`
+  (sending attempts, default `1`) to bound the time an unresponsive SMTP server can block
+  the R process.
 
 # shinymanager 1.1.1
 
