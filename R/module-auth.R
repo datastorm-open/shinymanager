@@ -517,7 +517,3 @@ auth_server <- function(input, output, session,
 
   return(authentication)
 }
-
-
-
-

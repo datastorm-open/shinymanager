@@ -1,5 +1,7 @@
-# shinymanager 1.1.1.1
+# shinymanager 1.1.1
 
+* (#222) Added Italian Language, Thanks @stewerner
+* FIX Norwegian label "Maximum number of users: %s"
 * SECURITY FIX: the admin operations (add, edit, delete users, change or reset passwords,
   downloads) are now checked on the server: they need a valid (not revoked, not timed out) admin
   token. Before, the admin module was started for every session and its inputs were accepted
@@ -47,7 +49,6 @@
   configuration errors).
 * DOC: the temporary password replaces the current one when the email is sent: recommendation to
   use the `TRUE` mode and to set `shinymanager.reset_password_max` knowing this risk.
-
 * FEAT: optional email sending, with no mandatory dependency. Provide a `send_mail`
   function to `secure_server()` (any backend), or use the optional helper `send_smtp_mail()`
   (based on `emayili`, in Suggests).
@@ -95,12 +96,7 @@
 * `send_smtp_mail()` gains `timeout` (seconds per attempt, default `30`) and `max_times`
   (sending attempts, default `1`) to bound the time an unresponsive SMTP server can block
   the R process.
-
-# shinymanager 1.1.1
-
-* (#222) Added Italian Language, Thanks @stewerner
-* FIX Norwegian label "Maximum number of users: %s"
-
+  
 # shinymanager 1.1.0
 
 * (#220) Added Norwegian Language, Thanks @mcldrchl
