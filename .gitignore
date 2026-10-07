@@ -13,3 +13,4 @@ inst/demo_app/rsconnect
 
 qf_pg_template.yml
 test_db.R
+*.tar.gz

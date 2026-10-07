@@ -138,7 +138,20 @@ It requires a \code{email} column in the credentials, a \code{send_mail} functio
    the email stored for that user (if any).
 }
 In both cases a temporary password is generated, emailed, and the user is forced to change
-it on next login. The same generic confirmation message is always displayed to avoid account enumeration.
+it on next login. A generic confirmation message is displayed (before sending the email) to avoid
+account enumeration. Known limits: an account that can't reset its password (see
+\code{shinymanager.reset_password_max} and \code{shinymanager.reset_password_unlock} below) gets
+a dedicated message and a failed sending (SMTP error, misconfiguration) shows an error popup;
+both reveal that the account exists. The reset button is enabled again after the same minimal
+delay (a few seconds) whatever the outcome, unless the sending takes longer.
+Each attempt is logged (\code{Reset password}, \code{Reset password: <reason>}) and sending errors are
+also raised as R warnings. No reset is done for an expired account or an account not authorized
+for the application.
+Note: the temporary password replaces the current one as soon as the email is sent, before the
+user proves access to the mailbox. Anyone who knows a username (and its email with \code{TRUE})
+can thus invalidate the password of this account, and use up its resets when
+\code{shinymanager.reset_password_max} is set. We recommend the \code{TRUE} mode rather than
+\code{"username"}, and to set \code{shinymanager.reset_password_max} knowing this risk.
 By default the email is looked up in the \code{email} column; use
 \code{options("shinymanager.email_column" = "my_col")} to use another column name.
 
@@ -152,6 +165,23 @@ The \code{send_mail} function does not receive the validity: mention it in the e
 The expiration is stored as text (UTC) in a \code{temp_pwd_expire} column of the \code{pwd_mngt}
 table: created automatically with SQLite, to be added manually as a text column with a SQL backend
 (without it, the temporary password does not expire).
+
+Using \code{options("shinymanager.reset_password_max")}, you can limit the number of password
+resets a user can request in a row (e.g. \code{3}). Default to \code{Inf} (no limit). The counter
+is reset on the next successful login with a non temporary password, or by an admin reset. It is
+stored in a \code{n_user_reset} column of the \code{pwd_mngt} table: created automatically with
+SQLite, to be added manually as an integer column with a SQL backend (without it, no limit).
+
+Using \code{options("shinymanager.reset_password_cooldown")}, you can set the minimal time, in
+seconds (not minutes, unlike \code{timeout} and \code{shinymanager.reset_password_validity}),
+before a user who received a reset email can get a new one. Default to \code{60};
+\code{0} for no limit. It is checked on the server: a request within this time gets the same
+generic message, sends nothing and is logged as \code{Reset password: too soon}. This limit is
+kept in memory: it is lost when the application restarts, and each R process (worker) has its own.
+
+Using \code{options("shinymanager.reset_password_unlock")}, you can choose whether a password
+reset unlocks an account locked by \code{shinymanager.pwd_failure_limit}. Default to \code{TRUE};
+with \code{FALSE}, only an admin can unlock it and no email is sent.
 }
 \note{
 A special input value will be accessible server-side with \code{input$shinymanager_where}

@@ -137,6 +137,12 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   }
   
   token_start <- isolate(getToken(session = session))
+
+  # checked on the server before each change / download: the token must still
+  # be valid (not revoked, not timed out) and belong to an admin
+  admin_allowed <- function() {
+    .tok$is_active(token_start) && .tok$is_admin(token_start)
+  }
   
   update_read_db <- reactiveValues(x = NULL)
   
@@ -298,7 +304,16 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     pwds <- pwds()
     
     if("n_wrong_pwd" %in% colnames(pwds)){
+      # locked account, when a failure limit is set
+      pwd_failure_limit <- suppressWarnings(as.numeric(get_pwd_failure_limit()))
+      if(is_finite_limit(pwd_failure_limit)){
+        pwds$Locked <- ifelse(!is.na(pwds$n_wrong_pwd) & pwds$n_wrong_pwd >= pwd_failure_limit, lan()$get("Yes"), lan()$get("No"))
+      }
       pwds$n_wrong_pwd <- NULL
+    }
+    # number of self-service resets in a row, only shown when a limit is set
+    if("n_user_reset" %in% colnames(pwds) && is.infinite(get_reset_password_max())){
+      pwds$n_user_reset <- NULL
     }
     if("temp_pwd_expire" %in% colnames(pwds)){
       pwds$temp_pwd_expire <- NULL
@@ -371,6 +386,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   })
   
   observeEvent(input$delete_selected_users, {
+    req(admin_allowed())
     users <- users()
     to_delete <- r_selected_users()
     
@@ -424,6 +440,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   })
   
   observeEvent(input$changed_password_users, {
+    req(admin_allowed())
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
@@ -495,6 +512,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # Write in database edited values for the user
   observeEvent(input$edited_user, {
+    req(admin_allowed())
     users <- users()
     pwds <- pwds()
     newval <- value_edited$user
@@ -536,7 +554,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     removeModal()
     
     if (inherits(res_edit, "try-error")) {
-      showNotification(ui = lan()$get("Fail to update user"), type = "error")
+      showNotification(ui = lan()$get("Failed to update user"), type = "error")
     } else {
       showNotification(ui = lan()$get("User successfully updated"), type = "message")
       update_read_db$x <- Sys.time()
@@ -567,6 +585,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   value_mult_edited <- callModule(module = edit_user, id = "edit_mult_user")
   
   observeEvent(input$edited_mult_user, {
+    req(admin_allowed())
     users <- users()
     newval <- value_mult_edited$user
     newval$user <- newval$admin <- NULL
@@ -600,7 +619,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     removeModal()
     
     if (inherits(res_edit, "try-error")) {
-      showNotification(ui = lan()$get("Fail to update user"), type = "error")
+      showNotification(ui = lan()$get("Failed to update user"), type = "error")
     } else {
       showNotification(ui = lan()$get("User successfully updated"), type = "message")
       update_read_db$x <- Sys.time()
@@ -615,7 +634,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       showModal(
         modalDialog(
           title = lan()$get("Too many users"),
-          sprintf(lan()$get("Maximum number of users : %s"), max_users)
+          sprintf(lan()$get("Maximum number of users: %s"), max_users)
         )
       )
     } else {
@@ -665,6 +684,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # write in database the new user and display his password
   observeEvent(input$added_user, {
+    req(admin_allowed())
     users <- users()
     newuser <- value_added$user
     if("must_change" %in% names(newuser)){
@@ -713,6 +733,9 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         # column added by the self-service reset: empty = no expiration
         if("temp_pwd_expire" %in% colnames(resetpwd)){
           newpwd$temp_pwd_expire <- ""
+        }
+        if("n_user_reset" %in% colnames(resetpwd)){
+          newpwd$n_user_reset <- 0
         }
         resetpwd <- rbind(resetpwd, newpwd)
         write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
@@ -765,6 +788,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # store in database that the user must change password on next connection
   observeEvent(input$changed_password, {
+    req(admin_allowed())
     showModal(
       modalDialog(
         title = NULL, footer = NULL, size = "s", easyClose = FALSE, 
@@ -790,6 +814,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     reset_pwd_modal(ns("reseted_password"), input$reset_pwd, lan())
   })
   observeEvent(input$reseted_password, {
+    req(admin_allowed())
     password <- generate_pwd()
     
     showModal(
@@ -828,6 +853,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       force_chg_pwd(input$reset_pwd)
       # admin-generated password: no expiration, cancels a mailed temporary one
       set_temp_pwd_expire(input$reset_pwd, "")
+      # and restarts the self-service reset counter
+      set_pwd_mngt_optional(input$reset_pwd, name = "n_user_reset", value = 0, empty = 0)
     }, silent = TRUE)
     
     removeModal()
@@ -861,6 +888,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
   
   # delete the user
   observeEvent(input$delete_user, {
+    req(admin_allowed())
     
     showModal(
       modalDialog(
@@ -908,6 +936,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       paste('shinymanager-sql-', Sys.Date(), '.sqlite', sep = '')
     },
     content = function(con) {
+      req(admin_allowed())
       req("db" %in% get_download())
       file.copy(sqlite_path, con)
     }
@@ -919,6 +948,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       paste('shinymanager-users-', Sys.Date(), '.csv', sep = '')
     },
     content = function(con) {
+      req(admin_allowed())
       req("users" %in% get_download())
       conn <- dbConnect(SQLite(), dbname = sqlite_path)
       on.exit(dbDisconnect(conn))

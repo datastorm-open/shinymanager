@@ -17,12 +17,14 @@ credentials <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# # Create credentials DB (only once)
-# create_db(
-#   credentials_data = credentials,
-#   sqlite_path = "credentials.sqlite",
-#   passphrase = "supersecret"
-# )
+# Create credentials DB (only once)
+if (!file.exists("credentials.sqlite")) {
+  create_db(
+    credentials_data = credentials,
+    sqlite_path = "credentials.sqlite",
+    passphrase = "supersecret"
+  )
+}
 
 set_labels(
   language = "en",

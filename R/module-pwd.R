@@ -126,6 +126,10 @@ pwd_server <- function(input, output, session, user, update_pwd, validate_pwd = 
   password <- reactiveValues(result = FALSE, user = NULL, relog = NULL)
   
   observeEvent(input$update_pwd, {
+    # with a token, it must still be valid (not revoked, not timed out)
+    if (isTRUE(use_token)) {
+      req(.tok$is_active(getToken(session = session)))
+    }
     password$relog <- NULL
     removeUI(selector = jns("msg_pwd"))
     

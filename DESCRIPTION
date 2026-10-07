@@ -24,13 +24,14 @@ Imports:
     billboarder,
     scrypt,
     yaml,
-    glue
+    glue,
+    later
 Suggests:
     keyring,
-    testthat (>= 2.1.0),
+    testthat (>= 3.1.7),
     knitr,
     rmarkdown,
     RPostgres,
     sparklyr,
-    emayili
+    emayili (>= 0.4.16)
 VignetteBuilder: knitr
