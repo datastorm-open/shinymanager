@@ -8,6 +8,7 @@ credentials <- data.frame(
   password = c("shiny", "shinymanager"),
   # password will automatically be hashed
   admin = c(FALSE, TRUE), # utilisateurs avec droits d'admin ?
+  email = c("shiny@example.com", "shinymanager@example.com"),
   stringsAsFactors = FALSE
 )
 
@@ -18,3 +19,4 @@ create_db(
   sqlite_path = "database.sqlite", # elle sera crée
   passphrase = "passphrase_wihtout_keyring"
 )
+options("shinymanager.reset_password" = TRUE)

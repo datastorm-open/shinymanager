@@ -43,6 +43,63 @@ get_pwd_failure_limit <- function(){
   getOption("shinymanager.pwd_failure_limit", default = Inf)
 }
 
+# TRUE if 'limit' is a single finite number, i.e. a password failure limit is set
+is_finite_limit <- function(limit) {
+  limit <- suppressWarnings(as.numeric(limit))
+  length(limit) == 1 && !is.na(limit) && !is.infinite(limit)
+}
+
+reset_password_enabled <- function() {
+  opt <- getOption("shinymanager.reset_password", default = FALSE)
+  isTRUE(opt) || identical(opt, "username")
+}
+
+# TRUE when the reset form should ask for a username only (email taken from the
+# credentials), FALSE when it should ask for both username and email.
+reset_password_username_only <- function() {
+  identical(getOption("shinymanager.reset_password", default = FALSE), "username")
+}
+
+get_email_column <- function() {
+  getOption("shinymanager.email_column", default = "email")
+}
+
+# Validity, in minutes, of the temporary password sent by the self-service
+# reset. NA (default, or invalid value) means the temporary password never expires.
+get_reset_password_validity <- function() {
+  validity <- suppressWarnings(as.numeric(getOption("shinymanager.reset_password_validity", default = NA)))
+  if (length(validity) != 1 || is.na(validity) || validity <= 0) {
+    return(NA_real_)
+  }
+  validity
+}
+
+# Minimal time, in seconds, between two emails sent to the same user by the
+# self-service reset. 60 by default (or invalid value), 0 for no limit.
+get_reset_password_cooldown <- function() {
+  cooldown <- suppressWarnings(as.numeric(getOption("shinymanager.reset_password_cooldown", default = 60)))
+  if (length(cooldown) != 1 || is.na(cooldown) || cooldown < 0) {
+    return(60)
+  }
+  cooldown
+}
+
+# Maximum number of self-service resets in a row. Inf (default, or invalid
+# value) means no limit.
+get_reset_password_max <- function() {
+  max_reset <- suppressWarnings(as.numeric(getOption("shinymanager.reset_password_max", default = Inf)))
+  if (length(max_reset) != 1 || is.na(max_reset) || max_reset < 1) {
+    return(Inf)
+  }
+  max_reset
+}
+
+# Can a self-service reset unlock an account locked by too many wrong
+# passwords ? TRUE by default, FALSE to leave it to an administrator.
+reset_password_unlock_enabled <- function() {
+  !isFALSE(getOption("shinymanager.reset_password_unlock", default = TRUE))
+}
+
 
 get_args <- function(..., fun) {
   args_fun <- names(formals(fun))
@@ -99,7 +156,7 @@ is_force_chg_pwd <- function(token) {
     resetpwd <- dbGetQuery(conn, request)
     
     # first check must change
-    res <- resetpwd$must_change[1]
+    res <- isTRUE(as.logical(resetpwd$must_change[1]))
     
     # then pwd_validity
     if(!res){
@@ -205,6 +262,8 @@ update_pwd <- function(user, pwd) {
       users$is_hashed_password[ind_user] <- FALSE
       write_db_encrypt(conn, value = users, name = "credentials", passphrase = passphrase)
       force_chg_pwd(user, FALSE)
+      # the new password is final: drop any mailed temporary password expiration
+      set_temp_pwd_expire(user, "")
     }, silent = TRUE)
     return(list(result = !inherits(res_pwd, "try-error")))
   } else  if (!is.null(config_db)) {
@@ -220,8 +279,10 @@ update_pwd <- function(user, pwd) {
       tablename <- SQL(config_db$tables$credentials$tablename)
       request <- glue_sql(config_db$tables$credentials$update, .con = conn)
       dbExecute(conn, request)
-      
+
       force_chg_pwd(user, FALSE)
+      # the new password is final: drop any mailed temporary password expiration
+      set_temp_pwd_expire(user, "")
     })
     return(list(result = !inherits(res_pwd, "try-error")))
   } else {
@@ -318,15 +379,7 @@ save_logs <- function(token) {
           write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
           
           # update pwd_management
-          pwd_mngt <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
-          if(nrow(pwd_mngt) > 0){
-            if(!"n_wrong_pwd" %in% colnames(pwd_mngt)){
-              pwd_mngt$n_wrong_pwd <- 0
-            } else {
-              pwd_mngt$n_wrong_pwd[pwd_mngt$user %in% user] <- 0
-            }
-            write_db_encrypt(conn = conn, value = pwd_mngt, name = "pwd_mngt", passphrase = passphrase)
-          }
+          reset_login_counters(user)
           
         }
       }, silent = TRUE)
@@ -336,46 +389,61 @@ save_logs <- function(token) {
         ), call. = FALSE)
       }
     } else if(!is.null(config_db)){
-      
-      conn <- connect_sql_db(config_db)
-      on.exit(disconnect_sql_db(conn, config_db))
-      
-      # check if current admin user
-      tablename <- SQL(config_db$tables$logs$tablename)
-      request <- glue_sql(config_db$tables$logs$check_token, .con = conn)
-      already_user_token <- dbGetQuery(conn, request)
-      
-      if(nrow(already_user_token) == 0){
+      res_logs <- try({
+        conn <- connect_sql_db(config_db)
+        on.exit(disconnect_sql_db(conn, config_db))
         
-        write_sql_db(
-          config_db = config_db, 
-          value = data.frame(
-            user = user,
-            server_connected = as.character(Sys.time()),
-            token = token,
-            logout = NA_character_,
-            app = get_appname(),
-            status = "Success",
-            stringsAsFactors = FALSE
-          ), 
-          name = config_db$tables$logs$tablename
-        )
+        # check if current admin user
+        tablename <- SQL(config_db$tables$logs$tablename)
+        request <- glue_sql(config_db$tables$logs$check_token, .con = conn)
+        already_user_token <- dbGetQuery(conn, request)
         
-        # update pwd_management
-        tablename <- SQL(config_db$tables$pwd_mngt$tablename)
-        request <- glue_sql(config_db$tables$pwd_mngt$select, .con = conn)
-        pwd_mngt_user <- dbGetQuery(conn, request)
-        
-        if(nrow(pwd_mngt_user) > 0){
-          if("n_wrong_pwd" %in% colnames(pwd_mngt_user)){
-            value <- 0
-            name <- "n_wrong_pwd"
-            udpate_users <- user
-            request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
-            db <- dbExecute(conn, request)
-          } 
+        if(nrow(already_user_token) == 0){
+          
+          write_sql_db(
+            config_db = config_db, 
+            value = data.frame(
+              user = user,
+              server_connected = as.character(Sys.time()),
+              token = token,
+              logout = NA_character_,
+              app = get_appname(),
+              status = "Success",
+              stringsAsFactors = FALSE
+            ), 
+            name = config_db$tables$logs$tablename
+          )
+          
+          # update pwd_management
+          reset_login_counters(user)
         }
+      }, silent = TRUE)
+      if (inherits(res_logs, "try-error")) {
+        warning(paste(
+          "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
+        ), call. = FALSE)
       }
+    }
+  } else {
+    # no logs, but the counters must still be reset on a successful login
+    res_counters <- try(reset_login_counters(.tok$get_user(token)), silent = TRUE)
+    if (inherits(res_counters, "try-error")) {
+      warning(paste(
+        "shinymanager: unable to reset the user counters | error:", attr(res_counters, "condition")$message
+      ), call. = FALSE)
+    }
+  }
+}
+
+# Successful login with a non temporary password (save_logs is not called on
+# the forced password change page): reset the wrong password and self-service
+# reset counters of the user, when the columns exist.
+reset_login_counters <- function(user) {
+  pwd_mngt_user <- read_pwd_mngt_user(user)
+  for (name in intersect(c("n_wrong_pwd", "n_user_reset"), colnames(pwd_mngt_user))) {
+    # only write when needed (called on each page load without logs)
+    if (nrow(pwd_mngt_user) > 0 && !isTRUE(all(pwd_mngt_user[[name]] %in% 0))) {
+      set_pwd_mngt_optional(user, name = name, value = 0, empty = 0)
     }
   }
 }
@@ -441,25 +509,27 @@ save_logs_failed <- function(user, status = "Failed") {
     conn <- dbConnect(SQLite(), dbname = sqlite_path)
     on.exit(dbDisconnect(conn))
     res_logs <- try({
-      logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
-      # patch for old logs database
-      if(!"status" %in% colnames(logs)){
-        if(nrow(logs) > 0){
-          logs$status <- "Success"
-        } else {
-          logs$status <- character(0)
+      if(write_logs_enabled()){
+        logs <- read_db_decrypt(conn = conn, name = "logs", passphrase = passphrase)
+        # patch for old logs database
+        if(!"status" %in% colnames(logs)){
+          if(nrow(logs) > 0){
+            logs$status <- "Success"
+          } else {
+            logs$status <- character(0)
+          }
         }
+        logs <- rbind(logs, data.frame(
+          user = user,
+          server_connected = as.character(Sys.time()),
+          token = NA_character_,
+          logout = NA_character_,
+          app = get_appname(),
+          status = status,
+          stringsAsFactors = FALSE
+        ))
+        write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
       }
-      logs <- rbind(logs, data.frame(
-        user = user,
-        server_connected = as.character(Sys.time()),
-        token = NA_character_,
-        logout = NA_character_,
-        app = get_appname(),
-        status = status,
-        stringsAsFactors = FALSE
-      ))
-      write_db_encrypt(conn = conn, value = logs, name = "logs", passphrase = passphrase)
       
       if(status %in% "Wrong pwd"){
         # update pwd_management
@@ -470,7 +540,8 @@ save_logs_failed <- function(user, status = "Failed") {
           } 
           
           ind_user <- which(pwd_mngt$user %in% user)
-          pwd_mngt$n_wrong_pwd[ind_user] <- pwd_mngt$n_wrong_pwd[ind_user] + 1
+          n_wrong <- pwd_mngt$n_wrong_pwd[ind_user]
+          pwd_mngt$n_wrong_pwd[ind_user] <- ifelse(is.na(n_wrong), 0, n_wrong) + 1
           write_db_encrypt(conn = conn, value = pwd_mngt, name = "pwd_mngt", passphrase = passphrase)
         }
       }
@@ -512,7 +583,7 @@ save_logs_failed <- function(user, status = "Failed") {
         
         if(nrow(pwd_mngt_user) > 0){
           if("n_wrong_pwd" %in% colnames(pwd_mngt_user)){
-            value <- pwd_mngt_user$n_wrong_pwd + 1
+            value <- ifelse(is.na(pwd_mngt_user$n_wrong_pwd), 0, pwd_mngt_user$n_wrong_pwd) + 1
             name <- "n_wrong_pwd"
             udpate_users <- user
             request <- glue_sql(config_db$tables$pwd_mngt$update, .con = conn)
@@ -555,22 +626,28 @@ logout_logs <- function(token) {
         ), call. = FALSE)
       }
     } else if(!is.null(config_db)){
-      
-      conn <- connect_sql_db(config_db)
-      on.exit(disconnect_sql_db(conn, config_db))
-      
-      tablename <- SQL(config_db$tables$logs$tablename)
-      request <- glue_sql(config_db$tables$logs$check_token, .con = conn)
-      logs_user <- dbGetQuery(conn, request)
-      
-      if(nrow(logs_user) > 0){
-        if("logout" %in% colnames(logs_user)){
-          value <-  as.character(Sys.time())
-          name <- "logout"
-          token <- logs_user$token
-          request <- glue_sql(config_db$tables$logs$update, .con = conn)
-          db <- dbExecute(conn, request)
-        } 
+      res_logs <- try({
+        conn <- connect_sql_db(config_db)
+        on.exit(disconnect_sql_db(conn, config_db))
+        
+        tablename <- SQL(config_db$tables$logs$tablename)
+        request <- glue_sql(config_db$tables$logs$check_token, .con = conn)
+        logs_user <- dbGetQuery(conn, request)
+        
+        if(nrow(logs_user) > 0){
+          if("logout" %in% colnames(logs_user)){
+            value <-  as.character(Sys.time())
+            name <- "logout"
+            token <- logs_user$token
+            request <- glue_sql(config_db$tables$logs$update, .con = conn)
+            db <- dbExecute(conn, request)
+          } 
+        }
+      }, silent = TRUE)
+      if (inherits(res_logs, "try-error")) {
+        warning(paste(
+          "shinymanager: unable to save logs | error:", attr(res_logs, "condition")$message
+        ), call. = FALSE)
       }
     }
   }

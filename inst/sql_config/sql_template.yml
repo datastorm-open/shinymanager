@@ -41,6 +41,7 @@ tables:
   pwd_mngt:
     tablename: SHINY_PWDS                       # if you want to change tablename
     # user, must_change, have_changed, date_change, n_wrong_pwd = mandatory with this name
+    # optional, only for the self-service password reset: temp_pwd_expire (text), n_user_reset (integer)
     #  No additionnal columns here
     init: CREATE TABLE {`tablename`} (
             "user"  varchar(100) PRIMARY KEY, 

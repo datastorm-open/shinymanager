@@ -52,6 +52,11 @@
     is_valid_server = function(token) {
       isTRUE(token %in% private$tokens)
     },
+    # valid on the server side: not revoked and not timed out (no side effect)
+    is_active = function(token) {
+      if (is.null(token) || !self$is_valid_server(token)) return(FALSE)
+      isTRUE(self$is_valid_timeout(token, update = FALSE))
+    },
     is_admin = function(token) {
       isTRUE(as.logical(private$tokens_user[[token]]$admin))
     },
@@ -63,6 +68,8 @@
     remove = function(token) {
       if (private$length() == 0) return(NULL)
       private$tokens <- setdiff(private$tokens, token)
+      # also drop the user info, so a revoked token gives no identity anymore
+      if (!is.null(token)) private$tokens_user[[token]] <- NULL
       invisible()
     },
     reset_count = function(token) {
@@ -95,6 +102,23 @@
     },
     get_timeout = function() {
       private$timeout
+    },
+    set_send_mail = function(send_mail) {
+      private$send_mail <- send_mail
+      invisible()
+    },
+    get_send_mail = function() {
+      private$send_mail
+    },
+    # time of the last successful self-service reset of each user (in memory,
+    # shared by the sessions of the R process, lost on restart)
+    set_reset_time = function(user) {
+      private$reset_times[[user]] <- Sys.time()
+      invisible()
+    },
+    is_reset_too_soon = function(user, delay) {
+      last <- private$reset_times[[user]]
+      !is.null(last) && as.numeric(difftime(Sys.time(), last, units = "secs")) < delay
     }
   ),
   private = list(
@@ -105,6 +129,8 @@
     passphrase = NULL,
     sql_config_db = NULL,
     timeout = 0,
+    send_mail = NULL,
+    reset_times = list(),
     length = function() base::length(private$tokens)
   )
 )
