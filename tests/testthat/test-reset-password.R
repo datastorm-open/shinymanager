@@ -296,6 +296,7 @@ test_that("get_reset_password_validity reads the option, NA when unset or invali
 })
 
 test_that("without validity option, no expiration column is created", {
+  skip_on_cran()
   tmp6 <- tempfile(fileext = ".sqlite")
   create_db(credentials_data = credentials, sqlite_path = tmp6, passphrase = "secret")
   old <- options(shinymanager.reset_password_validity = NULL)
@@ -312,6 +313,7 @@ test_that("without validity option, no expiration column is created", {
 })
 
 test_that("with validity option, the mailed password gets an expiration", {
+  skip_on_cran()
   tmp7 <- tempfile(fileext = ".sqlite")
   create_db(credentials_data = credentials, sqlite_path = tmp7, passphrase = "secret")
   old <- options(shinymanager.reset_password_validity = 20)
@@ -346,6 +348,7 @@ test_that("with validity option, the mailed password gets an expiration", {
 })
 
 test_that("changing the password (or an admin reset) clears the expiration", {
+  skip_on_cran()
   tmp8 <- tempfile(fileext = ".sqlite")
   create_db(credentials_data = credentials, sqlite_path = tmp8, passphrase = "secret")
   .tok$set_sqlite_path(tmp8)
@@ -388,6 +391,7 @@ test_that("get_reset_password_max reads the option, Inf when unset or invalid", 
 })
 
 test_that("without max option, no reset counter column is created", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.reset_password_max = NULL)
   .tok$set_send_mail(fake_mail_ok)
@@ -398,6 +402,7 @@ test_that("without max option, no reset counter column is created", {
 })
 
 test_that("with max option, resets are limited until a successful login", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.reset_password_max = 2)
   .tok$set_send_mail(fake_mail_ok)
@@ -429,6 +434,7 @@ test_that("with max option, resets are limited until a successful login", {
 })
 
 test_that("a locked account is unlocked by a reset, unless reset_password_unlock = FALSE", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.pwd_failure_limit = 2, shinymanager.reset_password_unlock = NULL)
   .tok$set_send_mail(fake_mail_ok)
@@ -457,6 +463,7 @@ test_that("a locked account is unlocked by a reset, unless reset_password_unlock
 })
 
 test_that("no reset for an expired or unauthorized account", {
+  skip_on_cran()
   old <- options(shinymanager.application = "myapp")
   tmp <- new_test_db(data.frame(
     user = c("old", "other", "ok"),
@@ -477,6 +484,7 @@ test_that("no reset for an expired or unauthorized account", {
 })
 
 test_that("save_logs_failed respects write_logs but still counts wrong passwords", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.write_logs = FALSE)
   save_logs_failed("fanny", status = "Wrong pwd")
@@ -488,6 +496,7 @@ test_that("save_logs_failed respects write_logs but still counts wrong passwords
 })
 
 test_that("old database schema (no status, n_wrong_pwd, optional columns) still works", {
+  skip_on_cran()
   tmp <- new_test_db()
   # old logs without status, old pwd_mngt without n_wrong_pwd
   logs <- read_db_decrypt(tmp, "logs", "secret")
@@ -519,6 +528,7 @@ test_that("old database schema (no status, n_wrong_pwd, optional columns) still 
 })
 
 test_that("SQLite credentials checker sees a reset done after its creation", {
+  skip_on_cran()
   tmp <- new_test_db()
   checker <- check_credentials(tmp, passphrase = "secret")
   expect_true(checker("fanny", "azerty12")$result)
@@ -532,6 +542,7 @@ test_that("SQLite credentials checker sees a reset done after its creation", {
 })
 
 test_that("a failed save leaves password and pwd_mngt untouched (transaction)", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.reset_password_max = 3, shinymanager.reset_password_validity = 20)
   .tok$set_send_mail(fake_mail_ok)
@@ -554,6 +565,7 @@ test_that("a failed save leaves password and pwd_mngt untouched (transaction)", 
 })
 
 test_that("a change made while sending the email is not overwritten", {
+  skip_on_cran()
   tmp <- new_test_db()
   # another session updates victor while fanny's email is being sent
   .tok$set_send_mail(function(user, email, temp_password) {
@@ -568,6 +580,7 @@ test_that("a change made while sending the email is not overwritten", {
 })
 
 test_that("the account modified while sending the email is not overwritten", {
+  skip_on_cran()
   tmp <- new_test_db()
   # an admin changes fanny's email and password while the email is being sent
   .tok$set_send_mail(function(user, email, temp_password) {
@@ -585,6 +598,7 @@ test_that("the account modified while sending the email is not overwritten", {
 })
 
 test_that("the stored email is trimmed before sending", {
+  skip_on_cran()
   cred <- credentials
   cred$email[cred$user == "fanny"] <- "  fanny@mail.com "
   tmp <- new_test_db(cred)
@@ -596,6 +610,7 @@ test_that("the stored email is trimmed before sending", {
 })
 
 test_that("a NA wrong password counter is counted from 0", {
+  skip_on_cran()
   tmp <- new_test_db()
   pm <- read_db_decrypt(tmp, "pwd_mngt", "secret")
   pm$n_wrong_pwd <- NA
@@ -621,6 +636,7 @@ test_that("get_reset_password_cooldown reads the option, 60 when unset or invali
 })
 
 test_that("auth module: no cooldown with the option set to 0", {
+  skip_on_cran()
   tmp <- new_test_db()
   .tok$set_send_mail(fake_mail_ok)
   checker <- check_credentials(tmp, passphrase = "secret")
@@ -642,6 +658,7 @@ test_that("auth module: no cooldown with the option set to 0", {
 })
 
 test_that("tokens: the reset cooldown is per user", {
+  skip_on_cran()
   tmp <- new_test_db()
   expect_false(.tok$is_reset_too_soon("fanny", 60))
   .tok$set_reset_time("fanny")
@@ -652,6 +669,7 @@ test_that("tokens: the reset cooldown is per user", {
 })
 
 test_that("auth module: no second email for the same user before the cooldown", {
+  skip_on_cran()
   tmp <- new_test_db()
   .tok$set_send_mail(fake_mail_ok)
   checker <- check_credentials(tmp, passphrase = "secret")
@@ -682,6 +700,7 @@ test_that("auth module: no second email for the same user before the cooldown", 
 })
 
 test_that("auth module: no reset when disabled, login with the mailed password otherwise", {
+  skip_on_cran()
   tmp <- new_test_db()
   .tok$set_send_mail(fake_mail_ok)
   checker <- check_credentials(tmp, passphrase = "secret")
@@ -729,6 +748,7 @@ test_that("transaction: an error of dbBegin stops, except for backends without t
 })
 
 test_that("no pwd_mngt row: no email sent and password unchanged", {
+  skip_on_cran()
   tmp <- new_test_db()
   pm <- read_db_decrypt(tmp, "pwd_mngt", "secret")
   write_db_encrypt(tmp, value = pm[pm$user != "fanny", ], name = "pwd_mngt", passphrase = "secret")
@@ -752,6 +772,7 @@ test_that("a timestamp 'temp_pwd_expire' column is refused", {
 })
 
 test_that("auth module: a database error during a reset is logged, the session goes on", {
+  skip_on_cran()
   tmp <- new_test_db()
   .tok$set_send_mail(fake_mail_ok)
   checker <- check_credentials(tmp, passphrase = "secret")
@@ -777,6 +798,7 @@ test_that("auth module: a database error during a reset is logged, the session g
 })
 
 test_that("auth module: an expired temporary password is refused at login", {
+  skip_on_cran()
   tmp <- new_test_db()
   old <- options(shinymanager.reset_password = TRUE, shinymanager.reset_password_validity = 20)
   reset_capture()
@@ -802,6 +824,7 @@ test_that("auth module: an expired temporary password is refused at login", {
 })
 
 test_that("auth module: empty fields, nothing sent nor logged", {
+  skip_on_cran()
   tmp <- new_test_db()
   .tok$set_send_mail(fake_mail_ok)
   checker <- check_credentials(tmp, passphrase = "secret")

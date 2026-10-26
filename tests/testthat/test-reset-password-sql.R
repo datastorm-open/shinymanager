@@ -1,5 +1,8 @@
 context("test-reset-password-sql")
 
+# integration tests (SQL backend through DBI / RSQLite), long: not on CRAN
+skip_on_cran()
+
 # SQL backend, with a dedicated DBI / RSQLite configuration (the templates of
 # inst/sql_config target real servers: PostgreSQL, SQL Server, ...)
 sql_tmp <- tempfile(fileext = ".sqlite")

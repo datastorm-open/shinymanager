@@ -48,6 +48,7 @@ test_that("admin reset is refused without token or with a non admin token", {
 })
 
 test_that("admin reset works with a valid admin token, not after its removal", {
+  skip_on_cran()
   token <- add_sec_token("alice", TRUE)
   local_mocked_bindings(getToken = function(session = NULL) token)
   shiny::testServer(sec_server, {
