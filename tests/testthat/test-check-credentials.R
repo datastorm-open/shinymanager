@@ -42,7 +42,8 @@ test_that("check_credentials (applications) works", {
     stringsAsFactors = FALSE
   )
 
-  options("shinymanager.application" = "app2")
+  old <- options("shinymanager.application" = "app2")
+  on.exit(options(old), add = TRUE)
 
   expect_true(check_credentials(credentials)("fanny", "azerty")$result)
   expect_true(check_credentials(credentials)("fanny", "azerty")$authorized)
@@ -50,3 +51,9 @@ test_that("check_credentials (applications) works", {
   expect_false(check_credentials(credentials)("victor", "12345")$authorized)
 })
 
+
+test_that("check_credentials gives a clear error for a missing file", {
+  expect_error(check_credentials("does_not_exist.sqlite"), "File not found: 'does_not_exist.sqlite'")
+  expect_error(check_credentials("does_not_exist.yml"), "working directory")
+  expect_error(check_credentials("not_a_db.txt"), "must be a data.frame")
+})

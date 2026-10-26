@@ -18,7 +18,7 @@
 #' @name module-authentication
 #'
 #' @importFrom htmltools tagList tags singleton tagAppendAttributes
-#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton uiOutput
+#' @importFrom shiny NS fluidRow column textInput passwordInput actionButton actionLink uiOutput
 #'
 #' @example examples/module-auth.R
 auth_ui <- function(id, status = "primary", tags_top = NULL,
@@ -131,6 +131,16 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
                 ),
                 tags$br(), tags$br()
               ),
+              if (reset_password_enabled()) {
+                tags$div(
+                  style = "text-align: center; margin-top: -10px; margin-bottom: 10px;",
+                  actionLink(
+                    inputId = ns("show_reset_pwd"),
+                    label = lan$get("Forgot password?")
+                  )
+                )
+              },
+              tags$div(id = ns("reset_pwd_panel")),
               tags$br(),
               tags$script(
                 sprintf("bindEnter('%s');", ns(""))
@@ -174,7 +184,7 @@ auth_ui <- function(id, status = "primary", tags_top = NULL,
 #'  }
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI
+#' @importFrom shiny reactiveValues observeEvent removeUI updateQueryString insertUI is.reactive icon updateActionButton updateTextInput renderUI textInput actionButton showModal modalDialog modalButton
 #' @importFrom stats setNames
 auth_server <- function(input, output, session,
                         check_credentials,
@@ -197,10 +207,22 @@ auth_server <- function(input, output, session,
   observe({
     if(!is.null(input$language) && input$language != ""){
       lan()$set_language(input$language)
+
+      # remove transient messages so no stale-language text remains
+      removeUI(selector = jns("msg_auth"))
+      removeUI(selector = jns("reset_pwd_msg"))
+
       updateTextInput(session, inputId = "user_id", label = lan()$get("Username:"))
       updateTextInput(session, inputId = "user_pwd", label = lan()$get("Password:"))
       updateActionButton(session, inputId = "go_auth", label = lan()$get("Login"))
-      
+
+      if (reset_password_enabled()) {
+        updateActionButton(session, inputId = "show_reset_pwd", label = lan()$get("Forgot password?"))
+        updateTextInput(session, inputId = "reset_user", label = lan()$get("Username:"))
+        updateTextInput(session, inputId = "reset_email", label = lan()$get("Email:"))
+        updateActionButton(session, inputId = "do_reset_pwd", label = lan()$get("Reset my password"))
+      }
+
       session$sendCustomMessage(
         type = "update_auth_title",
         message = list(
@@ -223,6 +245,15 @@ auth_server <- function(input, output, session,
   
   
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
+
+  # auth_ui shows the reset link as soon as the option is set: hide it when the
+  # reset can't work, without database (data.frame backend) or 'send_mail'.
+  # check_credentials is forced first, as it sets the database used.
+  force(check_credentials)
+  if (reset_password_enabled() && (!is.function(.tok$get_send_mail()) ||
+      (is.null(.tok$get_sqlite_path()) && is.null(.tok$get_sql_config_db())))) {
+    removeUI(selector = jns("show_reset_pwd"))
+  }
   
   observeEvent(input$go_auth, {
     removeUI(selector = jns("msg_auth"))
@@ -242,11 +273,14 @@ auth_server <- function(input, output, session,
     # locked account ?
     locked <- FALSE
     pwd_failure_limit <- as.numeric(get_pwd_failure_limit())
-    if(length(pwd_failure_limit) > 0 && !is.na(pwd_failure_limit) && !is.infinite(pwd_failure_limit)){
-      locked <- check_locked_account(input$user_id, pwd_failure_limit)
+    if(is_finite_limit(pwd_failure_limit)){
+      locked <- isTRUE(check_locked_account(input$user_id, pwd_failure_limit))
     }
-    
-    if (isTRUE(res_auth$result) & !locked) {
+
+    # temporary password sent by the self-service reset and no longer valid ?
+    temp_pwd_expired <- isTRUE(res_auth$result) && is_temp_pwd_expired(input$user_id)
+
+    if (isTRUE(res_auth$result) & !locked & !temp_pwd_expired) {
       removeUI(selector = jns("auth-mod"))
       authentication$result <- TRUE
       authentication$user <- input$user_id
@@ -272,7 +306,21 @@ auth_server <- function(input, output, session,
           icon("triangle-exclamation"), lan()$get("Your account is locked")
         )
       )
-      
+
+    } else if (isTRUE(res_auth$result) & temp_pwd_expired) {
+
+      # dedicated message: only shown to someone who knows the (temporary)
+      # password, so it reveals nothing about which accounts exist
+      save_logs_failed(input$user_id, status = "Reset password: expired")
+
+      insertUI(
+        selector = jns("result_auth"),
+        ui = tags$div(
+          id = ns("msg_auth"), class = "alert alert-danger",
+          icon("triangle-exclamation"), lan()$get("Your temporary password has expired, please request a new one.")
+        )
+      )
+
     } else {
       if (is.null(res_auth$user_info)) {
         save_logs_failed(input$user_id, status = "Unknown user")
@@ -305,7 +353,15 @@ auth_server <- function(input, output, session,
         } else {
           
           save_logs_failed(input$user_id, status = "Wrong pwd")
-          
+
+          # the attempt reaching the limit locks the account right away
+          if(!locked && is_finite_limit(pwd_failure_limit)){
+            locked <- isTRUE(check_locked_account(input$user_id, pwd_failure_limit))
+            if(locked){
+              save_logs_failed(input$user_id, status = "Account locked")
+            }
+          }
+
           if(!locked){
             insertUI(
               selector = jns("result_auth"),
@@ -328,8 +384,136 @@ auth_server <- function(input, output, session,
     }
     
     removeUI(selector = jns("spinner_msg_ok"))
-    
+
   }, ignoreInit = TRUE)
-  
+
+  # self-service password reset (user + email)
+  observeEvent(input$show_reset_pwd, {
+    removeUI(selector = jns("reset_pwd_form"))
+    insertUI(
+      selector = jns("reset_pwd_panel"),
+      ui = tags$div(
+        id = ns("reset_pwd_form"),
+        tags$hr(),
+        textInput(
+          inputId = ns("reset_user"),
+          label = lan()$get("Username:"),
+          width = "100%"
+        ),
+        if (!reset_password_username_only()) {
+          textInput(
+            inputId = ns("reset_email"),
+            label = lan()$get("Email:"),
+            width = "100%"
+          )
+        },
+        actionButton(
+          inputId = ns("do_reset_pwd"),
+          label = lan()$get("Reset my password"),
+          width = "100%"
+        ),
+        tags$br(), tags$br(),
+        tags$div(id = ns("reset_pwd_result"))
+      )
+    )
+  }, ignoreInit = TRUE)
+
+  observeEvent(input$do_reset_pwd, {
+    # the form is only displayed when enabled, but inputs can be sent anyway
+    req(reset_password_enabled())
+    # The outcome is logged server-side (admin logs). The visitor gets the same
+    # generic message, displayed before sending the email (which can take a few
+    # seconds), so it does not reveal which users / emails exist. Exceptions: an
+    # account that can't reset its password (dedicated message) and a failed
+    # sending (popup), which do reveal that the account exists.
+    generic_msg <- lan()$get("If the account exists and an email address is associated with it, an email containing a temporary password will be sent.")
+    # disable / enable the button, to avoid a second request while sending
+    reset_btn_js <- function(disabled) {
+      tags$script(sprintf("$('#%s').prop('disabled', %s);", ns("do_reset_pwd"), disabled))
+    }
+    # empty field: nothing to check nor to send (reveals nothing about accounts)
+    is_empty <- function(x) is.null(x) || !nzchar(trimws(paste(x, collapse = "")))
+    if (is_empty(input$reset_user) || (!reset_password_username_only() && is_empty(input$reset_email))) {
+      removeUI(selector = jns("reset_pwd_msg"), immediate = TRUE)
+      insertUI(
+        selector = jns("reset_pwd_result"),
+        ui = tags$div(
+          id = ns("reset_pwd_msg"), class = "alert alert-warning",
+          icon("triangle-exclamation"), lan()$get("Please fill in all fields.")
+        ),
+        immediate = TRUE
+      )
+      return()
+    }
+    reset_start <- Sys.time()
+    removeUI(selector = jns("reset_pwd_msg"), immediate = TRUE)
+    insertUI(
+      selector = jns("reset_pwd_result"),
+      ui = tags$div(
+        id = ns("reset_pwd_msg"), class = "alert alert-info",
+        icon("circle-info"), generic_msg, reset_btn_js("true")
+      ),
+      immediate = TRUE
+    )
+
+    # server-side limit (the button is only disabled client-side): no new email
+    # for a user who just got one, with the same generic message
+    reset_user <- trimws(as.character(input$reset_user))
+    if (length(reset_user) == 1 && .tok$is_reset_too_soon(reset_user, get_reset_password_cooldown())) {
+      res_reset <- list(result = FALSE, reason = "too_soon")
+    } else {
+      res_reset <- tryCatch(
+        reset_pwd_user_email(input$reset_user, input$reset_email),
+        error = function(e) {
+          warning(paste("shinymanager: password reset failed | error:", conditionMessage(e)), call. = FALSE)
+          list(result = FALSE, reason = "db_error")
+        }
+      )
+      if (isTRUE(res_reset$result)) .tok$set_reset_time(reset_user)
+    }
+    save_reset_logs(input$reset_user, res_reset$reason)
+
+    removeUI(selector = jns("reset_pwd_msg"))
+    if (res_reset$reason %in% reset_reason_blocked()) {
+      msg <- tags$div(
+        id = ns("reset_pwd_msg"), class = "alert alert-danger",
+        icon("triangle-exclamation"),
+        lan()$get("Password reset is not available for this account, please contact your administrator.")
+      )
+    } else if (res_reset$reason %in% reset_reason_error()) {
+      msg <- tags$div(id = ns("reset_pwd_msg"))
+      error_msg <- if (identical(res_reset$reason, "db_error")) {
+        "An error occurred while saving the new password. Please try again later or contact your administrator."
+      } else {
+        "An error occurred while sending the email. Please try again later or contact your administrator."
+      }
+      showModal(modalDialog(
+        tags$p(icon("triangle-exclamation"), lan()$get(error_msg)),
+        footer = modalButton(lan()$get("Dismiss")),
+        easyClose = TRUE
+      ))
+    } else {
+      msg <- tags$div(
+        id = ns("reset_pwd_msg"), class = "alert alert-info",
+        icon("circle-info"), generic_msg
+      )
+    }
+    insertUI(selector = jns("reset_pwd_result"), ui = msg)
+
+    # the button is enabled again after the same minimal delay whatever the
+    # outcome, so the response time does not reveal which accounts exist
+    delay <- max(0, reset_btn_delay - as.numeric(difftime(Sys.time(), reset_start, units = "secs")))
+    later::later(function() {
+      if (!session$isClosed()) {
+        removeUI(selector = jns("reset_btn_enable"), immediate = TRUE, session = session)
+        insertUI(
+          selector = jns("reset_pwd_result"),
+          ui = tags$div(id = ns("reset_btn_enable"), reset_btn_js("false")),
+          immediate = TRUE, session = session
+        )
+      }
+    }, delay = delay)
+  }, ignoreInit = TRUE)
+
   return(authentication)
 }

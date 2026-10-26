@@ -78,6 +78,10 @@
 #' @seealso \code{\link{create_db}}, \code{\link{create_sql_db}}, \code{\link{check_credentials}}
 #' 
 check_credentials <- function(db, passphrase = NULL) {
+  # a missing file, often a relative path from another working directory
+  if (is.character(db) && length(db) == 1 && grepl("\\.(sqlite|ya?ml)$", tolower(db)) && !file.exists(db)) {
+    stop("File not found: '", db, "' (working directory: ", getwd(), ")", call. = FALSE)
+  }
   if (is.data.frame(db)) {
     .tok$set_sqlite_path(NULL)
     .tok$set_sql_config_db(NULL)
@@ -177,14 +181,16 @@ check_credentials_df <- function(user, password, credentials_df) {
 }
 
 check_credentials_sqlite <- function(sqlite_path, passphrase) {
-  conn <- dbConnect(SQLite(), dbname = sqlite_path)
-  on.exit(dbDisconnect(conn))
-  db <- read_db_decrypt(
-    conn = conn,
-    name = "credentials",
-    passphrase = passphrase
-  )
   function(user, password) {
+    # read on each attempt: the credentials may have changed since the creation
+    # of this function (password reset, admin update)
+    conn <- dbConnect(SQLite(), dbname = sqlite_path)
+    on.exit(dbDisconnect(conn))
+    db <- read_db_decrypt(
+      conn = conn,
+      name = "credentials",
+      passphrase = passphrase
+    )
     check_credentials_df(user, password, credentials_df = db)
   }
 }
