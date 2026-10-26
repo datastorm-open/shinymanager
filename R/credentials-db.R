@@ -222,9 +222,12 @@ create_db <- function(credentials_data, sqlite_path, passphrase = NULL, flags = 
 #'   passphrase = key_get("R-shinymanager-key", "obiwankenobi")
 #' )
 #'
+#' # columns of the new row must match the table (other columns, like custom
+#' # or optional ones, must be added, e.g. with NA)
 #' pwd_mngt <- rbind.data.frame(
 #'   pwd_mngt,
-#'   data.frame(user = "new", must_change = T, have_changed = F, date_change = "")
+#'   data.frame(user = "new", must_change = T, have_changed = F,
+#'              date_change = "", n_wrong_pwd = 0)
 #' )
 #'
 #' write_db_encrypt(

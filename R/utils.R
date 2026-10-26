@@ -367,7 +367,7 @@ save_logs <- function(token) {
         already_user_token <- any(logs$user %in% user & logs_day %in% date_day & logs$token %in% token)
         
         if(!already_user_token){
-          logs <- rbind(logs, data.frame(
+          logs <- rbind_fill(logs, data.frame(
             user = user,
             server_connected = date_time,
             token = token,
@@ -519,7 +519,7 @@ save_logs_failed <- function(user, status = "Failed") {
             logs$status <- character(0)
           }
         }
-        logs <- rbind(logs, data.frame(
+        logs <- rbind_fill(logs, data.frame(
           user = user,
           server_connected = as.character(Sys.time()),
           token = NA_character_,
@@ -653,6 +653,20 @@ logout_logs <- function(token) {
   }
 }
 
+
+# Append rows to a table (SQLite credentials, pwd_mngt, logs) whose columns may
+# differ from the new rows: custom columns added manually, or optional columns
+# of a newer version. Missing columns are filled with NA, on both sides, and the
+# table column order is kept (new columns at the end).
+rbind_fill <- function(df, new) {
+  for (col in setdiff(colnames(df), colnames(new))) {
+    new[[col]] <- rep(NA, nrow(new))
+  }
+  for (col in setdiff(colnames(new), colnames(df))) {
+    df[[col]] <- rep(NA, nrow(df))
+  }
+  rbind(df, new[colnames(df)])
+}
 
 #' Simple password generation
 #'

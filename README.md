@@ -85,6 +85,26 @@ server <- function(input, output, session) {
 ````
 
 
+### Upgrade from 1.1.x
+
+No re-initialization of the database is needed : a 1.1.x SQLite or SQL database works as is with 1.2.0. To use the self-service password reset on an existing database :
+
+* **email** : add an ``email`` column (or the one set with ``options("shinymanager.email_column")``) to the *credentials* table. With SQLite, run it once, preferably while the application is stopped :
+
+````
+conn <- DBI::dbConnect(RSQLite::SQLite(), "path/to/database.sqlite")
+creds <- read_db_decrypt(conn, name = "credentials", passphrase = "passphrase")
+creds$email <- NA_character_ # then fill it, or use the admin mode
+write_db_encrypt(conn, value = creds, name = "credentials", passphrase = "passphrase")
+DBI::dbDisconnect(conn)
+````
+
+Once added, the column is available in the admin mode to add / edit the users emails.
+
+* **SQLite** : the optional columns of the *pwd_mngt* table (``temp_pwd_expire``, ``n_user_reset``) are created automatically, the first time a value has to be stored.
+* **SQL** : nothing is created automatically. Add the ``email`` column to *credentials*, and if needed ``temp_pwd_expire`` (text, e.g. ``varchar(19)``) and ``n_user_reset`` (integer) to *pwd_mngt*. Without them, the validity and the maximum number of resets are ignored. See the comments in the templates of ``inst/sql_config``.
+* **Downgrade** : once ``temp_pwd_expire`` or ``n_user_reset`` exists in a SQLite database, adding a user from the admin mode of a 1.1.x version fails. Remove these columns before downgrading.
+
 ### Cross-application
 
 Adding optional ``applications`` column in *credentials* db: the name of the applications to which the user is authorized, separated by a semicolon. The name of the application corresponds to the name of the directory, or can be declared using: options("shinymanager.application" = "my-app")
@@ -134,6 +154,14 @@ require(shinymanager)
  ?set_labels
 
 ````
+
+### News on shinymanager 1.2.0
+
+* SECURITY FIX : admin operations are now checked on the server (valid admin token needed)
+* Self-service password reset by email, with optional ``send_smtp_mail()`` helper
+* Logs dashboard : users overview and security events
+* Italian language
+* See [NEWS.md](NEWS.md) for all the changes and the behavior changes, and *Upgrade from 1.1.x* above
 
 ### News on shinymanager 1.1.0
 

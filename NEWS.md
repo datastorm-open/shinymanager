@@ -41,12 +41,16 @@
 * With `options("shinymanager.write_logs" = FALSE)`, failed connections are no longer written and
   the wrong password counter is reset on a successful login.
 * New dependency: `later` (Imports).
+* No database re-initialization is needed to upgrade (see README, *Upgrade from 1.1.x*). Once the
+  optional `pwd_mngt` columns exist in a SQLite database, a 1.1.x version can't add users anymore.
 
 ## Bug fixes
 
 * Login and password change with the Enter key right after typing: the typed values are sent
   before the click (complements #195 and #216).
 * A missing (`NA`) wrong password counter or `must_change` in `pwd_mngt` no longer stops the login.
+* SQLite: adding a user (admin) and writing the logs no longer fail when the `pwd_mngt` or `logs`
+  table has additional columns (custom ones, or the new optional ones): they are filled with `NA`.
 * SQL backend: a logs error at login or logout no longer stops the session (warning).
 * Logs dashboard: the application selector lists the applications with failed connections only,
   and failed connections of a user on the same day are no longer merged.

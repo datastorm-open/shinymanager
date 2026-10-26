@@ -714,9 +714,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         if(!"is_hashed_password" %in% colnames(users)){
           users$is_hashed_password <- FALSE
         }
-        newuser[setdiff(colnames(users), colnames(newuser))] <- NA
-        newuser <- newuser[colnames(users)]
-        users <- rbind(users, newuser)
+        users <- rbind_fill(users, newuser[intersect(colnames(newuser), colnames(users))])
         write_db_encrypt(conn = conn, value = users, name = "credentials", passphrase = passphrase)
         resetpwd <- read_db_decrypt(conn = conn, name = "pwd_mngt", passphrase = passphrase)
         if(!"n_wrong_pwd" %in% colnames(resetpwd)){
@@ -737,7 +735,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         if("n_user_reset" %in% colnames(resetpwd)){
           newpwd$n_user_reset <- 0
         }
-        resetpwd <- rbind(resetpwd, newpwd)
+        # other columns (custom ones) are filled with NA
+        resetpwd <- rbind_fill(resetpwd, newpwd)
         write_db_encrypt(conn = conn, value = resetpwd, name = "pwd_mngt", passphrase = passphrase)
       } else {
         conn <- connect_sql_db(config_db)
