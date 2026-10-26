@@ -5,7 +5,7 @@
       <stop offset="0.55" stop-color="#1667ad"/>
       <stop offset="1" stop-color="#0b2f57"/>
     </linearGradient>
-    <radialGradient id="glow" cx="260" cy="231" r="210" gradientUnits="userSpaceOnUse">
+    <radialGradient id="glow" cx="260" cy="209" r="210" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
@@ -30,7 +30,7 @@
   <!-- hexagon -->
   <path d="M260 8 L512.9 154 L512.9 446 L260 592 L7.1 446 L7.1 154 Z" fill="url(#bg)"/>
   <g clip-path="url(#hexclip)">
-    <circle cx="260" cy="231" r="210" fill="url(#glow)"/>
+    <circle cx="260" cy="209" r="210" fill="url(#glow)"/>
     <!-- light sheen -->
     <path d="M-20 120 L540 -40 L540 60 L-20 260 Z" fill="#ffffff" opacity="0.06"/>
     <!-- faint hexagon network -->
@@ -47,7 +47,7 @@
   <path d="M260 26 L497 163 L497 437 L260 574 L23 437 L23 163 Z" fill="none" stroke="#a9dbff" stroke-opacity="0.35" stroke-width="3"/>
   <path d="M260 8 L512.9 154 L512.9 446 L260 592 L7.1 446 L7.1 154 Z" fill="none" stroke="#0a2748" stroke-width="12" stroke-linejoin="round"/>
 
-  <g transform="translate(0,16)">
+  <g transform="translate(0,-6)">
   <!-- shield with user -->
   <g filter="url(#shadow)">
     <path d="M260 92 L356 127 V202 C356 266 316 306 260 330 C204 306 164 266 164 202 V127 Z" fill="url(#shield)"/>
@@ -64,6 +64,6 @@
 
   <!-- name -->
   <text x="260" y="425" text-anchor="middle" font-family="Segoe UI Semibold, Segoe UI, Arial, sans-serif" font-weight="600" font-size="68" letter-spacing="-0.5" fill="#ffffff" filter="url(#tshadow)">shiny<tspan fill="#9fd6ff">manager</tspan></text>
-  <text x="260" y="463" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="21" letter-spacing="3" fill="#cfe9ff">AUTHENTICATION FOR SHINY</text>
+  <text x="260" y="463" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="21" letter-spacing="2.2" fill="#cfe9ff">AUTHENTICATION FOR SHINY</text>
 </g>
 </svg>
