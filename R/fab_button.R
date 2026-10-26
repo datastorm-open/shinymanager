@@ -53,8 +53,8 @@ fab_button <- function(...,
           id = inputId,
           `data-mfb-label` = label,
           class = "mfb-component__button--main action-button",
-          icon("plus", class = "mfb-component__main-icon--resting"),
-          icon("xmark", class = "mfb-component__main-icon--active")
+          sm_icon("plus", class = "mfb-component__main-icon--resting"),
+          sm_icon("xmark", class = "mfb-component__main-icon--active")
         ),
         tags$ul(
           class = "mfb-component__list",

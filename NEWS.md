@@ -54,6 +54,8 @@
 * SQL backend: a logs error at login or logout no longer stops the session (warning).
 * Logs dashboard: the application selector lists the applications with failed connections only,
   and failed connections of a user on the same day are no longer merged.
+* Icons are displayed again with an old `fontawesome` package (< 0.3.0, Font Awesome 5) or
+  shiny < 1.7: the Font Awesome 5 names are used in that case.
 * Translations: "Maximum number of users", "Failed to update user", "Your account is locked"
   (pt-BR, es, ja), and the Norwegian label "Maximum number of users: %s".
 

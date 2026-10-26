@@ -182,3 +182,43 @@ fileReaderSQL <- function(config_db, name){
     res <- tryCatch(db_read_table_sql(conn, config_db$tables[[name]]$tablename), 
                     error = function(e) NULL)
 }
+
+
+# Icons
+# -----
+# shinymanager uses Font Awesome 6 icon names. Font Awesome 5 is used with an old
+# 'fontawesome' package (< 0.3.0) or shiny < 1.7 (its own bundled icons), where
+# the names below don't exist (empty icons): their Font Awesome 5 name is used.
+fa5_names <- c(
+  "pen-to-square" = "edit",
+  "trash-can" = "trash-alt",
+  "right-from-bracket" = "sign-out-alt",
+  "house" = "home",
+  "gears" = "cogs",
+  "xmark" = "times",
+  "triangle-exclamation" = "exclamation-triangle",
+  "circle-info" = "info-circle",
+  "arrow-rotate-left" = "undo",
+  "square-check" = "check-square",
+  "calendar-days" = "calendar-alt",
+  "shield-halved" = "shield-alt"
+)
+
+sm_icon_env <- new.env()
+
+use_fa5_names <- function() {
+  if (is.null(sm_icon_env$fa5)) {
+    sm_icon_env$fa5 <- utils::packageVersion("shiny") < "1.7.0" ||
+      !requireNamespace("fontawesome", quietly = TRUE) ||
+      utils::packageVersion("fontawesome") < "0.3.0"
+  }
+  sm_icon_env$fa5
+}
+
+#' @importFrom shiny icon
+sm_icon <- function(name, ...) {
+  if (name %in% names(fa5_names) && isTRUE(use_fa5_names())) {
+    name <- fa5_names[[name]]
+  }
+  icon(name, ...)
+}

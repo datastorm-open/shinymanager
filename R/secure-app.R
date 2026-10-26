@@ -81,12 +81,12 @@ secure_app <- function(ui,
               list(
                 inputId = ".shinymanager_logout",
                 label = lan$get("Logout"),
-                icon = icon("right-from-bracket")
+                icon = sm_icon("right-from-bracket")
               ),
               list(
                 inputId = ".shinymanager_app",
                 label = lan$get("Go to application"),
-                icon = icon("share")
+                icon = sm_icon("share")
               )
             ),
             shinymanager_where("admin"),
@@ -95,7 +95,7 @@ secure_app <- function(ui,
             shinymanager_language(lan$get_language())
           ),
           tabPanel(
-            title = tagList(icon("house"), lan$get("Home")),
+            title = tagList(sm_icon("house"), lan$get("Home")),
             value = "home",
             admin_ui("admin", lan)
           ),
@@ -113,12 +113,12 @@ secure_app <- function(ui,
             list(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("right-from-bracket")
+              icon = sm_icon("right-from-bracket")
             ),
             list(
               inputId = ".shinymanager_admin",
               label = lan$get("Administrator mode"),
-              icon = icon("gears")
+              icon = sm_icon("gears")
             )
           )
         } else {
@@ -130,7 +130,7 @@ secure_app <- function(ui,
             list(
               inputId = ".shinymanager_logout",
               label = lan$get("Logout"),
-              icon = icon("right-from-bracket")
+              icon = sm_icon("right-from-bracket")
             )
           )
         }

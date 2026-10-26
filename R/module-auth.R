@@ -303,7 +303,7 @@ auth_server <- function(input, output, session,
         selector = jns("result_auth"),
         ui = tags$div(
           id = ns("msg_auth"), class = "alert alert-danger",
-          icon("triangle-exclamation"), lan()$get("Your account is locked")
+          sm_icon("triangle-exclamation"), lan()$get("Your account is locked")
         )
       )
 
@@ -317,7 +317,7 @@ auth_server <- function(input, output, session,
         selector = jns("result_auth"),
         ui = tags$div(
           id = ns("msg_auth"), class = "alert alert-danger",
-          icon("triangle-exclamation"), lan()$get("Your temporary password has expired, please request a new one.")
+          sm_icon("triangle-exclamation"), lan()$get("Your temporary password has expired, please request a new one.")
         )
       )
 
@@ -328,7 +328,7 @@ auth_server <- function(input, output, session,
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
+            sm_icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
           )
         )
       } else if (isTRUE(res_auth$expired)) {
@@ -337,7 +337,7 @@ auth_server <- function(input, output, session,
           selector = jns("result_auth"),
           ui = tags$div(
             id = ns("msg_auth"), class = "alert alert-danger",
-            icon("triangle-exclamation"), lan()$get("Your account has expired")
+            sm_icon("triangle-exclamation"), lan()$get("Your account has expired")
           )
         )
       } else {
@@ -347,7 +347,7 @@ auth_server <- function(input, output, session,
             selector = jns("result_auth"),
             ui = tags$div(
               id = ns("msg_auth"), class = "alert alert-danger",
-              icon("triangle-exclamation"), lan()$get("You are not authorized for this application")
+              sm_icon("triangle-exclamation"), lan()$get("You are not authorized for this application")
             )
           )
         } else {
@@ -367,7 +367,7 @@ auth_server <- function(input, output, session,
               selector = jns("result_auth"),
               ui = tags$div(
                 id = ns("msg_auth"), class = "alert alert-danger",
-                icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
+                sm_icon("triangle-exclamation"), lan()$get("Username or password are incorrect")
               )
             )
           } else {
@@ -375,7 +375,7 @@ auth_server <- function(input, output, session,
               selector = jns("result_auth"),
               ui = tags$div(
                 id = ns("msg_auth"), class = "alert alert-danger",
-                icon("triangle-exclamation"), lan()$get("Your account is locked")
+                sm_icon("triangle-exclamation"), lan()$get("Your account is locked")
               )
             )
           }
@@ -439,7 +439,7 @@ auth_server <- function(input, output, session,
         selector = jns("reset_pwd_result"),
         ui = tags$div(
           id = ns("reset_pwd_msg"), class = "alert alert-warning",
-          icon("triangle-exclamation"), lan()$get("Please fill in all fields.")
+          sm_icon("triangle-exclamation"), lan()$get("Please fill in all fields.")
         ),
         immediate = TRUE
       )
@@ -451,7 +451,7 @@ auth_server <- function(input, output, session,
       selector = jns("reset_pwd_result"),
       ui = tags$div(
         id = ns("reset_pwd_msg"), class = "alert alert-info",
-        icon("circle-info"), generic_msg, reset_btn_js("true")
+        sm_icon("circle-info"), generic_msg, reset_btn_js("true")
       ),
       immediate = TRUE
     )
@@ -477,7 +477,7 @@ auth_server <- function(input, output, session,
     if (res_reset$reason %in% reset_reason_blocked()) {
       msg <- tags$div(
         id = ns("reset_pwd_msg"), class = "alert alert-danger",
-        icon("triangle-exclamation"),
+        sm_icon("triangle-exclamation"),
         lan()$get("Password reset is not available for this account, please contact your administrator.")
       )
     } else if (res_reset$reason %in% reset_reason_error()) {
@@ -488,14 +488,14 @@ auth_server <- function(input, output, session,
         "An error occurred while sending the email. Please try again later or contact your administrator."
       }
       showModal(modalDialog(
-        tags$p(icon("triangle-exclamation"), lan()$get(error_msg)),
+        tags$p(sm_icon("triangle-exclamation"), lan()$get(error_msg)),
         footer = modalButton(lan()$get("Dismiss")),
         easyClose = TRUE
       ))
     } else {
       msg <- tags$div(
         id = ns("reset_pwd_msg"), class = "alert alert-info",
-        icon("circle-info"), generic_msg
+        sm_icon("circle-info"), generic_msg
       )
     }
     insertUI(selector = jns("reset_pwd_result"), ui = msg)

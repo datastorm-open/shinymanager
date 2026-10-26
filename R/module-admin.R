@@ -23,13 +23,13 @@ admin_ui <- function(id, lan = NULL) {
         # tags$h2(lan$get("Administrator mode")),
         # tags$br(), tags$br(),
         
-        tags$h3(icon("users"), lan$get("Users"), class = "text-primary"),
+        tags$h3(sm_icon("users"), lan$get("Users"), class = "text-primary"),
         tags$hr(),
         
         actionButton(
           inputId = ns("add_user"),
           label = lan$get("Add a user"),
-          icon = icon("plus"),
+          icon = sm_icon("plus"),
           width = "100%",
           class = "btn-primary"
         ),
@@ -44,7 +44,7 @@ admin_ui <- function(id, lan = NULL) {
           label = "",
           class = "btn-secondary pull-right",
           style = "margin-left: 5px",
-          icon = icon("square-check")
+          icon = sm_icon("square-check")
         ),
         
         actionButton(
@@ -52,14 +52,14 @@ admin_ui <- function(id, lan = NULL) {
           label = lan$get("Edit selected users"),
           class = "btn-primary pull-right disabled",
           style = "margin-left: 5px",
-          icon = icon("pen-to-square")
+          icon = sm_icon("pen-to-square")
         ),
         
         actionButton(
           inputId = ns("remove_selected_users"),
           label = lan$get("Remove selected users"),
           class = "btn-danger pull-right disabled",
-          icon = icon("trash-can")
+          icon = sm_icon("trash-can")
         ),
         
         tags$br(),
@@ -72,12 +72,12 @@ admin_ui <- function(id, lan = NULL) {
               outputId = ns("download_users_database"),
               label = lan$get("Download Users file"),
               class = "btn-primary center-block",
-              icon = icon("download")
+              icon = sm_icon("download")
             )
           )
         },
         
-        tags$h3(icon("key"), lan$get("Passwords"), class = "text-primary"),
+        tags$h3(sm_icon("key"), lan$get("Passwords"), class = "text-primary"),
         tags$hr(),
         
         DTOutput(outputId = ns("table_pwds")),
@@ -90,14 +90,14 @@ admin_ui <- function(id, lan = NULL) {
           label = "",
           class = "btn-secondary pull-right",
           style = "margin-left: 5px",
-          icon = icon("square-check")
+          icon = sm_icon("square-check")
         ),
         
         actionButton(
           inputId = ns("change_selected_pwds"),
           label = lan$get("Force selected users to change password"),
           class = "btn-primary pull-right disabled",
-          icon = icon("key")
+          icon = sm_icon("key")
         ),
         
         if("db" %in% get_download()){
@@ -110,7 +110,7 @@ admin_ui <- function(id, lan = NULL) {
                 outputId = ns("download_sql_database"),
                 label = lan$get("Download SQL database"),
                 class = "btn-primary center-block",
-                icon = icon("download")
+                icon = sm_icon("download")
               )
             )
           )
@@ -245,8 +245,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
     
     users <- users()
     users <- users[, setdiff(names(users), c("password", "is_hashed_password")), drop = FALSE]
-    users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", icon("pen-to-square"), status = "primary", lan = lan())
-    users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", icon("trash-can"), status = "danger", lan = lan())
+    users$Edit <- input_btns(ns("edit_user"), users$user, "Edit user", sm_icon("pen-to-square"), status = "primary", lan = lan())
+    users$Remove <- input_btns(ns("remove_user"), users$user, "Delete user", sm_icon("trash-can"), status = "danger", lan = lan())
     users$Select <- input_checkbox_ui(ns("select_mult_users"), users$user, session = session)
     names_lan <- sapply(names(users), function(x) lan()$get(x))
     change <- as.logical(users$admin)
@@ -319,8 +319,8 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
       pwds$temp_pwd_expire <- NULL
     }
 
-    pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", icon("key"), status = "primary", lan = lan())
-    pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", icon("arrow-rotate-left"), status = "warning", lan = lan())
+    pwds$`Change password` <- input_btns(ns("change_pwd"), pwds$user, "Ask to change password", sm_icon("key"), status = "primary", lan = lan())
+    pwds$`Reset password` <- input_btns(ns("reset_pwd"), pwds$user, "Reset password", sm_icon("arrow-rotate-left"), status = "warning", lan = lan())
     pwds$Select <- input_checkbox_ui(ns("change_mult_pwds"), pwds$user, session = session)
     names_lan <- sapply(names(pwds), function(x) lan()$get(x))
     change <- as.logical(pwds$must_change)
@@ -497,7 +497,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         ui = tags$div(
           id = ns("alert-edituser-exist"),
           class = "alert alert-warning",
-          icon("triangle-exclamation"),
+          sm_icon("triangle-exclamation"),
           lan()$get("User already exist!")
         ),
         immediate = TRUE
@@ -669,7 +669,7 @@ admin <- function(input, output, session, sqlite_path, passphrase, config_db, la
         ui = tags$div(
           id = ns("alert-user-exist"),
           class = "alert alert-warning",
-          icon("triangle-exclamation"),
+          sm_icon("triangle-exclamation"),
           lan()$get("User already exist!")
         ),
         immediate = TRUE

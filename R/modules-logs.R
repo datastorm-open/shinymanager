@@ -75,25 +75,25 @@ logs_ui <- function(id, lan = NULL) {
                          )
         ),
         
-        tags$h3(icon("users"), lan$get("Number of connections per user"), class = "text-primary"),
+        tags$h3(sm_icon("users"), lan$get("Number of connections per user"), class = "text-primary"),
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_users"), height = "600px"),
         
         tags$br(),
         
-        tags$h3(icon("calendar-days"), lan$get("Number of connections per day"), class = "text-primary"),
+        tags$h3(sm_icon("calendar-days"), lan$get("Number of connections per day"), class = "text-primary"),
         tags$hr(),
         billboarderOutput(outputId = ns("graph_conn_days")),
 
         tags$br(),
 
-        tags$h3(icon("address-card"), lan$get("Users overview"), class = "text-primary"),
+        tags$h3(sm_icon("address-card"), lan$get("Users overview"), class = "text-primary"),
         tags$hr(),
         DTOutput(outputId = ns("table_users_overview")),
 
         tags$br(),
 
-        tags$h3(icon("shield-halved"), lan$get("Security events"), class = "text-primary"),
+        tags$h3(sm_icon("shield-halved"), lan$get("Security events"), class = "text-primary"),
         tags$hr(),
         uiOutput(outputId = ns("security_kpis")),
         billboarderOutput(outputId = ns("graph_security_days")),
@@ -105,7 +105,7 @@ logs_ui <- function(id, lan = NULL) {
                  outputId = ns("download_logs"),
                  label = lan$get("Download logs database"),
                  class = "btn-primary center-block",
-                 icon = icon("download")
+                 icon = sm_icon("download")
                ))
         },
         
