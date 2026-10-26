@@ -521,3 +521,55 @@ save_reset_pwd_sql <- function(conn, config_db, user, temp_pwd, user_info = NULL
     invisible(TRUE)
   })
 }
+
+
+# "Forgot password?" link availability
+# ------------------------------------
+# Why the reset can't work with the current configuration, NULL if it can. The
+# link is then hidden (see auth_server) and a warning explains why: before, the
+# link was hidden without any explanation, or shown with a form that could not
+# work (no email column).
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RSQLite SQLite
+reset_link_unavailable_reason <- function() {
+  if (!is.function(.tok$get_send_mail())) {
+    return("no 'send_mail' function given to secure_server()")
+  }
+  sqlite_path <- .tok$get_sqlite_path()
+  config_db   <- .tok$get_sql_config_db()
+  if (is.null(sqlite_path) && is.null(config_db)) {
+    return("a SQLite or SQL database is needed (credentials given as a data.frame)")
+  }
+  email_col <- get_email_column()
+  # columns of the credentials table, NULL if they can't be read: the link is
+  # kept then, the error will show at login / reset
+  cols <- tryCatch({
+    if (!is.null(sqlite_path)) {
+      conn <- dbConnect(SQLite(), dbname = sqlite_path)
+      on.exit(dbDisconnect(conn))
+      colnames(read_db_decrypt(conn, name = "credentials", passphrase = .tok$get_passphrase()))
+    } else {
+      conn <- connect_sql_db(config_db)
+      on.exit(disconnect_sql_db(conn, config_db))
+      db_list_fields_sql(conn, config_db$tables$credentials$tablename)
+    }
+  }, error = function(e) NULL)
+  if (!is.null(cols) && !email_col %in% cols) {
+    return(paste0("no '", email_col, "' column in the credentials (see options(\"shinymanager.email_column\"))"))
+  }
+  NULL
+}
+
+# Warn once per R process and per reason (not at each session start)
+reset_link_warnings <- new.env()
+
+warn_reset_link_hidden <- function(reason) {
+  if (!isTRUE(reset_link_warnings[[reason]])) {
+    assign(reason, TRUE, envir = reset_link_warnings)
+    warning(
+      "shinymanager: options(\"shinymanager.reset_password\") is set but the ",
+      "\"Forgot password?\" link is hidden: ", reason, call. = FALSE
+    )
+  }
+  invisible()
+}

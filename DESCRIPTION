@@ -33,5 +33,6 @@ Suggests:
     rmarkdown,
     RPostgres,
     sparklyr,
-    emayili (>= 0.4.16)
+    emayili (>= 0.4.16),
+    fontawesome
 VignetteBuilder: knitr

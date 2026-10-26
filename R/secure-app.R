@@ -243,7 +243,9 @@ secure_app <- function(ui,
 #' Using \code{options("shinymanager.reset_password")}, you can enable a self-service
 #' password reset link ("Forgot password?") on the authentication page. Default to \code{FALSE}.
 #' It requires a \code{email} column in the credentials, a \code{send_mail} function passed to
-#' \code{secure_server} and a SQLite / SQL backend. Two modes are available:
+#' \code{secure_server} and a SQLite / SQL backend: otherwise the link is hidden, with a warning
+#' (once per R process) giving the reason. The option must be set before the authentication page
+#' is built (e.g. in \code{global.R}, not in the server function). Two modes are available:
 #' \itemize{
 #'   \item \code{TRUE} : the user must enter a valid username \strong{and} its associated email.
 #'   \item \code{"username"} : the user only enters a username; the temporary password is sent to

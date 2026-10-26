@@ -56,7 +56,7 @@ With ``options("shinymanager.reset_password_max" = 3)``, a user can only request
 
 With ``options("shinymanager.reset_password_unlock" = FALSE)``, an account locked by ``shinymanager.pwd_failure_limit`` can only be unlocked by an admin : no email is sent (default ``TRUE`` : the reset unlocks the account).
 
-It requires an ``email`` column in the *credentials* (use ``options("shinymanager.email_column")`` for another column name), a SQLite / SQL backend, and a ``send_mail`` function passed to ``secure_server``. No email package is mandatory : provide your own sending function (any backend), or use the optional helper ``send_smtp_mail()`` (based on the suggested package ``emayili``).
+It requires an ``email`` column in the *credentials* (use ``options("shinymanager.email_column")`` for another column name), a SQLite / SQL backend, and a ``send_mail`` function passed to ``secure_server``. Otherwise the link is hidden, with a warning giving the reason. Set the option before the authentication page is built (in ``global.R`` for example, not in the server function). No email package is mandatory : provide your own sending function (any backend), or use the optional helper ``send_smtp_mail()`` (based on the suggested package ``emayili``).
 
 ````
 # server.R

@@ -247,12 +247,16 @@ auth_server <- function(input, output, session,
   authentication <- reactiveValues(result = FALSE, user = NULL, user_info = NULL)
 
   # auth_ui shows the reset link as soon as the option is set: hide it when the
-  # reset can't work, without database (data.frame backend) or 'send_mail'.
-  # check_credentials is forced first, as it sets the database used.
+  # reset can't work (no 'send_mail', data.frame backend, no email column), with
+  # a warning for the developer. check_credentials is forced first, as it sets
+  # the database used.
   force(check_credentials)
-  if (reset_password_enabled() && (!is.function(.tok$get_send_mail()) ||
-      (is.null(.tok$get_sqlite_path()) && is.null(.tok$get_sql_config_db())))) {
-    removeUI(selector = jns("show_reset_pwd"))
+  if (reset_password_enabled()) {
+    reason <- reset_link_unavailable_reason()
+    if (!is.null(reason)) {
+      warn_reset_link_hidden(reason)
+      removeUI(selector = jns("show_reset_pwd"))
+    }
   }
   
   observeEvent(input$go_auth, {

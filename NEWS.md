@@ -28,6 +28,9 @@
   resets, locked) and security events per day. Every reset attempt is logged
   (`Reset password: <reason>`).
 * Admin: `Locked` column in the passwords table when `shinymanager.pwd_failure_limit` is set.
+* The "Forgot password?" link is hidden when the reset can't work (no `send_mail` function, a
+  data.frame backend, or no email column), with a warning giving the reason (once per R process).
+  The option must be set before the authentication page is built (e.g. in `global.R`).
 * (#222) Italian language. Thanks @stewerner
 
 ## Behavior changes
