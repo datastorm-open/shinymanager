@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 600" width="520" height="600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#3fa9f0"/>
+      <stop offset="0.55" stop-color="#1667ad"/>
+      <stop offset="1" stop-color="#0b2f57"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="260" cy="231" r="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d6ebfb"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#061a33" flood-opacity="0.45"/>
+    </filter>
+    <filter id="tshadow" x="-10%" y="-40%" width="120%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#061a33" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="hexclip">
+      <path d="M260 8 L512.9 154 L512.9 446 L260 592 L7.1 446 L7.1 154 Z"/>
+    </clipPath>
+    <clipPath id="shieldclip">
+      <path d="M260 92 L356 127 V202 C356 266 316 306 260 330 C204 306 164 266 164 202 V127 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- hexagon -->
+  <path d="M260 8 L512.9 154 L512.9 446 L260 592 L7.1 446 L7.1 154 Z" fill="url(#bg)"/>
+  <g clip-path="url(#hexclip)">
+    <circle cx="260" cy="231" r="210" fill="url(#glow)"/>
+    <!-- light sheen -->
+    <path d="M-20 120 L540 -40 L540 60 L-20 260 Z" fill="#ffffff" opacity="0.06"/>
+    <!-- faint hexagon network -->
+    <g fill="none" stroke="#bfe3ff" stroke-opacity="0.13" stroke-width="2">
+      <path d="M60 470 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+      <path d="M120 505 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+      <path d="M400 470 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+      <path d="M340 505 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+      <path d="M60 130 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+      <path d="M400 130 l30 -17 l30 17 v35 l-30 17 l-30 -17 Z"/>
+    </g>
+  </g>
+  <!-- borders -->
+  <path d="M260 26 L497 163 L497 437 L260 574 L23 437 L23 163 Z" fill="none" stroke="#a9dbff" stroke-opacity="0.35" stroke-width="3"/>
+  <path d="M260 8 L512.9 154 L512.9 446 L260 592 L7.1 446 L7.1 154 Z" fill="none" stroke="#0a2748" stroke-width="12" stroke-linejoin="round"/>
+
+  <g transform="translate(0,16)">
+  <!-- shield with user -->
+  <g filter="url(#shadow)">
+    <path d="M260 92 L356 127 V202 C356 266 316 306 260 330 C204 306 164 266 164 202 V127 Z" fill="url(#shield)"/>
+  </g>
+  <g clip-path="url(#shieldclip)" fill="#1667ad">
+    <circle cx="260" cy="178" r="33"/>
+    <path d="M188 360 C188 256 220 228 260 228 C300 228 332 256 332 360 Z"/>
+  </g>
+  <!-- verified badge -->
+  <g filter="url(#shadow)">
+    <circle cx="338" cy="292" r="36" fill="#22c55e" stroke="#ffffff" stroke-width="7"/>
+  </g>
+  <path d="M320 292 l12 12 l22 -24" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- name -->
+  <text x="260" y="425" text-anchor="middle" font-family="Segoe UI Semibold, Segoe UI, Arial, sans-serif" font-weight="600" font-size="68" letter-spacing="-0.5" fill="#ffffff" filter="url(#tshadow)">shiny<tspan fill="#9fd6ff">manager</tspan></text>
+  <text x="260" y="463" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="21" letter-spacing="3" fill="#cfe9ff">AUTHENTICATION FOR SHINY</text>
+</g>
+</svg>
